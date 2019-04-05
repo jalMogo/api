@@ -1,3 +1,25 @@
+# Set up private key using multi-stage Dockerfile:
+# https://vsupalov.com/build-docker-image-clone-private-repo-ssh-key/
+
+# this is our first build stage, it will not persist in the final image
+FROM ubuntu as intermediate
+
+# install git
+RUN apt-get update
+RUN apt-get install -y git
+
+# add credentials on build
+ARG SSH_PRIVATE_KEY
+RUN mkdir /root/.ssh/
+RUN echo "${SSH_PRIVATE_KEY}" > /root/.ssh/id_rsa
+
+# make sure your domain is accepted
+RUN touch /root/.ssh/known_hosts
+RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
+
+RUN git clone git@github.com:jalMogo/api.git
+
+
 ###########################################################
 # Dockerfile to build Python WSGI Application Containers
 # Based on Debian
@@ -13,7 +35,7 @@ MAINTAINER Luke Swart <luke@mapseed.org>
 RUN apt-get update
 
 # Install basic applications
-RUN apt-get install -y tar git curl wget dialog net-tools build-essential gettext
+RUN apt-get install -y tar curl wget dialog net-tools build-essential gettext
 
 # Install Python and Basic Python Tools
 RUN apt-get install -y python-dev python-distribute python-pip
@@ -21,8 +43,10 @@ RUN apt-get install -y python-dev python-distribute python-pip
 # Install Postgres/PostGIS dependencies:
 RUN apt-get install -y python-psycopg2 postgresql libpq-dev postgresql-9.6-postgis-2.3 postgis postgresql-9.6
 
-# If you want to deploy from an online host git repository, you can use the following command to clone:
-RUN git clone https://github.com/jalmogo/api.git && cd api && git checkout 1.7.3 && cd -
+
+# Move the repo from our intermediate image into our final image:
+COPY --from=intermediate /api /api
+
 # # for local testing, cd into project root and uncomment this line:
 # ADD . api
 
