@@ -12,6 +12,7 @@ RUN apt-get install -y git
 ARG SSH_PRIVATE_KEY
 RUN mkdir /root/.ssh/
 RUN echo "${SSH_PRIVATE_KEY}" > /root/.ssh/id_rsa
+RUN chmod 0600 /root/.ssh/id_rsa
 
 # make sure your domain is accepted
 RUN touch /root/.ssh/known_hosts
