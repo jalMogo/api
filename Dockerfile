@@ -7,7 +7,7 @@
 FROM python:2.7.15-stretch
 
 # File Author / Maintainer
-MAINTAINER Luke Swart <luke@smartercleanup.org>
+MAINTAINER Luke Swart <luke@mapseed.org>
 
 # Update the sources list
 RUN apt-get update
@@ -22,7 +22,7 @@ RUN apt-get install -y python-dev python-distribute python-pip
 RUN apt-get install -y python-psycopg2 postgresql libpq-dev postgresql-9.6-postgis-2.3 postgis postgresql-9.6
 
 # If you want to deploy from an online host git repository, you can use the following command to clone:
-RUN git clone https://github.com/mapseed/api.git && cd api && git checkout 1.7.0 && cd -
+RUN git clone https://github.com/jalmogo/api.git && cd api && git checkout 1.7.3 && cd -
 # # for local testing, cd into project root and uncomment this line:
 # ADD . api
 
