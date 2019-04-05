@@ -1,4 +1,5 @@
 #!/bin/bash
 # https://forums.docker.com/t/docker-cloud-build-environment-variables-not-being-passed-to-the-auto-build/24010/9
 
+echo "inside build hook..."
 docker build -t $IMAGE_NAME . --build-arg SSH_PRIVATE_KEY="$SSH_PRIVATE_KEY"
