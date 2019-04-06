@@ -19,8 +19,7 @@ RUN touch /root/.ssh/known_hosts
 RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
 
 RUN git clone git@github.com:jalMogo/api.git
-WORKDIR /api  # NOTE: `RUN cd api` gets reset by the next RUN command!
-RUN git checkout jalmogo/django-1.10
+RUN cd api && git checkout jalmogo/django-1.10
 
 
 ###########################################################
