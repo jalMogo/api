@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/jalMogo/api.svg?style=svg)](https://circleci.com/gh/jalMogo/api)
+[![Build Status](https://circleci.com/gh/jalmogo/api.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/jalmogo/api.svg?style=shield&circle-token=:circle-token)
 
 Mapseed API
 ===============
