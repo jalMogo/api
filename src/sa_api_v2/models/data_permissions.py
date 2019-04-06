@@ -34,7 +34,11 @@ class DataPermission (CloneableModelMixin, CacheClearingModel, models.Model):
     # TODO: enable resources with selectors like
     # "tags:3>*" or "tags:3>5>*". That way, group will have access to
     # that tag, and any of its children.
-    submission_set = models.CharField(max_length=128, blank=True, help_text='Either the name of a submission set (e.g., "comments"), "tags", or "places". Leave blank to refer to all things.')
+    submission_set = models.CharField(
+        max_length=128, blank=True,
+        help_text='Either the name of a submission set (e.g. "comments", "tags", or\
+        "places"). Use a "*" to refer to all things.'
+    )
     can_retrieve = models.BooleanField(default=True)
     can_create = models.BooleanField(default=False)
     can_update = models.BooleanField(default=False)
