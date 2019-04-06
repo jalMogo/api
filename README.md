@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/jalMogo/api.svg?style=svg)](https://circleci.com/gh/jalMogo/api)
+
 Mapseed API
 ===============
 
