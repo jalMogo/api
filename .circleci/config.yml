@@ -7,7 +7,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: modulitos/api:release-1.7.3
+      - image: modulitos/api:release-1.7.7
         environment:
           PASS: test1234
           USERNAME: testuser
