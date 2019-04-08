@@ -64,7 +64,7 @@ from .permissions import (IsAdminOwnerOrReadOnly, IsLoggedInOwnerOrPublicDataOnl
                           IsLoggedInOwner, IsLoggedInAdmin,
                           IsAllowedByDataPermissions)
 
-logger = logging.getLogger('sa_api_v2.views')
+logger = logging.getLogger(__name__)
 
 
 ###############################################################################

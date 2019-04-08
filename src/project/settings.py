@@ -327,6 +327,11 @@ LOGGING = {
             'handlers': ['console', 'sentry'],
             'level': 'WARNING'
         },
+        'django.server': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
         'django.request': {
             'handlers': ['console', 'sentry'],
             'level': 'ERROR',
