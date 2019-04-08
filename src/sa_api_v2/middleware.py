@@ -8,24 +8,21 @@ import logging
 # https://gist.github.com/SehgalDivij/1ca5c647c710a2c3a0397bce5ec1c1b4
 class RequestBodyLogger (object):
     logger = logging.getLogger('ms_api.request')
-    allowed_methods = ['post', 'put', 'patch', 'delete']
+    request_body_methods = ['post', 'put', 'patch', 'delete']
 
     def process_request(self, request):
         method = request.method.lower()
-        if (method in self.allowed_methods and
-           request.META.get('CONTENT_TYPE') == 'application/json'):
-            # DELETE often has an empty string as body:
-            if request.body == '' or request.body is None:
-                self.logger.info('"{} {}"'.format(
-                    request.method,
-                    request.get_full_path(),
-                ))
-            else:
-                self.logger.info('"{} {}" {}'.format(
-                    request.method,
-                    request.get_full_path(),
-                    json.dumps(json.loads(request.body.decode("utf-8")), indent=2)
-                ))
+        if method in self.request_body_methods:
+            body = ""
+            if request.META.get('CONTENT_TYPE') == 'application/json' and\
+               request.body != '' and request.body is not None:
+                # DELETE often has an empty string as body, so we've checked for that here.
+                body = json.dumps(json.loads(request.body.decode("utf-8")), indent=2)
+            self.logger.info('"{} {}" {}'.format(
+                request.method,
+                request.get_full_path(),
+                body
+            ))
 
 
 class RequestTimeLogger (object):
