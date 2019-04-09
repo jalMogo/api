@@ -12,18 +12,25 @@ def RequestBodyLogger(get_response):
 
     def middleware(request):
         method = request.method.lower()
-        if method in request_body_methods:
-            body = ""
-            if request.META.get('CONTENT_TYPE') == 'application/json' and\
-               request.body != '' and request.body is not None:
-                # DELETE often has an empty string as body, so we've checked for that here.
-                body = json.dumps(json.loads(request.body.decode("utf-8")), indent=2)
-            logger.info('"{} {}" {}'.format(
-                request.method,
-                request.get_full_path(),
-                body
-            ))
-        return get_response(request)
+        if method not in request_body_methods:
+            return get_response(request)
+
+        body = ""
+        if request.META.get('CONTENT_TYPE') == 'application/json' and\
+           request.body != '' and request.body is not None:
+            # DELETE often has an empty string as body, so we've checked for that here.
+            body = json.dumps(json.loads(request.body.decode("utf-8")), indent=2)
+
+        response = get_response(request)
+
+        logger.info('"{} {} {}"\nbody: {}\nresponse: {}'.format(
+            request.method,
+            response.status_code,
+            request.get_full_path(),
+            body,
+            json.dumps(json.loads(response.content.decode("utf-8")), indent=2),
+        ))
+        return response
     return middleware
 
 
