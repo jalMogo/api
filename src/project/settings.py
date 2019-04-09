@@ -3,7 +3,6 @@ import raven
 import os
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 SHOW_DEBUG_TOOLBAR = DEBUG
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
@@ -87,22 +86,26 @@ STATICFILES_FINDERS = (
 )
 STATICFILES_DIRS = ()
 
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-)
-TEMPLATE_DIRS = ()
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                "django.contrib.auth.context_processors.auth",
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.contrib.auth.context_processors.auth",
-    "django.core.context_processors.debug",
-    "django.core.context_processors.i18n",
-    "django.core.context_processors.media",
-    "django.core.context_processors.static",
-    "django.core.context_processors.tz",
-    "django.contrib.messages.context_processors.messages",
-    'django.core.context_processors.request',
-)
+                "django.contrib.messages.context_processors.messages",
+                'django.template.context_processors.request',
+            ],
+        },
+    },
+]
 
 ATTACHMENT_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
@@ -324,6 +327,11 @@ LOGGING = {
             'handlers': ['console', 'sentry'],
             'level': 'WARNING'
         },
+        'django.server': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
         'django.request': {
             'handlers': ['console', 'sentry'],
             'level': 'ERROR',
@@ -392,7 +400,6 @@ if 'DATABASE_URL' in environ:
 
 if 'DEBUG' in environ:
     DEBUG = (environ['DEBUG'].lower() == 'true')
-    TEMPLATE_DEBUG = DEBUG
     SHOW_DEBUG_TOOLBAR = DEBUG
 
 
