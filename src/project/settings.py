@@ -143,7 +143,7 @@ MIDDLEWARE = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'sa_api_v2.middleware.RequestTimeLogger',
-    'sa_api_v2.middleware.RequestBodyLogger',
+    'sa_api_v2.middleware.RequestResponsePayloadLogger',
 )
 
 # We only use the CORS Headers app for oauth. The Mapseed API resources
@@ -492,8 +492,8 @@ if BROKER_URL == 'django://':
 
 if SHOW_DEBUG_TOOLBAR:
     INSTALLED_APPS += ('debug_toolbar',)
-    MIDDLEWARE_CLASSES = (
-        MIDDLEWARE_CLASSES[:2] +
+    MIDDLEWARE = (
+        MIDDLEWARE[:2] +
         ('debug_toolbar.middleware.DebugToolbarMiddleware',) +
-        MIDDLEWARE_CLASSES[2:]
+        MIDDLEWARE[2:]
     )
