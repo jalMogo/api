@@ -6,7 +6,7 @@ import logging
 # Request logging examples:
 # https://github.com/Rhumbix/django-request-logging/blob/master/request_logging/middleware.py
 # https://gist.github.com/SehgalDivij/1ca5c647c710a2c3a0397bce5ec1c1b4
-def RequestBodyLogger(get_response):
+def RequestResponsePayloadLogger(get_response):
     logger = logging.getLogger('ms_api.request')
     request_body_methods = ['post', 'put', 'patch', 'delete']
 
