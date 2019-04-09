@@ -58,7 +58,8 @@ django-loginas==0.2.2
 django-oauth-toolkit== 1.0.0
 
 
-django-cors-headers==1.1.0
+# last version with Django 1.10 support:
+django-cors-headers==2.4.1
 
 
 
