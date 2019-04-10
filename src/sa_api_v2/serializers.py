@@ -899,7 +899,6 @@ class BasePlaceSerializer (SubmittedThingSerializer,
         Get this for the entire dataset at once.
         """
         url_field = PlaceTagListIdentityField()
-        url_field.context = self.context
         url = url_field.to_representation(place)
         return {
             'url': url,
@@ -980,7 +979,6 @@ class BasePlaceSerializer (SubmittedThingSerializer,
 
         if 'url' in fields:
             field = fields['url']
-            field.context = self.context
             data['url'] = field.to_representation(obj)
 
         data = self.explode_data_blob(data)
@@ -1011,6 +1009,7 @@ class BasePlaceSerializer (SubmittedThingSerializer,
 class SimplePlaceSerializer (BasePlaceSerializer):
     class Meta (BasePlaceSerializer.Meta):
         read_only_fields = ('dataset',)
+        fields = '__all__'
 
 
 class PlaceListSerializer(serializers.ListSerializer):
@@ -1044,10 +1043,10 @@ class PlaceSerializer (BasePlaceSerializer,
 
     class Meta (BasePlaceSerializer.Meta):
         list_serializer_class = PlaceListSerializer
+        fields = '__all__'
 
     def summary_to_native(self, set_name, submissions):
         url_field = SubmissionSetIdentityField()
-        url_field.context = self.context
         set_url = url_field.to_representation(submissions[0])
 
         return {
@@ -1208,6 +1207,7 @@ class DataSetSerializer (BaseDataSetSerializer, serializers.HyperlinkedModelSeri
 
     class Meta (BaseDataSetSerializer.Meta):
         validators = []
+        fields = '__all__'
         pass
 
     def validate_load_from_url(self, attrs, source):

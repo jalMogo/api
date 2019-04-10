@@ -84,10 +84,10 @@ class TestActionSerializer (TestCase):
             thing=comment.submittedthing_ptr)
 
     def test_place_action_attributes(self):
-        serializer = ActionSerializer(self.place_action)
-        serializer.context = {
-            'request': RequestFactory().get('')
-        }
+        serializer = ActionSerializer(
+            self.place_action,
+            context={'request': RequestFactory().get('')},
+        )
 
         self.assertIn('id', serializer.data)
         self.assertEqual(serializer.data.get('action'), 'create')
@@ -96,10 +96,10 @@ class TestActionSerializer (TestCase):
         self.assertNotIn('thing', serializer.data)
 
     def test_submission_action_attributes(self):
-        serializer = ActionSerializer(self.comment_action)
-        serializer.context = {
-            'request': RequestFactory().get('')
-        }
+        serializer = ActionSerializer(
+            self.comment_action,
+            context={'request': RequestFactory().get('')},
+        )
 
         self.assertIn('id', serializer.data)
         self.assertEqual(serializer.data.get('action'), 'create')
@@ -112,10 +112,10 @@ class TestActionSerializer (TestCase):
                                .select_related('thing__place', 'thing__submission')\
                                .filter(thing=self.place_action.thing)[0]
 
-        serializer = ActionSerializer(action)
-        serializer.context = {
-            'request': RequestFactory().get('')
-        }
+        serializer = ActionSerializer(
+            action,
+            context={'request': RequestFactory().get('')},
+        )
 
         self.assertIn('id', serializer.data)
         self.assertEqual(serializer.data.get('action'), 'create')
@@ -128,10 +128,10 @@ class TestActionSerializer (TestCase):
             .select_related('thing__place' ,'thing__submission')\
             .filter(thing=self.comment_action.thing)[0]
 
-        serializer = ActionSerializer(action)
-        serializer.context = {
-            'request': RequestFactory().get('')
-        }
+        serializer = ActionSerializer(
+            action,
+            context={'request': RequestFactory().get('')},
+        )
 
         self.assertIn('id', serializer.data)
         self.assertEqual(serializer.data.get('action'), 'create')
@@ -272,7 +272,6 @@ class TestPlaceSerializer (TestCase):
         request.get_dataset = lambda: self.dataset
 
         serializer = PlaceSerializer(None)
-        serializer.context = {'request': request}
 
         data = serializer.data
         self.assertIsInstance(data, dict)
@@ -281,8 +280,7 @@ class TestPlaceSerializer (TestCase):
         request = RequestFactory().get('')
         request.get_dataset = lambda: self.dataset
 
-        serializer = PlaceSerializer(self.place)
-        serializer.context = {'request': request}
+        serializer = PlaceSerializer(self.place, context={'request': request})
 
         self.assertEqual(
             serializer.data['submission_sets']['comments']['length'], 2)
@@ -298,10 +296,10 @@ class TestSubmissionSerializer (TestCase):
         cache_buffer.reset()
 
     def test_can_serlialize_a_null_instance(self):
-        serializer = SubmissionSerializer(None)
-        serializer.context = {
-            'request': RequestFactory().get('')
-        }
+        serializer = SubmissionSerializer(
+            None,
+            context={'request': RequestFactory().get('')},
+        )
 
         data = serializer.data
         self.assertIsInstance(data, dict)
@@ -329,12 +327,14 @@ class TestDataSetSerializer (TestCase):
                                   set_name='comments')
 
     def test_can_serlialize_a_null_instance(self):
-        serializer = DataSetSerializer(None)
-        serializer.context = {
-            'request': RequestFactory().get(''),
-            'place_count_map_getter': (lambda: {}),
-            'submission_sets_map_getter': (lambda: {})
-        }
+        serializer = DataSetSerializer(
+            None,
+            context={
+                'request': RequestFactory().get(''),
+                'place_count_map_getter': (lambda: {}),
+                'submission_sets_map_getter': (lambda: {})
+            }
+        )
 
         data = serializer.data
         self.assertIsInstance(data, dict)

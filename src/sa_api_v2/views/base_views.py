@@ -996,14 +996,16 @@ class PlaceListView (
         """
         Serializes the place object to GeoJSON and POSTs it to each webhook
         """
-        serializer = serializers.PlaceSerializer(obj)
         # Update request to include private data. We need everything since
         # we can't PATCH on the API yet.
         temp_get = self.request.GET.copy()
         temp_get['include_private_places'] = 'on'
         temp_get['include_private_fields'] = 'on'
         self.request.GET = temp_get
-        serializer.context = {'request': self.request}
+        serializer = serializers.PlaceSerializer(
+            obj,
+            context={'request': self.request},
+        )
 
         # Render the place as GeoJSON
         renderer = renderers.GeoJSONRenderer()
