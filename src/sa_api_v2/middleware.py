@@ -23,12 +23,15 @@ def RequestResponsePayloadLogger(get_response):
 
         response = get_response(request)
 
+        response_content = ""
+        if response.content is not None and response.content != '':
+            response_content = json.dumps(json.loads(response.content.decode("utf-8")), indent=2)
         logger.info('"{} {} {}"\nbody: {}\nresponse: {}'.format(
             request.method,
             response.status_code,
             request.get_full_path(),
             body,
-            json.dumps(json.loads(response.content.decode("utf-8")), indent=2),
+            response_content,
         ))
         return response
     return middleware
