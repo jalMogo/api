@@ -53,8 +53,8 @@ def get_authed_user(request):
     return user
 
 
-class RemoteClientMiddleware(object):
-    def process_request(self, request):
+def RemoteClientMiddleware(get_response):
+    def middleware(request):
         user = get_authed_user(request)
 
         # Set the current user ID and the appropriate authentication backend
@@ -62,3 +62,7 @@ class RemoteClientMiddleware(object):
         if user:
             request.session[SESSION_KEY] = user.id
             request.session[BACKEND_SESSION_KEY] = 'sa_api_v2.auth_backends.CachedModelBackend'
+        response = get_response(request)
+        return response
+
+    return middleware

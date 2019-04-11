@@ -129,7 +129,7 @@ REST_FRAMEWORK = {
 WSGI_APPLICATION = 'project.wsgi.application'
 ROOT_URLCONF = 'project.urls'
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.gzip.GZipMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -143,10 +143,10 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'sa_api_v2.middleware.RequestTimeLogger',
-    'sa_api_v2.middleware.RequestBodyLogger',
+    'sa_api_v2.middleware.RequestResponsePayloadLogger',
 )
 
-# We only use the CORS Headers app for oauth. The Shareabouts API resources
+# We only use the CORS Headers app for oauth. The Mapseed API resources
 # have their own base view that handles CORS headers.
 CORS_URLS_REGEX = r'^/api/v\d+/users/oauth2/.*$'
 CORS_ORIGIN_ALLOW_ALL = True
@@ -419,32 +419,32 @@ if REDIS_URL_ENVVAR:
     # Celery broker
     BROKER_URL = environ[REDIS_URL_ENVVAR].strip('/') + '/1'
 
-if all([key in environ for key in ('SHAREABOUTS_AWS_KEY',
-                                   'SHAREABOUTS_AWS_SECRET',
-                                   'SHAREABOUTS_AWS_BUCKET')]):
-    AWS_ACCESS_KEY_ID = environ['SHAREABOUTS_AWS_KEY']
-    AWS_SECRET_ACCESS_KEY = environ['SHAREABOUTS_AWS_SECRET']
-    AWS_STORAGE_BUCKET_NAME = environ['SHAREABOUTS_AWS_BUCKET']
+if all([key in environ for key in ('MAPSEED_AWS_KEY',
+                                   'MAPSEED_AWS_SECRET',
+                                   'MAPSEED_AWS_BUCKET')]):
+    AWS_ACCESS_KEY_ID = environ['MAPSEED_AWS_KEY']
+    AWS_SECRET_ACCESS_KEY = environ['MAPSEED_AWS_SECRET']
+    AWS_STORAGE_BUCKET_NAME = environ['MAPSEED_AWS_BUCKET']
     AWS_QUERYSTRING_AUTH = False
     AWS_PRELOAD_METADATA = True
 
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
     ATTACHMENT_STORAGE = DEFAULT_FILE_STORAGE
 
-if 'SHAREABOUTS_TWITTER_KEY' in environ \
-        and 'SHAREABOUTS_TWITTER_SECRET' in environ:
-    SOCIAL_AUTH_TWITTER_KEY = environ['SHAREABOUTS_TWITTER_KEY']
-    SOCIAL_AUTH_TWITTER_SECRET = environ['SHAREABOUTS_TWITTER_SECRET']
+if 'MAPSEED_TWITTER_KEY' in environ \
+        and 'MAPSEED_TWITTER_SECRET' in environ:
+    SOCIAL_AUTH_TWITTER_KEY = environ['MAPSEED_TWITTER_KEY']
+    SOCIAL_AUTH_TWITTER_SECRET = environ['MAPSEED_TWITTER_SECRET']
 
-if 'SHAREABOUTS_FACEBOOK_KEY' in environ \
-        and 'SHAREABOUTS_FACEBOOK_SECRET' in environ:
-    SOCIAL_AUTH_FACEBOOK_KEY = environ['SHAREABOUTS_FACEBOOK_KEY']
-    SOCIAL_AUTH_FACEBOOK_SECRET = environ['SHAREABOUTS_FACEBOOK_SECRET']
+if 'MAPSEED_FACEBOOK_KEY' in environ \
+        and 'MAPSEED_FACEBOOK_SECRET' in environ:
+    SOCIAL_AUTH_FACEBOOK_KEY = environ['MAPSEED_FACEBOOK_KEY']
+    SOCIAL_AUTH_FACEBOOK_SECRET = environ['MAPSEED_FACEBOOK_SECRET']
 
 
-if 'SHAREABOUTS_ADMIN_EMAIL' in environ:
+if 'MAPSEED_ADMIN_EMAIL' in environ:
     ADMINS = (
-        ('Shareabouts API Admin', environ.get('SHAREABOUTS_ADMIN_EMAIL')),
+        ('Mapseed API Admin', environ.get('MAPSEED_ADMIN_EMAIL')),
     )
 
 if 'CONSOLE_LOG_LEVEL' in environ:
@@ -492,8 +492,8 @@ if BROKER_URL == 'django://':
 
 if SHOW_DEBUG_TOOLBAR:
     INSTALLED_APPS += ('debug_toolbar',)
-    MIDDLEWARE_CLASSES = (
-        MIDDLEWARE_CLASSES[:2] +
+    MIDDLEWARE = (
+        MIDDLEWARE[:2] +
         ('debug_toolbar.middleware.DebugToolbarMiddleware',) +
-        MIDDLEWARE_CLASSES[2:]
+        MIDDLEWARE[2:]
     )
