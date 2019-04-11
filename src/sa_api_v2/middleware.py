@@ -24,7 +24,7 @@ def RequestResponsePayloadLogger(get_response):
         response = get_response(request)
 
         response_content = ""
-        if response['Content-Type'] == 'application/json' and \
+        if response.get('Content-Type', None) == 'application/json' and \
            response.content is not None and response.content != '':
             response_content = json.dumps(json.loads(response.content.decode("utf-8")), indent=2)
         logger.info('"{} {} {}"\nbody: {}\nresponse: {}'.format(
