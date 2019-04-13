@@ -149,6 +149,7 @@ class TestPlaceInstanceView (APITestMixin, TestCase):
         # Check that the URL is right
         self.assertEqual(
             data['properties']['url'],
+            'http://testserver' +
             reverse(
                 'place-detail',
                 args=[self.owner.username, self.dataset.slug, self.place.id]
@@ -1020,6 +1021,7 @@ class TestPlaceListView (APITestMixin, TestCase):
 
         self.assertEqual(
             data['features'][0]['properties']['url'],
+            'http://testserver' +
             reverse('place-detail', args=[self.owner.username, self.dataset.slug, self.place.id]),
         )
 
