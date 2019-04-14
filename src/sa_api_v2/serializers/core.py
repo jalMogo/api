@@ -5,7 +5,6 @@ from django.utils import six
 import ujson as json
 import re
 from collections import defaultdict, OrderedDict
-from itertools import chain
 from django.contrib.gis.geos import GEOSGeometry
 from django.core.exceptions import ValidationError
 from django.utils.http import urlquote_plus
@@ -13,16 +12,15 @@ from rest_framework import pagination, serializers, fields
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
-from . import apikey
-from . import cors
-from . import models
-from .models import check_data_permission
-from .params import (
+from .. import apikey
+from .. import cors
+from .. import models
+from ..models import check_data_permission
+from ..params import (
     INCLUDE_INVISIBLE_PARAM,
     INCLUDE_TAGS_PARAM,
     INCLUDE_PRIVATE_FIELDS_PARAM,
     INCLUDE_SUBMISSIONS_PARAM,
-    FORMAT_PARAM
 )
 
 import logging
