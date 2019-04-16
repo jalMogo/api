@@ -2,559 +2,54 @@
 DjangoRestFramework resources for the Shareabouts REST API.
 """
 from django.utils import six
-import ujson as json
-import re
-from collections import defaultdict, OrderedDict
-from itertools import chain
-from django.contrib.gis.geos import GEOSGeometry
+from collections import defaultdict
 from django.core.exceptions import ValidationError
-from django.utils.http import urlquote_plus
-from rest_framework import pagination, serializers, fields
+from rest_framework import pagination, serializers
 from rest_framework.response import Response
-from rest_framework.reverse import reverse
 
-from . import apikey
-from . import cors
-from . import models
-from .models import check_data_permission
-from .params import (
+from .mixins import (
+    ActivityGenerator,
+    EmptyModelSerializer,
+    DataBlobProcessor,
+    AttachmentSerializerMixin,
+)
+
+from .fields import (
+    GeometryField,
+    DataSetRelatedField,
+    UserRelatedField,
+    PlaceRelatedField,
+    SubmissionSetRelatedField,
+    TagRelatedField,
+    PlaceIdentityField,
+    AttachmentIdentityField,
+    SubmissionSetIdentityField,
+    DataSetPlaceSetIdentityField,
+    DataSetSubmissionSetIdentityField,
+    SubmissionIdentityField,
+    TagIdentityField,
+    PlaceTagListIdentityField,
+    PlaceTagIdentityField,
+    DataSetIdentityField,
+)
+
+from .user import (
+    BaseUserSerializer,
+    UserSerializer,
+    SimpleUserSerializer,
+)
+from .. import apikey
+from .. import cors
+from .. import models
+from ..models import check_data_permission
+from ..params import (
     INCLUDE_INVISIBLE_PARAM,
     INCLUDE_TAGS_PARAM,
-    INCLUDE_PRIVATE_FIELDS_PARAM,
     INCLUDE_SUBMISSIONS_PARAM,
-    FORMAT_PARAM
 )
 
 import logging
 logger = logging.getLogger(__name__)
-
-# TODO: renmae this into serializers/core.py and make a separate serializers/__init__.py
-
-
-###############################################################################
-#
-# Geo-related fields
-# ------------------
-#
-
-class GeometryField(serializers.Field):
-    def __init__(self, format='dict', *args, **kwargs):
-        self.format = format
-
-        if self.format not in ('json', 'wkt', 'dict'):
-            raise ValueError('Invalid format: %s' % self.format)
-
-        super(GeometryField, self).__init__(*args, **kwargs)
-
-    def to_representation(self, obj):
-        if self.format == 'json':
-            return obj.json
-        elif self.format == 'wkt':
-            return obj.wkt
-        elif self.format == 'dict':
-            return json.loads(obj.json)
-        else:
-            raise ValueError('Cannot output as %s' % self.format)
-
-    def to_internal_value(self, data):
-        if not isinstance(data, basestring):
-            data = json.dumps(data)
-
-        try:
-            return GEOSGeometry(data)
-        except Exception as exc:
-            raise ValidationError('Problem converting native data to Geometry: %s' % (exc,))
-
-###############################################################################
-#
-# Shareabouts-specific fields
-# ---------------------------
-#
-
-
-class ShareaboutsFieldMixin (object):
-
-    # These names should match the names of the cache parameters, and should be
-    # in the same order as the corresponding URL arguments.
-    url_arg_names = ()
-
-    def get_url_kwargs(self, obj):
-        """
-        Pull the appropriate arguments off of the cache to construct the URL.
-        """
-        if isinstance(obj, models.User):
-            instance_kwargs = {'owner_username': obj.username}
-        else:
-            instance_kwargs = obj.cache.get_cached_instance_params(obj.pk,
-                                                                   lambda: obj)
-
-        url_kwargs = {}
-        for arg_name in self.url_arg_names:
-            arg_value = instance_kwargs.get(arg_name, None)
-            if arg_value is None:
-                try:
-                    arg_value = getattr(obj, arg_name)
-                except AttributeError:
-                    raise KeyError('No arg named %r in %r' % (arg_name,
-                                                              instance_kwargs))
-            url_kwargs[arg_name] = arg_value
-        return url_kwargs
-
-
-def api_reverse(view_name, kwargs={}, request=None, format=None):
-    """
-    A special case of URL reversal where we know we're getting an API URL. This
-    can be much faster than Django's built-in general purpose regex resolver.
-
-    """
-    if request:
-        url = '{}://{}/api/v2'.format(request.scheme, request.get_host())
-    else:
-        url = '/api/v2'
-
-    route_template_strings = {
-        'submission-detail': '/{owner_username}/datasets/{dataset_slug}/places/{place_id}/{submission_set_name}/{submission_id}',
-        'submission-list': '/{owner_username}/datasets/{dataset_slug}/places/{place_id}/{submission_set_name}',
-
-        'place-detail':
-        '/{owner_username}/datasets/{dataset_slug}/places/{place_id}',
-        'place-list': '/{owner_username}/datasets/{dataset_slug}/places',
-        'place-tag-list': '/{owner_username}/datasets/{dataset_slug}/places/{place_id}/tags',
-
-        'dataset-detail': '/{owner_username}/datasets/{dataset_slug}',
-        'user-detail': '/{owner_username}',
-        'dataset-submission-list': '/{owner_username}/datasets/{dataset_slug}/{submission_set_name}',
-        'attachment-detail': '/{owner_username}/datasets/{dataset_slug}/places/{place_id}/attachments/{attachment_id}',
-    }
-
-    try:
-        route_template_string = route_template_strings[view_name]
-    except KeyError:
-        raise ValueError('No API route named {} formatted.'.format(view_name))
-
-    url_params = dict([(key, urlquote_plus(val))
-                       for key, val in kwargs.iteritems()])
-    url += route_template_string.format(**url_params)
-
-    if format is not None:
-        url += '.' + format
-
-    return url
-
-
-class ShareaboutsRelatedField (ShareaboutsFieldMixin,
-                               serializers.HyperlinkedRelatedField):
-    """
-    Represents a Shareabouts relationship using hyperlinking.
-    """
-    read_only = True
-    view_name = None
-
-    def __init__(self, *args, **kwargs):
-        if self.view_name is not None:
-            kwargs['view_name'] = self.view_name
-        if self.queryset is not None:
-            kwargs['queryset'] = self.queryset
-        super(ShareaboutsRelatedField, self).__init__(*args, **kwargs)
-
-    def get_attribute(self, obj):
-        # Pass the entire object through to `to_representation()`,
-        # instead of the standard attribute lookup. Otherwise,
-        # obj is just a DRF relations.PKOnlyObject.
-        return obj
-
-    def to_representation(self, obj, request=None, format=None):
-        view_name = self.view_name
-        request = request if request else self.context.get('request', None)
-        format = format if format else self.format or self.context.get('format', None)
-
-        pk = getattr(obj, 'pk', None)
-        if pk is None:
-            return
-
-        kwargs = self.get_url_kwargs(obj)
-        return api_reverse(view_name, kwargs=kwargs, request=request,
-                           format=format)
-
-
-class DataSetRelatedField (ShareaboutsRelatedField):
-    view_name = 'dataset-detail'
-    url_arg_names = ('owner_username', 'dataset_slug')
-
-    def get_url(self, obj, request):
-        url_kwargs = {
-            'owner_username': obj.owner.username,
-            'dataset_slug': obj.slug,
-        }
-        return reverse(self.view_name, kwargs=url_kwargs, request=request)
-
-    def get_object(self, view_name, view_args, view_kwargs):
-        lookup_kwargs = {
-            'display_name': view_kwargs['dataset_slug'],
-            'owner__username': view_kwargs['owner_username'],
-        }
-        return self.get_queryset().get(**lookup_kwargs)
-
-
-class DataSetKeysRelatedField (ShareaboutsRelatedField):
-    view_name = 'apikey-list'
-    url_arg_names = ('owner_username', 'dataset_slug')
-
-
-class UserRelatedField (ShareaboutsRelatedField):
-    view_name = 'user-detail'
-    url_arg_names = ('owner_username',)
-
-
-class PlaceRelatedField (ShareaboutsRelatedField):
-    view_name = 'place-detail'
-    url_arg_names = ('owner_username', 'dataset_slug', 'place_id')
-    queryset = models.Place.objects.all()
-
-    def get_object(self, view_name, view_args, view_kwargs):
-        lookup_kwargs = {
-            'id': view_kwargs['place_id'],
-        }
-        return self.get_queryset().get(**lookup_kwargs)
-
-
-class SubmissionSetRelatedField (ShareaboutsRelatedField):
-    view_name = 'submission-list'
-    url_arg_names = ('owner_username', 'dataset_slug', 'place_id',
-                     'submission_set_name')
-
-
-# TODO: enable this with caching
-class TagRelatedField (serializers.HyperlinkedRelatedField):
-    view_name = 'tag-detail'
-    queryset = models.Tag.objects.all()
-    lookup_field = 'id'
-
-    def get_url(self, obj, view_name, request, format):
-        url_kwargs = {
-            'owner_username': obj.dataset.owner.get_username(),
-            'dataset_slug': obj.dataset.slug,
-            'tag_id': obj.pk
-        }
-        return reverse(self.view_name, kwargs=url_kwargs, request=request, format=format)
-
-    # TODO: do we need this?
-    def get_object(self, view_name, view_args, view_kwargs):
-        lookup_kwargs = {
-           'dataset__slug': view_kwargs['dataset_slug'],
-           'id': view_kwargs['tag_id']
-        }
-        return self.get_queryset().get(**lookup_kwargs)
-
-
-class ShareaboutsIdentityField (ShareaboutsFieldMixin,
-                                serializers.HyperlinkedIdentityField):
-    read_only = True
-
-    def __init__(self, *args, **kwargs):
-        view_name = kwargs.pop('view_name', None) or getattr(self, 'view_name',
-                                                             None)
-        super(ShareaboutsIdentityField, self).__init__(view_name=view_name,
-                                                       *args, **kwargs)
-
-    def get_attribute(self, obj):
-        # Pass the entire object through to `to_representation()`,
-        # instead of the standard attribute lookup. Otherwise,
-        # obj is just a DRF relations.PKOnlyObject.
-        return obj
-
-    def to_representation(self, obj, request=None, format=None):
-        if obj.pk is None:
-            return None
-
-        request = request if request else self.context.get('request', None)
-        format = format if format else self.context.get('format', None)
-
-        view_name = self.view_name or self.parent.opts.view_name
-
-        kwargs = self.get_url_kwargs(obj)
-
-        if format and self.format and self.format != format:
-            format = self.format
-
-        return api_reverse(view_name, kwargs=kwargs, request=request,
-                           format=format)
-
-
-class PlaceIdentityField (ShareaboutsIdentityField):
-    url_arg_names = ('owner_username', 'dataset_slug', 'place_id')
-    view_name = 'place-detail'
-
-
-class AttachmentIdentityField (ShareaboutsIdentityField):
-    url_arg_names = ('owner_username', 'dataset_slug', 'place_id', 'attachment_id')
-    view_name = 'attachment-detail'
-
-
-class SubmissionSetIdentityField (ShareaboutsIdentityField):
-    url_arg_names = ('owner_username', 'dataset_slug', 'place_id',
-                     'submission_set_name')
-    view_name = 'submission-list'
-
-
-class DataSetPlaceSetIdentityField (ShareaboutsIdentityField):
-    url_arg_names = ('owner_username', 'dataset_slug')
-    view_name = 'place-list'
-
-
-class DataSetSubmissionSetIdentityField (ShareaboutsIdentityField):
-    url_arg_names = ('owner_username', 'dataset_slug', 'submission_set_name')
-    view_name = 'dataset-submission-list'
-
-
-class SubmissionIdentityField (ShareaboutsIdentityField):
-    url_arg_names = ('owner_username', 'dataset_slug', 'place_id',
-                     'submission_set_name', 'submission_id')
-    view_name = 'submission-detail'
-
-
-class TagIdentityField (serializers.HyperlinkedIdentityField):
-    lookup_field = 'id'
-
-    def __init__(self, *args, **kwargs):
-        super(TagIdentityField, self).__init__(view_name='tag-detail', *args, **kwargs)
-
-    def get_url(self, obj, view_name, request, format):
-        url_kwargs = {
-            'owner_username': obj.dataset.owner.get_username(),
-            'dataset_slug': obj.dataset.slug,
-            'tag_id': obj.pk
-        }
-        return reverse(view_name, kwargs=url_kwargs, request=request, format=format)
-
-
-class PlaceTagListIdentityField (ShareaboutsIdentityField):
-    url_arg_names = ('owner_username', 'dataset_slug', 'place_id',)
-    view_name = 'place-tag-list'
-
-
-class PlaceTagIdentityField (serializers.HyperlinkedIdentityField):
-    lookup_field = 'id'
-
-    def __init__(self, *args, **kwargs):
-        super(PlaceTagIdentityField, self).__init__(view_name='place-tag-detail', *args, **kwargs)
-
-    def get_url(self, obj, view_name, request, format):
-        url_kwargs = {
-            'owner_username': obj.tag.dataset.owner.get_username(),
-            'dataset_slug': obj.tag.dataset.slug,
-            'place_id': obj.place.id,
-            'place_tag_id': obj.pk
-        }
-        return reverse(view_name, kwargs=url_kwargs, request=request, format=format)
-
-
-class DataSetIdentityField (ShareaboutsIdentityField):
-    url_arg_names = ('owner_username', 'dataset_slug')
-    view_name = 'dataset-detail'
-
-
-class AttachmentFileField (serializers.FileField):
-    def to_representation(self, obj):
-        return obj.storage.url(obj.name)
-
-
-###############################################################################
-#
-# Serializer Mixins
-# -----------------
-#
-
-
-class ActivityGenerator (object):
-    def save(self, silent=False, **kwargs):
-        request = self.context['request']
-        silent_header = request.META.get('HTTP_X_SHAREABOUTS_SILENT', 'False')
-        if not silent:
-            silent = silent_header.lower() in ('true', 't', 'yes', 'y')
-        request_source = request.META.get('HTTP_REFERER', '')
-        return super(ActivityGenerator, self).save(
-            silent=silent,
-            source=request_source,
-            **kwargs
-        )
-
-
-class EmptyModelSerializer (object):
-    """
-    A simple mixin that constructs an in-memory model when None is passed in
-    as the object to to_representation.
-    """
-    def ensure_obj(self, obj):
-        if obj is None: obj = self.opts.model()
-        return obj
-
-
-class DataBlobProcessor (EmptyModelSerializer):
-    """
-    Like ModelSerializer, but automatically serializes/deserializes a
-    'data' JSON blob of arbitrary key/value pairs.
-    """
-
-    def to_internal_value(self, data):
-        """
-        Dict of native values <- Dict of primitive datatypes.
-        """
-        known_fields_object = super(DataBlobProcessor, self).to_internal_value(data)
-
-        model = self.Meta.model
-        blob = json.loads(self.instance.data) if self.partial else {}
-        data_copy = OrderedDict()
-
-        # Pull off any fields that the model doesn't know about directly
-        # and put them into the data blob.
-        known_fields = set([f.name for f in model._meta.get_fields()])
-
-        # Also ignore the following field names (treat them like reserved
-        # words).
-        known_fields.update(self.fields.keys())
-
-        # And allow an arbitrary value field named 'data' (don't let the
-        # data blob get in the way).
-        known_fields.remove('data')
-
-        # Split the incoming data into stuff that will be set straight onto
-        # preexisting fields, and stuff that will go into the data blob.
-        for key in data:
-            if key not in known_fields:
-                blob[key] = data[key]
-
-        for key in known_fields_object:
-            data_copy[key] = known_fields_object[key]
-
-        data_copy['data'] = json.dumps(blob)
-
-        if not self.partial:
-            for field_name, field in self.fields.items():
-                if (not field.read_only and field_name not in data_copy and field.default is not fields.empty):
-                    data_copy[field_name] = field.default
-
-        return data_copy
-
-    # TODO: What is this replaced with?
-    def convert_object(self, obj):
-        attrs = super(DataBlobProcessor, self).convert_object(obj)
-
-        data = json.loads(obj.data)
-        del attrs['data']
-        attrs.update(data)
-
-        return attrs
-
-    def explode_data_blob(self, data):
-        blob = data.pop('data')
-
-        blob_data = json.loads(blob)
-
-        # Did the user not ask for private data? Remove it!
-        if not self.is_flag_on(INCLUDE_PRIVATE_FIELDS_PARAM):
-            for key in blob_data.keys():
-                if key.startswith('private'):
-                    del blob_data[key]
-
-        data.update(blob_data)
-        return data
-
-    def to_representation(self, obj):
-        obj = self.ensure_obj(obj)
-        data = super(DataBlobProcessor, self).to_representation(obj)
-        self.explode_data_blob(data)
-        return data
-
-
-class AttachmentSerializerMixin (EmptyModelSerializer, serializers.ModelSerializer):
-    url = AttachmentIdentityField()
-
-    def to_representation(self, instance):
-        # add an 'id', which is the primary key
-        ret = super(AttachmentSerializerMixin, self).to_representation(instance)
-        ret['id'] = instance.pk
-        return ret
-
-###############################################################################
-#
-# User Data Strategies
-# --------------------
-# Shims for reading user data from various social authentication provider
-# objects.
-#
-
-class DefaultUserDataStrategy (object):
-    def extract_avatar_url(self, user_info):
-        return ''
-
-    def extract_full_name(self, user_info):
-        return ''
-
-    def extract_bio(self, user_info):
-        return ''
-
-
-class TwitterUserDataStrategy (object):
-    def extract_avatar_url(self, user_info):
-        try:
-          url = user_info['profile_image_url_https']
-        except:
-          url = user_info['profile_image_url']
-
-        url_pattern = '^(?P<path>.*?)(?:_normal|_mini|_bigger|)(?P<ext>\.[^\.]*)$'
-        match = re.match(url_pattern, url)
-        if match:
-            return match.group('path') + '_bigger' + match.group('ext')
-        else:
-            return url
-
-    def extract_full_name(self, user_info):
-        return user_info['name']
-
-    def extract_bio(self, user_info):
-        return user_info['description']
-
-
-class FacebookUserDataStrategy (object):
-    def extract_avatar_url(self, user_info):
-        url = user_info['picture']['data']['url']
-        return url
-
-    def extract_full_name(self, user_info):
-        return user_info['name']
-
-    def extract_bio(self, user_info):
-        return user_info['about']
-
-
-class GoogleUserDataStrategy (object):
-    def extract_avatar_url(self, user_info):
-       url = user_info['image']['url']
-       return url
-
-    def extract_full_name(self, user_info):
-        name = user_info['name']['givenName'] + ' ' + user_info['name']['familyName']
-        return name
-
-    def extract_bio(self, user_info):
-        return user_info["aboutMe"]
-
-class ShareaboutsUserDataStrategy (object):
-    """
-    This strategy exists so that we can add avatars and full names to users
-    that already exist in the system without them creating a Twitter or
-    Facebook account.
-    """
-    def extract_avatar_url(self, user_info):
-        return user_info.get('avatar_url', None)
-
-    def extract_full_name(self, user_info):
-        return user_info.get('full_name', None)
-
-    def extract_bio(self, user_info):
-        return user_info.get('bio', None)
-
 
 ###############################################################################
 #
@@ -571,13 +66,19 @@ class ShareaboutsUserDataStrategy (object):
 #    hyperlinked serializer. This is more useful for bulk data dumps where all
 #    of the related data is included in a package.
 #
- 
+
+
 class AttachmentListSerializer (AttachmentSerializerMixin):
+    url = AttachmentIdentityField()
+
     class Meta:
         model = models.Attachment
         exclude = ('thing', 'id')
 
+
 class AttachmentInstanceSerializer (AttachmentSerializerMixin):
+    url = AttachmentIdentityField()
+
     class Meta:
         model = models.Attachment
         exclude = ('thing', 'id')
@@ -652,84 +153,6 @@ class GroupSerializer (BaseGroupSerializer):
             })
 
         return ret
-
-
-# User serializers
-class BaseUserSerializer (serializers.ModelSerializer):
-    name = serializers.SerializerMethodField()
-    avatar_url = serializers.SerializerMethodField()
-    provider_type = serializers.SerializerMethodField()
-    provider_id = serializers.SerializerMethodField()
-
-    strategies = {
-        'twitter': TwitterUserDataStrategy(),
-        'facebook': FacebookUserDataStrategy(),
-        'google-oauth2': GoogleUserDataStrategy(),
-        'shareabouts': ShareaboutsUserDataStrategy()
-    }
-    default_strategy = DefaultUserDataStrategy()
-
-    class Meta:
-        model = models.User
-        exclude = ('first_name', 'last_name', 'email', 'password', 'is_staff',
-                   'is_active', 'is_superuser', 'last_login', 'date_joined',
-                   'user_permissions')
-
-    def get_strategy(self, obj):
-        for social_auth in obj.social_auth.all():
-            provider = social_auth.provider
-            if provider in self.strategies:
-                return social_auth.extra_data, self.strategies[provider]
-
-        return None, self.default_strategy
-
-    def get_name(self, obj):
-        user_data, strategy = self.get_strategy(obj)
-        return strategy.extract_full_name(user_data)
-
-    def get_avatar_url(self, obj):
-        user_data, strategy = self.get_strategy(obj)
-        return strategy.extract_avatar_url(user_data)
-
-    def get_provider_type(self, obj):
-        for social_auth in obj.social_auth.all():
-            return social_auth.provider
-        else:
-            return ''
-
-    def get_provider_id(self, obj):
-        for social_auth in obj.social_auth.all():
-            return social_auth.uid
-        else:
-            return None
-
-    def to_representation(self, obj):
-        return {
-            "name": self.get_name(obj),
-            "avatar_url": self.get_avatar_url(obj),
-            "provider_type": self.get_provider_type(obj),
-            "provider_id": self.get_provider_id(obj),
-            "id": obj.id,
-            "username": obj.username
-        } if obj else {}
-
-
-class SimpleUserSerializer (BaseUserSerializer):
-    """
-    Generates a partial user representation, for use as submitter data in bulk
-    data calls.
-    """
-    class Meta (BaseUserSerializer.Meta):
-        exclude = BaseUserSerializer.Meta.exclude + ('groups',)
-
-
-class UserSerializer (BaseUserSerializer):
-    """
-    Generates a partial user representation, for use as submitter data in API
-    calls.
-    """
-    class Meta (BaseUserSerializer.Meta):
-        exclude = BaseUserSerializer.Meta.exclude + ('groups',)
 
 
 class FullUserSerializer (BaseUserSerializer):
