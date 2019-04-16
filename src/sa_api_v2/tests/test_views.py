@@ -150,10 +150,10 @@ class TestPlaceInstanceView (APITestMixin, TestCase):
         self.assertEqual(
             data['properties']['url'],
             'http://testserver' +
-                reverse(
-                    'place-detail',
-                    args=[self.owner.username, self.dataset.slug, self.place.id]
-                )
+            reverse(
+                'place-detail',
+                args=[self.owner.username, self.dataset.slug, self.place.id]
+            )
         )
 
         # Check that the submission sets look right
@@ -1019,9 +1019,11 @@ class TestPlaceListView (APITestMixin, TestCase):
         self.assertIn('geometry', data['features'][0])
         self.assertIn('type', data['features'][0])
 
-        self.assertEqual(data['features'][0]['properties']['url'],
-            'http://testserver/api/v2/%s/datasets/%s/places/%s' %
-            (self.owner.username, self.dataset.slug, self.place.id))
+        self.assertEqual(
+            data['features'][0]['properties']['url'],
+            'http://testserver' +
+            reverse('place-detail', args=[self.owner.username, self.dataset.slug, self.place.id]),
+        )
 
     def test_GET_response_for_multiple_specific_objects(self):
         places = []

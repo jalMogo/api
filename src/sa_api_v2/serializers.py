@@ -163,10 +163,10 @@ class ShareaboutsRelatedField (ShareaboutsFieldMixin,
         # obj is just a DRF relations.PKOnlyObject.
         return obj
 
-    def to_representation(self, obj):
+    def to_representation(self, obj, request=None, format=None):
         view_name = self.view_name
-        request = self.context.get('request', None)
-        format = self.format or self.context.get('format', None)
+        request = request if request else self.context.get('request', None)
+        format = format if format else self.format or self.context.get('format', None)
 
         pk = getattr(obj, 'pk', None)
         if pk is None:
@@ -186,7 +186,7 @@ class DataSetRelatedField (ShareaboutsRelatedField):
             'owner_username': obj.owner.username,
             'dataset_slug': obj.slug,
         }
-        return reverse('dataset-detail', kwargs=url_kwargs, request=request)
+        return reverse(self.view_name, kwargs=url_kwargs, request=request)
 
     def get_object(self, view_name, view_args, view_kwargs):
         lookup_kwargs = {
@@ -236,7 +236,7 @@ class TagRelatedField (serializers.HyperlinkedRelatedField):
             'dataset_slug': obj.dataset.slug,
             'tag_id': obj.pk
         }
-        return reverse(view_name, kwargs=url_kwargs, request=request, format=format)
+        return reverse(self.view_name, kwargs=url_kwargs, request=request, format=format)
 
     # TODO: do we need this?
     def get_object(self, view_name, view_args, view_kwargs):
@@ -263,12 +263,13 @@ class ShareaboutsIdentityField (ShareaboutsFieldMixin,
         # obj is just a DRF relations.PKOnlyObject.
         return obj
 
-    def to_representation(self, obj):
+    def to_representation(self, obj, request=None, format=None):
         if obj.pk is None:
             return None
 
-        request = self.context.get('request', None)
-        format = self.context.get('format', None)
+        request = request if request else self.context.get('request', None)
+        format = format if format else self.context.get('format', None)
+
         view_name = self.view_name or self.parent.opts.view_name
 
         kwargs = self.get_url_kwargs(obj)
@@ -899,8 +900,11 @@ class BasePlaceSerializer (SubmittedThingSerializer,
         Get this for the entire dataset at once.
         """
         url_field = PlaceTagListIdentityField()
-        url_field.context = self.context
-        url = url_field.to_representation(place)
+        url = url_field.to_representation(
+            place,
+            request=self.context.get('request', None),
+            format=self.context.get('format', None)
+        )
         return {
             'url': url,
             'length': place.tags.count()
@@ -961,10 +965,14 @@ class BasePlaceSerializer (SubmittedThingSerializer,
 
         request = self.context.get('request', None)
 
+        dataset_field = fields['dataset']
         data = {
             'id': obj.pk,  # = serializers.PrimaryKeyRelatedField(read_only=True)
             'geometry': str(obj.geometry or 'POINT(0 0)'),  # = GeometryField(format='wkt')
-            'dataset': fields['dataset'].get_url(obj.dataset, request),
+            'dataset': dataset_field.get_url(
+                obj.dataset,
+                request,
+            ),
             'attachments': self.attachments_to_native(obj),  # = AttachmentSerializer(read_only=True)
             'submitter': self.submitter_to_native(obj),
             'data': obj.data,
@@ -978,10 +986,14 @@ class BasePlaceSerializer (SubmittedThingSerializer,
         if obj.private:
             data['private'] = obj.private
 
+        # For use in PlaceSerializer:
         if 'url' in fields:
             field = fields['url']
-            field.context = self.context
-            data['url'] = field.to_representation(obj)
+            data['url'] = field.to_representation(
+                obj,
+                request=request,
+                format=self.context.get('format', None)
+            )
 
         data = self.explode_data_blob(data)
 
@@ -1011,6 +1023,7 @@ class BasePlaceSerializer (SubmittedThingSerializer,
 class SimplePlaceSerializer (BasePlaceSerializer):
     class Meta (BasePlaceSerializer.Meta):
         read_only_fields = ('dataset',)
+        fields = '__all__'
 
 
 class PlaceListSerializer(serializers.ListSerializer):
@@ -1044,11 +1057,15 @@ class PlaceSerializer (BasePlaceSerializer,
 
     class Meta (BasePlaceSerializer.Meta):
         list_serializer_class = PlaceListSerializer
+        fields = '__all__'
 
     def summary_to_native(self, set_name, submissions):
         url_field = SubmissionSetIdentityField()
-        url_field.context = self.context
-        set_url = url_field.to_representation(submissions[0])
+        set_url = url_field.to_representation(
+            submissions[0],
+            request=self.context.get('request', None),
+            format=self.context.get('format', None)
+        )
 
         return {
             'name': set_name,
@@ -1208,6 +1225,7 @@ class DataSetSerializer (BaseDataSetSerializer, serializers.HyperlinkedModelSeri
 
     class Meta (BaseDataSetSerializer.Meta):
         validators = []
+        fields = '__all__'
         pass
 
     def validate_load_from_url(self, attrs, source):
