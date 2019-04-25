@@ -20,6 +20,7 @@ from .fields import (
     PlaceRelatedField,
     SubmissionSetRelatedField,
     TagRelatedField,
+    CategoriesSerializer,
     PlaceIdentityField,
     AttachmentIdentityField,
     SubmissionSetIdentityField,
@@ -721,6 +722,8 @@ class ActionSerializer (EmptyModelSerializer, serializers.ModelSerializer):
 
 
 class FlavorSerializer (serializers.ModelSerializer):
+    categories = CategoriesSerializer(many=True, read_only=True)
+
     class Meta:
         model = models.Flavor
         fields = '__all__'
