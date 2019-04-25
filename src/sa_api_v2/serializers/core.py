@@ -4,8 +4,7 @@ DjangoRestFramework resources for the Shareabouts REST API.
 from django.utils import six
 from collections import defaultdict
 from django.core.exceptions import ValidationError
-from rest_framework import pagination, serializers
-from rest_framework.response import Response
+from rest_framework import serializers
 
 from .mixins import (
     ActivityGenerator,
@@ -721,39 +720,3 @@ class ActionSerializer (EmptyModelSerializer, serializers.ModelSerializer):
         return serializer.data
 
 
-###############################################################################
-#
-# Pagination Serializers
-# ----------------------
-#
-
-class MetadataPagination(pagination.PageNumberPagination):
-    page_size_query_param = 'page_size'
-    page_size = 50
-
-    def get_paginated_response(self, data):
-        return Response({
-            'metadata': {
-                'length': self.page.paginator.count,
-                'page': self.page.number,
-                'next': self.get_next_link(),
-                'previous': self.get_previous_link()
-            },
-            'results': data
-        })
-
-class FeatureCollectionPagination(pagination.PageNumberPagination):
-    page_size_query_param = 'page_size'
-    page_size = 50
-
-    def get_paginated_response(self, data):
-        return Response({
-            'metadata': {
-                'length': self.page.paginator.count,
-                'page': self.page.number,
-                'next': self.get_next_link(),
-                'previous': self.get_previous_link()
-            },
-            'type': 'FeatureCollection',
-            'features': data
-        })
