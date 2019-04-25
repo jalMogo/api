@@ -223,14 +223,6 @@ class TagRelatedField (serializers.HyperlinkedRelatedField):
         return self.get_queryset().get(**lookup_kwargs)
 
 
-class CategoriesSerializer (serializers.ModelSerializer):
-    # queryset = models.Category.objects.all()
-
-    class Meta:
-        model = models.Category
-        fields = '__all__'
-
-
 class ShareaboutsIdentityField (ShareaboutsFieldMixin,
                                 serializers.HyperlinkedIdentityField):
     read_only = True
