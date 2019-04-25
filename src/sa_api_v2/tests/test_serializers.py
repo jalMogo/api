@@ -15,7 +15,7 @@ from sa_api_v2.models import (
     Group,
     Flavor,
     Category,
-    # Form,
+    Form,
 )
 from sa_api_v2.serializers import (
     AttachmentListSerializer,
@@ -369,26 +369,46 @@ class TestFlavorSerializer (TestCase):
         Submission.objects.all().delete()
         cache_buffer.reset()
 
-        self.flavor = Flavor.objects.create(
-            name='test',
+        self.owner = User.objects.create(username='myuser')
+        self.dataset1 = DataSet.objects.create(
+            slug='data',
+            owner_id=self.owner.id
         )
+
+        self.form1 = Form.objects.create(
+            label='form1',
+            dataset=self.dataset1,
+        )
+
+        self.form2 = Form.objects.create(
+            label='form2',
+            dataset=self.dataset1,
+        )
+
+        self.flavor = Flavor.objects.create(
+            name='myflavor',
+        )
+
         self.category1 = Category.objects.create(
             icon='path/to/my/icon.png',
             name="category1",
             flavor=self.flavor,
+            form=self.form1,
         )
+
         self.category2 = Category.objects.create(
             icon='path/to/my/icon.png',
             name="category2",
             flavor=self.flavor,
+            form=self.form2,
         )
 
     def tearDown(self):
-        User.objects.all().delete()
         Flavor.objects.all().delete()
+        Category.objects.all().delete()
+        Form.objects.all().delete()
         DataSet.objects.all().delete()
-        Place.objects.all().delete()
-        Submission.objects.all().delete()
+        User.objects.all().delete()
         cache_buffer.reset()
 
     def test_attributes(self):
@@ -402,5 +422,18 @@ class TestFlavorSerializer (TestCase):
         self.assertEqual(2, len(serializer.data['categories']))
         self.assertIn('categories', serializer.data)
         self.assertEqual(2, len(serializer.data['categories']))
-        self.assertTrue(any(category['name'] == 'category1' for category in serializer.data['categories']))
-        self.assertTrue(any(category['name'] == 'category2' for category in serializer.data['categories']))
+        category1 = next(category for category in serializer.data['categories'] if category['name'] == 'category1')
+        self.assertEqual(category1.get('name'), self.category1.name)
+        category2 = next(category for category in serializer.data['categories'] if category['name'] == 'category2')
+        self.assertEqual(category2.get('name'), self.category2.name)
+
+    def test_forms(self):
+        serializer = FlavorSerializer(self.flavor)
+        category1 = next(category for category in serializer.data['categories']
+                         if category['name'] == 'category1')
+        form1 = category1['form']
+        self.assertTrue(form1.get('label'), self.form1.label)
+        category2 = next(category for category in serializer.data['categories']
+                         if category['name'] == 'category2')
+        form2 = category2['form']
+        self.assertTrue(form2.get('label'), self.form2.label)

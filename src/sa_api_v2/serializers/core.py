@@ -20,7 +20,6 @@ from .fields import (
     PlaceRelatedField,
     SubmissionSetRelatedField,
     TagRelatedField,
-    CategoriesSerializer,
     PlaceIdentityField,
     AttachmentIdentityField,
     SubmissionSetIdentityField,
@@ -721,8 +720,27 @@ class ActionSerializer (EmptyModelSerializer, serializers.ModelSerializer):
         return serializer.data
 
 
+class FormSerializer (serializers.ModelSerializer):
+    # queryset = models.Category.objects.all()
+    # dataset = DataSetRelatedField(queryset=models.DataSet.objects.all())
+
+    class Meta:
+        model = models.Form
+        # fields = '__all__'
+        # TODO: show the dataset
+        exclude = ['dataset']
+
+
+class CategorySerializer (serializers.ModelSerializer):
+    form = FormSerializer(read_only=True)
+
+    class Meta:
+        model = models.Category
+        fields = '__all__'
+
+
 class FlavorSerializer (serializers.ModelSerializer):
-    categories = CategoriesSerializer(many=True, read_only=True)
+    categories = CategorySerializer(many=True, read_only=True)
 
     class Meta:
         model = models.Flavor
