@@ -5,4 +5,4 @@ from .data_permissions import *
 from .profiles import *
 from .bulk_data import *
 from .tags import *
-from .flavor import *
+from .flavors import *
