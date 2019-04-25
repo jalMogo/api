@@ -1,13 +1,33 @@
-#-*- coding:utf-8 -*-
-
+# -*- coding:utf-8 -*-
 from django.test import TestCase
 from django.test.client import RequestFactory
 from django.core.files.base import ContentFile
 from django.core.urlresolvers import reverse
 from nose.tools import istest
 from sa_api_v2.cache import cache_buffer
-from sa_api_v2.models import Attachment, Action, User, DataSet, Place, Submission, Group
-from sa_api_v2.serializers import AttachmentListSerializer, AttachmentInstanceSerializer, ActionSerializer, UserSerializer, FullUserSerializer, PlaceSerializer, DataSetSerializer, SubmissionSerializer
+from sa_api_v2.models import (
+    Attachment,
+    Action,
+    User,
+    DataSet,
+    Place,
+    Submission,
+    Group,
+    Flavor,
+    Category,
+    # Form,
+)
+from sa_api_v2.serializers import (
+    AttachmentListSerializer,
+    AttachmentInstanceSerializer,
+    ActionSerializer,
+    UserSerializer,
+    FullUserSerializer,
+    PlaceSerializer,
+    DataSetSerializer,
+    SubmissionSerializer,
+    FlavorSerializer,
+)
 from social_django.models import UserSocialAuth
 import json
 from os import path
@@ -338,3 +358,31 @@ class TestDataSetSerializer (TestCase):
 
         data = serializer.data
         self.assertIsInstance(data, dict)
+
+
+class TestFlavorSerializer (TestCase):
+
+    def setUp(self):
+        User.objects.all().delete()
+        DataSet.objects.all().delete()
+        Place.objects.all().delete()
+        Submission.objects.all().delete()
+        cache_buffer.reset()
+
+        self.flavor = Flavor.objects.create(
+            name='test',
+            # datasets=[self.dataset, self.dataset2]
+        )
+
+    def tearDown(self):
+        User.objects.all().delete()
+        Flavor.objects.all().delete()
+        DataSet.objects.all().delete()
+        Place.objects.all().delete()
+        Submission.objects.all().delete()
+        cache_buffer.reset()
+
+    def test_attributes(self):
+        serializer = FlavorSerializer(self.flavor)
+
+        self.assertIn('name', serializer.data)
