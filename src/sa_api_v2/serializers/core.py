@@ -713,3 +713,7 @@ class ActionSerializer (EmptyModelSerializer, serializers.ModelSerializer):
         return serializer.data
 
 
+class FlavorSerializer (serializers.ModelSerializer):
+    class Meta:
+        model = models.Flavor
+        fields = '__all__'
