@@ -17,6 +17,7 @@ class Flavor(models.Model):
 
 
 class Category(models.Model):
+    name = models.CharField(max_length=128)
     icon = models.CharField(max_length=128)
     flavor = models.ForeignKey(Flavor, related_name='categories',
                                on_delete=models.CASCADE)

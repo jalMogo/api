@@ -371,7 +371,16 @@ class TestFlavorSerializer (TestCase):
 
         self.flavor = Flavor.objects.create(
             name='test',
-            # datasets=[self.dataset, self.dataset2]
+        )
+        self.category1 = Category.objects.create(
+            icon='path/to/my/icon.png',
+            name="category1",
+            flavor=self.flavor,
+        )
+        self.category2 = Category.objects.create(
+            icon='path/to/my/icon.png',
+            name="category2",
+            flavor=self.flavor,
         )
 
     def tearDown(self):
@@ -386,3 +395,12 @@ class TestFlavorSerializer (TestCase):
         serializer = FlavorSerializer(self.flavor)
 
         self.assertIn('name', serializer.data)
+
+    def test_categories(self):
+        serializer = FlavorSerializer(self.flavor)
+
+        self.assertEqual(2, len(serializer.data['categories']))
+        self.assertIn('categories', serializer.data)
+        self.assertEqual(2, len(serializer.data['categories']))
+        self.assertTrue(any(category['name'] == 'category1' for category in serializer.data['categories']))
+        self.assertTrue(any(category['name'] == 'category2' for category in serializer.data['categories']))
