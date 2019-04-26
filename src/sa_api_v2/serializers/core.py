@@ -724,16 +724,11 @@ class FormSerializer (serializers.ModelSerializer):
         exclude = ['dataset']
 
 
-class CategorySerializer (serializers.ModelSerializer):
-    form = FormSerializer(read_only=True)
 
-    class Meta:
-        model = models.Category
-        fields = '__all__'
 
 
 class FlavorSerializer (serializers.ModelSerializer):
-    categories = CategorySerializer(many=True, read_only=True)
+    forms = FormSerializer(many=True, read_only=True)
 
     class Meta:
         model = models.Flavor
