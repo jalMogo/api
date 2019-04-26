@@ -398,12 +398,18 @@ class TestFlavorSerializer (TestCase):
         cache_buffer.reset()
 
     def test_attributes(self):
-        serializer = FlavorSerializer(self.flavor)
+        serializer = FlavorSerializer(
+            self.flavor,
+            context={'request': RequestFactory().get('')},
+        )
 
         self.assertIn('name', serializer.data)
 
     def test_forms(self):
-        serializer = FlavorSerializer(self.flavor)
+        serializer = FlavorSerializer(
+            self.flavor,
+            context={'request': RequestFactory().get('')},
+        )
         self.assertEqual(2, len(serializer.data['forms']))
 
         form1 = next(form for form in serializer.data['forms']
@@ -415,3 +421,4 @@ class TestFlavorSerializer (TestCase):
         self.assertTrue(form2.get('label'), self.form2.label)
         self.assertIn('flavor', form2)
         self.assertIn('is_enabled', form2)
+        self.assertIn('dataset', form2)
