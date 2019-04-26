@@ -153,6 +153,20 @@ class ShareaboutsRelatedField (ShareaboutsFieldMixin,
                            format=format)
 
 
+# If we want to make this field writeable, we'll need to implement a get_object as well.
+class DataSetHyperlinkedField (serializers.HyperlinkedRelatedField):
+    view_name = 'dataset-detail'
+    queryset = models.DataSet.objects.all()
+    lookup_field = 'id'
+
+    def get_url(self, obj, view_name, request, format):
+        url_kwargs = {
+            'owner_username': obj.owner.username,
+            'dataset_slug': obj.slug,
+        }
+        return reverse(self.view_name, kwargs=url_kwargs, request=request)
+
+
 class DataSetRelatedField (ShareaboutsRelatedField):
     view_name = 'dataset-detail'
     url_arg_names = ('owner_username', 'dataset_slug')

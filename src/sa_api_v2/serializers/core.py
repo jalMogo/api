@@ -16,6 +16,7 @@ from .mixins import (
 from .fields import (
     GeometryField,
     DataSetRelatedField,
+    DataSetHyperlinkedField,
     UserRelatedField,
     PlaceRelatedField,
     SubmissionSetRelatedField,
@@ -721,17 +722,11 @@ class ActionSerializer (EmptyModelSerializer, serializers.ModelSerializer):
 
 
 class FormSerializer (serializers.ModelSerializer):
-    # queryset = models.Category.objects.all()
-    # dataset = DataSetRelatedField(queryset=models.DataSet.objects.all())
+    dataset = DataSetHyperlinkedField()
 
     class Meta:
         model = models.Form
-        # fields = '__all__'
-        # TODO: show the dataset
-        exclude = ['dataset']
-
-
-
+        fields = '__all__'
 
 
 class FlavorSerializer (serializers.ModelSerializer):
