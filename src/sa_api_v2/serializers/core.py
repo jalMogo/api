@@ -731,7 +731,7 @@ class RadioOptionSerializer (serializers.ModelSerializer):
 
     class Meta:
         model = models.RadioOption
-        fields = '__all__'
+        fields = ['label', 'value']
 
 
 class RadioFieldModuleSerializer (serializers.ModelSerializer):
@@ -739,7 +739,7 @@ class RadioFieldModuleSerializer (serializers.ModelSerializer):
 
     class Meta:
         model = models.RadioField
-        fields = '__all__'
+        fields = ['variant', 'placeholder', 'options']
 
 
 class FormModuleSerializer (serializers.ModelSerializer):
@@ -756,7 +756,7 @@ class FormSerializer (serializers.ModelSerializer):
 
     class Meta:
         model = models.Form
-        fields = '__all__'
+        fields = ['label', 'is_enabled', 'dataset', 'flavor', 'modules']
 
 
 class FlavorSerializer (serializers.ModelSerializer):
@@ -764,4 +764,4 @@ class FlavorSerializer (serializers.ModelSerializer):
 
     class Meta:
         model = models.Flavor
-        fields = '__all__'
+        fields = ['name', 'forms']
