@@ -17,10 +17,10 @@ class FlavorInstanceView (generics.RetrieveAPIView):
     serializer_class = serializers.FlavorSerializer
 
     def get_object(self, queryset=None):
-        flavor_name = self.kwargs['flavor_name']
+        flavor_slug = self.kwargs['flavor_slug']
         flavor_queryset = self.model\
                               .objects\
-                              .filter(name=flavor_name)\
+                              .filter(slug=flavor_slug)\
                               .prefetch_related(
                                   Prefetch(
                                       'forms__modules',
