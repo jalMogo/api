@@ -15,6 +15,8 @@ from sa_api_v2.models import (
     Group,
     Flavor,
     Form,
+    RadioField,
+    RadioOption,
 )
 from sa_api_v2.serializers import (
     AttachmentListSerializer,
@@ -384,6 +386,30 @@ class TestFlavorSerializer (TestCase):
             flavor=self.flavor,
         )
 
+        self.form1_modules = [
+            RadioField.objects.create(
+                key="ward",
+                form=self.form1,
+                placeholder="testing",
+            )
+        ]
+
+        RadioOption.objects.create(
+            label="Ward 1",
+            value="ward_1",
+            field=self.form1_modules[0],
+        )
+        RadioOption.objects.create(
+            label="Ward 2",
+            value="ward_2",
+            field=self.form1_modules[0],
+        )
+        RadioOption.objects.create(
+            label="Ward 3",
+            value="ward_3",
+            field=self.form1_modules[0],
+        )
+
         self.form2 = Form.objects.create(
             label='form2',
             dataset=self.dataset1,
@@ -421,4 +447,17 @@ class TestFlavorSerializer (TestCase):
         self.assertTrue(form2.get('label'), self.form2.label)
         self.assertIn('flavor', form2)
         self.assertIn('is_enabled', form2)
+        self.assertIn('dataset', form1)
         self.assertIn('dataset', form2)
+
+    def test_form_modules_radiofield(self):
+        serializer = FlavorSerializer(
+            self.flavor,
+            context={'request': RequestFactory().get('')},
+        )
+        self.assertEqual(2, len(serializer.data['forms']))
+
+        form1 = next(form for form in serializer.data['forms']
+                     if form['label'] == 'form1')
+        self.assertTrue(form1.get('label'), self.form1.label)
+        self.assertTrue(len(form1.get('modules')[0].get('radiofield').get('options')), 3)
