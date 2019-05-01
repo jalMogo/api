@@ -26,6 +26,7 @@ class TestFlavorInstanceView (APITestMixin, TestCase):
 
         self.flavor = Flavor.objects.create(
             name='myflavor',
+            slug='myflavor',
         )
 
         self.form1 = Form.objects.create(
@@ -65,7 +66,7 @@ class TestFlavorInstanceView (APITestMixin, TestCase):
         )
 
         self.request_kwargs = {
-            'flavor_name': self.flavor.name,
+            'flavor_slug': self.flavor.name,
         }
 
         self.factory = RequestFactory()
@@ -95,15 +96,16 @@ class TestFlavorInstanceView (APITestMixin, TestCase):
         # Check that the appropriate attributes are in the properties
         self.assertIn('forms', data)
         self.assertIn('name', data)
+        self.assertIn('slug', data)
 
         # Check that the data attributes have been incorporated into the
         # properties
         self.assertEqual(len(data.get('forms')), 2)
 
     def test_GET_invalid_url(self):
-        # Make sure that we respond with 404 if a flavor's slug is supplied, but it doesn't match to any dataset
+        # Make sure that we respond with 404 if a flavor's slug is supplied, but it doesn't match to any flavor
         request_kwargs = {
-          'flavor_name': 'wrong_name',
+          'flavor_slug': 'wrong_slug',
         }
 
         path = reverse('flavor-detail', kwargs=request_kwargs)
