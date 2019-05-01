@@ -37,7 +37,7 @@ urlpatterns = [
         name='dataset-snapshot-instance'),
 
     # flavors
-    url(r'^flavors/(?P<flavor_name>[^/]+)$',
+    url(r'^flavors/(?P<flavor_slug>[^/]+)$',
         views.FlavorInstanceView.as_view(),
         name='flavor-detail'),
 

@@ -757,4 +757,4 @@ class FlavorSerializer (serializers.ModelSerializer):
 
     class Meta:
         model = models.Flavor
-        fields = ['name', 'forms']
+        fields = ['name', 'slug', 'forms']
