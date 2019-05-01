@@ -714,8 +714,38 @@ class ActionSerializer (EmptyModelSerializer, serializers.ModelSerializer):
         return serializer.data
 
 
+class InformationalHtmlModuleSerializer (serializers.ModelSerializer):
+    class Meta:
+        model = models.InformationalHtmlModule
+        fields = '__all__'
+
+
+class RadioOptionSerializer (serializers.ModelSerializer):
+
+    class Meta:
+        model = models.RadioOption
+        fields = '__all__'
+
+
+class RadioFieldModuleSerializer (serializers.ModelSerializer):
+    options = RadioOptionSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = models.RadioField
+        fields = '__all__'
+
+
+class FormModuleSerializer (serializers.ModelSerializer):
+    radiofield = RadioFieldModuleSerializer(read_only=True)
+
+    class Meta:
+        model = models.FormModule
+        fields = '__all__'
+
+
 class FormSerializer (serializers.ModelSerializer):
     dataset = DataSetHyperlinkedField()
+    modules = FormModuleSerializer(many=True, read_only=True)
 
     class Meta:
         model = models.Form

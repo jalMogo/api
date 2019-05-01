@@ -23,3 +23,57 @@ class Form(models.Model):
     class Meta:
         app_label = 'sa_api_v2'
         db_table = 'ms_api_form'
+
+
+class FormModule(models.Model):
+
+    form = models.ForeignKey(
+        Form,
+        related_name="modules",
+    )
+
+    class Meta:
+        app_label = 'sa_api_v2'
+        db_table = 'ms_api_form_module'
+
+
+class InformationalHtmlModule(FormModule):
+
+    content = models.TextField(blank=True, default=None)
+
+    class Meta:
+        app_label = 'sa_api_v2'
+        db_table = 'ms_api_form_module_html'
+
+
+class FormField(FormModule):
+
+    key = models.CharField(max_length=128)
+    private = models.BooleanField(default=False, blank=True)
+    required = models.BooleanField(default=False, blank=True)
+
+    class Meta:
+        app_label = 'sa_api_v2'
+        abstract = True
+
+
+class RadioField(FormField):
+    variant = models.CharField(max_length=128)
+    placeholder = models.CharField(max_length=128, null=True, blank=True)
+
+    class Meta:
+        db_table = 'ms_api_form_module_field_radio'
+
+
+class RadioOption(models.Model):
+    label = models.CharField(max_length=128)
+    value = models.CharField(max_length=128)
+
+    field = models.ForeignKey(
+        RadioField,
+        related_name="options",
+    )
+
+    class Meta:
+        app_label = 'sa_api_v2'
+        db_table = 'ms_api_form_module_option_radio'
