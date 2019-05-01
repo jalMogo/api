@@ -459,5 +459,4 @@ class TestFlavorSerializer (TestCase):
 
         form1 = next(form for form in serializer.data['forms']
                      if form['label'] == 'form1')
-        self.assertTrue(form1.get('label'), self.form1.label)
         self.assertTrue(len(form1.get('modules')[0].get('radiofield').get('options')), 3)

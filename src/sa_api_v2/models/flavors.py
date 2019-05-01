@@ -15,7 +15,3 @@ class Flavor(models.Model):
         app_label = 'sa_api_v2'
         db_table = 'ms_api_flavor'
         ordering = ['name']
-
-
-
-
