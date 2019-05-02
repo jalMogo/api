@@ -358,6 +358,10 @@ class SubmissionAdmin(SubmittedThingAdmin):
     api_path.allow_tags = True
 
 
+class FlavorAdmin(admin.ModelAdmin):
+    model = models.Flavor
+
+
 class ActionAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_datetime'
     list_display = ('id', 'created_datetime', 'action', 'type_of_thing', 'submitter_name', 'source')
@@ -437,6 +441,7 @@ admin.site.register(models.Action, ActionAdmin)
 admin.site.register(models.Group, GroupAdmin)
 admin.site.register(models.Webhook, WebhookAdmin)
 admin.site.register(models.PlaceEmailTemplate, PlaceEmailTemplateAdmin)
+admin.site.register(models.Flavor, FlavorAdmin)
 
 admin.site.site_header = 'Mapseed API Server Administration'
 admin.site.site_title = 'Mapseed API Server'
