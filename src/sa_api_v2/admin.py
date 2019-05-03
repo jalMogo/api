@@ -21,6 +21,7 @@ from .apikey.models import ApiKey
 from .cors.models import Origin
 from .cors.admin import OriginAdmin
 from .tasks import clone_related_dataset_data
+import nested_admin
 
 
 class SubmissionSetFilter (SimpleListFilter):
@@ -362,6 +363,31 @@ class SubmissionAdmin(SubmittedThingAdmin):
     api_path.allow_tags = True
 
 
+class RadioOptionInline(nested_admin.NestedTabularInline):
+    model = models.RadioOption
+
+
+class RadioFieldInline(nested_admin.NestedTabularInline):
+    model = models.RadioField
+    inlines = [
+        RadioOptionInline
+    ]
+
+
+class FormModuleInline(nested_admin.NestedTabularInline):
+    model = models.FormModule
+    inlines = [
+        RadioFieldInline
+    ]
+
+
+class FormAdmin(nested_admin.NestedModelAdmin):
+    model = models.Form
+    inlines = [
+        FormModuleInline
+    ]
+
+
 class FlavorAdmin(admin.ModelAdmin):
     model = models.Flavor
 
@@ -446,6 +472,7 @@ admin.site.register(models.Group, GroupAdmin)
 admin.site.register(models.Webhook, WebhookAdmin)
 admin.site.register(models.PlaceEmailTemplate, PlaceEmailTemplateAdmin)
 admin.site.register(models.Flavor, FlavorAdmin)
+admin.site.register(models.Form, FormAdmin)
 
 admin.site.site_header = 'Mapseed API Server Administration'
 admin.site.site_title = 'Mapseed API Server'

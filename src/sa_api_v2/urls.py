@@ -76,6 +76,7 @@ urlpatterns = [
     url(r'^~/datasets$',
         views.AdminDataSetListView.as_view(),
         name='admin-dataset-list'),
+    url(r'^nested_admin/', include('nested_admin.urls')),
 
     url(r'^(?P<owner_username>[^/]+)/datasets/(?P<dataset_slug>[^/]+)/keys$',
         views.ApiKeyListView.as_view(),

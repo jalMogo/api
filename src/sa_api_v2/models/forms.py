@@ -37,7 +37,7 @@ class FormModule(models.Model):
         db_table = 'ms_api_form_module'
 
 
-class InformationalHtmlModule(FormModule):
+class HtmlModule(FormModule):
 
     content = models.TextField(blank=True, default=None)
 
@@ -58,8 +58,15 @@ class FormField(FormModule):
 
 
 class RadioField(FormField):
-    variant = models.CharField(max_length=128)
-    placeholder = models.CharField(max_length=128, null=True, blank=True)
+    RADIO = "radio"
+    DROPDOWN = "dropdown"
+    CHOICES = [
+        (RADIO, 'a radio selection'),
+        (DROPDOWN, 'a dropdown list'),
+    ]
+
+    variant = models.CharField(max_length=128, choices=CHOICES, default=RADIO)
+    dropdown_placeholder = models.CharField(max_length=128, null=True, blank=True)
 
     class Meta:
         db_table = 'ms_api_form_module_field_radio'
