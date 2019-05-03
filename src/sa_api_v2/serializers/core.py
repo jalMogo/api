@@ -145,7 +145,7 @@ class GroupSerializer (BaseGroupSerializer):
                                        .to_representation(obj.dataset))
         ret['name'] = obj.name
         ret['dataset_slug'] = obj.dataset.slug
-        ret['permissions'] = [] 
+        ret['permissions'] = []
 
         for permission in obj.permissions.all():
             ret['permissions'].append({
@@ -721,10 +721,11 @@ class ActionSerializer (EmptyModelSerializer, serializers.ModelSerializer):
         return serializer.data
 
 
-class InformationalHtmlModuleSerializer (serializers.ModelSerializer):
+class HtmlModuleSerializer (serializers.ModelSerializer):
+
     class Meta:
-        model = models.InformationalHtmlModule
-        fields = '__all__'
+        model = models.HtmlModule
+        fields = ['content']
 
 
 class RadioOptionSerializer (serializers.ModelSerializer):
@@ -735,32 +736,33 @@ class RadioOptionSerializer (serializers.ModelSerializer):
 
 
 class RadioFieldModuleSerializer (serializers.ModelSerializer):
-    options = RadioOptionSerializer(many=True, read_only=True)
+    options = RadioOptionSerializer(many=True)
 
     class Meta:
         model = models.RadioField
-        fields = ['variant', 'placeholder', 'options']
+        fields = ['variant', 'dropdown_placeholder', 'options']
 
 
 class FormModuleSerializer (serializers.ModelSerializer):
-    radiofield = RadioFieldModuleSerializer(read_only=True)
+    radiofield = RadioFieldModuleSerializer()
+    htmlmodule = HtmlModuleSerializer()
 
     class Meta:
         model = models.FormModule
-        fields = '__all__'
+        exclude = ['form']
 
 
 class FormSerializer (serializers.ModelSerializer):
     dataset = DataSetHyperlinkedField()
-    modules = FormModuleSerializer(many=True, read_only=True)
+    modules = FormModuleSerializer(many=True)
 
     class Meta:
         model = models.Form
-        fields = ['label', 'is_enabled', 'dataset', 'flavor', 'modules']
+        fields = ['label', 'is_enabled', 'dataset', 'modules']
 
 
 class FlavorSerializer (serializers.ModelSerializer):
-    forms = FormSerializer(many=True, read_only=True)
+    forms = FormSerializer(many=True)
 
     class Meta:
         model = models.Flavor

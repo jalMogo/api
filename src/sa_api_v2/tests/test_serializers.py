@@ -17,6 +17,7 @@ from sa_api_v2.models import (
     Form,
     RadioField,
     RadioOption,
+    HtmlModule,
 )
 from sa_api_v2.serializers import (
     AttachmentListSerializer,
@@ -386,11 +387,15 @@ class TestFlavorSerializer (TestCase):
             flavor=self.flavor,
         )
 
+        self.html_module_content = "<p>Hey there!</p>"
         self.form1_modules = [
             RadioField.objects.create(
                 key="ward",
                 form=self.form1,
-                placeholder="testing",
+            ),
+            HtmlModule.objects.create(
+                content=self.html_module_content,
+                form=self.form1,
             )
         ]
 
@@ -445,7 +450,6 @@ class TestFlavorSerializer (TestCase):
         form2 = next(form for form in serializer.data['forms']
                      if form['label'] == 'form2')
         self.assertTrue(form2.get('label'), self.form2.label)
-        self.assertIn('flavor', form2)
         self.assertIn('is_enabled', form2)
         self.assertIn('dataset', form1)
         self.assertIn('dataset', form2)
@@ -460,3 +464,16 @@ class TestFlavorSerializer (TestCase):
         form1 = next(form for form in serializer.data['forms']
                      if form['label'] == 'form1')
         self.assertTrue(len(form1.get('modules')[0].get('radiofield').get('options')), 3)
+
+    def test_form_modules_html(self):
+        serializer = FlavorSerializer(
+            self.flavor,
+            context={'request': RequestFactory().get('')},
+        )
+
+        form1 = next(form for form in serializer.data['forms']
+                     if form['label'] == 'form1')
+        self.assertTrue(
+            len(form1.get('modules')[1].get('htmlmodule').get('content')),
+            self.html_module_content
+        )
