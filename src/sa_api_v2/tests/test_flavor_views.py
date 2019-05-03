@@ -39,7 +39,8 @@ class TestFlavorInstanceView (APITestMixin, TestCase):
             RadioField.objects.create(
                 key="ward",
                 form=self.form1,
-                placeholder="testing",
+                variant="dropdown",
+                dropdown_placeholder="testing",
             )
         ]
 
