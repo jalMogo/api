@@ -15,6 +15,7 @@ from sa_api_v2.models import (
     Group,
     Flavor,
     Form,
+    FormModule,
     RadioField,
     RadioOption,
     HtmlModule,
@@ -389,30 +390,40 @@ class TestFlavorSerializer (TestCase):
 
         self.html_module_content = "<p>Hey there!</p>"
         self.form1_modules = [
-            RadioField.objects.create(
-                key="ward",
+            FormModule.objects.create(
+                order=0,
                 form=self.form1,
             ),
-            HtmlModule.objects.create(
-                content=self.html_module_content,
+            FormModule.objects.create(
+                order=1,
                 form=self.form1,
             )
         ]
 
+        HtmlModule.objects.create(
+            content=self.html_module_content,
+            module=self.form1_modules[1]
+        )
+
+        radio_field = RadioField.objects.create(
+            key="ward",
+            prompt="where is your ward?",
+            module=self.form1_modules[0]
+        )
         RadioOption.objects.create(
             label="Ward 1",
             value="ward_1",
-            field=self.form1_modules[0],
+            field=radio_field,
         )
         RadioOption.objects.create(
             label="Ward 2",
             value="ward_2",
-            field=self.form1_modules[0],
+            field=radio_field,
         )
         RadioOption.objects.create(
             label="Ward 3",
             value="ward_3",
-            field=self.form1_modules[0],
+            field=radio_field,
         )
 
         self.form2 = Form.objects.create(
@@ -474,6 +485,6 @@ class TestFlavorSerializer (TestCase):
         form1 = next(form for form in serializer.data['forms']
                      if form['label'] == 'form1')
         self.assertTrue(
-            len(form1.get('modules')[1].get('htmlmodule').get('content')),
+            form1.get('modules')[1].get('htmlmodule').get('content'),
             self.html_module_content
         )

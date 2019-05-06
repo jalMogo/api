@@ -31,26 +31,43 @@ class FormModule(models.Model):
         Form,
         related_name="modules",
     )
+    order = models.PositiveSmallIntegerField(default=0, blank=False, null=False)
+
+    def __unicode__(self):
+        return "order: {order}".format(order=self.order)
 
     class Meta:
         app_label = 'sa_api_v2'
         db_table = 'ms_api_form_module'
+        ordering = ['order']
 
 
-class HtmlModule(FormModule):
+class HtmlModule(models.Model):
 
     content = models.TextField(blank=True, default=None)
+
+    module = models.OneToOneField(
+        FormModule,
+        on_delete=models.CASCADE,
+    )
 
     class Meta:
         app_label = 'sa_api_v2'
         db_table = 'ms_api_form_module_html'
 
 
-class FormField(FormModule):
+class FormField(models.Model):
 
     key = models.CharField(max_length=128)
+    # Should we allow prompt to be null? Empty string should be fine...
+    prompt = models.TextField(blank=True, default=None)
     private = models.BooleanField(default=False, blank=True)
     required = models.BooleanField(default=False, blank=True)
+
+    module = models.OneToOneField(
+        FormModule,
+        on_delete=models.CASCADE,
+    )
 
     class Meta:
         app_label = 'sa_api_v2'
@@ -79,6 +96,7 @@ class RadioOption(models.Model):
     field = models.ForeignKey(
         RadioField,
         related_name="options",
+        on_delete=models.CASCADE,
     )
 
     class Meta:
