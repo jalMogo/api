@@ -728,17 +728,23 @@ class RadioOptionSerializer (serializers.ModelSerializer):
         fields = ['label', 'value']
 
 
+class BaseFormFieldSerializer (serializers.ModelSerializer):
+    class Meta:
+        abstract = True
+        fields = ['key', 'prompt', 'private', 'required']
+
+
 class RadioFieldModuleSerializer (serializers.ModelSerializer):
     options = RadioOptionSerializer(many=True)
 
-    class Meta:
+    class Meta(BaseFormFieldSerializer.Meta):
         model = models.RadioField
-        fields = ['variant', 'dropdown_placeholder', 'options']
+        fields = BaseFormFieldSerializer.Meta.fields + ['variant', 'dropdown_placeholder', 'options']
 
 
 class FormModuleSerializer (serializers.ModelSerializer):
-    radiofield = RadioFieldModuleSerializer()
     htmlmodule = HtmlModuleSerializer()
+    radiofield = RadioFieldModuleSerializer()
 
     class Meta:
         model = models.FormModule
