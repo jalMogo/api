@@ -26,6 +26,7 @@ class FlavorInstanceView (generics.RetrieveAPIView):
                                       'forms__modules',
                                       queryset=models.FormModule.objects.select_related(
                                           'radiofield',
+                                          'htmlmodule',
                                       ),
                                   ),
                               )
