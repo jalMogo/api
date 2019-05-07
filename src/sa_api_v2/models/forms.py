@@ -59,8 +59,7 @@ class HtmlModule(models.Model):
 class FormField(models.Model):
 
     key = models.CharField(max_length=128)
-    # Should we allow prompt to be null? Empty string should be fine...
-    prompt = models.TextField(blank=True, default=None)
+    prompt = models.TextField(blank=True, default="")
     private = models.BooleanField(default=False, blank=True)
     required = models.BooleanField(default=False, blank=True)
 
