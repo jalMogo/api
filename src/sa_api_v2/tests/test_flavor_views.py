@@ -11,6 +11,7 @@ from ..models import (
     Form,
     RadioField,
     RadioOption,
+    FormModule,
 )
 from .test_views import APITestMixin
 from ..views import (
@@ -36,28 +37,32 @@ class TestFlavorInstanceView (APITestMixin, TestCase):
         )
 
         self.form1_modules = [
-            RadioField.objects.create(
-                key="ward",
+            FormModule.objects.create(
+                order=0,
                 form=self.form1,
-                variant="dropdown",
-                dropdown_placeholder="testing",
-            )
+            ),
         ]
+        radio_field = RadioField.objects.create(
+            key="ward",
+            variant="dropdown",
+            dropdown_placeholder="testing",
+            module=self.form1_modules[0]
+        )
 
         RadioOption.objects.create(
             label="Ward 1",
             value="ward_1",
-            field=self.form1_modules[0],
+            field=radio_field,
         )
         RadioOption.objects.create(
             label="Ward 2",
             value="ward_2",
-            field=self.form1_modules[0],
+            field=radio_field,
         )
         RadioOption.objects.create(
             label="Ward 3",
             value="ward_3",
-            field=self.form1_modules[0],
+            field=radio_field,
         )
 
         self.form2 = Form.objects.create(
