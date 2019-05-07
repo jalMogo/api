@@ -19,7 +19,7 @@ RUN touch /root/.ssh/known_hosts
 RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
 
 RUN git clone git@github.com:jalMogo/api.git
-RUN cd api && git checkout jalmogo/django-1.11
+RUN cd api && git checkout jalmogo/add-forms
 
 
 ###########################################################
