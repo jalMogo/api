@@ -7,7 +7,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: modulitos/api:release-1.9.6
+      - image: modulitos/api:release-1.10.1
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
