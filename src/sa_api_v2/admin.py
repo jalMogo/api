@@ -17,9 +17,11 @@ from django.http import HttpResponseRedirect
 from django.utils.html import escape
 from django_ace import AceWidget
 from django_object_actions import DjangoObjectActions
+from django.utils.html import format_html
 from .apikey.models import ApiKey
 from .cors.models import Origin
 from .cors.admin import OriginAdmin
+from adminsortable2.admin import SortableInlineAdminMixin
 from .tasks import clone_related_dataset_data
 import nested_admin
 
@@ -363,6 +365,10 @@ class SubmissionAdmin(SubmittedThingAdmin):
     api_path.allow_tags = True
 
 
+class HtmlModuleInline(nested_admin.NestedTabularInline):
+    model = models.HtmlModule
+
+
 class RadioOptionInline(nested_admin.NestedTabularInline):
     model = models.RadioOption
 
@@ -374,14 +380,30 @@ class RadioFieldInline(nested_admin.NestedTabularInline):
     ]
 
 
-class FormModuleInline(nested_admin.NestedTabularInline):
+class FormModuleAdmin(nested_admin.NestedModelAdmin):
     model = models.FormModule
+    readonly_fields = ('order',)
     inlines = [
-        RadioFieldInline
+        RadioFieldInline,
+        HtmlModuleInline,
     ]
 
 
-class FormAdmin(nested_admin.NestedModelAdmin):
+class FormModuleInline(SortableInlineAdminMixin, admin.StackedInline):
+    model = models.FormModule
+    readonly_fields = ['edit_url']
+
+    def edit_url(self, instance):
+        if instance.pk is None:
+            return '(You must save your form before you can edit this form module.)'
+        else:
+            return format_html(
+                '<a href="{}"><strong>Edit Form Module</strong></a>',
+                reverse('admin:sa_api_v2_formmodule_change', args=[instance.pk])
+            )
+
+
+class FormAdmin(admin.ModelAdmin):
     model = models.Form
     inlines = [
         FormModuleInline
@@ -473,6 +495,7 @@ admin.site.register(models.Webhook, WebhookAdmin)
 admin.site.register(models.PlaceEmailTemplate, PlaceEmailTemplateAdmin)
 admin.site.register(models.Flavor, FlavorAdmin)
 admin.site.register(models.Form, FormAdmin)
+admin.site.register(models.FormModule, FormModuleAdmin)
 
 admin.site.site_header = 'Mapseed API Server Administration'
 admin.site.site_title = 'Mapseed API Server'

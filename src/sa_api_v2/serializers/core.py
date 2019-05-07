@@ -755,7 +755,7 @@ class FormModuleSerializer (serializers.ModelSerializer):
 
     class Meta:
         model = models.FormModule
-        exclude = ['form']
+        exclude = ['form', 'order']
 
 
 class FormSerializer (serializers.ModelSerializer):
