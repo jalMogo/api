@@ -4,7 +4,10 @@ from django.core.cache import cache
 # from mock import patch
 # from nose.tools import (istest, assert_equal, assert_not_equal, assert_in,
 #                         assert_raises)
-from django.core.exceptions import ValidationError
+from django.core.exceptions import (
+    ValidationError,
+    ObjectDoesNotExist,
+)
 from ..models import (
     Form,
     FormModule,
@@ -626,4 +629,19 @@ class TestFormModel (TestCase):
                 prompt="where is your ward?",
                 module=self.form_modules[1]
             )
-        self.assertTrue('[FORM_MODULE_MODEL] Instance has more than one related model' in context.exception.message)
+        self.assertTrue(
+            '[FORM_MODULE_MODEL] Instance has more than one related model' in context.exception.message
+        )
+
+    def test_delete_cascades_modules_fields_and_options(self):
+        self.assertTrue(self.form.modules.all().exists())
+        self.assertTrue(self.radio_field.options.all().exists())
+        self.form.delete()
+        self.assertFalse(self.form.modules.all().exists())
+        self.assertFalse(self.radio_field.options.all().exists())
+
+        with self.assertRaises(ObjectDoesNotExist) as context:
+            self.radio_field.refresh_from_db()
+        self.assertTrue(
+            'RadioField matching query does not exist' in context.exception.message
+        )
