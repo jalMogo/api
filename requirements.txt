@@ -79,7 +79,7 @@ bleach==1.4.3
 # TODO: upgrade to 1.0.4 for django 1.11:
 django-ace==1.0.4
 django-nested-admin==3.2.3
-django-admin-sortable2==0.7.1
+django-admin-sortable2==0.7
 
 # The manager interface
 requests>=2.9.1
