@@ -12,7 +12,10 @@ from django.contrib.auth.forms import UserChangeForm as BaseUserChangeForm
 from django.contrib.gis import admin
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.forms import ValidationError
+from django.forms import (
+    ValidationError,
+    ModelForm,
+)
 from django.http import HttpResponseRedirect
 from django.utils.html import escape
 from django_ace import AceWidget
@@ -382,16 +385,26 @@ class RadioFieldInline(nested_admin.NestedTabularInline):
 
 class FormModuleAdmin(nested_admin.NestedModelAdmin):
     model = models.FormModule
-    readonly_fields = ('order',)
+    readonly_fields = ('form', 'order')
     inlines = [
         RadioFieldInline,
         HtmlModuleInline,
     ]
 
 
+class AlwaysChangedModelForm(ModelForm):
+    def has_changed(self, *args, **kwargs):
+        if self.instance.pk is None:
+            return True
+        return super(AlwaysChangedModelForm, self).has_changed(*args, **kwargs)
+
+
 class FormModuleInline(SortableInlineAdminMixin, admin.StackedInline):
     model = models.FormModule
-    readonly_fields = ['edit_url']
+    extra = 0
+    form = AlwaysChangedModelForm
+
+    readonly_fields = ['edit_url', 'summary']
 
     def edit_url(self, instance):
         if instance.pk is None:
@@ -400,6 +413,16 @@ class FormModuleInline(SortableInlineAdminMixin, admin.StackedInline):
             return format_html(
                 '<a href="{}"><strong>Edit Form Module</strong></a>',
                 reverse('admin:sa_api_v2_formmodule_change', args=[instance.pk])
+            )
+
+    def summary(self, instance):
+        related_module = instance.get_related_module()
+        if related_module is None:
+            return "summary: module id: {}".format(instance.id)
+        else:
+            return "summary: module id: {} and related module type: {}".format(
+                instance.id,
+                related_module.__class__,
             )
 
 
