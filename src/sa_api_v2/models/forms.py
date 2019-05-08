@@ -15,6 +15,7 @@ class Form(models.Model):
         related_name='+',
         on_delete=models.CASCADE,
         null=True,
+        blank=True,
     )
 
     flavor = models.ForeignKey(
@@ -38,6 +39,7 @@ class FormModule(models.Model):
     form = models.ForeignKey(
         Form,
         related_name="modules",
+        on_delete=models.CASCADE,
     )
     order = models.PositiveSmallIntegerField(default=0, blank=False, null=False)
 
