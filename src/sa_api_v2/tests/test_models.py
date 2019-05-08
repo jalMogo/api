@@ -1,23 +1,37 @@
 import json
 from django.test import TestCase
-# from django.test.client import Client
-from django.test.client import RequestFactory
-# from django.contrib.auth.models import User
 from django.core.cache import cache
-from django.core.urlresolvers import reverse
 # from mock import patch
 # from nose.tools import (istest, assert_equal, assert_not_equal, assert_in,
 #                         assert_raises)
-from ..models import (DataSet, User, Group, SubmittedThing, Action, Place, Submission,
-    DataSetPermission, check_data_permission, DataIndex, IndexedValue)
+from django.core.exceptions import ValidationError
+from ..models import (
+    Form,
+    FormModule,
+    HtmlModule,
+    RadioField,
+    RadioOption,
+    DataSet,
+    User,
+    Group,
+    SubmittedThing,
+    Action,
+    Place,
+    Submission,
+    DataSetPermission,
+    check_data_permission,
+    DataIndex,
+    IndexedValue
+)
 from ..apikey.models import ApiKey
 # from ..views import SubmissionCollectionView
 # from ..views import raise_error_if_not_authenticated
 # from ..views import ApiKeyCollectionView
 # from ..views import OwnerPasswordView
 # import json
-import mock
 from mock import patch
+
+# ./src/manage.py test -s sa_api_v2.tests.test_models:TestFormModel.test_fails_with_multiple_relations_on_form_module
 
 
 class TestSubmittedThing (TestCase):
@@ -68,9 +82,6 @@ class TestDataIndexes (TestCase):
         self.owner = User.objects.create(username='myuser')
         self.dataset = DataSet.objects.create(slug='data',
                                               owner_id=self.owner.id)
-
-    def tearDown(self):
-        User.objects.all().delete()  # Everything should cascade from owner
 
     def test_indexed_values_are_indexed_when_thing_is_saved(self):
         self.dataset.indexes.add(DataIndex(attr_name='index1'), bulk=False)
@@ -200,9 +211,6 @@ class CloningTests (TestCase):
     def clear_objects(self):
         # This should cascade to everything else.
         User.objects.all().delete()
-
-    def tearDown(self):
-        self.clear_objects()
 
     def setUp(self):
         self.clear_objects()
@@ -393,9 +401,6 @@ class DataPermissionTests (TestCase):
     def setUp(self):
         self.clear_objects()
 
-    def tearDown(self):
-        self.clear_objects()
-
     def test_default_dataset_permissions_allow_reading(self):
         owner = User.objects.create(username='myowner')
         user = User.objects.create(username='myuser')
@@ -556,3 +561,53 @@ class DataPermissionTests (TestCase):
 # - Specific client permission allows/restricts reading and writing
 # - General group permission allows reading and restricts writing
 # - Specific group permission allows/restricts reading and writing
+
+class TestFormModel (TestCase):
+    def setUp(self):
+        self.owner = User.objects.create(username='myuser')
+        self.dataset = DataSet.objects.create(
+            slug='data',
+            owner_id=self.owner.id
+        )
+        self.form = Form.objects.create(label="my form model", dataset=self.dataset)
+
+        self.form_modules = [
+            FormModule.objects.create(
+                order=0,
+                form=self.form,
+            ),
+            FormModule.objects.create(
+                order=1,
+                form=self.form,
+            )
+        ]
+
+        HtmlModule.objects.create(
+            content="<p>Html test module model</p>",
+            module=self.form_modules[1]
+        )
+
+        self.radio_field = RadioField.objects.create(
+            key="ward",
+            prompt="where is your ward?",
+            module=self.form_modules[0]
+        )
+        self.radio_option_1 = RadioOption.objects.create(
+            label="Ward 1",
+            value="ward_1",
+            field=self.radio_field,
+        )
+        self.radio_option_2 = RadioOption.objects.create(
+            label="Ward 2",
+            value="ward_2",
+            field=self.radio_field,
+        )
+
+    def test_fails_with_multiple_relations_on_form_module(self):
+        with self.assertRaises(ValidationError) as context:
+            RadioField.objects.create(
+                key="ward",
+                prompt="where is your ward?",
+                module=self.form_modules[1]
+            )
+        self.assertTrue('[FORM_MODULE_MODEL] Instance more than one related mode' in context.exception.message)
