@@ -43,14 +43,12 @@ class FormModule(models.Model):
     )
     order = models.PositiveSmallIntegerField(default=0, blank=False, null=False)
 
-    def __unicode__(self):
-        return "order: {order}".format(order=self.order)
 
     def get_related_module(self):
         related_modules = self._get_related_modules()
         if len(related_modules) == 0:
             message = '[FORM_MODULE_MODEL] Instance has no related model: {}'.format(self.id)
-            raise ValidationError(message)
+            return None
         else:
             return related_modules[0]
 
