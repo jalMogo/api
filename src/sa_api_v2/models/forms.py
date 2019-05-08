@@ -10,7 +10,12 @@ class Form(models.Model):
     label = models.CharField(max_length=128)
     is_enabled = models.BooleanField(default=True)
 
-    dataset = models.ForeignKey(DataSet, related_name='+', on_delete=models.CASCADE)
+    dataset = models.ForeignKey(
+        DataSet,
+        related_name='+',
+        on_delete=models.CASCADE,
+        null=True,
+    )
 
     flavor = models.ForeignKey(
         Flavor,

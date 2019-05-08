@@ -585,12 +585,7 @@ class DataPermissionTests (TestCase):
 
 class TestFormModel (TestCase):
     def setUp(self):
-        self.owner = User.objects.create(username='myuser')
-        self.dataset = DataSet.objects.create(
-            slug='data',
-            owner_id=self.owner.id
-        )
-        self.form = Form.objects.create(label="my form model", dataset=self.dataset)
+        self.form = Form.objects.create(label="my form model")
 
         self.form_modules = [
             FormModule.objects.create(
