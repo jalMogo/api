@@ -1,6 +1,9 @@
 from django.contrib.gis.db import models
 from .core import DataSet
 from .flavors import Flavor
+import logging
+from django.core.exceptions import ValidationError
+logger = logging.getLogger(__name__)
 
 
 class Form(models.Model):
@@ -14,7 +17,7 @@ class Form(models.Model):
         related_name='forms',
         on_delete=models.SET_NULL,
         null=True,
-        blank=True
+        blank=True,
     )
 
     def __unicode__(self):
@@ -36,6 +39,26 @@ class FormModule(models.Model):
     def __unicode__(self):
         return "order: {order}".format(order=self.order)
 
+    def get_related_module(self):
+        if hasattr(self, 'radiofield'):
+            return self.radiofield
+        elif hasattr(self, 'htmlmodule'):
+            return self.htmlmodule
+        else:
+            message = '[FORM_MODULE_MODEL] Instance has no related model: {}'.format(self.id)
+            logger.warning(message)
+
+    def clean(self):
+        related_modules = []
+        if hasattr(self, 'radiofield'):
+            related_modules.append(self.radiofield)
+        if hasattr(self, 'htmlmodule'):
+            related_modules.append(self.htmlmodule)
+
+        if len(related_modules) > 1:
+            message = '[FORM_MODULE_MODEL] Instance more than one related model: {}'.format(self.id)
+            raise ValidationError(message)
+
     class Meta:
         app_label = 'sa_api_v2'
         db_table = 'ms_api_form_module'
@@ -50,6 +73,10 @@ class HtmlModule(models.Model):
         FormModule,
         on_delete=models.CASCADE,
     )
+
+    def save(self, *args, **kwargs):
+        self.module.clean()
+        super(HtmlModule, self).save(*args, **kwargs)
 
     class Meta:
         app_label = 'sa_api_v2'
@@ -71,6 +98,10 @@ class FormField(models.Model):
     class Meta:
         app_label = 'sa_api_v2'
         abstract = True
+
+    def save(self, *args, **kwargs):
+        self.module.clean()
+        super(FormField, self).save(*args, **kwargs)
 
 
 class RadioField(FormField):
