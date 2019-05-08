@@ -40,23 +40,25 @@ class FormModule(models.Model):
         return "order: {order}".format(order=self.order)
 
     def get_related_module(self):
-        if hasattr(self, 'radiofield'):
-            return self.radiofield
-        elif hasattr(self, 'htmlmodule'):
-            return self.htmlmodule
-        else:
+        related_modules = self._get_related_modules()
+        if len(related_modules) == 0:
             message = '[FORM_MODULE_MODEL] Instance has no related model: {}'.format(self.id)
-            logger.warning(message)
+            raise ValidationError(message)
+        else:
+            return related_modules[0]
 
-    def clean(self):
+    def _get_related_modules(self):
         related_modules = []
         if hasattr(self, 'radiofield'):
             related_modules.append(self.radiofield)
         if hasattr(self, 'htmlmodule'):
             related_modules.append(self.htmlmodule)
+        return related_modules
 
+    def clean(self):
+        related_modules = self._get_related_modules()
         if len(related_modules) > 1:
-            message = '[FORM_MODULE_MODEL] Instance more than one related model: {}'.format(self.id)
+            message = '[FORM_MODULE_MODEL] Instance has more than one related model: {}'.format(self.id)
             raise ValidationError(message)
 
     class Meta:
