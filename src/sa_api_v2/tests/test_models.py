@@ -610,4 +610,4 @@ class TestFormModel (TestCase):
                 prompt="where is your ward?",
                 module=self.form_modules[1]
             )
-        self.assertTrue('[FORM_MODULE_MODEL] Instance more than one related mode' in context.exception.message)
+        self.assertTrue('[FORM_MODULE_MODEL] Instance has more than one related model' in context.exception.message)
