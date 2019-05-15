@@ -35,7 +35,6 @@ class Form(models.Model):
 
 
 class FormModule(models.Model):
-
     form = models.ForeignKey(
         Form,
         related_name="modules",
@@ -72,9 +71,7 @@ class FormModule(models.Model):
         ordering = ['order']
 
 
-class HtmlModule(models.Model):
-
-    content = models.TextField(blank=True, default=None)
+class RelatedFormModule(models.Model):
 
     module = models.OneToOneField(
         FormModule,
@@ -83,32 +80,33 @@ class HtmlModule(models.Model):
 
     def save(self, *args, **kwargs):
         self.module.clean()
-        super(HtmlModule, self).save(*args, **kwargs)
-
-    class Meta:
-        app_label = 'sa_api_v2'
-        db_table = 'ms_api_form_module_html'
-
-
-class FormField(models.Model):
-
-    key = models.CharField(max_length=128)
-    prompt = models.TextField(blank=True, default="")
-    private = models.BooleanField(default=False, blank=True)
-    required = models.BooleanField(default=False, blank=True)
-
-    module = models.OneToOneField(
-        FormModule,
-        on_delete=models.CASCADE,
-    )
+        super(RelatedFormModule, self).save(*args, **kwargs)
 
     class Meta:
         app_label = 'sa_api_v2'
         abstract = True
 
-    def save(self, *args, **kwargs):
-        self.module.clean()
-        super(FormField, self).save(*args, **kwargs)
+
+class HtmlModule(RelatedFormModule):
+    content = models.TextField(blank=True, default=None)
+
+    def __unicode__(self):
+        return "html module with content: {}".format(self.content)
+
+    class Meta:
+        db_table = 'ms_api_form_module_html'
+
+
+class FormField(RelatedFormModule):
+
+    key = models.CharField(max_length=128)
+    prompt = models.TextField(blank=True, default="")
+    # If the submitted data will be counted as private.
+    private = models.BooleanField(default=False, blank=True)
+    required = models.BooleanField(default=False, blank=True)
+
+    class Meta:
+        abstract = True
 
 
 class RadioField(FormField):
@@ -121,6 +119,9 @@ class RadioField(FormField):
 
     variant = models.CharField(max_length=128, choices=CHOICES, default=RADIO)
     dropdown_placeholder = models.CharField(max_length=128, null=True, blank=True)
+
+    def __unicode__(self):
+        return "radio field with prompt: {}".format(self.prompt)
 
     class Meta:
         db_table = 'ms_api_form_module_field_radio'

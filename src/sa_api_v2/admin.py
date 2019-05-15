@@ -418,11 +418,11 @@ class FormModuleInline(SortableInlineAdminMixin, admin.StackedInline):
     def summary(self, instance):
         related_module = instance.get_related_module()
         if related_module is None:
-            return "summary: module id: {}".format(instance.id)
+            return "module id: {}".format(instance.id)
         else:
-            return "summary: module id: {} and related module type: {}".format(
+            return "module id: {} and related module: {}".format(
                 instance.id,
-                related_module.__class__,
+                related_module,
             )
 
 
