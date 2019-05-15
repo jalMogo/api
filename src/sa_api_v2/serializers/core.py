@@ -731,11 +731,17 @@ class HtmlModuleSerializer (serializers.ModelSerializer):
         fields = ['content']
 
 
-class RadioOptionSerializer (serializers.ModelSerializer):
-
+class BaseFormFieldOptionSerializer (serializers.ModelSerializer):
     class Meta:
+        abstract = True
+        fields = ['advance_to_next_stage']
+
+
+class RadioOptionSerializer (BaseFormFieldOptionSerializer):
+
+    class Meta(BaseFormFieldOptionSerializer):
         model = models.RadioOption
-        fields = ['label', 'value']
+        fields = BaseFormFieldOptionSerializer.Meta.fields + ['label', 'value']
 
 
 class BaseFormFieldSerializer (serializers.ModelSerializer):
