@@ -101,9 +101,16 @@ class FormField(RelatedFormModule):
 
     key = models.CharField(max_length=128)
     prompt = models.TextField(blank=True, default="")
-    # If the submitted data will be counted as private.
-    private = models.BooleanField(default=False, blank=True)
-    required = models.BooleanField(default=False, blank=True)
+    private = models.BooleanField(
+        default=False,
+        blank=True,
+        help_text="If true, then the submitted data will be flagged as private.",
+    )
+    required = models.BooleanField(
+        default=False,
+        blank=True,
+        help_text="If true, then the form cannot be submitted unless this field has received a response.",
+    )
 
     class Meta:
         abstract = True
@@ -127,7 +134,19 @@ class RadioField(FormField):
         db_table = 'ms_api_form_module_field_radio'
 
 
-class RadioOption(models.Model):
+class FormFieldOption(models.Model):
+    advance_to_next_stage = models.BooleanField(
+        default=False,
+        blank=True,
+        help_text="When this option is selected, the form will advance to the next stage.",
+    )
+
+    class Meta:
+        app_label = 'sa_api_v2'
+        abstract = True
+
+
+class RadioOption(FormFieldOption):
     label = models.CharField(max_length=128)
     value = models.CharField(max_length=128)
 
@@ -138,5 +157,4 @@ class RadioOption(models.Model):
     )
 
     class Meta:
-        app_label = 'sa_api_v2'
         db_table = 'ms_api_form_module_option_radio'
