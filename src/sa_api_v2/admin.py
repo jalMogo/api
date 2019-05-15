@@ -387,11 +387,19 @@ class RadioFieldInline(nested_admin.NestedTabularInline):
 
 class FormModuleAdmin(nested_admin.NestedModelAdmin):
     model = models.FormModule
-    readonly_fields = ('form', 'order')
+    readonly_fields = ('form_model', 'order')
+    exclude = ("form",)
     inlines = [
         RadioFieldInline,
         HtmlModuleInline,
     ]
+
+    def form_model(self, instance):
+            return format_html(
+                '<a href="{}"><strong>{}</strong></a>',
+                reverse('admin:sa_api_v2_form_change', args=[instance.form.pk]),
+                instance.form.label,
+            )
 
 
 class AlwaysChangedModelForm(ModelForm):
