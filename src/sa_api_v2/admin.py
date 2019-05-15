@@ -370,6 +370,7 @@ class SubmissionAdmin(SubmittedThingAdmin):
 
 class HtmlModuleInline(nested_admin.NestedTabularInline):
     model = models.HtmlModule
+    extra = 0
 
 
 class RadioOptionInline(nested_admin.NestedTabularInline):
@@ -378,6 +379,7 @@ class RadioOptionInline(nested_admin.NestedTabularInline):
 
 class RadioFieldInline(nested_admin.NestedTabularInline):
     model = models.RadioField
+    extra = 0
     inlines = [
         RadioOptionInline
     ]
