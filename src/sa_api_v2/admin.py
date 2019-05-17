@@ -373,8 +373,35 @@ class HtmlModuleInline(nested_admin.NestedTabularInline):
     extra = 0
 
 
+class FormFieldOptionInlineForm(ModelForm):
+    visibility_triggers = ModelMultipleChoiceField(
+        widget=CheckboxSelectMultiple,
+        queryset=models.FormModule.objects.none(),
+        help_text=unicode(models.FormFieldOption._meta.get_field('visibility_triggers').help_text),
+        required=False,
+    )
+    fields = ('advance_to_next_stage', 'visibility_triggers')
+
+    def __init__(self, *args, **kwargs):
+        super(FormFieldOptionInlineForm, self).__init__(*args, **kwargs)
+        if 'instance' in kwargs:
+            # limit the selectable visibility_triggers to FormModules
+            # that belong to the same form, and are not visible by
+            # default
+            self.fields['visibility_triggers'].queryset = models.FormModule.objects.filter(
+                ~Q(id=self.instance.field.module.id),
+                form__id=self.instance.field.module.form.id,
+                visible=False,
+            )
+        else:
+            self.fields['visibility_triggers'].queryset = models.FormModule.objects.none()
+
+
 class RadioOptionInline(nested_admin.NestedTabularInline):
     model = models.RadioOption
+    form = FormFieldOptionInlineForm
+
+    fields = ('label', 'value') + FormFieldOptionInlineForm.fields
 
 
 class RadioFieldInline(nested_admin.NestedTabularInline):
@@ -430,7 +457,7 @@ class FormModuleInline(SortableInlineAdminMixin, admin.StackedInline):
         if related_module is None:
             return "module id: {}".format(instance.id)
         else:
-            return "module id: {} and related module: {}".format(
+            return "module id: {}, {}".format(
                 instance.id,
                 related_module,
             )
