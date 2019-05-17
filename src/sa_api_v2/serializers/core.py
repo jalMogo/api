@@ -731,10 +731,18 @@ class HtmlModuleSerializer (serializers.ModelSerializer):
         fields = ['content']
 
 
+class SimpleFormModuleSerializer (serializers.ModelSerializer):
+    class Meta:
+        model = models.FormModule
+        fields = ['id']
+
+
 class BaseFormFieldOptionSerializer (serializers.ModelSerializer):
+    visibility_triggers = SimpleFormModuleSerializer(read_only=True, required=False, many=True)
+
     class Meta:
         abstract = True
-        fields = ['advance_to_next_stage']
+        fields = ['advance_to_next_stage', 'visibility_triggers']
 
 
 class RadioOptionSerializer (BaseFormFieldOptionSerializer):
