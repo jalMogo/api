@@ -41,12 +41,21 @@ class FormModule(models.Model):
         on_delete=models.CASCADE,
     )
     order = models.PositiveSmallIntegerField(default=0, blank=False, null=False)
+    visible = models.BooleanField(
+        default=True,
+        blank=True,
+        help_text="Determines whether the module is visible by default.",
+    )
 
+    def __unicode__(self):
+        related_module = self.get_related_module()
+        return 'id: {}, {}'.format(self.id, related_module)
 
     def get_related_module(self):
         related_modules = self._get_related_modules()
         if len(related_modules) == 0:
-            message = '[FORM_MODULE_MODEL] Instance has no related model: {}'.format(self.id)
+            # In Django Admin, a FormModule needs to be created before
+            # a RelatedFormModule can be added to it.
             return None
         else:
             return related_modules[0]
@@ -140,6 +149,23 @@ class FormFieldOption(models.Model):
         blank=True,
         help_text="When this option is selected, the form will advance to the next stage.",
     )
+
+    visibility_triggers = models.ManyToManyField(
+        FormModule,
+        help_text="If this FormFieldOption is selected, the following FormModules will become visible. Only default invisible modules are selectable here.",
+        blank=True,
+        related_name='+',
+    )
+
+    def clean(self):
+        related_field = self.field
+        if related_field is None:
+            message = '[FORM_FIELD_OPTION] Instance does not have a related `field`: {}'.format(self.id)
+            raise ValidationError(message)
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super(FormFieldOption, self).save(*args, **kwargs)
 
     class Meta:
         app_label = 'sa_api_v2'
