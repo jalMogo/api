@@ -430,7 +430,7 @@ class FormModuleAdmin(nested_admin.NestedModelAdmin):
             return format_html(
                 '<a href="{}"><strong>{}</strong></a>',
                 reverse('admin:sa_api_v2_formstage_change', args=[instance.stage.pk]),
-                instance.stage.label,
+                instance.stage,
             )
 
 
@@ -496,7 +496,7 @@ class FormStageInline(SortableInlineAdminMixin, admin.StackedInline):
             return '(You must save your form before you can edit this form module.)'
         else:
             return format_html(
-                '<a href="{}"><strong>Edit Form Module</strong></a>',
+                '<a href="{}"><strong>Edit Form Stage</strong></a>',
                 reverse('admin:sa_api_v2_formstage_change', args=[instance.pk])
             )
 
@@ -603,6 +603,7 @@ admin.site.register(models.Webhook, WebhookAdmin)
 admin.site.register(models.PlaceEmailTemplate, PlaceEmailTemplateAdmin)
 admin.site.register(models.Flavor, FlavorAdmin)
 admin.site.register(models.Form, FormAdmin)
+admin.site.register(models.FormStage, FormStageAdmin)
 admin.site.register(models.FormModule, FormModuleAdmin)
 
 admin.site.site_header = 'Mapseed API Server Administration'
