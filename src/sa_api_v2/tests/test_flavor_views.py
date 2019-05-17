@@ -9,17 +9,18 @@ from ..models import (
     DataSet,
     Flavor,
     Form,
+    FormStage,
+    FormModule,
     RadioField,
     RadioOption,
-    FormModule,
 )
 from .test_views import APITestMixin
 from ..views import (
     FlavorInstanceView,
 )
-# ./src/manage.py test -s sa_api_v2.tests.test_flavor_views:TestFlavorInstanceView.test_GET_response
 
 
+# ./src/manage.py test -s sa_api_v2.tests.test_flavor_views:TestFlavorInstanceView
 class TestFlavorInstanceView (APITestMixin, TestCase):
     def setUp(self):
         self.owner = User.objects.create_user(username='aaron', password='123', email='abc@example.com')
@@ -36,10 +37,21 @@ class TestFlavorInstanceView (APITestMixin, TestCase):
             flavor=self.flavor,
         )
 
+        self.form1_stages = [
+            FormStage.objects.create(
+                order=0,
+                form=self.form1,
+            ),
+            FormStage.objects.create(
+                order=1,
+                form=self.form1,
+            ),
+        ]
+
         self.form1_modules = [
             FormModule.objects.create(
                 order=0,
-                form=self.form1,
+                stage=self.form1_stages[0],
             ),
         ]
         radio_field = RadioField.objects.create(
@@ -107,6 +119,7 @@ class TestFlavorInstanceView (APITestMixin, TestCase):
         # Check that the data attributes have been incorporated into the
         # properties
         self.assertEqual(len(data.get('forms')), 2)
+        self.assertEqual(len(data.get('forms')[0].get('stages')), 2)
 
     def test_GET_invalid_url(self):
         # Make sure that we respond with 404 if a flavor's slug is supplied, but it doesn't match to any flavor
