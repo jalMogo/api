@@ -365,6 +365,7 @@ class TestDataSetSerializer (TestCase):
 
 class TestFlavorSerializer (TestCase):
 
+    # ./src/manage.py test -s sa_api_v2.tests.test_serializers:TestFlavorSerializer.test_form_modules_radiofield
     def setUp(self):
         User.objects.all().delete()
         DataSet.objects.all().delete()
@@ -389,6 +390,8 @@ class TestFlavorSerializer (TestCase):
         )
 
         self.html_module_content = "<p>Hey there!</p>"
+        # TODO: consider creating a 'save' utility method on
+        # the FormModule model to make this easier
         self.form1_modules = [
             FormModule.objects.create(
                 order=0,
