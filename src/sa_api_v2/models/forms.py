@@ -34,9 +34,30 @@ class Form(models.Model):
         db_table = 'ms_api_form'
 
 
-class FormModule(models.Model):
+# TODO: fix model/serializer/view tests,
+class FormStage(models.Model):
     form = models.ForeignKey(
         Form,
+        related_name="stages",
+        on_delete=models.CASCADE,
+    )
+    order = models.PositiveSmallIntegerField(default=0, blank=False, null=False)
+
+    # TODO: add visibility_layer_group_ids as string array
+    # TODO: add MapViewPort FK reference
+
+    def __unicode__(self):
+        return 'id: {}, order: {}'.format(self.id, self.order)
+
+    class Meta:
+        app_label = 'sa_api_v2'
+        db_table = 'ms_api_form_stage'
+        ordering = ['order']
+
+
+class FormModule(models.Model):
+    stage = models.ForeignKey(
+        FormStage,
         related_name="modules",
         on_delete=models.CASCADE,
     )

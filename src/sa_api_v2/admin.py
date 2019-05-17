@@ -395,7 +395,7 @@ class FormFieldOptionInlineForm(ModelForm):
             # default
             self.fields['visibility_triggers'].queryset = models.FormModule.objects.filter(
                 ~Q(id=self.instance.field.module.id),
-                form__id=self.instance.field.module.form.id,
+                stage__id=self.instance.field.module.stage.id,
                 visible=False,
             )
         else:
@@ -419,18 +419,18 @@ class RadioFieldInline(nested_admin.NestedTabularInline):
 
 class FormModuleAdmin(nested_admin.NestedModelAdmin):
     model = models.FormModule
-    readonly_fields = ('form_model', 'order')
-    exclude = ("form",)
+    readonly_fields = ('formstage', 'order')
+    exclude = ("stage",)
     inlines = [
         RadioFieldInline,
         HtmlModuleInline,
     ]
 
-    def form_model(self, instance):
+    def formstage(self, instance):
             return format_html(
                 '<a href="{}"><strong>{}</strong></a>',
-                reverse('admin:sa_api_v2_form_change', args=[instance.form.pk]),
-                instance.form.label,
+                reverse('admin:sa_api_v2_formstage_change', args=[instance.stage.pk]),
+                instance.stage.label,
             )
 
 
@@ -468,10 +468,53 @@ class FormModuleInline(SortableInlineAdminMixin, admin.StackedInline):
             )
 
 
+class FormStageAdmin(admin.ModelAdmin):
+    model = models.FormStage
+    readonly_fields = ('form_model', 'order')
+    exclude = ("form",)
+    inlines = [
+        FormModuleInline
+    ]
+
+    def form_model(self, instance):
+        return format_html(
+            '<a href="{}"><strong>{}</strong></a>',
+            reverse('admin:sa_api_v2_form_change', args=[instance.form.pk]),
+            instance.form.label,
+        )
+
+
+class FormStageInline(SortableInlineAdminMixin, admin.StackedInline):
+    model = models.FormStage
+    extra = 0
+    form = AlwaysChangedModelForm
+
+    readonly_fields = ['edit_url', 'summary']
+
+    def edit_url(self, instance):
+        if instance.pk is None:
+            return '(You must save your form before you can edit this form module.)'
+        else:
+            return format_html(
+                '<a href="{}"><strong>Edit Form Module</strong></a>',
+                reverse('admin:sa_api_v2_formstage_change', args=[instance.pk])
+            )
+
+    def summary(self, instance):
+        related_module = instance.get_related_module()
+        if related_module is None:
+            return "module id: {}".format(instance.id)
+        else:
+            return "module id: {}, {}".format(
+                instance.id,
+                related_module,
+            )
+
+
 class FormAdmin(admin.ModelAdmin):
     model = models.Form
     inlines = [
-        FormModuleInline
+        FormStageInline
     ]
 
 

@@ -10,6 +10,7 @@ from django.core.exceptions import (
 )
 from ..models import (
     Form,
+    FormStage,
     FormModule,
     HtmlModule,
     RadioField,
@@ -587,17 +588,22 @@ class DataPermissionTests (TestCase):
 # - Specific group permission allows/restricts reading and writing
 
 class TestFormModel (TestCase):
+    # ./src/manage.py test -s sa_api_v2.tests.test_models:TestFormModel
     def setUp(self):
         self.form = Form.objects.create(label="my form model")
+
+        self.stages = [
+            FormStage.objects.create(order=0, form=self.form),
+        ]
 
         self.form_modules = [
             FormModule.objects.create(
                 order=0,
-                form=self.form,
+                stage=self.stages[0],
             ),
             FormModule.objects.create(
                 order=1,
-                form=self.form,
+                stage=self.stages[0],
             )
         ]
 
@@ -634,10 +640,12 @@ class TestFormModel (TestCase):
         )
 
     def test_delete_cascades_modules_fields_and_options(self):
-        self.assertTrue(self.form.modules.all().exists())
+        self.assertTrue(self.form.stages.all().exists())
+        self.assertTrue(self.stages[0].modules.all().exists())
         self.assertTrue(self.radio_field.options.all().exists())
         self.form.delete()
-        self.assertFalse(self.form.modules.all().exists())
+        self.assertFalse(self.form.stages.all().exists())
+        self.assertFalse(self.stages[0].modules.all().exists())
         self.assertFalse(self.radio_field.options.all().exists())
 
         with self.assertRaises(ObjectDoesNotExist) as context:
