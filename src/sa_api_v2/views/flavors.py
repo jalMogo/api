@@ -23,7 +23,7 @@ class FlavorInstanceView (generics.RetrieveAPIView):
                               .filter(slug=flavor_slug)\
                               .prefetch_related(
                                   Prefetch(
-                                      'forms__modules',
+                                      'forms__stages__modules',
                                       queryset=models.FormModule.objects.select_related(
                                           'radiofield',
                                           'htmlmodule',
