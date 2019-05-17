@@ -772,7 +772,7 @@ class FormModuleSerializer (serializers.ModelSerializer):
 
     class Meta:
         model = models.FormModule
-        exclude = ['form']
+        exclude = ['stage']
 
     # removes "null" fields
     def to_representation(self, instance):
@@ -806,13 +806,21 @@ class FormModuleSerializer (serializers.ModelSerializer):
         return ret
 
 
-class FormSerializer (serializers.ModelSerializer):
-    dataset = DataSetHyperlinkedField()
+class FormStageSerializer (serializers.ModelSerializer):
     modules = FormModuleSerializer(many=True)
 
     class Meta:
+        model = models.FormStage
+        fields = ['modules', 'order']
+
+
+class FormSerializer (serializers.ModelSerializer):
+    dataset = DataSetHyperlinkedField()
+    stages = FormStageSerializer(many=True)
+
+    class Meta:
         model = models.Form
-        fields = ['label', 'is_enabled', 'dataset', 'modules']
+        fields = ['label', 'is_enabled', 'dataset', 'stages']
 
 
 class FlavorSerializer (serializers.ModelSerializer):

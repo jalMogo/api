@@ -15,6 +15,7 @@ from sa_api_v2.models import (
     Group,
     Flavor,
     Form,
+    FormStage,
     FormModule,
     RadioField,
     RadioOption,
@@ -365,7 +366,7 @@ class TestDataSetSerializer (TestCase):
 
 class TestFlavorSerializer (TestCase):
 
-    # ./src/manage.py test -s sa_api_v2.tests.test_serializers:TestFlavorSerializer.test_form_modules_radiofield
+    # ./src/manage.py test -s sa_api_v2.tests.test_serializers:TestFlavorSerializer
     def setUp(self):
         User.objects.all().delete()
         DataSet.objects.all().delete()
@@ -389,17 +390,32 @@ class TestFlavorSerializer (TestCase):
             flavor=self.flavor,
         )
 
+        self.stages = [
+            FormStage.objects.create(
+                order=0,
+                form=self.form1,
+            ),
+            FormStage.objects.create(
+                order=1,
+                form=self.form1,
+            )
+        ]
+
         self.html_module_content = "<p>Hey there!</p>"
         # TODO: consider creating a 'save' utility method on
         # the FormModule model to make this easier
         self.form1_modules = [
             FormModule.objects.create(
                 order=0,
-                form=self.form1,
+                stage=self.stages[0],
             ),
             FormModule.objects.create(
                 order=1,
-                form=self.form1,
+                stage=self.stages[0],
+            ),
+            FormModule.objects.create(
+                order=0,
+                stage=self.stages[1],
             )
         ]
 
@@ -468,6 +484,8 @@ class TestFlavorSerializer (TestCase):
         self.assertIn('dataset', form1)
         self.assertIn('dataset', form2)
 
+    # TODO: add tests here for FormStage MapViewPort and layer groups
+
     def test_form_modules_radiofield(self):
         serializer = FlavorSerializer(
             self.flavor,
@@ -477,7 +495,7 @@ class TestFlavorSerializer (TestCase):
 
         form1 = next(form for form in serializer.data['forms']
                      if form['label'] == 'form1')
-        self.assertTrue(len(form1.get('modules')[0].get('radiofield').get('options')), 3)
+        self.assertTrue(len(form1.get('stages')[0].get('modules')[0].get('radiofield').get('options')), 3)
 
     def test_form_modules_html(self):
         serializer = FlavorSerializer(
@@ -488,6 +506,6 @@ class TestFlavorSerializer (TestCase):
         form1 = next(form for form in serializer.data['forms']
                      if form['label'] == 'form1')
         self.assertTrue(
-            form1.get('modules')[1].get('htmlmodule').get('content'),
+            form1.get('stages')[0].get('modules')[1].get('htmlmodule').get('content'),
             self.html_module_content
         )
