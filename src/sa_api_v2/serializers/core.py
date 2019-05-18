@@ -806,12 +806,27 @@ class FormModuleSerializer (serializers.ModelSerializer):
         return ret
 
 
+class LayerGroupSerializer (serializers.ModelSerializer):
+    class Meta:
+        model = models.LayerGroup
+        fields = ['label']
+
+
+class MapViewportSerializer (serializers.ModelSerializer):
+    class Meta:
+        model = models.MapViewport
+        # fields = ['zoom', 'latitude', 'longitude', ']
+        fields = '__all__'
+
+
 class FormStageSerializer (serializers.ModelSerializer):
     modules = FormModuleSerializer(many=True)
+    visible_layer_groups = LayerGroupSerializer(many=True)
+    map_viewport = MapViewportSerializer()
 
     class Meta:
         model = models.FormStage
-        fields = ['modules', 'order']
+        fields = ['visible_layer_groups', 'map_viewport', 'modules', 'order' ]
 
 
 class FormSerializer (serializers.ModelSerializer):

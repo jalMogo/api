@@ -468,12 +468,19 @@ class FormModuleInline(SortableInlineAdminMixin, admin.StackedInline):
             )
 
 
-class FormStageAdmin(admin.ModelAdmin):
+class MapViewportInline(nested_admin.NestedStackedInline):
+    model = models.MapViewport
+    extra = 0
+
+
+class FormStageAdmin(nested_admin.NestedModelAdmin):
     model = models.FormStage
     readonly_fields = ('form_model', 'order')
+    fields = ('form_model', 'order', 'visible_layer_groups')
     exclude = ("form",)
     inlines = [
-        FormModuleInline
+        MapViewportInline,
+        FormModuleInline,
     ]
 
     def form_model(self, instance):
@@ -605,6 +612,9 @@ admin.site.register(models.Flavor, FlavorAdmin)
 admin.site.register(models.Form, FormAdmin)
 admin.site.register(models.FormStage, FormStageAdmin)
 admin.site.register(models.FormModule, FormModuleAdmin)
+# TODO: hide these from top level folder:
+admin.site.register(models.LayerGroup)
+admin.site.register(models.MapViewport)
 
 admin.site.site_header = 'Mapseed API Server Administration'
 admin.site.site_title = 'Mapseed API Server'
