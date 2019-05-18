@@ -1,12 +1,21 @@
 from django.contrib.gis.db import models
 from .core import DataSet
 from .flavors import Flavor
-from .maps import (
-    LayerGroup,
-)
 import logging
 from django.core.exceptions import ValidationError
 logger = logging.getLogger(__name__)
+
+__all__ = [
+    'Form',
+    'FormStage',
+    'LayerGroup',
+    'MapViewport',
+    'FormModule',
+    'HtmlModule',
+    'FormFieldOption',
+    'RadioField',
+    'RadioOption'
+]
 
 
 class Form(models.Model):
@@ -35,6 +44,17 @@ class Form(models.Model):
     class Meta:
         app_label = 'sa_api_v2'
         db_table = 'ms_api_form'
+
+
+class LayerGroup(models.Model):
+    label = models.CharField(max_length=128)
+
+    class Meta:
+        app_label = 'sa_api_v2'
+        db_table = 'ms_api_map_layer_group'
+
+    def __unicode__(self):
+        return self.label
 
 
 class FormStage(models.Model):

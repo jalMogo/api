@@ -7,4 +7,3 @@ from .bulk_data import *
 from .tags import *
 from .flavors import *
 from .forms import *
-from .maps import *
