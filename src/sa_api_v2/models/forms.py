@@ -1,6 +1,9 @@
 from django.contrib.gis.db import models
 from .core import DataSet
 from .flavors import Flavor
+from .maps import (
+    LayerGroup,
+)
 import logging
 from django.core.exceptions import ValidationError
 logger = logging.getLogger(__name__)
@@ -34,7 +37,6 @@ class Form(models.Model):
         db_table = 'ms_api_form'
 
 
-# TODO: fix model/serializer/view tests,
 class FormStage(models.Model):
     form = models.ForeignKey(
         Form,
@@ -43,8 +45,12 @@ class FormStage(models.Model):
     )
     order = models.PositiveSmallIntegerField(default=0, blank=False, null=False)
 
-    # TODO: add visibility_layer_group_ids as string array
-    # TODO: add MapViewPort FK reference
+    visible_layer_groups = models.ManyToManyField(
+        LayerGroup,
+        help_text="A list of layers that will become visible during this stage.",
+        blank=True,
+        related_name='+',
+    )
 
     def __unicode__(self):
         return 'id: {}, order: {}'.format(self.id, self.order)
@@ -53,6 +59,27 @@ class FormStage(models.Model):
         app_label = 'sa_api_v2'
         db_table = 'ms_api_form_stage'
         ordering = ['order']
+
+
+class MapViewport(models.Model):
+    zoom = models.PositiveSmallIntegerField(null=False, blank=False)
+    latitude = models.FloatField(null=False, blank=False)
+    longitude = models.FloatField(null=False, blank=False)
+    transition_duration = models.PositiveSmallIntegerField(null=False, blank=False)
+    bearing = models.PositiveSmallIntegerField(null=False, blank=False)
+    pitch = models.PositiveSmallIntegerField(null=False, blank=False)
+
+    stage = models.OneToOneField(
+        FormStage,
+        related_name='map_viewport',
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
+
+    class Meta:
+        app_label = 'sa_api_v2'
+        db_table = 'ms_api_map_viewport'
 
 
 class FormModule(models.Model):
