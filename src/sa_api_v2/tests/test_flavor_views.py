@@ -119,7 +119,8 @@ class TestFlavorInstanceView (APITestMixin, TestCase):
         # Check that the data attributes have been incorporated into the
         # properties
         self.assertEqual(len(data.get('forms')), 2)
-        self.assertEqual(len(data.get('forms')[0].get('stages')), 2)
+        form1 = next(form for form in data.get('forms') if form['label'] == 'form1')
+        self.assertEqual(len(form1.get('stages')), 2)
 
     def test_GET_invalid_url(self):
         # Make sure that we respond with 404 if a flavor's slug is supplied, but it doesn't match to any flavor
