@@ -33,6 +33,16 @@ from adminsortable2.admin import SortableInlineAdminMixin
 from .tasks import clone_related_dataset_data
 import nested_admin
 
+__all__ = []
+
+
+class HiddenModelAdmin (admin.ModelAdmin):
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
+
 
 class SubmissionSetFilter (SimpleListFilter):
     """
@@ -417,7 +427,7 @@ class RadioFieldInline(nested_admin.NestedTabularInline):
     ]
 
 
-class FormModuleAdmin(nested_admin.NestedModelAdmin):
+class FormModuleAdmin(HiddenModelAdmin, nested_admin.NestedModelAdmin):
     model = models.FormModule
     readonly_fields = ('formstage', 'order')
     exclude = ("stage",)
@@ -469,7 +479,7 @@ class MapViewportInline(nested_admin.NestedStackedInline):
     extra = 0
 
 
-class FormStageAdmin(nested_admin.NestedModelAdmin):
+class FormStageAdmin(HiddenModelAdmin, nested_admin.NestedModelAdmin):
     model = models.FormStage
     readonly_fields = ('form_model', 'order')
     fields = ('form_model', 'order', 'visible_layer_groups')
@@ -496,7 +506,7 @@ class FormStageInline(SortableInlineAdminMixin, admin.StackedInline):
 
     def edit_url(self, instance):
         if instance.pk is None:
-            return '(You must save your form before you can edit this form module.)'
+            return '(You must save your form before you can edit this form stage.)'
         else:
             return format_html(
                 '<a href="{}"><strong>Edit Form Stage</strong></a>',
@@ -608,9 +618,8 @@ admin.site.register(models.Flavor, FlavorAdmin)
 admin.site.register(models.Form, FormAdmin)
 admin.site.register(models.FormStage, FormStageAdmin)
 admin.site.register(models.FormModule, FormModuleAdmin)
-# TODO: hide these from top level folder:
-admin.site.register(models.LayerGroup)
-admin.site.register(models.MapViewport)
+admin.site.register(models.LayerGroup, HiddenModelAdmin)
+admin.site.register(models.MapViewport, HiddenModelAdmin)
 
 admin.site.site_header = 'Mapseed API Server Administration'
 admin.site.site_title = 'Mapseed API Server'
