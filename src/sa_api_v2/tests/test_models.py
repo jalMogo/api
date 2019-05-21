@@ -589,67 +589,132 @@ class DataPermissionTests (TestCase):
 
 class TestFormModel (TestCase):
     # ./src/manage.py test -s sa_api_v2.tests.test_models:TestFormModel
-    def setUp(self):
-        self.form = Form.objects.create(label="my form model")
+    @classmethod
+    def setUpTestData(self):
+        self.form = Form.objects.create(label="form 1")
 
         self.stages = [
             FormStage.objects.create(order=0, form=self.form),
         ]
 
-        self.form_modules = [
-            FormModule.objects.create(
-                order=0,
-                stage=self.stages[0],
-            ),
-            FormModule.objects.create(
-                order=1,
-                stage=self.stages[0],
-            )
-        ]
-
-        HtmlModule.objects.create(
+        html_module = HtmlModule.objects.create(
             content="<p>Html test module model</p>",
-            module=self.form_modules[1]
         )
 
         self.radio_field = RadioField.objects.create(
             key="ward",
             prompt="where is your ward?",
-            module=self.form_modules[0]
         )
-        self.radio_option_1 = RadioOption.objects.create(
+        RadioOption.objects.create(
             label="Ward 1",
             value="ward_1",
             field=self.radio_field,
         )
-        self.radio_option_2 = RadioOption.objects.create(
+        RadioOption.objects.create(
             label="Ward 2",
             value="ward_2",
             field=self.radio_field,
         )
 
+        self.form_modules = [
+            FormModule.objects.create(
+                order=0,
+                stage=self.stages[0],
+                htmlmodule=html_module,
+            ),
+            FormModule.objects.create(
+                order=1,
+                stage=self.stages[0],
+                radiofield=self.radio_field,
+            )
+        ]
+
     def test_fails_with_multiple_relations_on_form_module(self):
         with self.assertRaises(ValidationError) as context:
-            RadioField.objects.create(
+            radio_field = RadioField.objects.create(
                 key="ward",
                 prompt="where is your ward?",
-                module=self.form_modules[1]
             )
+            html_module = HtmlModule.objects.create(
+                content="<p>Html test module model</p>",
+            )
+
+            FormModule.objects.create(
+                order=2,
+                stage=self.stages[0],
+                htmlmodule=html_module,
+                radiofield=radio_field,
+            ),
         self.assertTrue(
             '[FORM_MODULE_MODEL] Instance has more than one related model' in context.exception.message
         )
 
-    def test_delete_cascades_modules_fields_and_options(self):
-        self.assertTrue(self.form.stages.all().exists())
+    def test_module_field_deletion_sets_null(self):
+        mut_radio_field = RadioField.objects.create(
+            key="option_test",
+            prompt="Which option will you choose?",
+        )
+
+        FormModule.objects.create(
+            order=2,
+            stage=self.stages[0],
+            radiofield=mut_radio_field,
+        )
+        new_module = self.stages[0].modules.all()[2]
         self.assertTrue(self.stages[0].modules.all().exists())
-        self.assertTrue(self.radio_field.options.all().exists())
-        self.form.delete()
-        self.assertFalse(self.form.stages.all().exists())
-        self.assertFalse(self.stages[0].modules.all().exists())
-        self.assertFalse(self.radio_field.options.all().exists())
+        self.assertIsNotNone(new_module.get_related_module())
+        mut_radio_field.delete()
+        self.assertTrue(self.stages[0].modules.all().exists())
+        new_module.refresh_from_db()
+        self.assertIsNone(new_module.get_related_module())
+
+    def test_delete_cascades_modules_fields_and_options(self):
+        mut_form = Form.objects.create(label="this form will be deleted")
+        mut_stages = [
+            FormStage.objects.create(order=0, form=mut_form),
+        ]
+
+        mut_html_module = HtmlModule.objects.create(
+            content="<p>this will be deleted!</p>",
+        )
+
+        mut_radio_field = RadioField.objects.create(
+            key="option_test",
+            prompt="Which option will you choose?",
+        )
+
+        RadioOption.objects.create(
+            label="Option 1",
+            value="option_1",
+            field=mut_radio_field,
+        )
+        RadioOption.objects.create(
+            label="Option 2",
+            value="option_2",
+            field=mut_radio_field,
+        )
+
+        FormModule.objects.create(
+            order=0,
+            stage=mut_stages[0],
+            htmlmodule=mut_html_module,
+        )
+        FormModule.objects.create(
+            order=1,
+            stage=mut_stages[0],
+            radiofield=mut_radio_field,
+        )
+
+        self.assertTrue(mut_form.stages.all().exists())
+        self.assertTrue(mut_stages[0].modules.all().exists())
+        self.assertTrue(mut_radio_field.options.all().exists())
+        mut_form.delete()
+        self.assertFalse(mut_form.stages.all().exists())
+        self.assertFalse(mut_stages[0].modules.all().exists())
+        self.assertFalse(mut_radio_field.options.all().exists())
 
         with self.assertRaises(ObjectDoesNotExist) as context:
-            self.radio_field.refresh_from_db()
+            mut_radio_field.refresh_from_db()
         self.assertTrue(
             'RadioField matching query does not exist' in context.exception.message
         )

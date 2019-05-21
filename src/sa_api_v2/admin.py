@@ -421,10 +421,6 @@ class FormModuleAdmin(nested_admin.NestedModelAdmin):
     model = models.FormModule
     readonly_fields = ('formstage', 'order')
     exclude = ("stage",)
-    inlines = [
-        RadioFieldInline,
-        HtmlModuleInline,
-    ]
 
     def formstage(self, instance):
             return format_html(
