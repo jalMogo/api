@@ -1,3 +1,5 @@
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 from django.contrib.gis.db import models
 from .core import DataSet
 from .flavors import Flavor
@@ -102,62 +104,8 @@ class MapViewport(models.Model):
         db_table = 'ms_api_map_viewport'
 
 
-class FormModule(models.Model):
-    stage = models.ForeignKey(
-        FormStage,
-        related_name="modules",
-        on_delete=models.CASCADE,
-    )
-    order = models.PositiveSmallIntegerField(default=0, blank=False, null=False)
-    visible = models.BooleanField(
-        default=True,
-        blank=True,
-        help_text="Determines whether the module is visible by default.",
-    )
-
-    def __unicode__(self):
-        related_module = self.get_related_module()
-        return 'id: {}, {}'.format(self.id, related_module)
-
-    def get_related_module(self):
-        related_modules = self._get_related_modules()
-        if len(related_modules) == 0:
-            # In Django Admin, a FormModule needs to be created before
-            # a RelatedFormModule can be added to it.
-            return None
-        else:
-            return related_modules[0]
-
-    def _get_related_modules(self):
-        related_modules = []
-        if hasattr(self, 'radiofield'):
-            related_modules.append(self.radiofield)
-        if hasattr(self, 'htmlmodule'):
-            related_modules.append(self.htmlmodule)
-        return related_modules
-
-    def clean(self):
-        related_modules = self._get_related_modules()
-        if len(related_modules) > 1:
-            message = '[FORM_MODULE_MODEL] Instance has more than one related model: {}'.format(self.id)
-            raise ValidationError(message)
-
-    class Meta:
-        app_label = 'sa_api_v2'
-        db_table = 'ms_api_form_module'
-        ordering = ['order']
-
-
 class RelatedFormModule(models.Model):
 
-    module = models.OneToOneField(
-        FormModule,
-        on_delete=models.CASCADE,
-    )
-
-    def save(self, *args, **kwargs):
-        self.module.clean()
-        super(RelatedFormModule, self).save(*args, **kwargs)
 
     class Meta:
         app_label = 'sa_api_v2'
@@ -174,8 +122,8 @@ class HtmlModule(RelatedFormModule):
         db_table = 'ms_api_form_module_html'
 
 
+# class FormField(models.Model):
 class FormField(RelatedFormModule):
-
     key = models.CharField(max_length=128)
     prompt = models.TextField(blank=True, default="")
     private = models.BooleanField(
@@ -209,6 +157,87 @@ class RadioField(FormField):
 
     class Meta:
         db_table = 'ms_api_form_module_field_radio'
+
+
+class FormModule(models.Model):
+    stage = models.ForeignKey(
+        FormStage,
+        related_name="modules",
+        on_delete=models.CASCADE,
+    )
+    order = models.PositiveSmallIntegerField(default=0, blank=False, null=False)
+    visible = models.BooleanField(
+        default=True,
+        blank=True,
+        help_text="Determines whether the module is visible by default.",
+    )
+
+    # TODO: limit admin queryset to only other RelatedFormModules that exist in forms of the same dataset
+    radiofield = models.ForeignKey(
+        RadioField,
+        on_delete=models.SET_NULL,
+        help_text="",
+        blank=True,
+        null=True,
+        related_name='modules',
+    )
+
+    htmlmodule = models.ForeignKey(
+        HtmlModule,
+        on_delete=models.SET_NULL,
+        help_text="",
+        blank=True,
+        null=True,
+        related_name='modules',
+    )
+
+    def __unicode__(self):
+        related_module = self.get_related_module()
+        return 'id: {}, {}'.format(self.id, related_module)
+
+    def get_related_module(self):
+        related_modules = self._get_related_modules()
+        if len(related_modules) == 0:
+            # In Django Admin, a FormModule needs to be created before
+            # a RelatedFormModule can be added to it.
+            return None
+        else:
+            return related_modules[0]
+
+    def _get_related_modules(self):
+        related_modules = []
+        if self.radiofield:
+            related_modules.append(self.radiofield)
+        if self.htmlmodule:
+            related_modules.append(self.htmlmodule)
+        return related_modules
+
+    def clean(self):
+        related_modules = self._get_related_modules()
+        if len(related_modules) > 1:
+            message = '[FORM_MODULE_MODEL] Instance has more than one related model: {}'.format(self.id)
+            raise ValidationError(message)
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super(FormModule, self).save(*args, **kwargs)
+
+    class Meta:
+        app_label = 'sa_api_v2'
+        db_table = 'ms_api_form_module'
+        ordering = ['order']
+
+
+@receiver(post_delete, sender=FormModule)
+def delete(sender, instance, using, **kwargs):
+    # Delete any "dangling" RelatedModules that have no FormModule
+    # references.
+    for related_module in instance._get_related_modules():
+        if related_module is None:
+            import ipdb
+            ipdb.set_trace()
+        if len(related_module.modules.all()) == 0:
+            related_module.delete()
 
 
 class FormFieldOption(models.Model):
