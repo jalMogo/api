@@ -731,14 +731,15 @@ class HtmlModuleSerializer (serializers.ModelSerializer):
         fields = ['content']
 
 
-class SimpleFormModuleSerializer (serializers.ModelSerializer):
+class FormModuleIdentityField (serializers.ModelSerializer):
     class Meta:
         model = models.FormModule
+        # TODO: make this a unique url
         fields = ['id']
 
 
 class BaseFormFieldOptionSerializer (serializers.ModelSerializer):
-    visibility_triggers = SimpleFormModuleSerializer(read_only=True, required=False, many=True)
+    visibility_triggers = FormModuleIdentityField(read_only=True, required=False, many=True)
 
     class Meta:
         abstract = True
@@ -826,7 +827,7 @@ class FormStageSerializer (serializers.ModelSerializer):
 
     class Meta:
         model = models.FormStage
-        fields = ['visible_layer_groups', 'map_viewport', 'modules', 'order' ]
+        fields = ['visible_layer_groups', 'map_viewport', 'modules', 'order']
 
 
 class FormSerializer (serializers.ModelSerializer):

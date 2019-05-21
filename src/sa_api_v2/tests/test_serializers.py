@@ -367,7 +367,8 @@ class TestDataSetSerializer (TestCase):
 class TestFlavorSerializer (TestCase):
 
     # ./src/manage.py test -s sa_api_v2.tests.test_serializers:TestFlavorSerializer
-    def setUp(self):
+    @classmethod
+    def setUpTestData(self):
         User.objects.all().delete()
         DataSet.objects.all().delete()
         Place.objects.all().delete()
@@ -402,32 +403,14 @@ class TestFlavorSerializer (TestCase):
         ]
 
         self.html_module_content = "<p>Hey there!</p>"
-        # TODO: consider creating a 'save' utility method on
-        # the FormModule model to make this easier
-        self.form1_modules = [
-            FormModule.objects.create(
-                order=0,
-                stage=self.stages[0],
-            ),
-            FormModule.objects.create(
-                order=1,
-                stage=self.stages[0],
-            ),
-            FormModule.objects.create(
-                order=0,
-                stage=self.stages[1],
-            )
-        ]
 
-        HtmlModule.objects.create(
+        html_module = HtmlModule.objects.create(
             content=self.html_module_content,
-            module=self.form1_modules[1]
         )
 
         radio_field = RadioField.objects.create(
             key="ward",
             prompt="where is your ward?",
-            module=self.form1_modules[0]
         )
         RadioOption.objects.create(
             label="Ward 1",
@@ -443,6 +426,23 @@ class TestFlavorSerializer (TestCase):
             label="Ward 3",
             value="ward_3",
             field=radio_field,
+        )
+
+        # TODO: consider creating a 'save' utility method on
+        # the FormModule model to make this easier
+        FormModule.objects.create(
+            order=0,
+            stage=self.stages[0],
+            radiofield=radio_field
+        ),
+        FormModule.objects.create(
+            order=1,
+            stage=self.stages[0],
+            htmlmodule=html_module,
+        ),
+        FormModule.objects.create(
+            order=0,
+            stage=self.stages[1],
         )
 
         self.form2 = Form.objects.create(
