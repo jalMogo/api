@@ -23,6 +23,15 @@ from ..views import (
 # ./src/manage.py test -s sa_api_v2.tests.test_flavor_views:TestFlavorInstanceView
 class TestFlavorInstanceView (APITestMixin, TestCase):
     def setUp(self):
+        self.factory = RequestFactory()
+        self.view = FlavorInstanceView.as_view()
+
+        cache_buffer.reset()
+        django_cache.clear()
+
+    @classmethod
+    def setUpTestData(self):
+
         self.owner = User.objects.create_user(username='aaron', password='123', email='abc@example.com')
         self.dataset = DataSet.objects.create(slug='ds', owner=self.owner)
 
@@ -48,17 +57,10 @@ class TestFlavorInstanceView (APITestMixin, TestCase):
             ),
         ]
 
-        self.form1_modules = [
-            FormModule.objects.create(
-                order=0,
-                stage=self.form1_stages[0],
-            ),
-        ]
         radio_field = RadioField.objects.create(
             key="ward",
             variant="dropdown",
             dropdown_placeholder="testing",
-            module=self.form1_modules[0]
         )
 
         RadioOption.objects.create(
@@ -77,7 +79,13 @@ class TestFlavorInstanceView (APITestMixin, TestCase):
             field=radio_field,
         )
 
-        self.form2 = Form.objects.create(
+        FormModule.objects.create(
+            order=0,
+            stage=self.form1_stages[0],
+            radiofield=radio_field,
+        )
+
+        Form.objects.create(
             label='form2',
             dataset=self.dataset,
             flavor=self.flavor,
@@ -86,13 +94,7 @@ class TestFlavorInstanceView (APITestMixin, TestCase):
         self.request_kwargs = {
             'flavor_slug': self.flavor.name,
         }
-
-        self.factory = RequestFactory()
         self.path = reverse('flavor-detail', kwargs=self.request_kwargs)
-        self.view = FlavorInstanceView.as_view()
-
-        cache_buffer.reset()
-        django_cache.clear()
 
     def tearDown(self):
         User.objects.all().delete()
