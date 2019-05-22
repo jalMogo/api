@@ -383,9 +383,6 @@ class SubmissionAdmin(SubmittedThingAdmin):
     api_path.allow_tags = True
 
 
-class HtmlModuleInline(nested_admin.NestedTabularInline):
-    model = models.HtmlModule
-    extra = 0
 
 
 class FormFieldOptionInlineForm(ModelForm):
@@ -419,18 +416,17 @@ class RadioOptionInline(nested_admin.NestedTabularInline):
     fields = ('label', 'value') + FormFieldOptionInlineForm.fields
 
 
-class RadioFieldInline(nested_admin.NestedTabularInline):
+class RadioFieldAdmin(HiddenModelAdmin, nested_admin.NestedModelAdmin):
     model = models.RadioField
-    extra = 0
     inlines = [
         RadioOptionInline
     ]
 
 
-class FormModuleAdmin(HiddenModelAdmin, nested_admin.NestedModelAdmin):
+class FormModuleAdmin(HiddenModelAdmin, admin.ModelAdmin):
     model = models.FormModule
     readonly_fields = ('formstage', 'order')
-    exclude = ("stage",)
+    fields = ("formstage", "visible", "radiofield", "htmlmodule")
 
     def formstage(self, instance):
             return format_html(
@@ -440,6 +436,8 @@ class FormModuleAdmin(HiddenModelAdmin, nested_admin.NestedModelAdmin):
             )
 
 
+# Allows us to save FormStage and FormModules that have been created
+# inline.
 class AlwaysChangedModelForm(ModelForm):
     def has_changed(self, *args, **kwargs):
         if self.instance.pk is None:
@@ -451,6 +449,7 @@ class FormModuleInline(SortableInlineAdminMixin, admin.StackedInline):
     model = models.FormModule
     extra = 0
     form = AlwaysChangedModelForm
+    fields = ['visible', 'edit_url', 'summary']
 
     readonly_fields = ['edit_url', 'summary']
 
@@ -620,6 +619,8 @@ admin.site.register(models.FormStage, FormStageAdmin)
 admin.site.register(models.FormModule, FormModuleAdmin)
 admin.site.register(models.LayerGroup, HiddenModelAdmin)
 admin.site.register(models.MapViewport, HiddenModelAdmin)
+admin.site.register(models.RadioField, RadioFieldAdmin)
+admin.site.register(models.HtmlModule, HiddenModelAdmin)
 
 admin.site.site_header = 'Mapseed API Server Administration'
 admin.site.site_title = 'Mapseed API Server'
