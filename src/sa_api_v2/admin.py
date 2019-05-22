@@ -428,6 +428,27 @@ class FormModuleAdmin(HiddenModelAdmin, admin.ModelAdmin):
     readonly_fields = ('formstage', 'order')
     fields = ("formstage", "visible", "radiofield", "htmlmodule")
 
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "radiofield":
+            kwargs["queryset"] = models.RadioField.objects.filter(
+                modules__id__in=self.flavor_module_ids,
+            )
+        elif db_field.name == "htmlmodule":
+            kwargs["queryset"] = models.HtmlModule.objects.filter(
+                modules__id__in=self.flavor_module_ids,
+            )
+
+        return super(FormModuleAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def get_form(self, request, obj=None, **kwargs):
+        # filter RadioFields that have ALL modules within the same flavor as this module:
+        # https://www.agiliq.com/blog/2014/04/django-backward-relationship-lookup/
+        self.flavor_module_ids = models.FormModule.objects.select_related('stage__form__flavor').filter(
+            stage__form__flavor__id=obj.stage.form.flavor.id,
+        )
+        form = super(FormModuleAdmin, self).get_form(request, obj, **kwargs)
+        return form
+
     def formstage(self, instance):
             return format_html(
                 '<a href="{}"><strong>{}</strong></a>',
