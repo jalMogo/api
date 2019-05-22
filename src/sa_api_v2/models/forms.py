@@ -122,7 +122,6 @@ class HtmlModule(RelatedFormModule):
         db_table = 'ms_api_form_module_html'
 
 
-# class FormField(models.Model):
 class FormField(RelatedFormModule):
     key = models.CharField(max_length=128)
     prompt = models.TextField(blank=True, default="")
@@ -172,11 +171,10 @@ class FormModule(models.Model):
         help_text="Determines whether the module is visible by default.",
     )
 
-    # TODO: limit admin queryset to only other RelatedFormModules that exist in forms of the same dataset
     radiofield = models.ForeignKey(
         RadioField,
         on_delete=models.SET_NULL,
-        help_text="",
+        help_text="Choose a radio field. Create a new radio field, or select a radiofield that already exists within this flavor. Only one field/module can be selected for this FormModule.",
         blank=True,
         null=True,
         related_name='modules',
@@ -185,7 +183,7 @@ class FormModule(models.Model):
     htmlmodule = models.ForeignKey(
         HtmlModule,
         on_delete=models.SET_NULL,
-        help_text="",
+        help_text="Choose an html module. Create a new html module, or select an htmlmodule that already exists within this flavor. Only one field/module can be selected for this FormModule.",
         blank=True,
         null=True,
         related_name='modules',
