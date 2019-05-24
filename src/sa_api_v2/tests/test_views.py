@@ -14,6 +14,7 @@ from ..models import (
     Place,
     Submission,
     Action,
+    Attachment,
 )
 from ..params import (
     INCLUDE_PRIVATE_FIELDS_PARAM,
