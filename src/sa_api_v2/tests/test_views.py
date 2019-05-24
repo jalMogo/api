@@ -8,20 +8,35 @@ from django.contrib.gis import geos
 import base64
 import csv
 import json
-import mock
 from StringIO import StringIO
-from ..models import User, DataSet, Place, Submission, Attachment, Action, Group, DataIndex, GroupPermission
+from ..models import (
+    User,
+    DataSet,
+    Place,
+    Submission,
+    Attachment,
+    Action,
+    Group,
+    GroupPermission,
+)
 from ..params import (
     INCLUDE_PRIVATE_FIELDS_PARAM,
-    INCLUDE_PRIVATE_PLACES_PARAM,
 )
 from ..cache import cache_buffer
 from ..apikey.models import ApiKey
 from ..apikey.auth import KEY_HEADER
 from ..cors.models import Origin
-from ..views import (PlaceInstanceView, PlaceListView, SubmissionInstanceView,
-    SubmissionListView, DataSetSubmissionListView, DataSetInstanceView,
-    DataSetListView, AdminDataSetListView, AttachmentListView, ActionListView)
+from ..views import (
+    PlaceInstanceView,
+    SubmissionInstanceView,
+    SubmissionListView,
+    DataSetSubmissionListView,
+    DataSetInstanceView,
+    DataSetListView,
+    AdminDataSetListView,
+    AttachmentListView,
+    ActionListView,
+)
 
 
 class APITestMixin (object):
