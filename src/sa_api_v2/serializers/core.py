@@ -43,6 +43,7 @@ from .. import cors
 from .. import models
 from ..models import check_data_permission
 from ..params import (
+    INCLUDE_PRIVATE_FIELDS_PARAM,
     INCLUDE_INVISIBLE_PARAM,
     INCLUDE_TAGS_PARAM,
     INCLUDE_SUBMISSIONS_PARAM,
@@ -501,7 +502,9 @@ class PlaceSerializer (BasePlaceSerializer,
         return serializer.data
 
     def submitter_to_native(self, obj):
-        return UserSerializer(obj.submitter).data if obj.submitter else None
+        return UserSerializer(obj.submitter, context={
+            INCLUDE_PRIVATE_FIELDS_PARAM: self.is_flag_on(INCLUDE_PRIVATE_FIELDS_PARAM)
+        }).data if obj.submitter else None
 
 
 # Submission serializers
