@@ -1,6 +1,10 @@
 import re
 from rest_framework import serializers
 from .. import models
+
+from ..params import (
+    INCLUDE_PRIVATE_FIELDS_PARAM,
+)
 ###############################################################################
 #
 # User Data Strategies
@@ -133,14 +137,22 @@ class BaseUserSerializer (serializers.ModelSerializer):
             return None
 
     def to_representation(self, obj):
-        return {
+        if not obj:
+            return {}
+        data = {
             "name": self.get_name(obj),
             "avatar_url": self.get_avatar_url(obj),
             "provider_type": self.get_provider_type(obj),
             "provider_id": self.get_provider_id(obj),
             "id": obj.id,
             "username": obj.username
-        } if obj else {}
+        }
+
+        # provider_id contains email address for Google Oauth, so we
+        # consider it a private field:
+        if self.context and self.context.get(INCLUDE_PRIVATE_FIELDS_PARAM):
+            del data["provider_id"]
+        return data
 
 
 class SimpleUserSerializer (BaseUserSerializer):
