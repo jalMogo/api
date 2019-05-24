@@ -30,7 +30,8 @@ from ..params import (
 
 
 class TestPlaceListView (APITestMixin, TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(self):
         cache_buffer.reset()
         django_cache.clear()
 
@@ -80,6 +81,7 @@ class TestPlaceListView (APITestMixin, TestCase):
 
         self.path = reverse('place-list', kwargs=self.request_kwargs)
 
+    def setUp(self):
         self.factory = RequestFactory()
         self.view = PlaceListView.as_view()
         self.apikey = ApiKey.objects.create(key='abc', dataset=self.dataset)
