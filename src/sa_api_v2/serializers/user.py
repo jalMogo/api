@@ -150,7 +150,7 @@ class BaseUserSerializer (serializers.ModelSerializer):
 
         # provider_id contains email address for Google Oauth, so we
         # consider it a private field:
-        if self.context and self.context.get(INCLUDE_PRIVATE_FIELDS_PARAM):
+        if not self.context or not self.context.get(INCLUDE_PRIVATE_FIELDS_PARAM):
             del data["provider_id"]
         return data
 
