@@ -26,7 +26,7 @@ from ..params import (
     INCLUDE_PRIVATE_FIELDS_PARAM,
     INCLUDE_PRIVATE_PLACES_PARAM,
 )
-# ./src/manage.py test -s sa_api_v2.tests.test_place_views:TestPlaceListView
+# ./src/manage.py test -s sa_api_v2.tests.test_place_list_view:TestPlaceListView
 
 
 class TestPlaceListView (APITestMixin, TestCase):
