@@ -1,8 +1,11 @@
 from django.conf import settings
 
 # Querystring Parameter Names
+# Places marked as 'invisible':
 INCLUDE_INVISIBLE_PARAM = 'include_invisible'
+# Places marked as 'private':
 INCLUDE_PRIVATE_PLACES_PARAM = 'include_private_places'
+# Protected Place fields and User fields:
 INCLUDE_PRIVATE_FIELDS_PARAM = 'include_private_fields'
 INCLUDE_SUBMISSIONS_PARAM = 'include_submissions'
 INCLUDE_TAGS_PARAM = 'include_tags'
