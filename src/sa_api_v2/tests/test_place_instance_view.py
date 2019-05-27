@@ -31,7 +31,6 @@ from ..params import (
 
 
 class TestPlaceInstanceView (APITestMixin, TestCase):
-    # def setUp(self):
     @classmethod
     def setUpTestData(self):
         self.owner = User.objects.create_user(username='aaron', password='123', email='abc@example.com')
@@ -183,6 +182,9 @@ class TestPlaceInstanceView (APITestMixin, TestCase):
         self.assertIn('attachments', data['properties'])
         self.assertIn('submission_sets', data['properties'])
         self.assertIn('submitter', data['properties'])
+
+        self.assertIn('provider_type', data.get('properties').get('submitter'))
+        self.assertNotIn('provider_id', data.get('properties').get('submitter'))
 
         # Check that the URL is right
         self.assertEqual(
@@ -393,6 +395,8 @@ class TestPlaceInstanceView (APITestMixin, TestCase):
         self.assertStatusCode(response, 200)
 
         # Check that the private data is in the properties
+        self.assertIn('provider_id', data.get('properties').get('submitter'))
+
         self.assertIn('private-secrets', data['properties'])
 
         # --------------------------------------------------
