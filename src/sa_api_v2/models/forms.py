@@ -75,7 +75,7 @@ class FormStage(models.Model):
     )
 
     def __unicode__(self):
-        return 'id: {}, order: {}'.format(self.id, self.order)
+        return 'Order: {}, within the form: {}'.format(self.order, self.form)
 
     class Meta:
         app_label = 'sa_api_v2'
@@ -106,17 +106,24 @@ class MapViewport(models.Model):
 
 class RelatedFormModule(models.Model):
 
-
     class Meta:
         app_label = 'sa_api_v2'
         abstract = True
 
 
 class HtmlModule(RelatedFormModule):
-    content = models.TextField(blank=True, default=None)
+    label = models.CharField(
+        help_text="For labelling purponses only - won't be used on the form. Use this label to more easily identify this module in the form.",
+        max_length=128,
+        blank=True,
+        default='',
+    )
+    content = models.TextField(
+        help_text="Add HTML here that will be displayed on the form. Make sure that the html is valid and sanitized!",
+    )
 
     def __unicode__(self):
-        return "html module with content: {}".format(self.content)
+        return "html module, with label: {}".format(self.label)
 
     class Meta:
         db_table = 'ms_api_form_module_html'
