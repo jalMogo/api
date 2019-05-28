@@ -42,7 +42,7 @@ class Form(models.Model):
     )
 
     def __unicode__(self):
-        return self.label
+        return "{} on dataset: {}".format(self.label, self.dataset.display_name)
 
     class Meta:
         app_label = 'sa_api_v2'
@@ -76,7 +76,7 @@ class FormStage(models.Model):
     )
 
     def __unicode__(self):
-        return 'Order: {}, within the form: {}'.format(self.order, self.form)
+        return '{}, order: {}'.format(self.form, self.order)
 
     class Meta:
         app_label = 'sa_api_v2'
@@ -124,7 +124,7 @@ class HtmlModule(RelatedFormModule):
     )
 
     def __unicode__(self):
-        return "html module, with label: {}".format(self.label)
+        return "html module, with label: \"{}\"".format(self.label)
 
     class Meta:
         db_table = 'ms_api_form_module_html'
@@ -160,7 +160,7 @@ class RadioField(FormField):
     dropdown_placeholder = models.CharField(max_length=128, null=True, blank=True)
 
     def __unicode__(self):
-        return "radio field with prompt: {}".format(self.prompt)
+        return "radio field with prompt: \"{}\"".format(self.prompt)
 
     class Meta:
         db_table = 'ms_api_form_module_field_radio'
@@ -216,7 +216,7 @@ class FormModule(models.Model):
 
     def __unicode__(self):
         related_module = self.get_related_module()
-        return 'id: {}, {}'.format(self.id, related_module)
+        return 'order: {order}, with related module: {related}'.format(related=related_module, order=self.order)
 
     def get_related_module(self):
         related_modules = self._get_related_modules()
