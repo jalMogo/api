@@ -111,6 +111,12 @@ class RelatedFormModule(models.Model):
         app_label = 'sa_api_v2'
         abstract = True
 
+    def __unicode__(self):
+        if len(self.modules.all()) == 0:
+            return "{} (unnattached)".format(self.summary())
+        else:
+            return self.summary()
+
 
 class HtmlModule(RelatedFormModule):
     label = models.CharField(
@@ -123,7 +129,7 @@ class HtmlModule(RelatedFormModule):
         help_text="Add HTML here that will be displayed on the form. Make sure that the html is valid and sanitized!",
     )
 
-    def __unicode__(self):
+    def summary(self):
         return "html module, with label: \"{}\"".format(self.label)
 
     class Meta:
@@ -159,7 +165,7 @@ class RadioField(FormField):
     variant = models.CharField(max_length=128, choices=CHOICES, default=RADIO)
     dropdown_placeholder = models.CharField(max_length=128, null=True, blank=True)
 
-    def __unicode__(self):
+    def summary(self):
         return "radio field with prompt: \"{}\"".format(self.prompt)
 
     class Meta:
@@ -167,7 +173,7 @@ class RadioField(FormField):
 
 
 class TextField(FormField):
-    def __unicode__(self):
+    def summary(self):
         return "text field with prompt: \"{}\"".format(self.prompt)
 
     class Meta:
