@@ -41,6 +41,8 @@ boto==2.39.0
 django-storages==1.6.6
 
 # hierarchy support for our dataset labels:
+# TODO: move over to django-mptt in Python 3.5+:
+# https://github.com/django-mptt/django-mptt
 django-closuretree==1.2.0
 
 

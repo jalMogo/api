@@ -6,8 +6,15 @@ class Flavor(models.Model):
 
     slug = models.SlugField(max_length=128, default=u'', unique=True)
 
-    # These are the datasets that the flavor reads from.
+    # TODO: add datasets to the flavor. The client needs to know which
+    # dataset endpoints to download and display on the map, and their
+    # permissions.
+
     # datasets = models.ManyToManyField(DataSet, related_name='tags', on_delete=models.CASCADE)
+
+    # AND, consider adding a "LayerGroup" model, which references
+    # an ordered list of models that represent either a styled
+    # DataSet, or other vector/raster/geojson source.
 
     def __unicode__(self):
         return self.name
