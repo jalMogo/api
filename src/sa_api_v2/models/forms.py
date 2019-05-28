@@ -16,7 +16,8 @@ __all__ = [
     'HtmlModule',
     'FormFieldOption',
     'RadioField',
-    'RadioOption'
+    'RadioOption',
+    'TextField',
 ]
 
 
@@ -165,6 +166,14 @@ class RadioField(FormField):
         db_table = 'ms_api_form_module_field_radio'
 
 
+class TextField(FormField):
+    def __unicode__(self):
+        return "text field with prompt: \"{}\"".format(self.prompt)
+
+    class Meta:
+        db_table = 'ms_api_form_module_field_text'
+
+
 class FormModule(models.Model):
     stage = models.ForeignKey(
         FormStage,
@@ -182,6 +191,15 @@ class FormModule(models.Model):
         RadioField,
         on_delete=models.SET_NULL,
         help_text="Choose a radio field. Create a new radio field, or select a radiofield that already exists within this flavor. Only one field/module can be selected for this FormModule.",
+        blank=True,
+        null=True,
+        related_name='modules',
+    )
+
+    textfield = models.ForeignKey(
+        TextField,
+        on_delete=models.SET_NULL,
+        help_text="Choose a text field. Create a new text field, or select one that already exists within this flavor. Only one field/module can be selected for this FormModule.",
         blank=True,
         null=True,
         related_name='modules',
