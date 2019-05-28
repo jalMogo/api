@@ -424,7 +424,7 @@ class RadioFieldAdmin(HiddenModelAdmin, nested_admin.NestedModelAdmin):
 class FormModuleAdmin(HiddenModelAdmin, admin.ModelAdmin):
     model = models.FormModule
     readonly_fields = ('formstage', 'order')
-    fields = ("formstage", "visible", "radiofield", "htmlmodule")
+    fields = ("formstage", "visible", "htmlmodule", "radiofield", "textfield")
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "radiofield":
@@ -435,6 +435,11 @@ class FormModuleAdmin(HiddenModelAdmin, admin.ModelAdmin):
             )
         elif db_field.name == "htmlmodule":
             kwargs["queryset"] = models.HtmlModule.objects.prefetch_related('modules').filter(
+                Q(modules__id__in=self.flavor_module_ids) | Q(modules=None),
+            )
+
+        elif db_field.name == "textfield":
+            kwargs["queryset"] = models.TextField.objects.prefetch_related('modules').filter(
                 Q(modules__id__in=self.flavor_module_ids) | Q(modules=None),
             )
 
@@ -642,6 +647,7 @@ admin.site.register(models.LayerGroup, HiddenModelAdmin)
 admin.site.register(models.MapViewport, HiddenModelAdmin)
 admin.site.register(models.RadioField, RadioFieldAdmin)
 admin.site.register(models.HtmlModule, HiddenModelAdmin)
+admin.site.register(models.TextField, HiddenModelAdmin)
 
 admin.site.site_header = 'Mapseed API Server Administration'
 admin.site.site_title = 'Mapseed API Server'
