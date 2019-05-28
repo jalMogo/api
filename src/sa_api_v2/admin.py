@@ -383,8 +383,6 @@ class SubmissionAdmin(SubmittedThingAdmin):
     api_path.allow_tags = True
 
 
-
-
 class FormFieldOptionInlineForm(ModelForm):
     visibility_triggers = ModelMultipleChoiceField(
         widget=CheckboxSelectMultiple,
@@ -430,12 +428,14 @@ class FormModuleAdmin(HiddenModelAdmin, admin.ModelAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "radiofield":
-            kwargs["queryset"] = models.RadioField.objects.filter(
-                modules__id__in=self.flavor_module_ids,
+            # Filter related FormModules that are within this flavor,
+            # or don't have any attached FormModules as well.
+            kwargs["queryset"] = models.RadioField.objects.prefetch_related('modules').filter(
+                Q(modules__id__in=self.flavor_module_ids) | Q(modules=None),
             )
         elif db_field.name == "htmlmodule":
-            kwargs["queryset"] = models.HtmlModule.objects.filter(
-                modules__id__in=self.flavor_module_ids,
+            kwargs["queryset"] = models.HtmlModule.objects.prefetch_related('modules').filter(
+                Q(modules__id__in=self.flavor_module_ids) | Q(modules=None),
             )
 
         return super(FormModuleAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
