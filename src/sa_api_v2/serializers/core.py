@@ -759,6 +759,12 @@ class BaseFormFieldSerializer (serializers.ModelSerializer):
         fields = ['key', 'prompt', 'private', 'required']
 
 
+class TextFieldModuleSerializer (serializers.ModelSerializer):
+    class Meta(BaseFormFieldSerializer.Meta):
+        model = models.TextField
+        fields = BaseFormFieldSerializer.Meta.fields
+
+
 class RadioFieldModuleSerializer (serializers.ModelSerializer):
     options = RadioOptionSerializer(many=True)
 
