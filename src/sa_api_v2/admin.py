@@ -475,9 +475,9 @@ class FormModuleInline(SortableInlineAdminMixin, admin.StackedInline):
     model = models.FormModule
     extra = 0
     form = AlwaysChangedModelForm
-    fields = ['visible', 'edit_url', 'summary']
+    fields = ['visible', 'edit_url']
 
-    readonly_fields = ['edit_url', 'summary']
+    readonly_fields = ['edit_url']
 
     def edit_url(self, instance):
         if instance.pk is None:
@@ -486,16 +486,6 @@ class FormModuleInline(SortableInlineAdminMixin, admin.StackedInline):
             return format_html(
                 '<a href="{}"><strong>Edit Form Module</strong></a>',
                 reverse('admin:sa_api_v2_formmodule_change', args=[instance.pk])
-            )
-
-    def summary(self, instance):
-        related_module = instance.get_related_module()
-        if related_module is None:
-            return "module id: {}".format(instance.id)
-        else:
-            return "module id: {}, {}".format(
-                instance.id,
-                related_module,
             )
 
 
@@ -518,7 +508,7 @@ class FormStageAdmin(HiddenModelAdmin, nested_admin.NestedModelAdmin):
         return format_html(
             '<a href="{}"><strong>{}</strong></a>',
             reverse('admin:sa_api_v2_form_change', args=[instance.form.pk]),
-            instance.form.label,
+            instance.form,
         )
 
 
