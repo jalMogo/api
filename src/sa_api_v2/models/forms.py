@@ -233,12 +233,14 @@ class FormModule(models.Model):
             related_modules.append(self.radiofield)
         if self.htmlmodule:
             related_modules.append(self.htmlmodule)
+        if self.textfield:
+            related_modules.append(self.textfield)
         return related_modules
 
     def clean(self):
         related_modules = self._get_related_modules()
         if len(related_modules) > 1:
-            message = '[FORM_MODULE_MODEL] Instance has more than one related model: {}'.format(self.id)
+            message = '[FORM_MODULE_MODEL] Instance has more than one related model: {}'.format([related_modules])
             raise ValidationError(message)
 
     def save(self, *args, **kwargs):
