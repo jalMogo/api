@@ -11,6 +11,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import UserChangeForm as BaseUserChangeForm
 from django.contrib.gis import admin
 from django.contrib import messages
+from django.core.exceptions import FieldDoesNotExist
 from django.core.urlresolvers import reverse
 from django.forms import (
     ValidationError,
@@ -407,6 +408,20 @@ class FormFieldOptionInlineForm(ModelForm):
             self.fields['visibility_triggers'].queryset = models.FormModule.objects.none()
 
 
+class CheckboxOptionInline(nested_admin.NestedTabularInline):
+    model = models.CheckboxOption
+    form = FormFieldOptionInlineForm
+
+    fields = ('label', 'value') + FormFieldOptionInlineForm.fields
+
+
+class CheckboxFieldAdmin(HiddenModelAdmin, nested_admin.NestedModelAdmin):
+    model = models.CheckboxField
+    inlines = [
+        CheckboxOptionInline
+    ]
+
+
 class RadioOptionInline(nested_admin.NestedTabularInline):
     model = models.RadioOption
     form = FormFieldOptionInlineForm
@@ -424,24 +439,37 @@ class RadioFieldAdmin(HiddenModelAdmin, nested_admin.NestedModelAdmin):
 class FormModuleAdmin(HiddenModelAdmin, admin.ModelAdmin):
     model = models.FormModule
     readonly_fields = ('formstage', 'order')
-    fields = ("formstage", "visible", "htmlmodule", "radiofield", "textfield")
+    fields = (
+        "formstage",
+        "visible",
+        "htmlmodule",
+        "radiofield",
+        "checkboxfield",
+        "textareafield",
+        "textfield",
+    )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        Model = None
         if db_field.name == "radiofield":
             # Filter related FormModules that are within this flavor,
             # or don't have any attached FormModules as well.
-            kwargs["queryset"] = models.RadioField.objects.prefetch_related('modules').filter(
-                Q(modules__id__in=self.flavor_module_ids) | Q(modules=None),
-            )
+            Model = models.RadioField
         elif db_field.name == "htmlmodule":
-            kwargs["queryset"] = models.HtmlModule.objects.prefetch_related('modules').filter(
-                Q(modules__id__in=self.flavor_module_ids) | Q(modules=None),
-            )
+            Model = models.HtmlModule
 
         elif db_field.name == "textfield":
-            kwargs["queryset"] = models.TextField.objects.prefetch_related('modules').filter(
-                Q(modules__id__in=self.flavor_module_ids) | Q(modules=None),
-            )
+            Model = models.TextField
+        elif db_field.name == "textareafield":
+            Model = models.TextAreaField
+        elif db_field.name == "checkboxfield":
+            Model = models.CheckboxField
+        else:
+            raise FieldDoesNotExist("db_field name does not exist: {}".format(db_field.name))
+
+        kwargs["queryset"] = Model.objects.prefetch_related('modules').filter(
+            Q(modules__id__in=self.flavor_module_ids) | Q(modules=None),
+        )
 
         return super(FormModuleAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
@@ -638,6 +666,8 @@ admin.site.register(models.MapViewport, HiddenModelAdmin)
 admin.site.register(models.RadioField, RadioFieldAdmin)
 admin.site.register(models.HtmlModule, HiddenModelAdmin)
 admin.site.register(models.TextField, HiddenModelAdmin)
+admin.site.register(models.TextAreaField, HiddenModelAdmin)
+admin.site.register(models.CheckboxField, CheckboxFieldAdmin)
 
 admin.site.site_header = 'Mapseed API Server Administration'
 admin.site.site_title = 'Mapseed API Server'

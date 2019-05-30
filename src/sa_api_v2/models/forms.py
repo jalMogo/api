@@ -15,9 +15,12 @@ __all__ = [
     'FormModule',
     'HtmlModule',
     'FormFieldOption',
+    'CheckboxOption',
     'RadioField',
     'RadioOption',
     'TextField',
+    'TextAreaField',
+    'CheckboxField',
 ]
 
 
@@ -154,6 +157,9 @@ class FormField(RelatedFormModule):
         abstract = True
 
 
+placeholder_field = models.CharField(max_length=255, default="", blank=True)
+
+
 class RadioField(FormField):
     RADIO = "radio"
     DROPDOWN = "dropdown"
@@ -163,7 +169,7 @@ class RadioField(FormField):
     ]
 
     variant = models.CharField(max_length=128, choices=CHOICES, default=RADIO)
-    dropdown_placeholder = models.CharField(max_length=128, null=True, blank=True)
+    dropdown_placeholder = placeholder_field
 
     def summary(self):
         return "radio field with prompt: \"{}\"".format(self.prompt)
@@ -172,7 +178,27 @@ class RadioField(FormField):
         db_table = 'ms_api_form_module_field_radio'
 
 
+class CheckboxField(FormField):
+    def summary(self):
+        return "checkbox field with prompt: \"{}\"".format(self.prompt)
+
+    class Meta:
+        db_table = 'ms_api_form_module_field_checkbox'
+
+
+class TextAreaField(FormField):
+    placeholder = placeholder_field
+
+    def summary(self):
+        return "textarea field with prompt: \"{}\"".format(self.prompt)
+
+    class Meta:
+        db_table = 'ms_api_form_module_field_textarea'
+
+
 class TextField(FormField):
+    placeholder = placeholder_field
+
     def summary(self):
         return "text field with prompt: \"{}\"".format(self.prompt)
 
@@ -197,6 +223,24 @@ class FormModule(models.Model):
         RadioField,
         on_delete=models.SET_NULL,
         help_text="Choose a radio field. Create a new radio field, or select a radiofield that already exists within this flavor. Only one field/module can be selected for this FormModule.",
+        blank=True,
+        null=True,
+        related_name='modules',
+    )
+
+    checkboxfield = models.ForeignKey(
+        CheckboxField,
+        on_delete=models.SET_NULL,
+        help_text="Choose a checkbox field. Create a new checkbox field, or select a radiofield that already exists within this flavor. Only one field/module can be selected for this FormModule.",
+        blank=True,
+        null=True,
+        related_name='modules',
+    )
+
+    textareafield = models.ForeignKey(
+        TextAreaField,
+        on_delete=models.SET_NULL,
+        help_text="Choose a textarea field. Create a new textarea field, or select one that already exists within this flavor. Only one field/module can be selected for this FormModule.",
         blank=True,
         null=True,
         related_name='modules',
@@ -241,6 +285,10 @@ class FormModule(models.Model):
             related_modules.append(self.htmlmodule)
         if self.textfield:
             related_modules.append(self.textfield)
+        if self.textareafield:
+            related_modules.append(self.textareafield)
+        if self.checkboxfield:
+            related_modules.append(self.checkboxfield)
         return related_modules
 
     def clean(self):
@@ -298,6 +346,20 @@ class FormFieldOption(models.Model):
     class Meta:
         app_label = 'sa_api_v2'
         abstract = True
+
+
+class CheckboxOption(FormFieldOption):
+    label = models.CharField(max_length=128)
+    value = models.CharField(max_length=128)
+
+    field = models.ForeignKey(
+        CheckboxField,
+        related_name="options",
+        on_delete=models.CASCADE,
+    )
+
+    class Meta:
+        db_table = 'ms_api_form_module_option_checkbox'
 
 
 class RadioOption(FormFieldOption):
