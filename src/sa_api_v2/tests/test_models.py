@@ -11,7 +11,9 @@ from django.core.exceptions import (
 from ..models import (
     Form,
     FormStage,
-    FormModule,
+    FormStageModule,
+    GroupModule,
+    FormGroupModule,
     HtmlModule,
     RadioField,
     RadioOption,
@@ -616,17 +618,47 @@ class TestFormModel (TestCase):
             field=self.radio_field,
         )
 
+        html_grouped_module = HtmlModule.objects.create(
+            content="<p>html within a group!</p>",
+        )
+
+        html_grouped_module_2 = HtmlModule.objects.create(
+            content="<p>html within a group!</p>",
+        )
+
+        related_group_module = GroupModule.objects.create(
+            label="This is a group",
+        )
+
+        self.group_form_modules = [
+            FormGroupModule.objects.create(
+                order=1,
+                group=related_group_module,
+                htmlmodule=html_grouped_module,
+            ),
+            FormGroupModule.objects.create(
+                order=2,
+                group=related_group_module,
+                htmlmodule=html_grouped_module_2,
+            ),
+        ]
+
         self.form_modules = [
-            FormModule.objects.create(
-                order=0,
+            FormStageModule.objects.create(
+                order=1,
                 stage=self.stages[0],
                 htmlmodule=html_module,
             ),
-            FormModule.objects.create(
-                order=1,
+            FormStageModule.objects.create(
+                order=2,
                 stage=self.stages[0],
                 radiofield=self.radio_field,
-            )
+            ),
+            FormStageModule.objects.create(
+                order=3,
+                stage=self.stages[0],
+                groupmodule=related_group_module,
+            ),
         ]
 
     def test_fails_with_multiple_relations_on_form_module(self):
@@ -639,7 +671,7 @@ class TestFormModel (TestCase):
                 content="<p>Html test module model</p>",
             )
 
-            FormModule.objects.create(
+            FormStageModule.objects.create(
                 order=2,
                 stage=self.stages[0],
                 htmlmodule=html_module,
@@ -655,7 +687,7 @@ class TestFormModel (TestCase):
             prompt="Which option will you choose?",
         )
 
-        FormModule.objects.create(
+        FormStageModule.objects.create(
             order=2,
             stage=self.stages[0],
             radiofield=mut_radio_field,
@@ -694,12 +726,12 @@ class TestFormModel (TestCase):
             field=mut_radio_field,
         )
 
-        FormModule.objects.create(
+        FormStageModule.objects.create(
             order=0,
             stage=mut_stages[0],
             htmlmodule=mut_html_module,
         )
-        FormModule.objects.create(
+        FormStageModule.objects.create(
             order=1,
             stage=mut_stages[0],
             radiofield=mut_radio_field,
