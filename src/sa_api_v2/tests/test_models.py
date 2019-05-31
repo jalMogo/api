@@ -727,14 +727,36 @@ class TestFormModel (TestCase):
         )
 
         FormStageModule.objects.create(
-            order=0,
+            order=1,
             stage=mut_stages[0],
             htmlmodule=mut_html_module,
         )
         FormStageModule.objects.create(
-            order=1,
+            order=2,
             stage=mut_stages[0],
             radiofield=mut_radio_field,
+        )
+
+        # This radio field should not be deleted on cascade, because
+        # it is attached to a form that won't be deleted:
+        radio_field = RadioField.objects.create(
+            key="option_test",
+            prompt="test",
+        )
+
+        FormStageModule.objects.create(
+            order=3,
+            stage=mut_stages[0],
+            radiofield=radio_field,
+        )
+
+        # Create another form that will have the radio_field attached:
+        form = Form.objects.create(label="this form won't be deleted")
+        form_stage = FormStage.objects.create(order=0, form=form)
+        FormStageModule.objects.create(
+            order=1,
+            stage=form_stage,
+            radiofield=radio_field,
         )
 
         self.assertTrue(mut_form.stages.all().exists())
@@ -744,9 +766,17 @@ class TestFormModel (TestCase):
         self.assertFalse(mut_form.stages.all().exists())
         self.assertFalse(mut_stages[0].modules.all().exists())
         self.assertFalse(mut_radio_field.options.all().exists())
-
+        # Test that modules left unattached to a form are deleted:
         with self.assertRaises(ObjectDoesNotExist) as context:
             mut_radio_field.refresh_from_db()
         self.assertTrue(
             'RadioField matching query does not exist' in context.exception.message
         )
+        with self.assertRaises(ObjectDoesNotExist) as context:
+            mut_html_module.refresh_from_db()
+        self.assertTrue(
+            'HtmlModule matching query does not exist' in context.exception.message
+        )
+
+        # Test that attached modules still exists:
+        radio_field.refresh_from_db()
