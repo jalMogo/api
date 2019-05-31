@@ -12,7 +12,9 @@ __all__ = [
     'FormStage',
     'LayerGroup',
     'MapViewport',
-    'FormModule',
+    'FormStageModule',
+    'FormGroupModule',
+    'GroupModule',
     'HtmlModule',
     'FormFieldOption',
     'CheckboxOption',
@@ -121,9 +123,24 @@ class RelatedFormModule(models.Model):
             return self.summary()
 
 
+class GroupModule(RelatedFormModule):
+    label = models.CharField(
+        help_text="For labelling purposes only - won't be used on the form. Use this label to more easily identify this module in the form.",
+        max_length=128,
+        blank=True,
+        default='',
+    )
+
+    def summary(self):
+        return "group module, with label: \"{}\"".format(self.label)
+
+    class Meta:
+        db_table = 'ms_api_form_module_group'
+
+
 class HtmlModule(RelatedFormModule):
     label = models.CharField(
-        help_text="For labelling purponses only - won't be used on the form. Use this label to more easily identify this module in the form.",
+        help_text="For labelling purposes only - won't be used on the form. Use this label to more easily identify this module in the form.",
         max_length=128,
         blank=True,
         default='',
@@ -206,12 +223,7 @@ class TextField(FormField):
         db_table = 'ms_api_form_module_field_text'
 
 
-class FormModule(models.Model):
-    stage = models.ForeignKey(
-        FormStage,
-        related_name="modules",
-        on_delete=models.CASCADE,
-    )
+class AbstractFormModule(models.Model):
     order = models.PositiveSmallIntegerField(default=0, blank=False, null=False)
     visible = models.BooleanField(
         default=True,
@@ -225,7 +237,6 @@ class FormModule(models.Model):
         help_text="Choose a radio field. Create a new radio field, or select a radiofield that already exists within this flavor. Only one field/module can be selected for this FormModule.",
         blank=True,
         null=True,
-        related_name='modules',
     )
 
     checkboxfield = models.ForeignKey(
@@ -234,7 +245,6 @@ class FormModule(models.Model):
         help_text="Choose a checkbox field. Create a new checkbox field, or select a radiofield that already exists within this flavor. Only one field/module can be selected for this FormModule.",
         blank=True,
         null=True,
-        related_name='modules',
     )
 
     textareafield = models.ForeignKey(
@@ -243,7 +253,6 @@ class FormModule(models.Model):
         help_text="Choose a textarea field. Create a new textarea field, or select one that already exists within this flavor. Only one field/module can be selected for this FormModule.",
         blank=True,
         null=True,
-        related_name='modules',
     )
 
     textfield = models.ForeignKey(
@@ -252,7 +261,6 @@ class FormModule(models.Model):
         help_text="Choose a text field. Create a new text field, or select one that already exists within this flavor. Only one field/module can be selected for this FormModule.",
         blank=True,
         null=True,
-        related_name='modules',
     )
 
     htmlmodule = models.ForeignKey(
@@ -261,7 +269,6 @@ class FormModule(models.Model):
         help_text="Choose an html module. Create a new html module, or select an htmlmodule that already exists within this flavor. Only one field/module can be selected for this FormModule.",
         blank=True,
         null=True,
-        related_name='modules',
     )
 
     def __unicode__(self):
@@ -299,22 +306,61 @@ class FormModule(models.Model):
 
     def save(self, *args, **kwargs):
         self.clean()
-        super(FormModule, self).save(*args, **kwargs)
+        super(AbstractFormModule, self).save(*args, **kwargs)
+
+    class Meta:
+        abstract = True
+
+
+class FormStageModule(AbstractFormModule):
+    stage = models.ForeignKey(
+        FormStage,
+        help_text="Every FormStageModule must belong to a FormStage.",
+        related_name="modules",
+        on_delete=models.CASCADE,
+    )
+
+    groupmodule = models.ForeignKey(
+        GroupModule,
+        on_delete=models.SET_NULL,
+        help_text="Choose a group. Create a new radio field, or select a radiofield that already exists within this flavor. Only one field/module can be selected for this FormModule.",
+        blank=True,
+        null=True,
+    )
+
+    def _get_related_modules(self):
+        related_modules = super(FormStageModule, self)._get_related_modules()
+        if self.groupmodule:
+            related_modules.append(self.radiofield)
+        return related_modules
 
     class Meta:
         app_label = 'sa_api_v2'
-        db_table = 'ms_api_form_module'
+        db_table = 'ms_api_form_stage_module'
         ordering = ['order']
+        default_related_name = "modules"
 
 
-@receiver(post_delete, sender=FormModule)
+class FormGroupModule(AbstractFormModule):
+    group = models.ForeignKey(
+        GroupModule,
+        related_name="groups",
+        on_delete=models.CASCADE,
+    )
+
+    class Meta:
+        app_label = 'sa_api_v2'
+        db_table = 'ms_api_form_group_module'
+        ordering = ['order']
+        default_related_name = "groups"
+
+
+@receiver(post_delete, sender=FormStageModule)
+@receiver(post_delete, sender=FormGroupModule)
 def delete(sender, instance, using, **kwargs):
     # Delete any "dangling" RelatedModules that have no FormModule
     # references.
     for related_module in instance._get_related_modules():
-        if related_module is None:
-            import ipdb
-            ipdb.set_trace()
         if len(related_module.modules.all()) == 0:
             related_module.delete()
 
@@ -327,7 +373,8 @@ class FormFieldOption(models.Model):
     )
 
     visibility_triggers = models.ManyToManyField(
-        FormModule,
+        # Triggers are constrained to FormGroupModules only.
+        FormGroupModule,
         help_text="If this FormFieldOption is selected, the following FormModules will become visible. Only default invisible modules are selectable here.",
         blank=True,
         related_name='+',
