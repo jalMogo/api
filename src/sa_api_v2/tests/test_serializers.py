@@ -16,10 +16,12 @@ from sa_api_v2.models import (
     Flavor,
     Form,
     FormStage,
-    FormModule,
+    FormStageModule,
+    FormGroupModule,
     RadioField,
     RadioOption,
     HtmlModule,
+    GroupModule,
 )
 from sa_api_v2.serializers import (
     AttachmentListSerializer,
@@ -428,19 +430,39 @@ class TestFlavorSerializer (TestCase):
             field=radio_field,
         )
 
+        related_group_module = GroupModule.objects.create(
+            label="This is a group",
+        )
+        self.grouped_html_module_content = "<p>Inside a group!</p>"
+        html_grouped_module = HtmlModule.objects.create(
+            content="<p>html within a group!</p>",
+        )
+        self.group_form_modules = [
+            FormGroupModule.objects.create(
+                order=1,
+                group=related_group_module,
+                htmlmodule=html_grouped_module,
+            ),
+        ]
+
         # TODO: consider creating a 'save' utility method on
-        # the FormModule model to make this easier
-        FormModule.objects.create(
-            order=0,
+        # the FormStageModule model to make this easier
+        FormStageModule.objects.create(
+            order=1,
             stage=self.stages[0],
             radiofield=radio_field
         ),
-        FormModule.objects.create(
-            order=1,
+        FormStageModule.objects.create(
+            order=2,
             stage=self.stages[0],
             htmlmodule=html_module,
         ),
-        FormModule.objects.create(
+        FormStageModule.objects.create(
+            order=3,
+            stage=self.stages[0],
+            groupmodule=related_group_module,
+        )
+        FormStageModule.objects.create(
             order=0,
             stage=self.stages[1],
         )

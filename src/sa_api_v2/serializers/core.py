@@ -725,21 +725,20 @@ class ActionSerializer (EmptyModelSerializer, serializers.ModelSerializer):
 
 
 class HtmlModuleSerializer (serializers.ModelSerializer):
-
     class Meta:
         model = models.HtmlModule
         fields = ['content']
 
 
-class FormModuleIdentityField (serializers.ModelSerializer):
+class FormStageModuleIdentityField (serializers.ModelSerializer):
     class Meta:
-        model = models.FormModule
+        model = models.FormStageModule
         # TODO: make this a unique url
         fields = ['id']
 
 
 class BaseFormFieldOptionSerializer (serializers.ModelSerializer):
-    visibility_triggers = FormModuleIdentityField(read_only=True, required=False, many=True)
+    visibility_triggers = FormStageModuleIdentityField(read_only=True, required=False, many=True)
 
     class Meta:
         abstract = True
@@ -773,13 +772,9 @@ class RadioFieldModuleSerializer (serializers.ModelSerializer):
         fields = BaseFormFieldSerializer.Meta.fields + ['variant', 'dropdown_placeholder', 'options']
 
 
-class FormModuleSerializer (serializers.ModelSerializer):
+class AbstractFormModuleSerializer (serializers.ModelSerializer):
     htmlmodule = HtmlModuleSerializer()
     radiofield = RadioFieldModuleSerializer()
-
-    class Meta:
-        model = models.FormModule
-        exclude = ['stage']
 
     # removes "null" fields
     def to_representation(self, instance):
@@ -813,6 +808,28 @@ class FormModuleSerializer (serializers.ModelSerializer):
         return ret
 
 
+class FormGroupModuleSerializer (AbstractFormModuleSerializer):
+    class Meta:
+        model = models.FormGroupModule
+        exclude = ['group']
+
+
+class GroupModuleSerializer (serializers.ModelSerializer):
+    modules = FormGroupModuleSerializer(many=True)
+
+    class Meta:
+        model = models.GroupModule
+        fields = ['label', 'modules']
+
+
+class FormStageModuleSerializer (AbstractFormModuleSerializer):
+    groupmodule = GroupModuleSerializer()
+
+    class Meta:
+        model = models.FormStageModule
+        exclude = ['stage']
+
+
 class LayerGroupSerializer (serializers.ModelSerializer):
     class Meta:
         model = models.LayerGroup
@@ -827,7 +844,7 @@ class MapViewportSerializer (serializers.ModelSerializer):
 
 
 class FormStageSerializer (serializers.ModelSerializer):
-    modules = FormModuleSerializer(many=True)
+    modules = FormStageModuleSerializer(many=True)
     visible_layer_groups = LayerGroupSerializer(many=True)
     map_viewport = MapViewportSerializer()
 
