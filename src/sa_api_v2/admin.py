@@ -387,7 +387,7 @@ class SubmissionAdmin(SubmittedThingAdmin):
 class FormFieldOptionInlineForm(ModelForm):
     visibility_triggers = ModelMultipleChoiceField(
         widget=CheckboxSelectMultiple,
-        queryset=models.FormModule.objects.none(),
+        queryset=models.FormGroupModule.objects.none(),
         help_text=unicode(models.FormFieldOption._meta.get_field('visibility_triggers').help_text),
         required=False,
     )
@@ -395,17 +395,22 @@ class FormFieldOptionInlineForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(FormFieldOptionInlineForm, self).__init__(*args, **kwargs)
-        if 'instance' in kwargs:
-            # limit the selectable visibility_triggers to FormModules
+        if 'instance' in kwargs:  # and instance.field.group exists!!!
+            # limit the selectable visibility_triggers to FormGroupModules
             # that belong to the same form, and are not visible by
             # default
-            self.fields['visibility_triggers'].queryset = models.FormModule.objects.filter(
-                ~Q(id=self.instance.field.module.id),
-                stage__id=self.instance.field.module.stage.id,
-                visible=False,
-            )
+
+            # FormGroupModule.objects.select_related('stage').\
+            self.fields['visibility_triggers'].queryset = models.\
+                FormGroupModule.objects.select_related('group').\
+                filter(
+                    # Filter out the current FormModule:
+                    ~Q(id=self.instance.field.group_module.id),
+                    group__id=self.instance.field.group_module.id,
+                    visible=False,
+                )
         else:
-            self.fields['visibility_triggers'].queryset = models.FormModule.objects.none()
+            self.fields['visibility_triggers'].queryset = models.FormGroupModule.objects.none()
 
 
 class CheckboxOptionInline(nested_admin.NestedTabularInline):
@@ -436,18 +441,8 @@ class RadioFieldAdmin(HiddenModelAdmin, nested_admin.NestedModelAdmin):
     ]
 
 
-class FormModuleAdmin(HiddenModelAdmin, admin.ModelAdmin):
-    model = models.FormModule
-    readonly_fields = ('formstage', 'order')
-    fields = (
-        "formstage",
-        "visible",
-        "htmlmodule",
-        "radiofield",
-        "checkboxfield",
-        "textareafield",
-        "textfield",
-    )
+class AbstractFormModuleAdmin (HiddenModelAdmin, admin.ModelAdmin):
+    model = models.GroupModule
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         Model = None
@@ -455,6 +450,8 @@ class FormModuleAdmin(HiddenModelAdmin, admin.ModelAdmin):
             # Filter related FormModules that are within this flavor,
             # or don't have any attached FormModules as well.
             Model = models.RadioField
+        elif db_field.name == "groupmodule":
+            Model = models.GroupModule
         elif db_field.name == "htmlmodule":
             Model = models.HtmlModule
 
@@ -467,19 +464,38 @@ class FormModuleAdmin(HiddenModelAdmin, admin.ModelAdmin):
         else:
             raise FieldDoesNotExist("db_field name does not exist: {}".format(db_field.name))
 
-        kwargs["queryset"] = Model.objects.prefetch_related('modules').filter(
-            Q(modules__id__in=self.flavor_module_ids) | Q(modules=None),
-        )
+        kwargs["queryset"] = self._get_related_queryset(Model.objects)
 
-        return super(FormModuleAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+        return super(AbstractFormModuleAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
+
+class FormStageModuleAdmin(AbstractFormModuleAdmin):
+    model = models.FormStageModule
+    readonly_fields = ('formstage', 'order')
+    fields = (
+        "formstage",
+        "visible",
+        "htmlmodule",
+        "groupmodule",
+        "radiofield",
+        "checkboxfield",
+        "textareafield",
+        "textfield",
+    )
+
+    def _get_related_queryset(self, queryset):
+        # include only in the queryset RelatedModules that are within this Flavor, or unattached:
+        return queryset.prefetch_related('stage_modules').filter(
+            Q(stage_modules__id__in=self.stage_modules) | Q(stage_modules=None),
+        )
 
     def get_form(self, request, obj=None, **kwargs):
         # filter RadioFields that have ALL modules within the same flavor as this module:
         # https://www.agiliq.com/blog/2014/04/django-backward-relationship-lookup/
-        self.flavor_module_ids = models.FormModule.objects.select_related('stage__form__flavor').filter(
+        self.stage_modules = models.FormStageModule.objects.select_related('stage__form__flavor').filter(
             stage__form__flavor__id=obj.stage.form.flavor.id,
         )
-        form = super(FormModuleAdmin, self).get_form(request, obj, **kwargs)
+        form = super(FormStageModuleAdmin, self).get_form(request, obj, **kwargs)
         return form
 
     def formstage(self, instance):
@@ -487,6 +503,50 @@ class FormModuleAdmin(HiddenModelAdmin, admin.ModelAdmin):
                 '<a href="{}"><strong>{}</strong></a>',
                 reverse('admin:sa_api_v2_formstage_change', args=[instance.stage.pk]),
                 instance.stage,
+            )
+
+
+class FormGroupModuleAdmin(AbstractFormModuleAdmin):
+    model = models.FormGroupModule
+    readonly_fields = ('groupmodule', 'order')
+    fields = (
+        "groupmodule",
+        "visible",
+        "htmlmodule",
+        "radiofield",
+        "checkboxfield",
+        "textareafield",
+        "textfield",
+    )
+
+    def _get_related_queryset(self, queryset):
+        # include only in the queryset RelatedModules that are within
+        # this Flavor, or unattached:
+        # (It's helpful to link multiple FormModule to a RelatedModule when we are cloning/tweaking
+        # forms...)
+        return queryset.prefetch_related('group_modules').filter(
+            Q(group_modules__id__in=self.group_modules) | Q(group_modules=None),
+        )
+
+    def get_form(self, request, obj=None, **kwargs):
+        # Get all FormGroupModules within this flavor:
+        # First, get the flavor id:
+        flavor_ids = set(map(lambda x: x.id, obj.group.stage_modules.all()))
+        if len(flavor_ids) > 1:
+            # all stage_modules attached to the GroupModule should belong to the same flavor!
+            raise ValidationError("FormGroupModelAdmin.get_form: invariant violated: more than 1 flavor associated with module: {}".form(obj))
+        flavor_id = flavor_ids.pop()
+        self.group_modules = models.FormGroupModule.objects.prefetch_related('group__stage_modules__stage__form__flavor').filter(
+            group__stage_modules__stage__form__flavor__id=flavor_id,
+        )
+        form = super(FormGroupModuleAdmin, self).get_form(request, obj, **kwargs)
+        return form
+
+    def groupmodule(self, instance):
+            return format_html(
+                '<a href="{}"><strong>{}</strong></a>',
+                reverse('admin:sa_api_v2_groupmodule_change', args=[instance.group.pk]),
+                instance.group,
             )
 
 
@@ -499,8 +559,8 @@ class AlwaysChangedModelForm(ModelForm):
         return super(AlwaysChangedModelForm, self).has_changed(*args, **kwargs)
 
 
-class FormModuleInline(SortableInlineAdminMixin, admin.StackedInline):
-    model = models.FormModule
+class FormStageModuleInline(SortableInlineAdminMixin, admin.StackedInline):
+    model = models.FormStageModule
     extra = 0
     form = AlwaysChangedModelForm
     fields = ['visible', 'edit_url']
@@ -513,13 +573,38 @@ class FormModuleInline(SortableInlineAdminMixin, admin.StackedInline):
         else:
             return format_html(
                 '<a href="{}"><strong>Edit Form Module</strong></a>',
-                reverse('admin:sa_api_v2_formmodule_change', args=[instance.pk])
+                reverse('admin:sa_api_v2_formstagemodule_change', args=[instance.pk])
+            )
+
+
+class FormGroupModuleInline(SortableInlineAdminMixin, admin.StackedInline):
+    model = models.FormGroupModule
+    extra = 0
+    form = AlwaysChangedModelForm
+    fields = ['visible', 'edit_url']
+
+    readonly_fields = ['edit_url']
+
+    def edit_url(self, instance):
+        if instance.pk is None:
+            return '(You must save your form before you can edit this form module.)'
+        else:
+            return format_html(
+                '<a href="{}"><strong>Edit Group Module</strong></a>',
+                reverse('admin:sa_api_v2_formgroupmodule_change', args=[instance.pk])
             )
 
 
 class MapViewportInline(nested_admin.NestedStackedInline):
     model = models.MapViewport
     extra = 0
+
+
+class GroupModuleAdmin(HiddenModelAdmin, nested_admin.NestedModelAdmin):
+    model = models.GroupModule
+    inlines = [
+        FormGroupModuleInline,
+    ]
 
 
 class FormStageAdmin(HiddenModelAdmin, nested_admin.NestedModelAdmin):
@@ -529,7 +614,7 @@ class FormStageAdmin(HiddenModelAdmin, nested_admin.NestedModelAdmin):
     exclude = ("form",)
     inlines = [
         MapViewportInline,
-        FormModuleInline,
+        FormStageModuleInline,
     ]
 
     def form_model(self, instance):
@@ -660,7 +745,8 @@ admin.site.register(models.PlaceEmailTemplate, PlaceEmailTemplateAdmin)
 admin.site.register(models.Flavor, FlavorAdmin)
 admin.site.register(models.Form, FormAdmin)
 admin.site.register(models.FormStage, FormStageAdmin)
-admin.site.register(models.FormModule, FormModuleAdmin)
+admin.site.register(models.FormStageModule, FormStageModuleAdmin)
+admin.site.register(models.FormGroupModule, FormGroupModuleAdmin)
 admin.site.register(models.LayerGroup, HiddenModelAdmin)
 admin.site.register(models.MapViewport, HiddenModelAdmin)
 admin.site.register(models.RadioField, RadioFieldAdmin)
@@ -668,6 +754,7 @@ admin.site.register(models.HtmlModule, HiddenModelAdmin)
 admin.site.register(models.TextField, HiddenModelAdmin)
 admin.site.register(models.TextAreaField, HiddenModelAdmin)
 admin.site.register(models.CheckboxField, CheckboxFieldAdmin)
+admin.site.register(models.GroupModule, GroupModuleAdmin)
 
 admin.site.site_header = 'Mapseed API Server Administration'
 admin.site.site_title = 'Mapseed API Server'
