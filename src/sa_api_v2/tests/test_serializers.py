@@ -433,9 +433,9 @@ class TestFlavorSerializer (TestCase):
         related_group_module = GroupModule.objects.create(
             label="This is a group",
         )
-        self.grouped_html_module_content = "<p>Inside a group!</p>"
+        self.grouped_html_module_content = "<p>html within a group!</p>"
         html_grouped_module = HtmlModule.objects.create(
-            content="<p>html within a group!</p>",
+            content=self.grouped_html_module_content,
         )
         self.group_form_modules = [
             FormGroupModule.objects.create(
@@ -527,7 +527,21 @@ class TestFlavorSerializer (TestCase):
 
         form1 = next(form for form in serializer.data['forms']
                      if form['label'] == 'form1')
-        self.assertTrue(
+        self.assertEqual(
             form1.get('stages')[0].get('modules')[1].get('htmlmodule').get('content'),
             self.html_module_content
+        )
+
+    def test_form_modules_group(self):
+        serializer = FlavorSerializer(
+            self.flavor,
+            context={'request': RequestFactory().get('')},
+        )
+        self.assertEqual(2, len(serializer.data['forms']))
+
+        form1 = next(form for form in serializer.data['forms']
+                     if form['label'] == 'form1')
+        self.assertEqual(
+            form1.get('stages')[0].get('modules')[2].get('groupmodule').get('modules')[0].get('htmlmodule').get('content'),
+            self.grouped_html_module_content,
         )
