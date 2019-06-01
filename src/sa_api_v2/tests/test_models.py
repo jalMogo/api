@@ -750,13 +750,23 @@ class TestFormModel (TestCase):
             radiofield=radio_field,
         )
 
+        group_module = GroupModule.objects.create(
+            label="test group module!"
+        )
+
+        FormGroupModule.objects.create(
+            order=0,
+            group=group_module,
+            radiofield=radio_field,
+        )
+
         # Create another form that will have the radio_field attached:
         form = Form.objects.create(label="this form won't be deleted")
         form_stage = FormStage.objects.create(order=0, form=form)
         FormStageModule.objects.create(
             order=1,
             stage=form_stage,
-            radiofield=radio_field,
+            groupmodule=group_module,
         )
 
         self.assertTrue(mut_form.stages.all().exists())

@@ -117,7 +117,7 @@ class RelatedFormModule(models.Model):
         abstract = True
 
     def __unicode__(self):
-        if len(self.modules.all()) == 0:
+        if len(self.stage_modules.all()) == 0 and len(self.group_modules.all()) == 0:
             return "{} (unnattached)".format(self.summary())
         else:
             return self.summary()
@@ -338,13 +338,13 @@ class FormStageModule(AbstractFormModule):
         app_label = 'sa_api_v2'
         db_table = 'ms_api_form_stage_module'
         ordering = ['order']
-        default_related_name = "modules"
+        default_related_name = "stage_modules"
 
 
 class FormGroupModule(AbstractFormModule):
     group = models.ForeignKey(
         GroupModule,
-        related_name="groups",
+        related_name="modules",
         on_delete=models.CASCADE,
     )
 
@@ -352,16 +352,17 @@ class FormGroupModule(AbstractFormModule):
         app_label = 'sa_api_v2'
         db_table = 'ms_api_form_group_module'
         ordering = ['order']
-        default_related_name = "groups"
+        default_related_name = "group_modules"
 
 
 @receiver(post_delete, sender=FormStageModule)
 @receiver(post_delete, sender=FormGroupModule)
 def delete(sender, instance, using, **kwargs):
-    # Delete any "dangling" RelatedModules that have no FormModule
-    # references.
+    # Delete any "dangling" RelatedModules that have no
+    # FormStageModule or FormGroupModule references.
     for related_module in instance._get_related_modules():
-        if len(related_module.modules.all()) == 0:
+        if len(related_module.stage_modules.all()) == 0 \
+           and len(related_module.group_modules.all()) == 0:
             related_module.delete()
 
 
@@ -375,7 +376,7 @@ class FormFieldOption(models.Model):
     visibility_triggers = models.ManyToManyField(
         # Triggers are constrained to FormGroupModules only.
         FormGroupModule,
-        help_text="If this FormFieldOption is selected, the following FormModules will become visible. Only default invisible modules are selectable here.",
+        help_text="If this FormFieldOption is selected, the following FormGroupModules will become visible. Only default invisible modules are selectable here.",
         blank=True,
         related_name='+',
     )
