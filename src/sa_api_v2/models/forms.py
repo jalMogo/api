@@ -361,6 +361,8 @@ def delete(sender, instance, using, **kwargs):
     # Delete any "dangling" RelatedModules that have no
     # FormStageModule or FormGroupModule references.
     for related_module in instance._get_related_modules():
+        if related_module is None:
+            return
         if len(related_module.stage_modules.all()) == 0 \
            and len(related_module.group_modules.all()) == 0:
             related_module.delete()
