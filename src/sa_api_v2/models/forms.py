@@ -117,7 +117,8 @@ class RelatedFormModule(models.Model):
         abstract = True
 
     def __unicode__(self):
-        if len(self.stage_modules.all()) == 0 and len(self.group_modules.all()) == 0:
+        if len(self.stage_modules.all()) == 0 and \
+           (hasattr(self, 'group_modules') and len(self.group_modules.all()) == 0):
             return "{} (unnattached)".format(self.summary())
         else:
             return self.summary()

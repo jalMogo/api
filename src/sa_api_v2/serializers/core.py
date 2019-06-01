@@ -758,6 +758,18 @@ class BaseFormFieldSerializer (serializers.ModelSerializer):
         fields = ['key', 'prompt', 'private', 'required']
 
 
+class CheckboxFieldModuleSerializer (serializers.ModelSerializer):
+    class Meta(BaseFormFieldSerializer.Meta):
+        model = models.CheckboxField
+        fields = BaseFormFieldSerializer.Meta.fields
+
+
+class TextAreaFieldModuleSerializer (serializers.ModelSerializer):
+    class Meta(BaseFormFieldSerializer.Meta):
+        model = models.TextAreaField
+        fields = BaseFormFieldSerializer.Meta.fields
+
+
 class TextFieldModuleSerializer (serializers.ModelSerializer):
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.TextField
@@ -775,6 +787,9 @@ class RadioFieldModuleSerializer (serializers.ModelSerializer):
 class AbstractFormModuleSerializer (serializers.ModelSerializer):
     htmlmodule = HtmlModuleSerializer()
     radiofield = RadioFieldModuleSerializer()
+    checkboxfield = CheckboxFieldModuleSerializer()
+    textfield = TextFieldModuleSerializer()
+    textareafield = TextAreaFieldModuleSerializer()
 
     # removes "null" fields
     def to_representation(self, instance):
