@@ -379,7 +379,7 @@ class FormFieldOption(models.Model):
     visibility_triggers = models.ManyToManyField(
         # Triggers are constrained to FormGroupModules only.
         FormGroupModule,
-        help_text="If this FormFieldOption is selected, the following FormGroupModules will become visible. Only default invisible modules are selectable here.",
+        help_text="Triggers an update to make the following FormGroupModules visible. Only default invisible modules are within this module's group are selectable here.",
         blank=True,
         related_name='+',
     )

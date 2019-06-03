@@ -443,6 +443,14 @@ class RadioFieldAdmin(HiddenModelAdmin, nested_admin.NestedModelAdmin):
 
 class AbstractFormModuleAdmin (HiddenModelAdmin, admin.ModelAdmin):
     model = models.GroupModule
+    fields = (
+        "visible",
+        "htmlmodule",
+        "radiofield",
+        "checkboxfield",
+        "textareafield",
+        "textfield",
+    )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         Model = None
@@ -472,16 +480,7 @@ class AbstractFormModuleAdmin (HiddenModelAdmin, admin.ModelAdmin):
 class FormStageModuleAdmin(AbstractFormModuleAdmin):
     model = models.FormStageModule
     readonly_fields = ('formstage', 'order')
-    fields = (
-        "formstage",
-        "visible",
-        "htmlmodule",
-        "groupmodule",
-        "radiofield",
-        "checkboxfield",
-        "textareafield",
-        "textfield",
-    )
+    fields = ('formstage',) + AbstractFormModuleAdmin.fields + ("groupmodule",)
 
     def _get_related_queryset(self, queryset):
         # include only in the queryset RelatedModules that are within this Flavor, or unattached:
@@ -508,16 +507,8 @@ class FormStageModuleAdmin(AbstractFormModuleAdmin):
 
 class FormGroupModuleAdmin(AbstractFormModuleAdmin):
     model = models.FormGroupModule
-    readonly_fields = ('groupmodule', 'order')
-    fields = (
-        "groupmodule",
-        "visible",
-        "htmlmodule",
-        "radiofield",
-        "checkboxfield",
-        "textareafield",
-        "textfield",
-    )
+    readonly_fields = ('parent_group_module', 'order')
+    fields = ('parent_group_module',) + AbstractFormModuleAdmin.fields
 
     def _get_related_queryset(self, queryset):
         # include only in the queryset RelatedModules that are within
@@ -542,7 +533,7 @@ class FormGroupModuleAdmin(AbstractFormModuleAdmin):
         form = super(FormGroupModuleAdmin, self).get_form(request, obj, **kwargs)
         return form
 
-    def groupmodule(self, instance):
+    def parent_group_module(self, instance):
             return format_html(
                 '<a href="{}"><strong>{}</strong></a>',
                 reverse('admin:sa_api_v2_groupmodule_change', args=[instance.group.pk]),
