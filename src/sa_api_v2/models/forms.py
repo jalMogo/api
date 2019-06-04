@@ -47,7 +47,7 @@ class Form(models.Model):
     )
 
     def __unicode__(self):
-        return "{} on dataset: {}".format(self.label, self.dataset.display_name)
+        return "\"{}\" on dataset: {}".format(self.label, self.dataset)
 
     class Meta:
         app_label = 'sa_api_v2'
@@ -81,7 +81,11 @@ class FormStage(models.Model):
     )
 
     def __unicode__(self):
-        return '{}, order: {}'.format(self.form, self.order)
+        return 'order: {}, containing {} modules, on form: \"{}\"'.format(
+            self.order,
+            len(self.modules.all()),
+            self.form.label,
+        )
 
     class Meta:
         app_label = 'sa_api_v2'
