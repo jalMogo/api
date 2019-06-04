@@ -486,7 +486,7 @@ class TestFlavorSerializer (TestCase):
             context={'request': RequestFactory().get('')},
         )
 
-        self.assertIn('name', serializer.data)
+        self.assertIn('display_name', serializer.data)
 
     def test_forms(self):
         serializer = FlavorSerializer(
