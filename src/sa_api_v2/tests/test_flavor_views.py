@@ -92,7 +92,7 @@ class TestFlavorInstanceView (APITestMixin, TestCase):
         )
 
         self.request_kwargs = {
-            'flavor_slug': self.flavor.name,
+            'flavor_slug': self.flavor.slug,
         }
         self.path = reverse('flavor-detail', kwargs=self.request_kwargs)
 
@@ -115,7 +115,7 @@ class TestFlavorInstanceView (APITestMixin, TestCase):
 
         # Check that the appropriate attributes are in the properties
         self.assertIn('forms', data)
-        self.assertIn('name', data)
+        self.assertIn('display_name', data)
         self.assertIn('slug', data)
 
         # Check that the data attributes have been incorporated into the
