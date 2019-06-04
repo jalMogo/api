@@ -2,7 +2,7 @@ from django.contrib.gis.db import models
 
 
 class Flavor(models.Model):
-    name = models.CharField(max_length=128)
+    display_name = models.CharField(max_length=128)
 
     slug = models.SlugField(max_length=128, default=u'', unique=True)
 
@@ -17,9 +17,9 @@ class Flavor(models.Model):
     # DataSet, or other vector/raster/geojson source.
 
     def __unicode__(self):
-        return self.name
+        return self.display_name
 
     class Meta:
         app_label = 'sa_api_v2'
         db_table = 'ms_api_flavor'
-        ordering = ['name']
+        ordering = ['display_name']

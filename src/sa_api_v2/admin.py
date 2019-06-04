@@ -387,7 +387,7 @@ class SubmissionAdmin(SubmittedThingAdmin):
 class FormFieldOptionInlineForm(ModelForm):
     visibility_triggers = ModelMultipleChoiceField(
         widget=CheckboxSelectMultiple,
-        queryset=models.FormGroupModule.objects.none(),
+        queryset=models.NestedOrderedModule.objects.none(),
         help_text=unicode(models.FormFieldOption._meta.get_field('visibility_triggers').help_text),
         required=False,
     )
@@ -395,22 +395,26 @@ class FormFieldOptionInlineForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(FormFieldOptionInlineForm, self).__init__(*args, **kwargs)
-        # Only add visibility triggers if we are inside of a GroupModule. If so, only allow trigger onto modules that are within the same GroupModule as this Option's FormField
-        group_module_ids = map(lambda form_group_module: form_group_module.group.id, self.instance.field.group_modules.all()) \
+        # Only add visibility triggers if we are inside of a
+        # GroupModule. If so, only allow trigger onto modules that are
+        # within the same GroupModule as this Option's FormField
+        group_module_ids = map(lambda form_group_module:
+                               form_group_module.group.id,
+                               self.instance.field.nested_ordered_modules.all()) \
             if 'instance' in kwargs else []
         if len(group_module_ids) > 0:
 
-            # limit the selectable visibility_triggers to FormGroupModules
+            # limit the selectable visibility_triggers to NestedOrderedModules
             # that belong to the same form, and are not visible by
             # default
-            nested_ordered_module_ids = self.instance.field.group_modules.all()
+            nested_ordered_module_ids = self.instance.field.nested_ordered_modules.all()
             self.fields['visibility_triggers'].queryset = models.\
-                FormGroupModule.objects.select_related('group').\
+                NestedOrderedModule.objects.select_related('group').\
                 filter(
                     # filter out this option's OrderedModule, because we
                     # don't want to trigger our own field:
                     ~Q(id__in=nested_ordered_module_ids),
-                    # Only select FormGroupModules under the same
+                    # Only select NestedOrderedModules under the same
                     # GroupModule as this instance's field:
                     group_id__in=group_module_ids,
                     visible=False,
@@ -459,8 +463,6 @@ class AbstractFormModuleAdmin (HiddenModelAdmin, admin.ModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         Model = None
         if db_field.name == "radiofield":
-            # Filter related FormModules that are within this flavor,
-            # or don't have any attached FormModules as well.
             Model = models.RadioField
         elif db_field.name == "groupmodule":
             Model = models.GroupModule
@@ -476,29 +478,31 @@ class AbstractFormModuleAdmin (HiddenModelAdmin, admin.ModelAdmin):
         else:
             raise FieldDoesNotExist("db_field name does not exist: {}".format(db_field.name))
 
+        # Filter our related modules to only those that unattached or
+        # within this flavor:
         kwargs["queryset"] = self._get_related_queryset(Model.objects)
 
         return super(AbstractFormModuleAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 
-class FormStageModuleAdmin(AbstractFormModuleAdmin):
-    model = models.FormStageModule
+class OrderedModuleAdmin(AbstractFormModuleAdmin):
+    model = models.OrderedModule
     readonly_fields = ('formstage', 'order')
     fields = ('formstage',) + AbstractFormModuleAdmin.fields + ("groupmodule",)
 
     def _get_related_queryset(self, queryset):
         # include only in the queryset RelatedModules that are within this Flavor, or unattached:
-        return queryset.prefetch_related('stage_modules').filter(
-            Q(stage_modules__id__in=self.stage_modules) | Q(stage_modules=None),
+        return queryset.prefetch_related('ordered_modules').filter(
+            Q(ordered_modules__id__in=self.ordered_modules) | Q(ordered_modules=None),
         )
 
     def get_form(self, request, obj=None, **kwargs):
         # filter RadioFields that have ALL modules within the same flavor as this module:
         # https://www.agiliq.com/blog/2014/04/django-backward-relationship-lookup/
-        self.stage_modules = models.FormStageModule.objects.select_related('stage__form__flavor').filter(
+        self.ordered_modules = models.OrderedModule.objects.select_related('stage__form__flavor').filter(
             stage__form__flavor__id=obj.stage.form.flavor.id,
         )
-        form = super(FormStageModuleAdmin, self).get_form(request, obj, **kwargs)
+        form = super(OrderedModuleAdmin, self).get_form(request, obj, **kwargs)
         return form
 
     def formstage(self, instance):
@@ -509,8 +513,8 @@ class FormStageModuleAdmin(AbstractFormModuleAdmin):
             )
 
 
-class FormGroupModuleAdmin(AbstractFormModuleAdmin):
-    model = models.FormGroupModule
+class NestedOrderedModuleAdmin(AbstractFormModuleAdmin):
+    model = models.NestedOrderedModule
     readonly_fields = ('parent_group_module', 'order')
     fields = ('parent_group_module',) + AbstractFormModuleAdmin.fields
 
@@ -519,22 +523,22 @@ class FormGroupModuleAdmin(AbstractFormModuleAdmin):
         # this Flavor, or unattached:
         # (It's helpful to link multiple FormModule to a RelatedModule when we are cloning/tweaking
         # forms...)
-        return queryset.prefetch_related('group_modules').filter(
-            Q(group_modules__id__in=self.group_modules) | Q(group_modules=None),
+        return queryset.prefetch_related('nested_ordered_modules').filter(
+            Q(nested_ordered_modules__id__in=self.nested_ordered_modules) | Q(nested_ordered_modules=None),
         )
 
     def get_form(self, request, obj=None, **kwargs):
-        # Get all FormGroupModules within this flavor:
+        # Get all NestedOrderedModules within this flavor:
         # First, get the flavor id:
-        flavor_ids = set(map(lambda x: x.id, obj.group.stage_modules.all()))
+        flavor_ids = set(map(lambda x: x.id, obj.group.ordered_modules.all()))
         if len(flavor_ids) > 1:
             # all stage_modules attached to the GroupModule should belong to the same flavor!
             raise ValidationError("FormGroupModelAdmin.get_form: invariant violated: more than 1 flavor associated with module: {}".form(obj))
         flavor_id = flavor_ids.pop()
-        self.group_modules = models.FormGroupModule.objects.prefetch_related('group__stage_modules__stage__form__flavor').filter(
-            group__stage_modules__stage__form__flavor__id=flavor_id,
+        self.nested_ordered_modules = models.NestedOrderedModule.objects.prefetch_related('group__ordered_modules__stage__form__flavor').filter(
+            group__ordered_modules__stage__form__flavor__id=flavor_id,
         )
-        form = super(FormGroupModuleAdmin, self).get_form(request, obj, **kwargs)
+        form = super(NestedOrderedModuleAdmin, self).get_form(request, obj, **kwargs)
         return form
 
     def parent_group_module(self, instance):
@@ -554,8 +558,8 @@ class AlwaysChangedModelForm(ModelForm):
         return super(AlwaysChangedModelForm, self).has_changed(*args, **kwargs)
 
 
-class FormStageModuleInline(SortableInlineAdminMixin, admin.StackedInline):
-    model = models.FormStageModule
+class OrderedModuleInline(SortableInlineAdminMixin, admin.StackedInline):
+    model = models.OrderedModule
     extra = 0
     form = AlwaysChangedModelForm
     fields = ['visible', 'edit_url']
@@ -572,8 +576,8 @@ class FormStageModuleInline(SortableInlineAdminMixin, admin.StackedInline):
             )
 
 
-class FormGroupModuleInline(SortableInlineAdminMixin, admin.StackedInline):
-    model = models.FormGroupModule
+class NestedOrderedModuleInline(SortableInlineAdminMixin, admin.StackedInline):
+    model = models.NestedOrderedModule
     extra = 0
     form = AlwaysChangedModelForm
     fields = ['visible', 'edit_url']
@@ -598,7 +602,7 @@ class MapViewportInline(nested_admin.NestedStackedInline):
 class GroupModuleAdmin(HiddenModelAdmin, nested_admin.NestedModelAdmin):
     model = models.GroupModule
     inlines = [
-        FormGroupModuleInline,
+        NestedOrderedModuleInline,
     ]
 
 
@@ -609,7 +613,7 @@ class FormStageAdmin(HiddenModelAdmin, nested_admin.NestedModelAdmin):
     exclude = ("form",)
     inlines = [
         MapViewportInline,
-        FormStageModuleInline,
+        OrderedModuleInline,
     ]
 
     def form_model(self, instance):
@@ -656,6 +660,7 @@ class FormAdmin(admin.ModelAdmin):
 
 class FlavorAdmin(admin.ModelAdmin):
     model = models.Flavor
+    prepopulated_fields = {'slug': ['display_name']}
 
 
 class ActionAdmin(admin.ModelAdmin):
@@ -740,8 +745,8 @@ admin.site.register(models.PlaceEmailTemplate, PlaceEmailTemplateAdmin)
 admin.site.register(models.Flavor, FlavorAdmin)
 admin.site.register(models.Form, FormAdmin)
 admin.site.register(models.FormStage, FormStageAdmin)
-admin.site.register(models.FormStageModule, FormStageModuleAdmin)
-admin.site.register(models.FormGroupModule, FormGroupModuleAdmin)
+admin.site.register(models.OrderedModule, OrderedModuleAdmin)
+admin.site.register(models.NestedOrderedModule, NestedOrderedModuleAdmin)
 admin.site.register(models.LayerGroup, HiddenModelAdmin)
 admin.site.register(models.MapViewport, HiddenModelAdmin)
 admin.site.register(models.RadioField, RadioFieldAdmin)

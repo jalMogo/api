@@ -730,15 +730,15 @@ class HtmlModuleSerializer (serializers.ModelSerializer):
         fields = ['content']
 
 
-class FormStageModuleIdentityField (serializers.ModelSerializer):
+class OrderedModuleIdentityField (serializers.ModelSerializer):
     class Meta:
-        model = models.FormStageModule
+        model = models.OrderedModule
         # TODO: make this a unique url
         fields = ['id']
 
 
 class BaseFormFieldOptionSerializer (serializers.ModelSerializer):
-    visibility_triggers = FormStageModuleIdentityField(read_only=True, required=False, many=True)
+    visibility_triggers = OrderedModuleIdentityField(read_only=True, required=False, many=True)
 
     class Meta:
         abstract = True
@@ -823,25 +823,26 @@ class AbstractFormModuleSerializer (serializers.ModelSerializer):
         return ret
 
 
-class FormGroupModuleSerializer (AbstractFormModuleSerializer):
+class NestedOrderedModuleSerializer (AbstractFormModuleSerializer):
     class Meta:
-        model = models.FormGroupModule
+        model = models.NestedOrderedModule
         exclude = ['group']
 
 
 class GroupModuleSerializer (serializers.ModelSerializer):
-    modules = FormGroupModuleSerializer(many=True)
+    modules = NestedOrderedModuleSerializer(many=True)
 
     class Meta:
         model = models.GroupModule
         fields = ['label', 'modules']
+        # exclude = ['group']
 
 
-class FormStageModuleSerializer (AbstractFormModuleSerializer):
+class OrderedModuleSerializer (AbstractFormModuleSerializer):
     groupmodule = GroupModuleSerializer()
 
     class Meta:
-        model = models.FormStageModule
+        model = models.OrderedModule
         exclude = ['stage']
 
 
@@ -859,7 +860,7 @@ class MapViewportSerializer (serializers.ModelSerializer):
 
 
 class FormStageSerializer (serializers.ModelSerializer):
-    modules = FormStageModuleSerializer(many=True)
+    modules = OrderedModuleSerializer(many=True)
     visible_layer_groups = LayerGroupSerializer(many=True)
     map_viewport = MapViewportSerializer()
 
@@ -882,4 +883,4 @@ class FlavorSerializer (serializers.ModelSerializer):
 
     class Meta:
         model = models.Flavor
-        fields = ['name', 'slug', 'forms']
+        fields = ['display_name', 'slug', 'forms']

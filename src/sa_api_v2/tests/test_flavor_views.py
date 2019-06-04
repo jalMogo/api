@@ -10,7 +10,7 @@ from ..models import (
     Flavor,
     Form,
     FormStage,
-    FormStageModule,
+    OrderedModule,
     RadioField,
     RadioOption,
 )
@@ -36,7 +36,7 @@ class TestFlavorInstanceView (APITestMixin, TestCase):
         self.dataset = DataSet.objects.create(slug='ds', owner=self.owner)
 
         self.flavor = Flavor.objects.create(
-            name='myflavor',
+            display_name='myflavor',
             slug='myflavor',
         )
 
@@ -79,7 +79,7 @@ class TestFlavorInstanceView (APITestMixin, TestCase):
             field=radio_field,
         )
 
-        FormStageModule.objects.create(
+        OrderedModule.objects.create(
             order=0,
             stage=self.form1_stages[0],
             radiofield=radio_field,

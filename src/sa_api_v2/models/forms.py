@@ -12,8 +12,8 @@ __all__ = [
     'FormStage',
     'LayerGroup',
     'MapViewport',
-    'FormStageModule',
-    'FormGroupModule',
+    'OrderedModule',
+    'NestedOrderedModule',
     'GroupModule',
     'HtmlModule',
     'FormFieldOption',
@@ -117,8 +117,10 @@ class RelatedFormModule(models.Model):
         abstract = True
 
     def __unicode__(self):
-        if len(self.stage_modules.all()) == 0 and \
-           (hasattr(self, 'group_modules') and len(self.group_modules.all()) == 0):
+        # GroupModule doesn't have a 'nested_ordered_modules' attribute, so we
+        # check that explicitly:
+        if len(self.ordered_modules.all()) == 0 and \
+           (hasattr(self, 'nested_ordered_modules') and len(self.nested_ordered_modules.all()) == 0):
             return "{} (unnattached)".format(self.summary())
         else:
             return self.summary()
@@ -224,7 +226,7 @@ class TextField(FormField):
         db_table = 'ms_api_form_module_field_text'
 
 
-class AbstractFormModule(models.Model):
+class AbstractOrderedModule(models.Model):
     order = models.PositiveSmallIntegerField(default=0, blank=False, null=False)
     visible = models.BooleanField(
         default=True,
@@ -307,16 +309,16 @@ class AbstractFormModule(models.Model):
 
     def save(self, *args, **kwargs):
         self.clean()
-        super(AbstractFormModule, self).save(*args, **kwargs)
+        super(AbstractOrderedModule, self).save(*args, **kwargs)
 
     class Meta:
         abstract = True
 
 
-class FormStageModule(AbstractFormModule):
+class OrderedModule(AbstractOrderedModule):
     stage = models.ForeignKey(
         FormStage,
-        help_text="Every FormStageModule must belong to a FormStage.",
+        help_text="Every OrderedModule must belong to a FormStage.",
         related_name="modules",
         on_delete=models.CASCADE,
     )
@@ -330,19 +332,19 @@ class FormStageModule(AbstractFormModule):
     )
 
     def _get_related_modules(self):
-        related_modules = super(FormStageModule, self)._get_related_modules()
+        related_modules = super(OrderedModule, self)._get_related_modules()
         if self.groupmodule:
             related_modules.append(self.radiofield)
         return related_modules
 
     class Meta:
         app_label = 'sa_api_v2'
-        db_table = 'ms_api_form_stage_module'
+        db_table = 'ms_api_form_ordered_module'
         ordering = ['order']
-        default_related_name = "stage_modules"
+        default_related_name = "ordered_modules"
 
 
-class FormGroupModule(AbstractFormModule):
+class NestedOrderedModule(AbstractOrderedModule):
     group = models.ForeignKey(
         GroupModule,
         related_name="modules",
@@ -351,21 +353,21 @@ class FormGroupModule(AbstractFormModule):
 
     class Meta:
         app_label = 'sa_api_v2'
-        db_table = 'ms_api_form_group_module'
+        db_table = 'ms_api_form_nested_ordered_module'
         ordering = ['order']
-        default_related_name = "group_modules"
+        default_related_name = "nested_ordered_modules"
 
 
-@receiver(post_delete, sender=FormStageModule)
-@receiver(post_delete, sender=FormGroupModule)
+@receiver(post_delete, sender=OrderedModule)
+@receiver(post_delete, sender=NestedOrderedModule)
 def delete(sender, instance, using, **kwargs):
     # Delete any "dangling" RelatedModules that have no
-    # FormStageModule or FormGroupModule references.
+    # OrderedModule or NestedOrderedModule references.
     for related_module in instance._get_related_modules():
         if related_module is None:
             return
-        if len(related_module.stage_modules.all()) == 0 \
-           and len(related_module.group_modules.all()) == 0:
+        if len(related_module.ordered_modules.all()) == 0 \
+           and len(related_module.nested_ordered_modules.all()) == 0:
             related_module.delete()
 
 
@@ -377,17 +379,16 @@ class FormFieldOption(models.Model):
     )
 
     visibility_triggers = models.ManyToManyField(
-        # Triggers are constrained to FormGroupModules only.
-        FormGroupModule,
-        help_text="Triggers an update to make the following FormGroupModules visible. Only default invisible modules are within this module's group are selectable here.",
+        # Triggers are constrained to NestedOrderedModules only.
+        NestedOrderedModule,
+        help_text="Triggers an update to make the following NestedOrderedModules visible. Only default invisible modules are within this module's group are selectable here.",
         blank=True,
         related_name='+',
     )
 
     def clean(self):
-        related_field = self.field
-        if related_field is None:
-            message = '[FORM_FIELD_OPTION] Instance does not have a related `field`: {}'.format(self.id)
+        if not hasattr(self, 'field') or self.field is None:
+            message = '[FORM_FIELD_OPTION] Instance does not have a related `field`: {}'.format(self)
             raise ValidationError(message)
 
     def save(self, *args, **kwargs):
@@ -409,6 +410,9 @@ class CheckboxOption(FormFieldOption):
         on_delete=models.CASCADE,
     )
 
+    def __unicode__(self):
+        return "CheckboxOption with label: {} on field: {}".format(self.label, self.field)
+
     class Meta:
         db_table = 'ms_api_form_module_option_checkbox'
 
@@ -422,6 +426,9 @@ class RadioOption(FormFieldOption):
         related_name="options",
         on_delete=models.CASCADE,
     )
+
+    def __unicode__(self):
+        return "RadioOption with label: {} on field: {}".format(self.label, self.field)
 
     class Meta:
         db_table = 'ms_api_form_module_option_radio'
