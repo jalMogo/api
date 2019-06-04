@@ -835,7 +835,6 @@ class GroupModuleSerializer (serializers.ModelSerializer):
     class Meta:
         model = models.GroupModule
         fields = ['label', 'modules']
-        # exclude = ['group']
 
 
 class OrderedModuleSerializer (AbstractFormModuleSerializer):

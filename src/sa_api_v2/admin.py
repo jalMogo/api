@@ -571,8 +571,8 @@ class OrderedModuleInline(SortableInlineAdminMixin, admin.StackedInline):
             return '(You must save your form before you can edit this form module.)'
         else:
             return format_html(
-                '<a href="{}"><strong>Edit Form Module</strong></a>',
-                reverse('admin:sa_api_v2_formstagemodule_change', args=[instance.pk])
+                '<a href="{}"><strong>Edit Ordered Module</strong></a>',
+                reverse('admin:sa_api_v2_orderedmodule_change', args=[instance.pk])
             )
 
 
@@ -589,8 +589,8 @@ class NestedOrderedModuleInline(SortableInlineAdminMixin, admin.StackedInline):
             return '(You must save your form before you can edit this form module.)'
         else:
             return format_html(
-                '<a href="{}"><strong>Edit Group Module</strong></a>',
-                reverse('admin:sa_api_v2_formgroupmodule_change', args=[instance.pk])
+                '<a href="{}"><strong>Edit Nested Ordered Module</strong></a>',
+                reverse('admin:sa_api_v2_nestedorderedmodule_change', args=[instance.pk])
             )
 
 
@@ -608,15 +608,15 @@ class GroupModuleAdmin(HiddenModelAdmin, nested_admin.NestedModelAdmin):
 
 class FormStageAdmin(HiddenModelAdmin, nested_admin.NestedModelAdmin):
     model = models.FormStage
-    readonly_fields = ('form_model', 'order')
-    fields = ('form_model', 'order', 'visible_layer_groups')
+    readonly_fields = ('link_to_form', 'order')
+    fields = ('link_to_form', 'order', 'visible_layer_groups')
     exclude = ("form",)
     inlines = [
         MapViewportInline,
         OrderedModuleInline,
     ]
 
-    def form_model(self, instance):
+    def link_to_form(self, instance):
         return format_html(
             '<a href="{}"><strong>{}</strong></a>',
             reverse('admin:sa_api_v2_form_change', args=[instance.form.pk]),
@@ -747,7 +747,7 @@ admin.site.register(models.Form, FormAdmin)
 admin.site.register(models.FormStage, FormStageAdmin)
 admin.site.register(models.OrderedModule, OrderedModuleAdmin)
 admin.site.register(models.NestedOrderedModule, NestedOrderedModuleAdmin)
-admin.site.register(models.LayerGroup, HiddenModelAdmin)
+admin.site.register(models.LayerGroup, admin.ModelAdmin)
 admin.site.register(models.MapViewport, HiddenModelAdmin)
 admin.site.register(models.RadioField, RadioFieldAdmin)
 admin.site.register(models.HtmlModule, HiddenModelAdmin)
