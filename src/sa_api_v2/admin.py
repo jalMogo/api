@@ -395,22 +395,26 @@ class FormFieldOptionInlineForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(FormFieldOptionInlineForm, self).__init__(*args, **kwargs)
-        if 'instance' in kwargs:  # and instance.field.group exists!!!
+        # Only add visibility triggers if we are inside of a GroupModule. If so, only allow trigger onto modules that are within the same GroupModule as this Option's FormField
+        group_module_ids = map(lambda form_group_module: form_group_module.group.id, self.instance.field.group_modules.all()) \
+            if 'instance' in kwargs else []
+        if len(group_module_ids) > 0:
+
             # limit the selectable visibility_triggers to FormGroupModules
             # that belong to the same form, and are not visible by
             # default
-
-            # FormGroupModule.objects.select_related('stage').\
+            nested_ordered_module_ids = self.instance.field.group_modules.all()
             self.fields['visibility_triggers'].queryset = models.\
                 FormGroupModule.objects.select_related('group').\
                 filter(
-                    # Filter out the current FormModule:
-                    ~Q(id=self.instance.field.group_module.id),
-                    group__id=self.instance.field.group_module.id,
+                    # filter out this option's OrderedModule, because we
+                    # don't want to trigger our own field:
+                    ~Q(id__in=nested_ordered_module_ids),
+                    # Only select FormGroupModules under the same
+                    # GroupModule as this instance's field:
+                    group_id__in=group_module_ids,
                     visible=False,
                 )
-        else:
-            self.fields['visibility_triggers'].queryset = models.FormGroupModule.objects.none()
 
 
 class CheckboxOptionInline(nested_admin.NestedTabularInline):
