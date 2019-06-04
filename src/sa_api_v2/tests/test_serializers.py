@@ -16,8 +16,8 @@ from sa_api_v2.models import (
     Flavor,
     Form,
     FormStage,
-    FormStageModule,
-    FormGroupModule,
+    OrderedModule,
+    NestedOrderedModule,
     RadioField,
     RadioOption,
     HtmlModule,
@@ -384,7 +384,7 @@ class TestFlavorSerializer (TestCase):
         )
 
         self.flavor = Flavor.objects.create(
-            name='myflavor',
+            display_name='myflavor',
         )
 
         self.form1 = Form.objects.create(
@@ -437,8 +437,8 @@ class TestFlavorSerializer (TestCase):
         html_grouped_module = HtmlModule.objects.create(
             content=self.grouped_html_module_content,
         )
-        self.group_form_modules = [
-            FormGroupModule.objects.create(
+        self.nested_ordered_modules = [
+            NestedOrderedModule.objects.create(
                 order=1,
                 group=related_group_module,
                 htmlmodule=html_grouped_module,
@@ -446,23 +446,23 @@ class TestFlavorSerializer (TestCase):
         ]
 
         # TODO: consider creating a 'save' utility method on
-        # the FormStageModule model to make this easier
-        FormStageModule.objects.create(
+        # the OrderedModule model to make this easier
+        OrderedModule.objects.create(
             order=1,
             stage=self.stages[0],
             radiofield=radio_field
         ),
-        FormStageModule.objects.create(
+        OrderedModule.objects.create(
             order=2,
             stage=self.stages[0],
             htmlmodule=html_module,
         ),
-        FormStageModule.objects.create(
+        OrderedModule.objects.create(
             order=3,
             stage=self.stages[0],
             groupmodule=related_group_module,
         )
-        FormStageModule.objects.create(
+        OrderedModule.objects.create(
             order=0,
             stage=self.stages[1],
         )

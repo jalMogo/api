@@ -11,9 +11,9 @@ from django.core.exceptions import (
 from ..models import (
     Form,
     FormStage,
-    FormStageModule,
+    OrderedModule,
     GroupModule,
-    FormGroupModule,
+    NestedOrderedModule,
     HtmlModule,
     RadioField,
     RadioOption,
@@ -630,31 +630,31 @@ class TestFormModel (TestCase):
             label="This is a group",
         )
 
-        self.group_form_modules = [
-            FormGroupModule.objects.create(
+        self.nested_ordered_modules = [
+            NestedOrderedModule.objects.create(
                 order=1,
                 group=related_group_module,
                 htmlmodule=html_grouped_module,
             ),
-            FormGroupModule.objects.create(
+            NestedOrderedModule.objects.create(
                 order=2,
                 group=related_group_module,
                 htmlmodule=html_grouped_module_2,
             ),
         ]
 
-        self.form_modules = [
-            FormStageModule.objects.create(
+        self.ordered_modules = [
+            OrderedModule.objects.create(
                 order=1,
                 stage=self.stages[0],
                 htmlmodule=html_module,
             ),
-            FormStageModule.objects.create(
+            OrderedModule.objects.create(
                 order=2,
                 stage=self.stages[0],
                 radiofield=self.radio_field,
             ),
-            FormStageModule.objects.create(
+            OrderedModule.objects.create(
                 order=3,
                 stage=self.stages[0],
                 groupmodule=related_group_module,
@@ -671,7 +671,7 @@ class TestFormModel (TestCase):
                 content="<p>Html test module model</p>",
             )
 
-            FormStageModule.objects.create(
+            OrderedModule.objects.create(
                 order=2,
                 stage=self.stages[0],
                 htmlmodule=html_module,
@@ -687,7 +687,7 @@ class TestFormModel (TestCase):
             prompt="Which option will you choose?",
         )
 
-        FormStageModule.objects.create(
+        OrderedModule.objects.create(
             order=2,
             stage=self.stages[0],
             radiofield=mut_radio_field,
@@ -726,12 +726,12 @@ class TestFormModel (TestCase):
             field=mut_radio_field,
         )
 
-        FormStageModule.objects.create(
+        OrderedModule.objects.create(
             order=1,
             stage=mut_stages[0],
             htmlmodule=mut_html_module,
         )
-        FormStageModule.objects.create(
+        OrderedModule.objects.create(
             order=2,
             stage=mut_stages[0],
             radiofield=mut_radio_field,
@@ -744,7 +744,7 @@ class TestFormModel (TestCase):
             prompt="test",
         )
 
-        FormStageModule.objects.create(
+        OrderedModule.objects.create(
             order=3,
             stage=mut_stages[0],
             radiofield=radio_field,
@@ -754,7 +754,7 @@ class TestFormModel (TestCase):
             label="test group module!"
         )
 
-        FormGroupModule.objects.create(
+        NestedOrderedModule.objects.create(
             order=0,
             group=group_module,
             radiofield=radio_field,
@@ -763,7 +763,7 @@ class TestFormModel (TestCase):
         # Create another form that will have the radio_field attached:
         form = Form.objects.create(label="this form won't be deleted")
         form_stage = FormStage.objects.create(order=0, form=form)
-        FormStageModule.objects.create(
+        OrderedModule.objects.create(
             order=1,
             stage=form_stage,
             groupmodule=group_module,
