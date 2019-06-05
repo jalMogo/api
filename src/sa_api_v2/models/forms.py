@@ -56,7 +56,7 @@ class Form(models.Model):
 
 
 class LayerGroup(models.Model):
-    label = models.CharField(max_length=128)
+    label = models.CharField(max_length=128, unique=True)
 
     class Meta:
         app_label = 'sa_api_v2'
