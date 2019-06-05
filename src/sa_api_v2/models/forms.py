@@ -18,6 +18,7 @@ __all__ = [
     'HtmlModule',
     'FormFieldOption',
     'CheckboxOption',
+    'GeocodingField',
     'RadioField',
     'RadioOption',
     'TextField',
@@ -181,7 +182,21 @@ class FormField(RelatedFormModule):
         abstract = True
 
 
-placeholder_field = models.CharField(max_length=255, default="", blank=True)
+placeholder_kwargs = {
+    "max_length": 255,
+    "default": "",
+    "blank": True,
+}
+
+
+class GeocodingField(FormField):
+    placeholder = models.CharField(**placeholder_kwargs)
+
+    def summary(self):
+        return "geocoding field with prompt: \"{}\"".format(self.prompt)
+
+    class Meta:
+        db_table = 'ms_api_form_module_field_geocoding'
 
 
 class RadioField(FormField):
@@ -193,7 +208,7 @@ class RadioField(FormField):
     ]
 
     variant = models.CharField(max_length=128, choices=CHOICES, default=RADIO)
-    dropdown_placeholder = placeholder_field
+    dropdown_placeholder = models.CharField(**placeholder_kwargs)
 
     def summary(self):
         return "radio field with prompt: \"{}\"".format(self.prompt)
@@ -211,7 +226,7 @@ class CheckboxField(FormField):
 
 
 class TextAreaField(FormField):
-    placeholder = placeholder_field
+    placeholder = models.CharField(**placeholder_kwargs)
 
     def summary(self):
         return "textarea field with prompt: \"{}\"".format(self.prompt)
@@ -221,7 +236,7 @@ class TextAreaField(FormField):
 
 
 class TextField(FormField):
-    placeholder = placeholder_field
+    placeholder = models.CharField(**placeholder_kwargs)
 
     def summary(self):
         return "text field with prompt: \"{}\"".format(self.prompt)
@@ -237,19 +252,27 @@ class AbstractOrderedModule(models.Model):
         blank=True,
         help_text="Determines whether the module is visible by default.",
     )
+    HELP_TEXT = "Choose a {} by creating a new one, or selecting one that already exists within this flavor. Only one field or one module can be selected for this OrderedModule."
 
     radiofield = models.ForeignKey(
         RadioField,
         on_delete=models.SET_NULL,
-        help_text="Choose a radio field. Create a new radio field, or select a radiofield that already exists within this flavor. Only one field/module can be selected for this FormModule.",
+        help_text=HELP_TEXT.format("radio"),
         blank=True,
         null=True,
     )
 
+    geocodingfield = models.ForeignKey(
+        GeocodingField,
+        on_delete=models.SET_NULL,
+        help_text=HELP_TEXT.format("geocoding field"),
+        blank=True,
+        null=True,
+    )
     checkboxfield = models.ForeignKey(
         CheckboxField,
         on_delete=models.SET_NULL,
-        help_text="Choose a checkbox field. Create a new checkbox field, or select a radiofield that already exists within this flavor. Only one field/module can be selected for this FormModule.",
+        help_text=HELP_TEXT.format("checkbox field"),
         blank=True,
         null=True,
     )
@@ -257,7 +280,7 @@ class AbstractOrderedModule(models.Model):
     textareafield = models.ForeignKey(
         TextAreaField,
         on_delete=models.SET_NULL,
-        help_text="Choose a textarea field. Create a new textarea field, or select one that already exists within this flavor. Only one field/module can be selected for this FormModule.",
+        help_text=HELP_TEXT.format("textarea field"),
         blank=True,
         null=True,
     )
@@ -265,7 +288,7 @@ class AbstractOrderedModule(models.Model):
     textfield = models.ForeignKey(
         TextField,
         on_delete=models.SET_NULL,
-        help_text="Choose a text field. Create a new text field, or select one that already exists within this flavor. Only one field/module can be selected for this FormModule.",
+        help_text=HELP_TEXT.format("text field"),
         blank=True,
         null=True,
     )
@@ -273,7 +296,7 @@ class AbstractOrderedModule(models.Model):
     htmlmodule = models.ForeignKey(
         HtmlModule,
         on_delete=models.SET_NULL,
-        help_text="Choose an html module. Create a new html module, or select an htmlmodule that already exists within this flavor. Only one field/module can be selected for this FormModule.",
+        help_text=HELP_TEXT.format("html module"),
         blank=True,
         null=True,
     )
@@ -295,6 +318,8 @@ class AbstractOrderedModule(models.Model):
         related_modules = []
         if self.radiofield:
             related_modules.append(self.radiofield)
+        if self.geocodingfield:
+            related_modules.append(self.geocodingfield)
         if self.htmlmodule:
             related_modules.append(self.htmlmodule)
         if self.textfield:
@@ -330,7 +355,7 @@ class OrderedModule(AbstractOrderedModule):
     groupmodule = models.ForeignKey(
         GroupModule,
         on_delete=models.SET_NULL,
-        help_text="Choose a group. Create a new radio field, or select a radiofield that already exists within this flavor. Only one field/module can be selected for this FormModule.",
+        help_text=AbstractOrderedModule.HELP_TEXT.format("group module"),
         blank=True,
         null=True,
     )
@@ -338,7 +363,7 @@ class OrderedModule(AbstractOrderedModule):
     def _get_related_modules(self):
         related_modules = super(OrderedModule, self)._get_related_modules()
         if self.groupmodule:
-            related_modules.append(self.radiofield)
+            related_modules.append(self.groupmodule)
         return related_modules
 
     class Meta:
