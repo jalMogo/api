@@ -309,7 +309,7 @@ class AbstractOrderedModule(models.Model):
 
     def __unicode__(self):
         related_module = self.get_related_module()
-        return 'order: {order}, with related module: {related}'.format(related=related_module, order=self.order)
+        return 'order: {order}, with Related Module: {related}'.format(related=related_module, order=self.order)
 
     def get_related_module(self):
         related_modules = self._get_related_modules()
