@@ -758,6 +758,12 @@ class BaseFormFieldSerializer (serializers.ModelSerializer):
         fields = ['key', 'prompt', 'private', 'required']
 
 
+class GeocodingFieldModuleSerializer (serializers.ModelSerializer):
+    class Meta(BaseFormFieldSerializer.Meta):
+        model = models.GeocodingField
+        fields = BaseFormFieldSerializer.Meta.fields + ['placeholder']
+
+
 class CheckboxFieldModuleSerializer (serializers.ModelSerializer):
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.CheckboxField
@@ -767,13 +773,13 @@ class CheckboxFieldModuleSerializer (serializers.ModelSerializer):
 class TextAreaFieldModuleSerializer (serializers.ModelSerializer):
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.TextAreaField
-        fields = BaseFormFieldSerializer.Meta.fields
+        fields = BaseFormFieldSerializer.Meta.fields + ['placeholder']
 
 
 class TextFieldModuleSerializer (serializers.ModelSerializer):
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.TextField
-        fields = BaseFormFieldSerializer.Meta.fields
+        fields = BaseFormFieldSerializer.Meta.fields + ['placeholder']
 
 
 class RadioFieldModuleSerializer (serializers.ModelSerializer):
@@ -789,6 +795,7 @@ class AbstractFormModuleSerializer (serializers.ModelSerializer):
     radiofield = RadioFieldModuleSerializer()
     checkboxfield = CheckboxFieldModuleSerializer()
     textfield = TextFieldModuleSerializer()
+    geocodingfield = GeocodingFieldModuleSerializer()
     textareafield = TextAreaFieldModuleSerializer()
 
     # removes "null" fields

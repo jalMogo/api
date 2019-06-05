@@ -661,6 +661,11 @@ class TestFormModel (TestCase):
             ),
         ]
 
+    def tearDown(self):
+        Form.objects.all().delete()
+        DataSet.objects.all().delete()
+        User.objects.all().delete()
+
     def test_fails_with_multiple_relations_on_form_module(self):
         with self.assertRaises(ValidationError) as context:
             radio_field = RadioField.objects.create(
@@ -751,7 +756,7 @@ class TestFormModel (TestCase):
         )
 
         group_module = GroupModule.objects.create(
-            label="test group module!"
+            label="this GroupModule won't be deleted."
         )
 
         NestedOrderedModule.objects.create(
