@@ -334,7 +334,8 @@ class TestSubmissionSerializer (TestCase):
 
 class TestDataSetSerializer (TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(self):
         User.objects.all().delete()
         DataSet.objects.all().delete()
         Place.objects.all().delete()
@@ -352,6 +353,13 @@ class TestDataSetSerializer (TestCase):
         Submission.objects.create(dataset=self.dataset,
                                   place_model=self.place,
                                   set_name='comments')
+
+    def tearDown(self):
+        User.objects.all().delete()
+        DataSet.objects.all().delete()
+        Place.objects.all().delete()
+        Submission.objects.all().delete()
+        cache_buffer.reset()
 
     def test_can_serlialize_a_null_instance(self):
         serializer = DataSetSerializer(
