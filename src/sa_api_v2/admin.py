@@ -455,6 +455,7 @@ class AbstractFormModuleAdmin (HiddenModelAdmin, admin.ModelAdmin):
         "visible",
         "htmlmodule",
         "radiofield",
+        "geocodingfield",
         "checkboxfield",
         "textareafield",
         "textfield",
@@ -464,11 +465,12 @@ class AbstractFormModuleAdmin (HiddenModelAdmin, admin.ModelAdmin):
         Model = None
         if db_field.name == "radiofield":
             Model = models.RadioField
+        elif db_field.name == "geocodingfield":
+            Model = models.GeocodingField
         elif db_field.name == "groupmodule":
             Model = models.GroupModule
         elif db_field.name == "htmlmodule":
             Model = models.HtmlModule
-
         elif db_field.name == "textfield":
             Model = models.TextField
         elif db_field.name == "textareafield":
@@ -754,6 +756,7 @@ admin.site.register(models.HtmlModule, HiddenModelAdmin)
 admin.site.register(models.TextField, HiddenModelAdmin)
 admin.site.register(models.TextAreaField, HiddenModelAdmin)
 admin.site.register(models.CheckboxField, CheckboxFieldAdmin)
+admin.site.register(models.GeocodingField, HiddenModelAdmin)
 admin.site.register(models.GroupModule, GroupModuleAdmin)
 
 admin.site.site_header = 'Mapseed API Server Administration'
