@@ -526,20 +526,20 @@ class NestedOrderedModuleAdmin(AbstractFormModuleAdmin):
         # (It's helpful to link multiple FormModule to a RelatedModule when we are cloning/tweaking
         # forms...)
         return queryset.prefetch_related('nested_ordered_modules').filter(
-            Q(nested_ordered_modules__id__in=self.nested_ordered_modules) | Q(nested_ordered_modules=None),
+            Q(nested_ordered_modules__id__in=self.nested_ordered_module_ids) | Q(nested_ordered_modules=None),
         )
 
     def get_form(self, request, obj=None, **kwargs):
         # Get all NestedOrderedModules within this flavor:
         # First, get the flavor id:
-        flavor_ids = set(map(lambda x: x.id, obj.group.ordered_modules.all()))
+        flavor_ids = set(map(lambda x: x.stage.form.flavor.id, obj.group.ordered_modules.all()))
         if len(flavor_ids) > 1:
             # all stage_modules attached to the GroupModule should belong to the same flavor!
             raise ValidationError("FormGroupModelAdmin.get_form: invariant violated: more than 1 flavor associated with module: {}".form(obj))
         flavor_id = flavor_ids.pop()
-        self.nested_ordered_modules = models.NestedOrderedModule.objects.prefetch_related('group__ordered_modules__stage__form__flavor').filter(
+        self.nested_ordered_module_ids = models.NestedOrderedModule.objects.prefetch_related('group__ordered_modules__stage__form__flavor').filter(
             group__ordered_modules__stage__form__flavor__id=flavor_id,
-        )
+        ).values_list('id', flat=True)
         form = super(NestedOrderedModuleAdmin, self).get_form(request, obj, **kwargs)
         return form
 
