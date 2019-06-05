@@ -168,7 +168,8 @@ class TestActionSerializer (TestCase):
 
 class TestSocialUserSerializer (TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(self):
         test_dir = path.dirname(__file__)
         fixture_dir = path.join(test_dir, 'fixtures')
         twitter_user_data_file = path.join(fixture_dir, 'twitter_user.json')
