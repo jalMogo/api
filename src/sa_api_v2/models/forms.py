@@ -121,11 +121,17 @@ class RelatedFormModule(models.Model):
         app_label = 'sa_api_v2'
         abstract = True
 
+    # returns whether the instances has ordered_modules or
+    # nested_ordered_modules pointing to it.
+    def has_any_ordered_modules(self):
+        # Note that GroupModule doesn't have a
+        # 'nested_ordered_modules' attribute, so we check that
+        # explicitly:
+        return len(self.ordered_modules.all()) > 0 or \
+           (hasattr(self, 'nested_ordered_modules') and len(self.nested_ordered_modules.all()) > 0)
+
     def __unicode__(self):
-        # GroupModule doesn't have a 'nested_ordered_modules' attribute, so we
-        # check that explicitly:
-        if len(self.ordered_modules.all()) == 0 and \
-           (hasattr(self, 'nested_ordered_modules') and len(self.nested_ordered_modules.all()) == 0):
+        if not self.has_any_ordered_modules():
             return "{} (unnattached)".format(self.summary())
         else:
             return self.summary()
@@ -395,8 +401,7 @@ def delete(sender, instance, using, **kwargs):
     for related_module in instance._get_related_modules():
         if related_module is None:
             return
-        if len(related_module.ordered_modules.all()) == 0 \
-           and len(related_module.nested_ordered_modules.all()) == 0:
+        if not related_module.has_any_ordered_modules():
             related_module.delete()
 
 
