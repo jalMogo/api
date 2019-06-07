@@ -391,7 +391,7 @@ class FormFieldOptionInlineForm(ModelForm):
         help_text=unicode(models.FormFieldOption._meta.get_field('visibility_triggers').help_text),
         required=False,
     )
-    fields = ('advance_to_next_stage', 'visibility_triggers')
+    fields = ('visibility_triggers',)
 
     def __init__(self, *args, **kwargs):
         super(FormFieldOptionInlineForm, self).__init__(*args, **kwargs)
@@ -454,7 +454,11 @@ class AbstractFormModuleAdmin (HiddenModelAdmin, admin.ModelAdmin):
     fields = (
         "visible",
         "htmlmodule",
+        "skipstagemodule",
         "radiofield",
+        "filefield",
+        "datefield",
+        "numberfield",
         "geocodingfield",
         "checkboxfield",
         "textareafield",
@@ -465,18 +469,26 @@ class AbstractFormModuleAdmin (HiddenModelAdmin, admin.ModelAdmin):
         Model = None
         if db_field.name == "radiofield":
             Model = models.RadioField
+        elif db_field.name == "filefield":
+            Model = models.FileField
+        elif db_field.name == "numberfield":
+            Model = models.NumberField
+        elif db_field.name == "datefield":
+            Model = models.DateField
         elif db_field.name == "geocodingfield":
             Model = models.GeocodingField
-        elif db_field.name == "groupmodule":
-            Model = models.GroupModule
-        elif db_field.name == "htmlmodule":
-            Model = models.HtmlModule
         elif db_field.name == "textfield":
             Model = models.TextField
         elif db_field.name == "textareafield":
             Model = models.TextAreaField
         elif db_field.name == "checkboxfield":
             Model = models.CheckboxField
+        elif db_field.name == "groupmodule":
+            Model = models.GroupModule
+        elif db_field.name == "htmlmodule":
+            Model = models.HtmlModule
+        elif db_field.name == "skipstagemodule":
+            Model = models.SkipStageModule
         else:
             raise FieldDoesNotExist("db_field name does not exist: {}".format(db_field.name))
 
@@ -753,8 +765,12 @@ admin.site.register(models.LayerGroup, admin.ModelAdmin)
 admin.site.register(models.MapViewport, HiddenModelAdmin)
 admin.site.register(models.RadioField, RadioFieldAdmin)
 admin.site.register(models.HtmlModule, HiddenModelAdmin)
+admin.site.register(models.SkipStageModule, HiddenModelAdmin)
 admin.site.register(models.TextField, HiddenModelAdmin)
 admin.site.register(models.TextAreaField, HiddenModelAdmin)
+admin.site.register(models.DateField, HiddenModelAdmin)
+admin.site.register(models.NumberField, HiddenModelAdmin)
+admin.site.register(models.FileField, HiddenModelAdmin)
 admin.site.register(models.CheckboxField, CheckboxFieldAdmin)
 admin.site.register(models.GeocodingField, HiddenModelAdmin)
 admin.site.register(models.GroupModule, GroupModuleAdmin)

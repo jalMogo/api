@@ -16,9 +16,13 @@ __all__ = [
     'NestedOrderedModule',
     'GroupModule',
     'HtmlModule',
+    'SkipStageModule',
     'FormFieldOption',
     'CheckboxOption',
     'GeocodingField',
+    'DateField',
+    'NumberField',
+    'FileField',
     'RadioField',
     'RadioOption',
     'TextField',
@@ -139,7 +143,7 @@ class RelatedFormModule(models.Model):
 
 class GroupModule(RelatedFormModule):
     label = models.CharField(
-        help_text="For labelling purposes only - won't be used on the form. Use this label to more easily identify this module in the form.",
+        help_text="For naming purposes only - this won't be displayed to end users. Use this label to more easily identify this module whle building the form.",
         max_length=128,
         blank=True,
         default='',
@@ -154,7 +158,7 @@ class GroupModule(RelatedFormModule):
 
 class HtmlModule(RelatedFormModule):
     label = models.CharField(
-        help_text="For labelling purposes only - won't be used on the form. Use this label to more easily identify this module in the form.",
+        help_text="For naming purposes only - this won't be displayed to end users. Use this label to more easily identify this module whle building the form.",
         max_length=128,
         blank=True,
         default='',
@@ -170,29 +174,111 @@ class HtmlModule(RelatedFormModule):
         db_table = 'ms_api_form_module_html'
 
 
+class SkipStageModule(RelatedFormModule):
+    label = models.TextField(
+        help_text="The message to be displayed on the form. When clicked, it will skip to the next FormStage. Note that all modules within this FormStage should be optional for this to work properly. (eg: \"This section is not relevant to me.\")",
+        blank=True,
+        default='',
+    )
+
+    def summary(self):
+        return "skip stage module with label: \"{}\"".format(self.label[:40])
+
+    class Meta:
+        db_table = 'ms_api_form_module_skip_stage'
+
+
 class FormField(RelatedFormModule):
-    key = models.CharField(max_length=128)
-    prompt = models.TextField(blank=True, default="")
+    key = models.CharField(
+        max_length=128,
+        help_text="The key onto which the field's response will be saved",
+    )
+    label = models.TextField(
+        blank=True,
+        default="",
+        help_text="This label will be used when displaying the submitted form field (eg: \"My project idea is:\")",
+    )
+    prompt = models.TextField(
+        blank=True,
+        default="",
+        help_text="Some helpful text to guide the user on how to fill out this field (eg: \"What is your project idea?\")",
+    )
     private = models.BooleanField(
         default=False,
         blank=True,
-        help_text="If true, then the submitted data will be flagged as private.",
+        help_text="If true, then the submitted data will be flagged as private",
     )
     required = models.BooleanField(
         default=False,
         blank=True,
-        help_text="If true, then the form cannot be submitted unless this field has received a response.",
+        help_text="If true, then the form cannot be submitted unless this field has received a response",
     )
 
     class Meta:
         abstract = True
 
 
+# Used for CharField:
 placeholder_kwargs = {
     "max_length": 255,
     "default": "",
     "blank": True,
+    "help_text": "Used to help guide users on what to type into the form's input box (eg: \"Enter your email here\", \"joe@example.com\")",
 }
+
+# Used for CharField:
+units_kwargs = {
+    "max_length": 128,
+    "default": "",
+    "blank": True,
+    "help_text": "Units are used for labelling numerical submissions (eg: \"13 acres\")",
+}
+
+
+class DateField(FormField):
+    placeholder = models.CharField(**placeholder_kwargs)
+    include_ongoing = models.BooleanField(default=True)
+    # TODO: enforce only date-related regexes for model save:
+    label_format = models.CharField(
+        default="",
+        blank=True,
+        help_text="Formatting of the date that will be used on the label",
+        max_length=24,
+
+    )
+    form_format = models.CharField(
+        default="",
+        blank=True,
+        help_text="Formatting of the date that will be required for the input form",
+        max_length=24,
+    )
+
+    def summary(self):
+        return "date field with prompt: \"{}\"".format(self.prompt)
+
+    class Meta:
+        db_table = 'ms_api_form_module_field_date'
+
+
+class NumberField(FormField):
+    placeholder = models.CharField(**placeholder_kwargs)
+    minimum = models.IntegerField(blank=True, null=True)
+    units = models.CharField(**units_kwargs)
+
+    def summary(self):
+        return "number field with prompt: \"{}\"".format(self.prompt)
+
+    class Meta:
+        db_table = 'ms_api_form_module_field_number'
+
+
+class FileField(FormField):
+
+    def summary(self):
+        return "file field with prompt: \"{}\"".format(self.prompt)
+
+    class Meta:
+        db_table = 'ms_api_form_module_field_file'
 
 
 class GeocodingField(FormField):
@@ -208,9 +294,11 @@ class GeocodingField(FormField):
 class RadioField(FormField):
     RADIO = "radio"
     DROPDOWN = "dropdown"
+    TOGGLE = "toggle"
     CHOICES = [
         (RADIO, 'a radio selection'),
         (DROPDOWN, 'a dropdown list'),
+        (TOGGLE, 'a toggle switch, choosing one of 2 choices'),
     ]
 
     variant = models.CharField(max_length=128, choices=CHOICES, default=RADIO)
@@ -260,6 +348,30 @@ class AbstractOrderedModule(models.Model):
     )
     HELP_TEXT = "Choose a {} by creating a new one, or selecting one that already exists within this flavor. Only one field or one module can be selected for this OrderedModule."
 
+    numberfield = models.ForeignKey(
+        NumberField,
+        on_delete=models.SET_NULL,
+        help_text=HELP_TEXT.format("number"),
+        blank=True,
+        null=True,
+    )
+
+    filefield = models.ForeignKey(
+        FileField,
+        on_delete=models.SET_NULL,
+        help_text=HELP_TEXT.format("file"),
+        blank=True,
+        null=True,
+    )
+
+    datefield = models.ForeignKey(
+        DateField,
+        on_delete=models.SET_NULL,
+        help_text=HELP_TEXT.format("date"),
+        blank=True,
+        null=True,
+    )
+
     radiofield = models.ForeignKey(
         RadioField,
         on_delete=models.SET_NULL,
@@ -307,6 +419,14 @@ class AbstractOrderedModule(models.Model):
         null=True,
     )
 
+    skipstagemodule = models.ForeignKey(
+        SkipStageModule,
+        on_delete=models.SET_NULL,
+        help_text=HELP_TEXT.format("skip stage module"),
+        blank=True,
+        null=True,
+    )
+
     def __unicode__(self):
         related_module = self.get_related_module()
         return 'order: {order}, with Related Module: {related}'.format(related=related_module, order=self.order)
@@ -322,18 +442,26 @@ class AbstractOrderedModule(models.Model):
 
     def _get_related_modules(self):
         related_modules = []
+        if self.numberfield:
+            related_modules.append(self.numberfield)
+        if self.filefield:
+            related_modules.append(self.filefield)
+        if self.datefield:
+            related_modules.append(self.datefield)
         if self.radiofield:
             related_modules.append(self.radiofield)
         if self.geocodingfield:
             related_modules.append(self.geocodingfield)
-        if self.htmlmodule:
-            related_modules.append(self.htmlmodule)
         if self.textfield:
             related_modules.append(self.textfield)
         if self.textareafield:
             related_modules.append(self.textareafield)
         if self.checkboxfield:
             related_modules.append(self.checkboxfield)
+        if self.htmlmodule:
+            related_modules.append(self.htmlmodule)
+        if self.skipstagemodule:
+            related_modules.append(self.skipstagemodule)
         return related_modules
 
     def clean(self):
@@ -406,11 +534,6 @@ def delete(sender, instance, using, **kwargs):
 
 
 class FormFieldOption(models.Model):
-    advance_to_next_stage = models.BooleanField(
-        default=False,
-        blank=True,
-        help_text="When this option is selected, the form will advance to the next stage.",
-    )
 
     visibility_triggers = models.ManyToManyField(
         # Triggers are constrained to NestedOrderedModules only.
@@ -435,8 +558,15 @@ class FormFieldOption(models.Model):
 
 
 class CheckboxOption(FormFieldOption):
-    label = models.CharField(max_length=128)
-    value = models.CharField(max_length=128)
+    label = models.CharField(
+        max_length=128,
+        help_text="For display purposes only. This is how the option will be presented on the form, or labelled in a submission summary.",
+
+    )
+    value = models.CharField(
+        max_length=128,
+        help_text="This is the value that will be associated with the field's key.",
+    )
 
     field = models.ForeignKey(
         CheckboxField,
@@ -452,8 +582,14 @@ class CheckboxOption(FormFieldOption):
 
 
 class RadioOption(FormFieldOption):
-    label = models.CharField(max_length=128)
-    value = models.CharField(max_length=128)
+    label = models.CharField(
+        max_length=128,
+        help_text="For display purposes only. This is how the option will be presented on the form, or labelled in a submission summary.",
+    )
+    value = models.CharField(
+        max_length=128,
+        help_text="This is the value that will be associated with the field's key.",
+    )
 
     field = models.ForeignKey(
         RadioField,

@@ -25,9 +25,13 @@ class FlavorInstanceView (generics.RetrieveAPIView):
                                   Prefetch(
                                       'forms__stages__modules',
                                       queryset=models.OrderedModule.objects.select_related(
-                                          'radiofield',
+                                          'skipstagemodule',
                                           'htmlmodule',
                                           'groupmodule',
+                                          'filefield',
+                                          'numberfield',
+                                          'datefield',
+                                          'radiofield',
                                           'textfield',
                                           'textareafield',
                                           'checkboxfield',

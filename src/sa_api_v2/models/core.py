@@ -146,8 +146,7 @@ class DataSet (CloneableModelMixin, CacheClearingModel, models.Model):
     class Meta:
         app_label = 'sa_api_v2'
         db_table = 'sa_api_dataset'
-        unique_together = (('owner', 'slug'),
-                           )
+        unique_together = (('owner', 'slug'),)
 
     @property
     def places(self):

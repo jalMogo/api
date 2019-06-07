@@ -380,11 +380,6 @@ class TestFlavorSerializer (TestCase):
     # ./src/manage.py test -s sa_api_v2.tests.test_serializers:TestFlavorSerializer
     @classmethod
     def setUpTestData(self):
-        User.objects.all().delete()
-        DataSet.objects.all().delete()
-        Place.objects.all().delete()
-        Submission.objects.all().delete()
-        cache_buffer.reset()
 
         self.owner = User.objects.create(username='myuser')
         self.dataset1 = DataSet.objects.create(
@@ -454,8 +449,6 @@ class TestFlavorSerializer (TestCase):
             ),
         ]
 
-        # TODO: consider creating a 'save' utility method on
-        # the OrderedModule model to make this easier
         OrderedModule.objects.create(
             order=1,
             stage=self.stages[0],

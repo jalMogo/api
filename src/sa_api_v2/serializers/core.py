@@ -724,10 +724,16 @@ class ActionSerializer (EmptyModelSerializer, serializers.ModelSerializer):
         return serializer.data
 
 
+class SkipStageModuleSerializer (serializers.ModelSerializer):
+    class Meta:
+        model = models.SkipStageModule
+        fields = ['label']
+
+
 class HtmlModuleSerializer (serializers.ModelSerializer):
     class Meta:
         model = models.HtmlModule
-        fields = ['content']
+        fields = ['content', 'label']
 
 
 class OrderedModuleIdentityField (serializers.ModelSerializer):
@@ -742,7 +748,7 @@ class BaseFormFieldOptionSerializer (serializers.ModelSerializer):
 
     class Meta:
         abstract = True
-        fields = ['advance_to_next_stage', 'visibility_triggers']
+        fields = ['visibility_triggers']
 
 
 class RadioOptionSerializer (BaseFormFieldOptionSerializer):
@@ -755,7 +761,7 @@ class RadioOptionSerializer (BaseFormFieldOptionSerializer):
 class BaseFormFieldSerializer (serializers.ModelSerializer):
     class Meta:
         abstract = True
-        fields = ['key', 'prompt', 'private', 'required']
+        fields = ['key', 'prompt', 'label', 'private', 'required']
 
 
 class GeocodingFieldModuleSerializer (serializers.ModelSerializer):
@@ -782,6 +788,26 @@ class TextFieldModuleSerializer (serializers.ModelSerializer):
         fields = BaseFormFieldSerializer.Meta.fields + ['placeholder']
 
 
+class DateFieldModuleSerializer (serializers.ModelSerializer):
+    class Meta(BaseFormFieldSerializer.Meta):
+        model = models.DateField
+        fields = BaseFormFieldSerializer.Meta.fields + ['placeholder', 'include_ongoing']
+
+
+class NumberFieldModuleSerializer (serializers.ModelSerializer):
+
+    class Meta(BaseFormFieldSerializer.Meta):
+        model = models.NumberField
+        fields = BaseFormFieldSerializer.Meta.fields + ['placeholder', 'minimum', 'units']
+
+
+class FileFieldModuleSerializer (serializers.ModelSerializer):
+
+    class Meta(BaseFormFieldSerializer.Meta):
+        model = models.FileField
+        fields = BaseFormFieldSerializer.Meta.fields
+
+
 class RadioFieldModuleSerializer (serializers.ModelSerializer):
     options = RadioOptionSerializer(many=True)
 
@@ -792,7 +818,11 @@ class RadioFieldModuleSerializer (serializers.ModelSerializer):
 
 class AbstractFormModuleSerializer (serializers.ModelSerializer):
     htmlmodule = HtmlModuleSerializer()
+    skipstagemodule = SkipStageModuleSerializer()
     radiofield = RadioFieldModuleSerializer()
+    numberfield = NumberFieldModuleSerializer()
+    filefield = FileFieldModuleSerializer()
+    datefield = DateFieldModuleSerializer()
     checkboxfield = CheckboxFieldModuleSerializer()
     textfield = TextFieldModuleSerializer()
     geocodingfield = GeocodingFieldModuleSerializer()
