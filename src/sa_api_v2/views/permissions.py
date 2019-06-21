@@ -1,9 +1,11 @@
 from .. import apikey
 from rest_framework import (permissions)
+import jwt
 from ..params import (
     INCLUDE_INVISIBLE_PARAM,
     INCLUDE_PRIVATE_FIELDS_PARAM,
-    INCLUDE_PRIVATE_PLACES_PARAM
+    INCLUDE_PRIVATE_PLACES_PARAM,
+    JWT_TOKEN_PARAM
 )
 from .. import models
 ###############################################################################
@@ -135,6 +137,21 @@ class IsLoggedInAdmin(permissions.BasePermission):
 
 
 class IsAllowedByDataPermissions(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        # TODO: support JWTs in request header as well
+        # JWT tokens by default grant access to protected resources.
+        if JWT_TOKEN_PARAM in request.query_params and hasattr(obj, 'jwt_public') and hasattr(obj, 'jwt_secret'):
+            try:
+                jwt.decode(request.query_params.get(JWT_TOKEN_PARAM), getattr(obj, 'jwt_secret'), algorithm='RS256')
+                return True
+            except:
+                # If the JWT decoding fails for any reason (invalid payload,
+                # invalid signature), an exception is thrown.
+                return False
+
+        # Object permissions are only relevant if a request with a JWT is made
+        return True
+
     def has_permission(self, request, view):
         if request.method == 'OPTIONS':
             return True
@@ -143,8 +160,8 @@ class IsAllowedByDataPermissions(permissions.BasePermission):
         if is_owner(request.user, request):
             return True
 
-        # DataSets are protected by other means
-        if hasattr(view, 'model') and issubclass(view.model, models.DataSet):
+        # DataSets and requests with JWTs are protected by other means
+        if (hasattr(view, 'model') and issubclass(view.model, models.DataSet)) or JWT_TOKEN_PARAM in request.query_params:
             return True
 
         if hasattr(view, 'get_method_actions'):

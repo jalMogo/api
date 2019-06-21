@@ -1,4 +1,7 @@
 import ujson as json
+import random
+import string
+import jwt
 from django.contrib.gis.db import models
 from django.contrib.gis.db.models import query
 from django.conf import settings
@@ -270,6 +273,8 @@ class Place (SubmittedThing):
 
     objects = GeoSubmittedThingManager()
     private = models.BooleanField(default=False, blank=True, db_index=True)
+    jwt_secret = models.CharField(max_length=20, blank=True)
+    jwt_public = models.TextField(blank=True)
     cache = cache.PlaceCache()
     # previous_version = 'sa_api_v1.models.Place'
 
@@ -278,6 +283,16 @@ class Place (SubmittedThing):
         db_table = 'sa_api_place'
         ordering = ['-updated_datetime']
         verbose_name = "place"
+
+    def save(self, *args, **kwargs):
+        self.jwt_secret = getattr(
+            self,
+            'jwt_secret',
+            ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(20)])
+        )
+        self.jwt_public = jwt.encode({'place_id': self.id}, self.jwt_secret, algorithm='HS256')
+
+        return super(Place, self).save(*args, **kwargs)
 
     def clone_related(self, onto):
         data_overrides = {'place_model': onto, 'dataset': onto.dataset}

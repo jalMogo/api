@@ -82,6 +82,9 @@ django-ace==1.0.4
 # The manager interface
 requests>=2.9.1
 
+# Support for JSON Web Token generation
+pyjwt==1.7.1
+
 
 
 # ==============================

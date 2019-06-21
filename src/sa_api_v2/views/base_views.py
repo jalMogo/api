@@ -693,7 +693,7 @@ class PlaceInstanceView (Sanitizer, CachedResourceMixin, LocatedResourceMixin, O
     ---
     Get a specific place
 
-    **Authentication**: Basic, session, or key auth *(optional)*
+    **Authentication**: Basic, session, JWT, or key auth *(optional)*
 
     **Request Parameters**:
 
@@ -792,6 +792,7 @@ class PlaceInstanceView (Sanitizer, CachedResourceMixin, LocatedResourceMixin, O
     def get_object(self, queryset=None):
         place_id = self.kwargs['place_id']
         obj = self.get_object_or_404(place_id)
+        self.check_object_permissions(self.request, obj)
         self.verify_object(obj)
         return obj
 
