@@ -4,11 +4,9 @@ from django.core.urlresolvers import reverse
 from django.core.cache import cache as django_cache
 from django.core.files import File
 from django.contrib.gis import geos
-from django.conf import settings
 import base64
 import csv
 import json
-import jwt
 from StringIO import StringIO
 from ..models import (
     User,
@@ -20,8 +18,6 @@ from ..models import (
 )
 from ..params import (
     INCLUDE_PRIVATE_FIELDS_PARAM,
-    INCLUDE_PRIVATE_PLACES_PARAM,
-    JWT_TOKEN_PARAM
 )
 from ..cache import cache_buffer
 from ..apikey.models import ApiKey
@@ -45,113 +41,6 @@ class APITestMixin (object):
         self.assertIn(response.status_code, expected,
             'Status code not in %s response: (%s) %s' %
             (expected, response.status_code, response.rendered_content))
-
-
-class TestPlaceInstanceView (APITestMixin, TestCase):
-    def setUp(self):
-        self.owner = User.objects.create_user(username='mary', password='123', email='abc@example.com')
-        self.submitter = User.objects.create_user(username='joe', password='456', email='123@example.com')
-        self.dataset = DataSet.objects.create(slug='ds', owner=self.owner)
-        self.place = Place.objects.create(
-          dataset=self.dataset,
-          geometry='POINT(2 3)',
-          submitter=self.submitter,
-          data=json.dumps({
-            'type': 'ATM',
-            'name': 'K-Mart',
-            'private-secrets': 42
-          })
-        )
-
-        self.submissions = [
-          Submission.objects.create(place_model=self.place, set_name='comments', dataset=self.dataset, data='{"comment": "Wow!", "private-email": "abc@example.com", "foo": 3}'),
-          Submission.objects.create(place_model=self.place, set_name='comments', dataset=self.dataset, data='{"foo": 3}'),
-          Submission.objects.create(place_model=self.place, set_name='comments', dataset=self.dataset, data='{"foo": 3}', visible=False),
-          Submission.objects.create(place_model=self.place, set_name='likes', dataset=self.dataset, data='{"bar": 3}'),
-          Submission.objects.create(place_model=self.place, set_name='likes', dataset=self.dataset, data='{"bar": 3}'),
-          Submission.objects.create(place_model=self.place, set_name='likes', dataset=self.dataset, data='{"bar": 3}'),
-          Submission.objects.create(place_model=self.place, set_name='likes', dataset=self.dataset, data='{"bar": 3}', visible=False),
-        ]
-        self.submission = self.submissions[0]
-
-        self.valid_jwt_public_correct_payload = jwt.encode({ 'place_id': self.place.id }, settings.JWT_SECRET, algorithm='HS256')
-        self.valid_jwt_public_incorrect_payload = jwt.encode({ 'place_id': 99999999 }, settings.JWT_SECRET, algorithm='HS256')
-        self.invalid_jwt_public = jwt.encode({ 'place_id': self.place.id }, 'invalid-secret-oh-no', algorithm='HS256')
-
-        self.request_kwargs = {
-          'owner_username': self.owner.username,
-          'dataset_slug': self.dataset.slug,
-          'place_id': self.place.id,
-          'submission_set_name': 'comments',
-          'submission_id': self.submission.id
-        }
-
-        self.factory = RequestFactory()
-        self.path = reverse('submission-detail', kwargs=self.request_kwargs)
-        self.view = PlaceInstanceView.as_view()
-
-        cache_buffer.reset()
-        django_cache.clear()
-
-    def tearDown(self):
-        User.objects.all().delete()
-        DataSet.objects.all().delete()
-        Place.objects.all().delete()
-
-        cache_buffer.reset()
-        django_cache.clear()
-
-    def test_GET_response_with_JWT_token(self):
-        # --------------------------------------------------
-
-        #
-        # View should 401 when a GET request is made with a valid JWT whose
-        # payload does not match the requested Place.
-        #
-        request = self.factory.get(self.path + '?' + INCLUDE_PRIVATE_FIELDS_PARAM + \
-                '&' + INCLUDE_PRIVATE_PLACES_PARAM + \
-                '&' + JWT_TOKEN_PARAM + '=' + self.valid_jwt_public_incorrect_payload \
-            )
-        response = self.view(request, **self.request_kwargs)
-        data = json.loads(response.rendered_content)
-
-        # Check that the request was restricted
-        self.assertStatusCode(response, 401)
-
-        # --------------------------------------------------
-
-        #
-        # View should 401 when a GET request is made with an invalid JWT,
-        # signed with the wrong secret.
-        #
-        request = self.factory.get(self.path + '?' + INCLUDE_PRIVATE_FIELDS_PARAM + \
-                '&' + INCLUDE_PRIVATE_PLACES_PARAM + \
-                '&' + JWT_TOKEN_PARAM + '=' + self.invalid_jwt_public \
-            )
-        response = self.view(request, **self.request_kwargs)
-        data = json.loads(response.rendered_content)
-
-        # Check that the request was restricted
-        self.assertStatusCode(response, 401)
-
-        # --------------------------------------------------
-
-        #
-        # View should return private data when a GET request is made with a
-        # valid JWT.
-        #
-        request = self.factory.get(self.path + '?' + INCLUDE_PRIVATE_FIELDS_PARAM + \
-                '&' + INCLUDE_PRIVATE_PLACES_PARAM + \
-                '&' + JWT_TOKEN_PARAM + '=' + self.valid_jwt_public_correct_payload \
-            )
-        response = self.view(request, **self.request_kwargs)
-        data = json.loads(response.rendered_content)
-
-        # Check that the request was successful
-        self.assertStatusCode(response, 200)
-
-        # Check that the private data is in the properties
-        self.assertIn('private-secrets', data['properties'])
 
 
 class TestSubmissionInstanceView (APITestMixin, TestCase):

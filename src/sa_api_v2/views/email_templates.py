@@ -48,7 +48,7 @@ class EmailTemplateDetailView(generics.RetrieveAPIView):
 
 # TODO: A class/mixin isn't needed. Refactor this into a function.
 class EmailTemplateMixin(object):
-    def get_jwt_public(self, obj):
+    def _get_jwt_public(self, obj):
         return jwt.encode({'place_id': obj.id}, settings.JWT_SECRET, algorithm='HS256')
 
     def send_email_notification(self, obj, submission_set_name):
@@ -119,7 +119,7 @@ class EmailTemplateMixin(object):
             context_data = RequestContext(self.request, {
                 'place': obj,
                 'email': recipient_email,
-                'jwt_public': self.get_jwt_public(obj)
+                'jwt_public': self._get_jwt_public(obj)
             })
 
             logger.debug('[EMAIL] Got context data')

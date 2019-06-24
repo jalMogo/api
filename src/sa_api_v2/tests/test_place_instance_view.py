@@ -4,8 +4,10 @@ from django.core.urlresolvers import reverse
 from django.core.cache import cache as django_cache
 from django.core.files import File
 from django.contrib.auth.models import AnonymousUser
+from django.conf import settings
 import base64
 import json
+import jwt
 from StringIO import StringIO
 from ..cors.models import Origin
 from ..cache import cache_buffer
@@ -26,6 +28,8 @@ from ..views import (
 )
 from ..params import (
     INCLUDE_PRIVATE_FIELDS_PARAM,
+    INCLUDE_PRIVATE_PLACES_PARAM,
+    JWT_TOKEN_PARAM
 )
 # ./src/manage.py test -s sa_api_v2.tests.test_place_instance_view:TestPlaceInstanceView
 
@@ -141,6 +145,61 @@ class TestPlaceInstanceView (APITestMixin, TestCase):
 
         cache_buffer.reset()
         django_cache.clear()
+
+    def test_GET_response_with_JWT_token(self):
+        # --------------------------------------------------
+
+        #
+        # View should 401 when a GET request is made with a valid JWT whose
+        # payload does not match the requested Place.
+        #
+        valid_jwt_public_incorrect_payload = jwt.encode({ 'place_id': 99999999 }, settings.JWT_SECRET, algorithm='HS256')
+        request = self.factory.get(self.path + '?' + INCLUDE_PRIVATE_FIELDS_PARAM + \
+                '&' + INCLUDE_PRIVATE_PLACES_PARAM + \
+                '&' + JWT_TOKEN_PARAM + '=' + valid_jwt_public_incorrect_payload \
+            )
+        response = self.view(request, **self.request_kwargs)
+        data = json.loads(response.rendered_content)
+
+        # Check that the request was restricted
+        self.assertStatusCode(response, 401)
+
+        # --------------------------------------------------
+
+        #
+        # View should 401 when a GET request is made with an invalid JWT,
+        # signed with the wrong secret.
+        #
+        invalid_jwt_public = jwt.encode({ 'place_id': self.place.id }, 'invalid-secret-oh-no', algorithm='HS256')
+        request = self.factory.get(self.path + '?' + INCLUDE_PRIVATE_FIELDS_PARAM + \
+                '&' + INCLUDE_PRIVATE_PLACES_PARAM + \
+                '&' + JWT_TOKEN_PARAM + '=' + invalid_jwt_public \
+            )
+        response = self.view(request, **self.request_kwargs)
+        data = json.loads(response.rendered_content)
+
+        # Check that the request was restricted
+        self.assertStatusCode(response, 401)
+
+        # --------------------------------------------------
+
+        #
+        # View should return private data when a GET request is made with a
+        # valid JWT.
+        #
+        valid_jwt_public_correct_payload = jwt.encode({ 'place_id': self.place.id }, settings.JWT_SECRET, algorithm='HS256')
+        request = self.factory.get(self.path + '?' + INCLUDE_PRIVATE_FIELDS_PARAM + \
+                '&' + INCLUDE_PRIVATE_PLACES_PARAM + \
+                '&' + JWT_TOKEN_PARAM + '=' + valid_jwt_public_correct_payload \
+            )
+        response = self.view(request, **self.request_kwargs)
+        data = json.loads(response.rendered_content)
+
+        # Check that the request was successful
+        self.assertStatusCode(response, 200)
+
+        # Check that the private data is in the properties
+        self.assertIn('private-secrets', data['properties'])
 
     def test_OPTIONS_response(self):
         request = self.factory.options(self.path)

@@ -1,6 +1,18 @@
 from .. import apikey
 from rest_framework import (permissions)
 import jwt
+from jwt.exceptions import (
+    InvalidTokenError,
+    DecodeError,
+    InvalidSignatureError,
+    ExpiredSignatureError,
+    InvalidAudienceError,
+    InvalidIssuedAtError,
+    ImmatureSignatureError,
+    InvalidKeyError,
+    InvalidAlgorithmError,
+    MissingRequiredClaimError
+)
 from django.conf import settings
 from ..params import (
     INCLUDE_INVISIBLE_PARAM,
@@ -139,16 +151,26 @@ class IsLoggedInAdmin(permissions.BasePermission):
 
 class IsAllowedByDataPermissions(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        # TODO: support JWTs in request header as well
         # JWT tokens by default grant access to protected resources.
-        if JWT_TOKEN_PARAM in request.query_params:
+        if JWT_TOKEN_PARAM in request.GET:
             try:
-                payload = jwt.decode(request.query_params.get(JWT_TOKEN_PARAM), settings.JWT_SECRET, algorithm='RS256')
+                payload = jwt.decode(request.GET[JWT_TOKEN_PARAM], settings.JWT_SECRET, algorithm='RS256')
                 if (payload['place_id']) == obj.id:
                     return True
                 else:
                     return False
-            except:
+            except (
+                InvalidTokenError,
+                DecodeError,
+                InvalidSignatureError,
+                ExpiredSignatureError,
+                InvalidAudienceError,
+                InvalidIssuedAtError,
+                ImmatureSignatureError,
+                InvalidKeyError,
+                InvalidAlgorithmError,
+                MissingRequiredClaimError
+            ), e:
                 # If the JWT decoding fails for any reason (invalid payload,
                 # invalid signature), an exception is thrown.
                 return False
@@ -165,7 +187,7 @@ class IsAllowedByDataPermissions(permissions.BasePermission):
             return True
 
         # DataSets and requests with JWTs are protected by other means
-        if (hasattr(view, 'model') and issubclass(view.model, models.DataSet)) or JWT_TOKEN_PARAM in request.query_params:
+        if (hasattr(view, 'model') and issubclass(view.model, models.DataSet)) or JWT_TOKEN_PARAM in request.GET:
             return True
 
         if hasattr(view, 'get_method_actions'):

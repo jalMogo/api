@@ -18,7 +18,6 @@ from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
 from rest_framework.request import Request
 from rest_framework.exceptions import APIException
-from rest_framework.request import Request as DRFRequest
 from rest_framework_bulk import generics as bulk_generics
 from social_django import views as social_views
 from mock import patch
@@ -1535,9 +1534,7 @@ class DataSetListView (DataSetListMixin, ProtectedOwnedResourceMixin, generics.L
             path=reverse('dataset-detail', args=[original.owner.username, original.slug]),
             data=dict(include_invisible=True, include_private_fields=True))
 
-        fake_drf_request = DRFRequest(fake_request)
-
-        self.check_object_permissions(fake_drf_request, original)
+        self.check_object_permissions(fake_request, original)
 
         # Clone the object using the override values from the request. Only
         # do a shallow clone during the request. Schedule the deep clone to
