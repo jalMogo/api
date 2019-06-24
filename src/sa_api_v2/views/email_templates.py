@@ -3,10 +3,12 @@ from ..models import PlaceEmailTemplate
 from rest_framework.renderers import StaticHTMLRenderer
 from rest_framework.response import Response
 from django.http import Http404
+import jwt
 
 from .. import cors
 from django.template import RequestContext, Template
 from django.core.mail import EmailMultiAlternatives
+from django.conf import settings
 import logging
 logger = logging.getLogger('sa_api_v2.views')
 
@@ -46,6 +48,9 @@ class EmailTemplateDetailView(generics.RetrieveAPIView):
 
 # TODO: A class/mixin isn't needed. Refactor this into a function.
 class EmailTemplateMixin(object):
+    def get_jwt_public(self, obj):
+        return jwt.encode({'place_id': obj.id}, settings.JWT_SECRET, algorithm='HS256')
+
     def send_email_notification(self, obj, submission_set_name):
         # TODO: until we establish a many:one relationship between the
         # Origin and EmailTemplate models, we are temporarily
@@ -113,7 +118,8 @@ class EmailTemplateMixin(object):
             # for this to work.
             context_data = RequestContext(self.request, {
                 'place': obj,
-                'email': recipient_email
+                'email': recipient_email,
+                'jwt_public': self.get_jwt_public(obj)
             })
 
             logger.debug('[EMAIL] Got context data')

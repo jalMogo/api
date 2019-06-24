@@ -1,6 +1,7 @@
 from .. import apikey
 from rest_framework import (permissions)
 import jwt
+from django.conf import settings
 from ..params import (
     INCLUDE_INVISIBLE_PARAM,
     INCLUDE_PRIVATE_FIELDS_PARAM,
@@ -140,10 +141,13 @@ class IsAllowedByDataPermissions(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         # TODO: support JWTs in request header as well
         # JWT tokens by default grant access to protected resources.
-        if JWT_TOKEN_PARAM in request.query_params and hasattr(obj, 'jwt_public') and hasattr(obj, 'jwt_secret'):
+        if JWT_TOKEN_PARAM in request.query_params:
             try:
-                jwt.decode(request.query_params.get(JWT_TOKEN_PARAM), getattr(obj, 'jwt_secret'), algorithm='RS256')
-                return True
+                payload = jwt.decode(request.query_params.get(JWT_TOKEN_PARAM), settings.JWT_SECRET, algorithm='RS256')
+                if (payload['place_id']) == obj.id:
+                    return True
+                else:
+                    return False
             except:
                 # If the JWT decoding fails for any reason (invalid payload,
                 # invalid signature), an exception is thrown.

@@ -111,6 +111,9 @@ AWS_QUERYSTRING_AUTH = False
 
 LAUNCHROCK_KEY = os.environ.get('LAUNCHROCK_KEY', 'NO_LAUNCHROCK_KEY')
 
+# JWT generation
+JWT_SECRET = os.environ.get('JWT_SECRET', 'secretsecret')
+
 # Some default settings that are handy for debugging
 LOGGING = {
     'version': 1,

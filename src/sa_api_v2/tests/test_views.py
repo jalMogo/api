@@ -7,6 +7,7 @@ from django.contrib.gis import geos
 import base64
 import csv
 import json
+import jwt
 from StringIO import StringIO
 from ..models import (
     User,
@@ -18,6 +19,7 @@ from ..models import (
 )
 from ..params import (
     INCLUDE_PRIVATE_FIELDS_PARAM,
+    JWT_TOKEN_PARAM
 )
 from ..cache import cache_buffer
 from ..apikey.models import ApiKey
@@ -32,6 +34,7 @@ from ..views import (
     AdminDataSetListView,
     AttachmentListView,
     ActionListView,
+    PlaceInstanceView,
 )
 
 
@@ -40,6 +43,91 @@ class APITestMixin (object):
         self.assertIn(response.status_code, expected,
             'Status code not in %s response: (%s) %s' %
             (expected, response.status_code, response.rendered_content))
+
+
+class TestPlaceInstanceView (APITestMixin, TestCase):
+    def setUp(self):
+        self.owner = User.objects.create_user(username='aaron', password='123', email='abc@example.com')
+        self.submitter = User.objects.create_user(username='mjumbe', password='456', email='123@example.com')
+        self.dataset = DataSet.objects.create(slug='ds', owner=self.owner)
+        self.jwt_secret = 'secretsecret'
+        self.jwt_public = jwt.encode({ 'some': 'payload' }, self.jwt_secret, algorithm='HS256')
+        self.place = Place.objects.create(
+          dataset=self.dataset,
+          geometry='POINT(2 3)',
+          submitter=self.submitter,
+          data=json.dumps({
+            'type': 'ATM',
+            'name': 'K-Mart',
+            'private-secrets': 42
+          }),
+          jwt_secret=self.jwt_secret,
+          jwt_public=self.jwt_public
+        )
+
+        f = StringIO('This is test content in a "file"')
+        f.name = 'myfile.txt'
+        f.size = 20
+        self.attachments = Attachment.objects.create(
+            file=File(f, 'myfile.txt'), name='my_file_name', thing=self.submissions[0])
+
+        self.submission = self.submissions[0]
+
+        self.apikey = ApiKey.objects.create(key='abc', dataset=self.dataset)
+
+        self.origin = Origin.objects.create(pattern='def', dataset=self.dataset)
+        Origin.objects.create(pattern='def2', dataset=self.dataset)
+
+        self.request_kwargs = {
+          'owner_username': self.owner.username,
+          'dataset_slug': self.dataset.slug,
+          'place_id': self.place.id,
+          'submission_set_name': 'comments',
+          'submission_id': self.submission.id
+        }
+
+        self.factory = RequestFactory()
+        self.path = reverse('submission-detail', kwargs=self.request_kwargs)
+        self.view = PlaceInstanceView.as_view()
+
+        cache_buffer.reset()
+        django_cache.clear()
+
+    def tearDown(self):
+        User.objects.all().delete()
+        DataSet.objects.all().delete()
+        Place.objects.all().delete()
+
+        cache_buffer.reset()
+        django_cache.clear()
+
+    def test_GET_response_with_JWT_token(self):
+        # --------------------------------------------------
+
+        #
+        # View should 401 when a GET request is made with an invalid JWT query param
+        #
+        request = self.factory.get(self.path + '?' + INCLUDE_PRIVATE_FIELDS_PARAM + '&' + JWT_TOKEN_PARAM + '=' + 'incorrect.jwt.token')
+        response = self.view(request, **self.request_kwargs)
+        data = json.loads(response.rendered_content)
+
+        # Check that the request was restricted
+        self.assertStatusCode(response, 401)
+
+        # --------------------------------------------------
+
+        #
+        # View should return private data when requested with a valid JWT query param
+        #
+        request = self.factory.get(self.path + '?' + INCLUDE_PRIVATE_FIELDS_PARAM + '&' + JWT_TOKEN_PARAM + '=' + self.jwt_public)
+        response = self.view(request, **self.request_kwargs)
+        data = json.loads(response.rendered_content)
+
+        # Check that the request was successful
+        self.assertStatusCode(response, 200)
+
+        # Check that the private data is in the properties
+        self.assertIn('private-secrets', data)
 
 
 class TestSubmissionInstanceView (APITestMixin, TestCase):
@@ -55,7 +143,7 @@ class TestSubmissionInstanceView (APITestMixin, TestCase):
             'type': 'ATM',
             'name': 'K-Mart',
             'private-secrets': 42
-          }),
+          })
         )
         self.submissions = [
           Submission.objects.create(place_model=self.place, set_name='comments', dataset=self.dataset, data='{"comment": "Wow!", "private-email": "abc@example.com", "foo": 3}'),
