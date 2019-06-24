@@ -151,7 +151,7 @@ class TestPlaceInstanceView (APITestMixin, TestCase):
         self.assertStatusCode(response, 200)
 
         # Check that the private data is in the properties
-        self.assertIn('private-secrets', data)
+        self.assertIn('private-secrets', data['properties'])
 
 
 class TestSubmissionInstanceView (APITestMixin, TestCase):
