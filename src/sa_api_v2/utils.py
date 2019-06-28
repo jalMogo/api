@@ -1,9 +1,49 @@
 import re
 import time
+import jwt
+from jwt.exceptions import (
+    InvalidTokenError,
+    DecodeError,
+    InvalidSignatureError,
+    ExpiredSignatureError,
+    InvalidAudienceError,
+    InvalidIssuedAtError,
+    ImmatureSignatureError,
+    InvalidKeyError,
+    InvalidAlgorithmError,
+    MissingRequiredClaimError
+)
 from django.contrib.gis.geos import GEOSGeometry, Point
+from django.conf import settings
 from django.contrib.gis.measure import D
 from functools import wraps
 from urlparse import urlparse, urljoin
+
+def make_jwt_token(place_id):
+    return jwt.encode({'place_id': place_id}, settings.JWT_SECRET, algorithm='HS256')
+
+def check_jwt_token(place_id, jwt_public):
+    try:
+        payload = jwt.decode(jwt_public, settings.JWT_SECRET, algorithm='RS256')
+        if place_id == obj.id:
+            return True
+        else:
+            return False
+    except (
+        InvalidTokenError,
+        DecodeError,
+        InvalidSignatureError,
+        ExpiredSignatureError,
+        InvalidAudienceError,
+        InvalidIssuedAtError,
+        ImmatureSignatureError,
+        InvalidKeyError,
+        InvalidAlgorithmError,
+        MissingRequiredClaimError
+    ), e:
+        # If the JWT decoding fails for any reason (invalid payload,
+        # invalid signature), an exception is thrown.
+        return False
 
 def isiterable(obj):
     try:

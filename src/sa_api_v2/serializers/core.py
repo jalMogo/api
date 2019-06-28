@@ -48,6 +48,7 @@ from ..params import (
     INCLUDE_TAGS_PARAM,
     INCLUDE_SUBMISSIONS_PARAM,
 )
+from .. import utils
 
 import logging
 logger = logging.getLogger(__name__)
@@ -405,10 +406,11 @@ class BasePlaceSerializer (SubmittedThingSerializer,
             'updated_datetime': obj.updated_datetime.isoformat() if obj.updated_datetime else None,
         }
         # If the place is public, don't inlude the 'private' attribute
-        # in the serialized representation. This minimizes the JSON
-        # payload:
+        # or the JWT public token in the serialized representation. 
+        # This minimizes the JSON payload:
         if obj.private:
             data['private'] = obj.private
+            data['jwt_public'] = utils.make_jwt_token(obj.pk) 
 
         # For use in PlaceSerializer:
         if 'url' in fields:
