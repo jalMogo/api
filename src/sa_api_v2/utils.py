@@ -25,7 +25,7 @@ def make_jwt_token(place_id):
 def check_jwt_token(place_id, jwt_public):
     try:
         payload = jwt.decode(jwt_public, settings.JWT_SECRET, algorithm='RS256')
-        if place_id == obj.id:
+        if payload['place_id'] == place_id:
             return True
         else:
             return False
