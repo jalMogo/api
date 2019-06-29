@@ -48,7 +48,6 @@ from ..params import (
     INCLUDE_TAGS_PARAM,
     INCLUDE_SUBMISSIONS_PARAM,
 )
-from .. import utils
 
 import logging
 logger = logging.getLogger(__name__)
@@ -407,7 +406,8 @@ class BasePlaceSerializer (SubmittedThingSerializer,
         }
 
         # If the place is public, don't inlude the 'private' attribute
-        # in the serialized representation. This minimizes the JSON payload:
+        # in the serialized representation. This minimizes the JSON 
+        # payload:
         if obj.private:
             data['private'] = obj.private
 
