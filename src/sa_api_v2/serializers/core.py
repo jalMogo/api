@@ -402,11 +402,11 @@ class BasePlaceSerializer (SubmittedThingSerializer,
             'data': obj.data,
             'visible': obj.visible,
             'created_datetime': obj.created_datetime.isoformat() if obj.created_datetime else None,
-            'updated_datetime': obj.updated_datetime.isoformat() if obj.updated_datetime else None
+            'updated_datetime': obj.updated_datetime.isoformat() if obj.updated_datetime else None,
         }
 
         # If the place is public, don't inlude the 'private' attribute
-        # in the serialized representation. This minimizes the JSON 
+        # in the serialized representation. This minimizes the JSON
         # payload:
         if obj.private:
             data['private'] = obj.private
