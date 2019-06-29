@@ -115,7 +115,7 @@ class EmailTemplateMixin(object):
             context_data = RequestContext(self.request, {
                 'place': obj,
                 'email': recipient_email,
-                'jwt_public': utils.make_jwt_token(obj.id)
+                'jwt_public': obj.make_jwt_token()
             })
 
             logger.debug('[EMAIL] Got context data')

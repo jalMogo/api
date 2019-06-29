@@ -900,6 +900,14 @@ class PlaceListView (
     renderer_classes = (renderers.GeoJSONRenderer,) + OwnedResourceMixin.renderer_classes[2:]
     parser_classes = (parsers.GeoJSONParser,) + OwnedResourceMixin.parser_classes[1:]
 
+    def get_serializer_context(self):
+        context = super(PlaceListView, self).get_serializer_context()
+        if self.request.method == 'POST':
+            context['include_jwt_token'] = True
+
+        return context
+
+
     # Overriding create so we can sanitize submitted fields, which may
     # contain raw HTML intended to be rendered in the client
     def create(self, request, *args, **kwargs):
@@ -921,6 +929,9 @@ class PlaceListView (
             )
             self.post_save(self.object, created=True)
             headers = self.get_success_headers(serializer.data)
+
+            print('!!!!!!!!!!!!', serializer.data)
+
             return Response(serializer.data, status=status.HTTP_201_CREATED,
                             headers=headers)
 

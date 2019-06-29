@@ -154,7 +154,7 @@ class TestPlaceInstanceView (APITestMixin, TestCase):
         # View should 401 when a GET request is made with a valid JWT whose
         # payload does not match the requested Place.
         #
-        valid_jwt_public_incorrect_payload = utils.make_jwt_token(99999999)
+        valid_jwt_public_incorrect_payload = jwt.encode({ 'place_id': 99999999 }, settings.JWT_SECRET, algorithm='HS256')
         request = self.factory.get(self.path + '?' + INCLUDE_PRIVATE_FIELDS_PARAM + \
                 '&' + INCLUDE_PRIVATE_PLACES_PARAM + \
                 '&' + JWT_TOKEN_PARAM + '=' + valid_jwt_public_incorrect_payload \
@@ -188,7 +188,7 @@ class TestPlaceInstanceView (APITestMixin, TestCase):
         # View should return private data when a GET request is made with a
         # valid JWT.
         #
-        valid_jwt_public_correct_payload = utils.make_jwt_token(self.place.id)
+        valid_jwt_public_correct_payload = self.place.make_jwt_token()
         request = self.factory.get(self.path + '?' + INCLUDE_PRIVATE_FIELDS_PARAM + \
                 '&' + INCLUDE_PRIVATE_PLACES_PARAM + \
                 '&' + JWT_TOKEN_PARAM + '=' + valid_jwt_public_correct_payload \

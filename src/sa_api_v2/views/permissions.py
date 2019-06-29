@@ -139,7 +139,7 @@ class IsLoggedInAdmin(permissions.BasePermission):
 class IsAllowedByDataPermissions(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if JWT_TOKEN_PARAM in request.GET:
-            return utils.check_jwt_token(obj.id, request.GET[JWT_TOKEN_PARAM])
+            return obj.check_jwt_token(request.GET[JWT_TOKEN_PARAM])
 
         # Object permissions are only relevant if a request with a JWT is made
         return True

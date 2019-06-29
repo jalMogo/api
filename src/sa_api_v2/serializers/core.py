@@ -403,14 +403,16 @@ class BasePlaceSerializer (SubmittedThingSerializer,
             'data': obj.data,
             'visible': obj.visible,
             'created_datetime': obj.created_datetime.isoformat() if obj.created_datetime else None,
-            'updated_datetime': obj.updated_datetime.isoformat() if obj.updated_datetime else None,
-            'jwt_public': utils.make_jwt_token(obj.pk),
+            'updated_datetime': obj.updated_datetime.isoformat() if obj.updated_datetime else None
         }
 
         # If the place is public, don't inlude the 'private' attribute
-        # in the serialized representati. This minimizes the JSON payload:
+        # in the serialized representation. This minimizes the JSON payload:
         if obj.private:
             data['private'] = obj.private
+
+        if self.context.get('include_jwt_token'):
+            data['jwt_public'] = obj.make_jwt_token()
 
         # For use in PlaceSerializer:
         if 'url' in fields:
