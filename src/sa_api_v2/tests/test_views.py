@@ -32,7 +32,6 @@ from ..views import (
     AdminDataSetListView,
     AttachmentListView,
     ActionListView,
-    PlaceInstanceView,
 )
 
 
@@ -56,7 +55,7 @@ class TestSubmissionInstanceView (APITestMixin, TestCase):
             'type': 'ATM',
             'name': 'K-Mart',
             'private-secrets': 42
-          })
+          }),
         )
         self.submissions = [
           Submission.objects.create(place_model=self.place, set_name='comments', dataset=self.dataset, data='{"comment": "Wow!", "private-email": "abc@example.com", "foo": 3}'),

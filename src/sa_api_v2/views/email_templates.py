@@ -8,7 +8,6 @@ from .. import cors
 from django.template import RequestContext, Template
 from django.core.mail import EmailMultiAlternatives
 import logging
-from .. import utils
 logger = logging.getLogger('sa_api_v2.views')
 
 

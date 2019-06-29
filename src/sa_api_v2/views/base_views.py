@@ -907,7 +907,6 @@ class PlaceListView (
 
         return context
 
-
     # Overriding create so we can sanitize submitted fields, which may
     # contain raw HTML intended to be rendered in the client
     def create(self, request, *args, **kwargs):
@@ -929,9 +928,6 @@ class PlaceListView (
             )
             self.post_save(self.object, created=True)
             headers = self.get_success_headers(serializer.data)
-
-            print('!!!!!!!!!!!!', serializer.data)
-
             return Response(serializer.data, status=status.HTTP_201_CREATED,
                             headers=headers)
 
@@ -1544,7 +1540,6 @@ class DataSetListView (DataSetListMixin, ProtectedOwnedResourceMixin, generics.L
         fake_request = RequestFactory().get(
             path=reverse('dataset-detail', args=[original.owner.username, original.slug]),
             data=dict(include_invisible=True, include_private_fields=True))
-
         self.check_object_permissions(fake_request, original)
 
         # Clone the object using the override values from the request. Only

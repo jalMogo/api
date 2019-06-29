@@ -31,7 +31,6 @@ from ..params import (
     INCLUDE_PRIVATE_PLACES_PARAM,
     JWT_TOKEN_PARAM
 )
-from .. import utils
 # ./src/manage.py test -s sa_api_v2.tests.test_place_instance_view:TestPlaceInstanceView
 
 

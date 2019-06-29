@@ -7,7 +7,6 @@ from ..params import (
     JWT_TOKEN_PARAM
 )
 from .. import models
-from .. import utils
 ###############################################################################
 #
 # Permissions
