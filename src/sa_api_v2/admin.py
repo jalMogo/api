@@ -325,7 +325,7 @@ class PlaceAdmin(SubmittedThingAdmin):
         InlinePlaceTagAdmin,
         InlineAttachmentAdmin
     ]
-    readonly_fields = ('jwt_public_token',)
+    readonly_fields = ('jwt_public_token', 'api_path')
 
     def jwt_public_token(self, instance):
         return instance.make_jwt_token()
