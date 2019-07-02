@@ -4,6 +4,19 @@ from django.contrib.gis.db.models import query
 from django.conf import settings
 from django.core.files.storage import get_storage_class
 from django.utils.timezone import now
+import jwt
+from jwt.exceptions import (
+    InvalidTokenError,
+    DecodeError,
+    InvalidSignatureError,
+    ExpiredSignatureError,
+    InvalidAudienceError,
+    InvalidIssuedAtError,
+    ImmatureSignatureError,
+    InvalidKeyError,
+    InvalidAlgorithmError,
+    MissingRequiredClaimError
+)
 from .. import cache
 from .. import utils
 from .caching import CacheClearingModel
@@ -278,6 +291,32 @@ class Place (SubmittedThing):
         db_table = 'sa_api_place'
         ordering = ['-updated_datetime']
         verbose_name = "place"
+
+    def make_jwt(self):
+        return jwt.encode({'place_id': self.id}, settings.JWT_SECRET, algorithm='HS256')
+
+    def check_jwt(self, jwt_public):
+        try:
+            payload = jwt.decode(jwt_public, settings.JWT_SECRET, algorithm='RS256')
+            if payload['place_id'] == self.id:
+                return True
+            else:
+                return False
+        except (
+            InvalidTokenError,
+            DecodeError,
+            InvalidSignatureError,
+            ExpiredSignatureError,
+            InvalidAudienceError,
+            InvalidIssuedAtError,
+            ImmatureSignatureError,
+            InvalidKeyError,
+            InvalidAlgorithmError,
+            MissingRequiredClaimError
+        ), e:
+            # If the JWT decoding fails for any reason (invalid payload,
+            # invalid signature), an exception is thrown.
+            return False
 
     def clone_related(self, onto):
         data_overrides = {'place_model': onto, 'dataset': onto.dataset}

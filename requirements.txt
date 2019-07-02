@@ -2,7 +2,7 @@
 # Web server
 # ==============================
 
-Django==1.11.20
+Django==1.11.22
 
 # Consider updating these for python 3 support:
 gevent==1.1.1
@@ -81,6 +81,9 @@ django-ace==1.0.4
 
 # The manager interface
 requests>=2.9.1
+
+# Support for JSON Web Token generation
+pyjwt==1.7.1
 
 
 

@@ -404,11 +404,15 @@ class BasePlaceSerializer (SubmittedThingSerializer,
             'created_datetime': obj.created_datetime.isoformat() if obj.created_datetime else None,
             'updated_datetime': obj.updated_datetime.isoformat() if obj.updated_datetime else None,
         }
+
         # If the place is public, don't inlude the 'private' attribute
         # in the serialized representation. This minimizes the JSON
         # payload:
         if obj.private:
             data['private'] = obj.private
+
+        if self.context.get('include_jwt'):
+            data['jwt_public'] = obj.make_jwt()
 
         # For use in PlaceSerializer:
         if 'url' in fields:

@@ -693,7 +693,7 @@ class PlaceInstanceView (Sanitizer, CachedResourceMixin, LocatedResourceMixin, O
     ---
     Get a specific place
 
-    **Authentication**: Basic, session, or key auth *(optional)*
+    **Authentication**: Basic, session, JWT, or key auth *(optional)*
 
     **Request Parameters**:
 
@@ -792,6 +792,7 @@ class PlaceInstanceView (Sanitizer, CachedResourceMixin, LocatedResourceMixin, O
     def get_object(self, queryset=None):
         place_id = self.kwargs['place_id']
         obj = self.get_object_or_404(place_id)
+        self.check_object_permissions(self.request, obj)
         self.verify_object(obj)
         return obj
 
@@ -898,6 +899,13 @@ class PlaceListView (
     pagination_class = serializers.FeatureCollectionPagination
     renderer_classes = (renderers.GeoJSONRenderer,) + OwnedResourceMixin.renderer_classes[2:]
     parser_classes = (parsers.GeoJSONParser,) + OwnedResourceMixin.parser_classes[1:]
+
+    def get_serializer_context(self):
+        context = super(PlaceListView, self).get_serializer_context()
+        if self.request.method == 'POST':
+            context['include_jwt'] = True
+
+        return context
 
     # Overriding create so we can sanitize submitted fields, which may
     # contain raw HTML intended to be rendered in the client

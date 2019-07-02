@@ -143,6 +143,9 @@ class TestPlaceListView (APITestMixin, TestCase):
             reverse('place-detail', args=[self.owner.username, self.dataset.slug, self.place.id]),
         )
 
+        # check that a JWT token is not present
+        self.assertNotIn('jwt_public', data['features'][0]['properties'])
+
     def test_GET_response_for_multiple_specific_objects(self):
         places = []
         for _ in range(10):
@@ -551,6 +554,13 @@ class TestPlaceListView (APITestMixin, TestCase):
 
         # Check that the request was successful
         self.assertStatusCode(response, 201)
+
+        #
+        # The 201 response should contain a valid JWT token 
+        #
+        self.assertIn('jwt_public', data['properties'])
+        self.assertEqual(data['properties']['jwt_public'], Place.objects.latest('id').make_jwt())
+        
 
         # Check that the data attributes have been incorporated into the
         # properties
