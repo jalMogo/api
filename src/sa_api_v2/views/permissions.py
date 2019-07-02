@@ -4,7 +4,7 @@ from ..params import (
     INCLUDE_INVISIBLE_PARAM,
     INCLUDE_PRIVATE_FIELDS_PARAM,
     INCLUDE_PRIVATE_PLACES_PARAM,
-    JWT_TOKEN_PARAM
+    JWT_PARAM
 )
 from .. import models
 ###############################################################################
@@ -137,8 +137,8 @@ class IsLoggedInAdmin(permissions.BasePermission):
 
 class IsAllowedByDataPermissions(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        if JWT_TOKEN_PARAM in request.GET:
-            return obj.check_jwt_token(request.GET[JWT_TOKEN_PARAM])
+        if JWT_PARAM in request.GET:
+            return obj.check_jwt(request.GET[JWT_PARAM])
 
         # Object permissions are only relevant if a request with a JWT is made
         return True
@@ -152,7 +152,7 @@ class IsAllowedByDataPermissions(permissions.BasePermission):
             return True
 
         # DataSets and requests with JWTs are protected by other means
-        if (hasattr(view, 'model') and issubclass(view.model, models.DataSet)) or JWT_TOKEN_PARAM in request.GET:
+        if (hasattr(view, 'model') and issubclass(view.model, models.DataSet)) or JWT_PARAM in request.GET:
             return True
 
         if hasattr(view, 'get_method_actions'):

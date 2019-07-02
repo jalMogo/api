@@ -14,7 +14,7 @@ DISTANCE_PARAM = 'distance_lt'
 BBOX_PARAM = 'bounds'
 FORMAT_PARAM = 'format'
 TEXTSEARCH_PARAM = 'search'
-JWT_TOKEN_PARAM = 'token'
+JWT_PARAM = 'token'
 
 PAGE_PARAM = 'page'
 PAGE_SIZE_PARAM = lambda: getattr(settings, 'REST_FRAMEWORK', {}).get('PAGINATE_BY_PARAM')

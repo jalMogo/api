@@ -29,7 +29,7 @@ from ..views import (
 from ..params import (
     INCLUDE_PRIVATE_FIELDS_PARAM,
     INCLUDE_PRIVATE_PLACES_PARAM,
-    JWT_TOKEN_PARAM
+    JWT_PARAM
 )
 # ./src/manage.py test -s sa_api_v2.tests.test_place_instance_view:TestPlaceInstanceView
 
@@ -156,7 +156,7 @@ class TestPlaceInstanceView (APITestMixin, TestCase):
         valid_jwt_public_incorrect_payload = jwt.encode({ 'place_id': 99999999 }, settings.JWT_SECRET, algorithm='HS256')
         request = self.factory.get(self.path + '?' + INCLUDE_PRIVATE_FIELDS_PARAM + \
                 '&' + INCLUDE_PRIVATE_PLACES_PARAM + \
-                '&' + JWT_TOKEN_PARAM + '=' + valid_jwt_public_incorrect_payload \
+                '&' + JWT_PARAM + '=' + valid_jwt_public_incorrect_payload \
             )
         response = self.view(request, **self.request_kwargs)
         data = json.loads(response.rendered_content)
@@ -173,7 +173,7 @@ class TestPlaceInstanceView (APITestMixin, TestCase):
         invalid_jwt_public = jwt.encode({ 'place_id': self.place.id }, 'invalid-secret-oh-no', algorithm='HS256')
         request = self.factory.get(self.path + '?' + INCLUDE_PRIVATE_FIELDS_PARAM + \
                 '&' + INCLUDE_PRIVATE_PLACES_PARAM + \
-                '&' + JWT_TOKEN_PARAM + '=' + invalid_jwt_public \
+                '&' + JWT_PARAM + '=' + invalid_jwt_public \
             )
         response = self.view(request, **self.request_kwargs)
         data = json.loads(response.rendered_content)
@@ -187,10 +187,10 @@ class TestPlaceInstanceView (APITestMixin, TestCase):
         # View should return private data when a GET request is made with a
         # valid JWT.
         #
-        valid_jwt_public_correct_payload = self.place.make_jwt_token()
+        valid_jwt_public_correct_payload = self.place.make_jwt()
         request = self.factory.get(self.path + '?' + INCLUDE_PRIVATE_FIELDS_PARAM + \
                 '&' + INCLUDE_PRIVATE_PLACES_PARAM + \
-                '&' + JWT_TOKEN_PARAM + '=' + valid_jwt_public_correct_payload \
+                '&' + JWT_PARAM + '=' + valid_jwt_public_correct_payload \
             )
         response = self.view(request, **self.request_kwargs)
         data = json.loads(response.rendered_content)

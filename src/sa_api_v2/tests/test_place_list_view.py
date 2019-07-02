@@ -559,7 +559,7 @@ class TestPlaceListView (APITestMixin, TestCase):
         # The 201 response should contain a valid JWT token 
         #
         self.assertIn('jwt_public', data['properties'])
-        self.assertEqual(data['properties']['jwt_public'], Place.objects.latest('id').make_jwt_token())
+        self.assertEqual(data['properties']['jwt_public'], Place.objects.latest('id').make_jwt())
         
 
         # Check that the data attributes have been incorporated into the

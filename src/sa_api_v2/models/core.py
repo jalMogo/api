@@ -292,10 +292,10 @@ class Place (SubmittedThing):
         ordering = ['-updated_datetime']
         verbose_name = "place"
 
-    def make_jwt_token(self):
+    def make_jwt(self):
         return jwt.encode({'place_id': self.id}, settings.JWT_SECRET, algorithm='HS256')
 
-    def check_jwt_token(self, jwt_public):
+    def check_jwt(self, jwt_public):
         try:
             payload = jwt.decode(jwt_public, settings.JWT_SECRET, algorithm='RS256')
             if payload['place_id'] == self.id:

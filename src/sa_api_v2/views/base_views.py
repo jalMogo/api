@@ -903,7 +903,7 @@ class PlaceListView (
     def get_serializer_context(self):
         context = super(PlaceListView, self).get_serializer_context()
         if self.request.method == 'POST':
-            context['include_jwt_token'] = True
+            context['include_jwt'] = True
 
         return context
 
