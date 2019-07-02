@@ -3,6 +3,7 @@ db/*.sqlite3
 log/*.log
 debug*
 .idea
+*.sw*
 
 # tmp
 tmp/
