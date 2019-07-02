@@ -2,7 +2,7 @@
 # Web server
 # ==============================
 
-Django==1.11.20
+Django==1.11.22
 
 # Consider updating these for python 3 support:
 gevent==1.1.1
