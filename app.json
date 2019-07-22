@@ -1,8 +1,7 @@
 {
-  "name": "Shareabouts Data Server",
-  "description": "A standalone Shareabouts data API server.",
-  "repository": "https://github.com/openplans/shareabouts-api",
-  "logo": "https://pbs.twimg.com/profile_images/476001405501587456/rnCUrPIX_400x400.png",
+  "name": "Mapseed Data Server",
+  "description": "A standalone Mapseed data API server.",
+  "repository": "https://github.com/mapseed",
 
   "scripts": {
     "postdeploy": "scripts/postdeploy"
