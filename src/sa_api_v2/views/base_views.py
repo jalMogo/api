@@ -653,20 +653,10 @@ class QueryError(exceptions.APIException):
 # --------------
 #
 
-class ShareaboutsAPIRootView (views.APIView):
+class MapseedAPIRootView (views.APIView):
     """
-    Welcome to the Shareabouts API. The Shareabouts API is the data storage
-    and data management component that powers the
-    [Shareabouts web application](https://github.com/openplans/shareabouts).
-    It is a REST API for flexibly storing data about places.
 
-    The Shareabouts API supports a number of authentication methods, including
-    basic auth for users, and OAuth for constructing applications against the
-    API. The API also allows you to easily build Twitter and Facebook
-    authentication into your own application build on the Shareabouts API.
-
-    The best place to start browsing is in your datasets. Use the link at the
-    top-right to log in.
+    Welcome to the Mapseed REST API.
 
     """
     def get(self, request):
