@@ -5,7 +5,7 @@ from . import views
 
 urlpatterns = [
     url(r'^$',
-        views.ShareaboutsAPIRootView.as_view(),
+        views.MapseedAPIRootView.as_view(),
         name='api-root'),
     url(r'^(?P<owner_username>[^/]+)/datasets/(?P<dataset_slug>[^/]+)/places/(?P<thing_id>\d+)/attachments$',
         views.AttachmentListView.as_view(),
