@@ -60,12 +60,10 @@ class FacebookUserDataStrategy (object):
 
 class GoogleUserDataStrategy (object):
     def extract_avatar_url(self, user_info):
-        url = user_info['image']['url']
-        return url
+        return user_info['picture']
 
     def extract_full_name(self, user_info):
-        name = user_info['name']['givenName'] + ' ' + user_info['name']['familyName']
-        return name
+        return user_info['name']
 
     def extract_bio(self, user_info):
         return user_info["aboutMe"]
