@@ -60,10 +60,20 @@ class FacebookUserDataStrategy (object):
 
 class GoogleUserDataStrategy (object):
     def extract_avatar_url(self, user_info):
-        return user_info['picture']
+        if 'picture' in user_info:
+            # This is the googleOauth2 new schema:
+            return user_info['picture']
+        else:
+            # This is the old schema (ideally should be migrated to the new one)
+            return user_info['image']['url']
 
     def extract_full_name(self, user_info):
-        return user_info['name']
+        if isinstance(user_info['name'], unicode) or isinstance(user_info['name'], str):
+            # This is the googleOauth2 new schema:
+            return user_info['name']
+        else:
+            # This is the old schema (ideally should be migrated to the new one)
+            return user_info['name']['givenName'] + ' ' + user_info['name']['familyName']
 
     def extract_bio(self, user_info):
         return user_info["aboutMe"]
