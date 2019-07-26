@@ -62,21 +62,32 @@ class GoogleUserDataStrategy (object):
     def extract_avatar_url(self, user_info):
         if 'picture' in user_info:
             # This is the googleOauth2 new schema:
-            return user_info['picture']
+            return user_info.get('picture', None)
         else:
             # This is the old schema (ideally should be migrated to the new one)
             return user_info['image']['url']
 
     def extract_full_name(self, user_info):
-        if isinstance(user_info['name'], unicode) or isinstance(user_info['name'], str):
+        if isinstance(user_info['name'], (unicode, str)):
             # This is the googleOauth2 new schema:
-            return user_info['name']
+            return user_info.get('name', None)
         else:
             # This is the old schema (ideally should be migrated to the new one)
             return user_info['name']['givenName'] + ' ' + user_info['name']['familyName']
 
     def extract_bio(self, user_info):
         return user_info["aboutMe"]
+
+
+class DiscourseUserDataStrategy (object):
+    def extract_avatar_url(self, user_info):
+        return user_info.get('avatar_url', None)
+
+    def extract_full_name(self, user_info):
+        return user_info.get('username', None)
+
+    def extract_bio(self, user_info):
+        return None
 
 
 class ShareaboutsUserDataStrategy (object):
@@ -106,6 +117,7 @@ class BaseUserSerializer (serializers.ModelSerializer):
         'twitter': TwitterUserDataStrategy(),
         'facebook': FacebookUserDataStrategy(),
         'google-oauth2': GoogleUserDataStrategy(),
+        'discourse-hdk': DiscourseUserDataStrategy(),
         'shareabouts': ShareaboutsUserDataStrategy()
     }
     default_strategy = DefaultUserDataStrategy()

@@ -221,7 +221,8 @@ AUTHENTICATION_BACKENDS = (
     # for list of available backends.
     #'social.backends.facebook.FacebookOAuth2',
     'social_core.backends.twitter.TwitterOAuth',
-    'sa_api_v2.auth_backends.NoRedirectStateFacebookOAuth2',
+    'social_core.backends.facebook.FacebookOAuth2',
+    'sa_api_v2.auth_backends.DiscourseSSOAuth',
     'social_core.backends.google.GoogleOAuth2',
     'sa_api_v2.auth_backends.CachedModelBackend',
 )
