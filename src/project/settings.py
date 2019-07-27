@@ -235,6 +235,7 @@ SOCIAL_AUTH_PROTECTED_USER_FIELDS = ['email',]
 SOCIAL_AUTH_FACEBOOK_EXTRA_DATA = ['name', 'picture', 'about']
 SOCIAL_AUTH_TWITTER_EXTRA_DATA = ['name', 'description', 'profile_image_url_https']
 SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['name', 'aboutMe', 'picture']
+SOCIAL_AUTH_DISCOURSE_SSO_SECRET = "discourseSsoSecret"
 
 # Explicitly request the following extra things from facebook
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {'fields': 'id,name,picture.width(96).height(96),first_name,last_name,about'}
