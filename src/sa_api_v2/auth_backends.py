@@ -1,13 +1,13 @@
 from django.contrib.auth.backends import ModelBackend
 from .cache import UserCache
 from social_core.backends.base import BaseAuth
-from social_django.models import Nonce
 from social_core.exceptions import (AuthException, AuthTokenError)
 import hmac
 from base64 import b64encode, b64decode
 from hashlib import sha256
 import urllib
 from social_core.utils import parse_qs
+import time
 
 
 class CachedModelBackend (ModelBackend):
@@ -17,17 +17,6 @@ class CachedModelBackend (ModelBackend):
             user = super(CachedModelBackend, self).get_user(user_id)
             UserCache.set_instance(user, user_id=user_id)
         return user
-
-
-class OpenIdConnectAssociation(object):
-    """ Use Association model to save the nonce by force."""
-
-    def __init__(self, handle, secret='', issued=0, lifetime=0, assoc_type=''):
-        self.handle = handle  # as nonce
-        self.secret = secret.encode()  # not use
-        self.issued = issued  # not use
-        self.lifetime = lifetime  # not use
-        self.assoc_type = assoc_type  # as state
 
 
 class DiscourseSSOAuth(BaseAuth):
@@ -43,8 +32,7 @@ class DiscourseSSOAuth(BaseAuth):
         """Return redirect url"""
         returnUrl = self.redirect_uri
         nonce = self.strategy.random_string(64)
-        association = OpenIdConnectAssociation(nonce)
-        self.strategy.storage.association.store(self.SERVER_URL, association)
+        self.add_nonce(nonce)
 
         payload = "nonce="+nonce+"&return_sso_url="+returnUrl
         base64Payload = b64encode(payload)
@@ -67,15 +55,15 @@ class DiscourseSSOAuth(BaseAuth):
         }
         return results
 
-    def remove_nonce(self, nonce_id):
-        self.strategy.storage.association.remove([nonce_id])
+    def add_nonce(self, nonce):
+        self.strategy.storage.nonce.use(self.SERVER_URL, time.time(), nonce)
 
     def get_nonce(self, nonce):
         try:
-            return self.strategy.storage.association.get(
+            return self.strategy.storage.nonce.objects.get(
                 server_url=self.SERVER_URL,
-                handle=nonce
-            )[0]
+                salt=nonce
+            )
         except IndexError:
             pass
 
@@ -93,7 +81,7 @@ class DiscourseSSOAuth(BaseAuth):
         response = parse_qs(decodedParams)
         nonce_obj = self.get_nonce(response.get('nonce'))
         if nonce_obj:
-            self.remove_nonce(nonce_obj.id)
+            nonce_obj.delete()
         else:
             raise AuthTokenError(self, 'Incorrect id_token: nonce')
 
