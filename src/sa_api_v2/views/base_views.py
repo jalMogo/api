@@ -32,7 +32,6 @@ from ..cors.auth import OriginAuthentication
 from ..apikey.auth import ApiKeyAuthentication
 from .email_templates import EmailTemplateMixin
 from .. import tasks
-from .. import utils
 from .content_negotiation import ShareaboutsContentNegotiation
 from ..cache import cache_buffer
 from ..params import (
@@ -1858,7 +1857,7 @@ class SessionKeyView (CorsEnabledMixin, views.APIView):
 # ---------------------------
 #
 
-def capture_referer(view_func):
+def capture_referer(view_func, include_log=False):
     """
     A wrapper for views that redirect with a 'next' parameter to any
     arbitrary URL. Normally, Django (and social-auth) internals only allow
@@ -1876,6 +1875,14 @@ def capture_referer(view_func):
         else:
             return HttpResponseBadRequest('Referer header must be set.')
 
+        if include_log:
+            logger.info(
+                'Login request received. provider: {0} from referer: {1}'.format(
+                    kwargs.get('backend'),
+                    referer,
+                )
+            )
+
         request.GET = request.GET.copy()
         request.GET['next'] = reverse('redirector') + '?' + urlencode({'target': client_next})
 
@@ -1886,8 +1893,10 @@ def capture_referer(view_func):
 
     return wrapper
 
-remote_social_login = capture_referer(social_views.auth)
-remote_logout = capture_referer(auth_views.logout)
+
+remote_social_login = capture_referer(social_views.auth, include_log=True)
+remote_logout = capture_referer(auth_views.logout, include_log=False)
+
 
 def remote_social_login_error(request):
     error_redirect_url = request.session.get('client_error_next')
