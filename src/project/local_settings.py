@@ -71,6 +71,10 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY',
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET',
                                                   'NO_SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
 
+SOCIAL_AUTH_DISCOURSE_HDK_SECRET = os.environ.get('SOCIAL_AUTH_DISCOURSE_HDK_SECRET',
+                                                   'NO_SOCIAL_AUTH_DISCOURSE_HDK_SECRET')
+SOCIAL_AUTH_DISCOURSE_HDK_SERVER_URL = os.environ.get('SOCIAL_AUTH_DISCOURSE_HDK_SERVER_URL',
+                                                       'NO_SOCIAL_AUTH_DISCOURSE_HDK_SERVER_URL')
 # Django will use django.core.files.storage.FileSystemStorage by default.
 # Uncomment the following lines if you want to use S3 storage instead.
 #
