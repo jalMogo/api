@@ -5,6 +5,7 @@ from django.test.client import RequestFactory
 # from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
+from django.contrib.auth.models import AnonymousUser
 # from mock import patch
 # from nose.tools import (istest, assert_equal, assert_not_equal, assert_in,
 #                         assert_raises)
@@ -549,6 +550,27 @@ class DataPermissionTests (TestCase):
         self.assertEqual(check_data_permission(submitter, None, place_id, 'update', dataset, 'places'), True)
         self.assertEqual(check_data_permission(submitter, None, place_id, 'create', dataset, 'places'), True)
         self.assertEqual(check_data_permission(submitter, None, place_id, 'destroy', dataset, 'places'), True)
+
+    def test_auth_required_restricts_anonymous_posting(self):
+        owner = User.objects.create(username='myowner')
+        submitter = User.objects.create(username='mysubmitter')
+        dataset = DataSet.objects.create(slug='data', owner_id=owner.id, auth_required=True)
+
+        anon_submitter = AnonymousUser()
+
+        perm = dataset.permissions.all().get()
+        perm.can_create = True
+        perm.save()
+
+        # Place permissions should allow creation operations by a
+        # submitter, but not by an anonymous submitter:
+        self.assertEqual(check_data_permission(submitter, None, None, 'create', dataset, 'places'), True)
+        self.assertEqual(check_data_permission(submitter, None, None, 'create', dataset, 'comments'), True)
+        self.assertEqual(check_data_permission(submitter, None, None, 'create', dataset, 'support'), True)
+
+        self.assertEqual(check_data_permission(anon_submitter, None, None, 'create', dataset, 'places'), False)
+        self.assertEqual(check_data_permission(anon_submitter, None, None, 'create', dataset, 'comments'), False)
+        self.assertEqual(check_data_permission(anon_submitter, None, None, 'create', dataset, 'support'), False)
 
 
 # More permissions tests to write:

@@ -184,6 +184,11 @@ def check_data_permission(user, client, place_id, do_action, dataset, resource, 
     if user and user.is_superuser:
         return True
 
+    # Don't allow anonymous submitters to create on auth_only datasets:
+    if dataset and dataset.auth_required and do_action == 'create' and \
+       (not user or not user.is_authenticated()):
+        return False
+
     # Owner can do anything
     if user and dataset and user.id == dataset.owner_id:
         return True

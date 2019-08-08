@@ -50,6 +50,7 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
         if (request.method in permissions.SAFE_METHODS or
             is_owner(request.user, request) or request.user.is_superuser
             or (hasattr(request, 'client') and
+                # check if the request's dataset's owner matches the CORS origin:
                 hasattr(request.client, 'owner') and
                 is_owner(request.client.owner, request))):
             return True
