@@ -131,6 +131,11 @@ class DataSet (CloneableModelMixin, CacheClearingModel, models.Model):
     owner = models.ForeignKey(User, related_name='datasets')
     display_name = models.CharField(max_length=128)
     slug = models.SlugField(max_length=128, default=u'')
+    auth_required = models.BooleanField(
+        help_text='If True, then users must authenticate before they can post to this dataset',
+        default=False,
+        blank=True
+    )
 
     cache = cache.DataSetCache()
     # previous_version = 'sa_api_v1.models.DataSet'
@@ -298,10 +303,7 @@ class Place (SubmittedThing):
     def check_jwt(self, jwt_public):
         try:
             payload = jwt.decode(jwt_public, settings.JWT_SECRET, algorithm='RS256')
-            if payload['place_id'] == self.id:
-                return True
-            else:
-                return False
+            return payload['place_id'] == self.id
         except (
             InvalidTokenError,
             DecodeError,
