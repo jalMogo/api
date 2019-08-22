@@ -8,6 +8,7 @@ from django.core.exceptions import (
     ValidationError,
     ObjectDoesNotExist,
 )
+from django.contrib.auth.models import AnonymousUser
 from ..models import (
     Form,
     FormStage,
