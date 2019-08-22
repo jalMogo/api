@@ -33,6 +33,8 @@ from sa_api_v2.serializers import (
     DataSetSerializer,
     SubmissionSerializer,
     FlavorSerializer,
+    FlavorFixtureSerializer,
+    FormFixtureSerializer,
 )
 from social_django.models import UserSocialAuth
 import json
@@ -547,3 +549,25 @@ class TestFlavorSerializer (TestCase):
             form1.get('stages')[0].get('modules')[2].get('groupmodule').get('modules')[0].get('htmlmodule').get('content'),
             self.grouped_html_module_content,
         )
+
+
+class TestFormDeserializers (TestCase):
+    @classmethod
+    def setUpTestData(self):
+        User.objects.all().delete()
+        DataSet.objects.all().delete()
+        self.owner = User.objects.create(username='myuser')
+        self.dataset = DataSet.objects.create(slug='test-dataset',
+                                              owner_id=self.owner.id)
+
+    def test_deserialize_flavor(self):
+        test_dir = path.dirname(__file__)
+        fixture_dir = path.join(test_dir, 'fixtures')
+        flavor_data_file = path.join(fixture_dir, 'flavor.json')
+        data = json.load(open(flavor_data_file))
+        serializer = FlavorFixtureSerializer(data=data['flavor'])
+        self.assertTrue(serializer.is_valid())
+        flavor = serializer.save()
+        forms = flavor.forms.all()
+        form = forms[0]
+        self.assertEqual(form.dataset.id, self.dataset.id)

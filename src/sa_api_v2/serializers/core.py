@@ -920,3 +920,37 @@ class FlavorSerializer (serializers.ModelSerializer):
     class Meta:
         model = models.Flavor
         fields = ['display_name', 'slug', 'forms']
+
+
+################################################################################
+# Fixture serializers
+################################################################################
+
+
+class FormFixtureSerializer (serializers.ModelSerializer):
+    dataset = serializers.SlugRelatedField(
+        slug_field='slug',
+        queryset=models.DataSet.objects.all(),
+    )
+    # TODO: serialize FormStage data from fixture
+    # stages = FormStageSerializer(many=True)
+
+    class Meta:
+        model = models.Form
+        # fields = ['label', 'is_enabled', 'dataset', 'stages']
+        fields = ['label', 'is_enabled', 'dataset']
+
+
+class FlavorFixtureSerializer (serializers.ModelSerializer):
+    forms = FormFixtureSerializer(many=True)
+
+    class Meta:
+        model = models.Flavor
+        fields = ['display_name', 'slug', 'forms']
+
+    def create(self, validated_data):
+        forms_data = validated_data.pop('forms')
+        flavor = models.Flavor.objects.create(**validated_data)
+        for form_data in forms_data:
+            models.Form.objects.create(flavor=flavor, **form_data)
+        return flavor
