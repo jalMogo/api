@@ -138,7 +138,10 @@ class BaseUserSerializer (serializers.ModelSerializer):
 
     def get_name(self, obj):
         user_data, strategy = self.get_strategy(obj)
-        return strategy.extract_full_name(user_data)
+        # return the user's name, if it exists in our model. If not, return the
+        # user's name provided by the strategy:
+        name = " ".join([name for name in [obj.first_name, obj.last_name] if name])
+        return name or strategy.extract_full_name(user_data)
 
     def get_avatar_url(self, obj):
         user_data, strategy = self.get_strategy(obj)
