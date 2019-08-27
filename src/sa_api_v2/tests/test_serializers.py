@@ -33,8 +33,10 @@ from sa_api_v2.serializers import (
     DataSetSerializer,
     SubmissionSerializer,
     FlavorSerializer,
-    FlavorFixtureSerializer,
+    LayerGroupSerializer,
     FormFixtureSerializer,
+    FlavorFixtureSerializer,
+    FormStageFixtureSerializer,
 )
 from social_django.models import UserSocialAuth
 import json
@@ -565,9 +567,37 @@ class TestFormDeserializers (TestCase):
         fixture_dir = path.join(test_dir, 'fixtures')
         flavor_data_file = path.join(fixture_dir, 'flavor.json')
         data = json.load(open(flavor_data_file))
-        serializer = FlavorFixtureSerializer(data=data['flavor'])
-        self.assertTrue(serializer.is_valid())
-        flavor = serializer.save()
+
+        # create our LayerGroup models:
+        layer_group_serializer = LayerGroupSerializer(
+            data=data['layer_groups'], 
+            many=True,
+        )
+        self.assertTrue(layer_group_serializer.is_valid())
+        layer_group_serializer.save()
+
+        # create our Form models:
+        form_serializer = FormFixtureSerializer(data=data['forms'], many=True)
+        self.assertTrue(form_serializer.is_valid())
+        form_serializer.save()
+
+        # create our FormStage models:
+        form_stage_serializer = FormStageFixtureSerializer(
+            data=data['form_stages'], 
+            many=True,
+        )
+        self.assertTrue(form_stage_serializer.is_valid())
+        form_stage_serializer.save()
+
+        # create our Flavor models:
+        flavor_serializer = FlavorFixtureSerializer(data=data['flavor'])
+        self.assertTrue(flavor_serializer.is_valid())
+        flavor = flavor_serializer.save()
         forms = flavor.forms.all()
         form = forms[0]
+
+        # assert that our form is valid:
         self.assertEqual(form.dataset.id, self.dataset.id)
+        # assert that our form stages are valid:
+        self.assertEqual(form.stages.all()[0].visible_layer_groups.all()[0].label, "layer1")
+        self.assertEqual(form.stages.all()[1].map_viewport.zoom, 12)

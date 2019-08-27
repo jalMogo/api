@@ -1,14 +1,42 @@
 {
+  "layer_groups": [
+    {
+      "label": "layer1"
+    },
+    {
+      "label": "layer2"
+    }
+  ],
+  "forms": [
+    {
+      "label": "form1",
+      "is_enabled": true,
+      "dataset": "test-dataset"
+    }
+  ],
+  "form_stages": [
+    {
+      "form": "form1",
+      "order": 1,
+      "visible_layer_groups": ["layer1", "layer2"]
+    },
+    {
+      "form": "form1",
+      "order": 2,
+      "visible_layer_groups": ["layer1", "layer2"],
+      "map_viewport": {
+        "zoom": 12,
+        "latitude": 44.4,
+        "longitude": -120.4,
+        "bearing": 24,
+        "transition_duration": 80,
+        "pitch": 20
+      }
+    }
+  ],
   "flavor": {
     "display_name": "test-flavor",
     "slug": "test-flavor",
-    "forms": [
-      {
-        "label": "form1",
-        "is_enabled": true,
-        "dataset": "test-dataset"
-      }
-    ]
-  },
-  "formStages": []
+    "forms": ["form1"]
+  }
 }

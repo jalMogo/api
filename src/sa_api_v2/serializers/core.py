@@ -926,31 +926,53 @@ class FlavorSerializer (serializers.ModelSerializer):
 # Fixture serializers
 ################################################################################
 
+class FormStageFixtureSerializer (serializers.ModelSerializer):
+    visible_layer_groups = serializers.SlugRelatedField(
+        many=True,
+        slug_field="label",
+        queryset=models.LayerGroup.objects.all(),
+    )
+
+    map_viewport = MapViewportSerializer(required=False)
+
+    form = serializers.SlugRelatedField(
+        slug_field="label",
+        queryset=models.Form.objects.all(),
+    )
+
+    class Meta:
+        model = models.FormStage
+        fields = ['visible_layer_groups', 'map_viewport', 'order', 'form']
+
+    def create(self, validated_data):
+        viewport_data = validated_data.pop('map_viewport', None)
+        layer_groups = validated_data.pop('visible_layer_groups', [])
+        stage = models.FormStage.objects.create(**validated_data)
+        map(
+            lambda layer_group, stage=stage: stage.visible_layer_groups.add(layer_group), layer_groups
+        )
+        if viewport_data is not None:
+            models.MapViewport.objects.create(stage=stage, **viewport_data)
+        return stage
+
 
 class FormFixtureSerializer (serializers.ModelSerializer):
     dataset = serializers.SlugRelatedField(
         slug_field='slug',
         queryset=models.DataSet.objects.all(),
     )
-    # TODO: serialize FormStage data from fixture
-    # stages = FormStageSerializer(many=True)
 
     class Meta:
         model = models.Form
-        # fields = ['label', 'is_enabled', 'dataset', 'stages']
         fields = ['label', 'is_enabled', 'dataset']
 
-
 class FlavorFixtureSerializer (serializers.ModelSerializer):
-    forms = FormFixtureSerializer(many=True)
+    forms = serializers.SlugRelatedField(
+        many=True,
+        slug_field='label',
+        queryset=models.Form.objects.all(),
+    )
 
     class Meta:
         model = models.Flavor
         fields = ['display_name', 'slug', 'forms']
-
-    def create(self, validated_data):
-        forms_data = validated_data.pop('forms')
-        flavor = models.Flavor.objects.create(**validated_data)
-        for form_data in forms_data:
-            models.Form.objects.create(flavor=flavor, **form_data)
-        return flavor
