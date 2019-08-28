@@ -815,18 +815,22 @@ class RadioFieldModuleSerializer (serializers.ModelSerializer):
         model = models.RadioField
         fields = BaseFormFieldSerializer.Meta.fields + ['variant', 'dropdown_placeholder', 'options']
 
+    def create(self, validated_data):
+        options_data = validated_data.pop('options', None)
+        radiofield = models.RadioField.objects.create(**validated_data)
+        return radiofield
 
 class AbstractFormModuleSerializer (serializers.ModelSerializer):
-    htmlmodule = HtmlModuleSerializer()
-    skipstagemodule = SkipStageModuleSerializer()
-    radiofield = RadioFieldModuleSerializer()
-    numberfield = NumberFieldModuleSerializer()
-    filefield = FileFieldModuleSerializer()
-    datefield = DateFieldModuleSerializer()
-    checkboxfield = CheckboxFieldModuleSerializer()
-    textfield = TextFieldModuleSerializer()
-    geocodingfield = GeocodingFieldModuleSerializer()
-    textareafield = TextAreaFieldModuleSerializer()
+    htmlmodule = HtmlModuleSerializer(required=False)
+    skipstagemodule = SkipStageModuleSerializer(required=False)
+    radiofield = RadioFieldModuleSerializer(required=False)
+    numberfield = NumberFieldModuleSerializer(required=False)
+    filefield = FileFieldModuleSerializer(required=False)
+    datefield = DateFieldModuleSerializer(required=False)
+    checkboxfield = CheckboxFieldModuleSerializer(required=False)
+    textfield = TextFieldModuleSerializer(required=False)
+    geocodingfield = GeocodingFieldModuleSerializer(required=False)
+    textareafield = TextAreaFieldModuleSerializer(required=False)
 
     # removes "null" fields
     def to_representation(self, instance):
@@ -875,12 +879,30 @@ class GroupModuleSerializer (serializers.ModelSerializer):
 
 
 class OrderedModuleSerializer (AbstractFormModuleSerializer):
-    groupmodule = GroupModuleSerializer()
+    groupmodule = GroupModuleSerializer(required=False)
 
     class Meta:
         model = models.OrderedModule
         exclude = ['stage']
 
+    def create(self, validated_data):
+        radiofield_data = validated_data.pop('radiofield', None)
+
+        stage = self.context.get("stage")
+        ordered_module = models.OrderedModule.objects.create(
+            stage=stage,
+            **validated_data
+        )
+
+        if radiofield_data is not None:
+            radiofield_serializer = RadioFieldModuleSerializer(data=radiofield_data)
+            if not radiofield_serializer.is_valid():
+                raise serializers.ValidationError(
+                    "OrderedModuleSerializer failed to validate: {}".format(radiofield_serializer.errors)
+                )
+            rf = radiofield_serializer.save()
+            rf.ordered_modules.add(ordered_module)
+        return ordered_module
 
 class LayerGroupSerializer (serializers.ModelSerializer):
     class Meta:
@@ -927,6 +949,9 @@ class FlavorSerializer (serializers.ModelSerializer):
 ################################################################################
 
 class FormStageFixtureSerializer (serializers.ModelSerializer):
+    modules = OrderedModuleSerializer(
+        many=True,
+    )
     visible_layer_groups = serializers.SlugRelatedField(
         many=True,
         slug_field="label",
@@ -942,10 +967,11 @@ class FormStageFixtureSerializer (serializers.ModelSerializer):
 
     class Meta:
         model = models.FormStage
-        fields = ['visible_layer_groups', 'map_viewport', 'order', 'form']
+        fields = ['visible_layer_groups', 'map_viewport', 'order', 'form', 'modules']
 
     def create(self, validated_data):
         viewport_data = validated_data.pop('map_viewport', None)
+        modules_data = validated_data.pop('modules')
         layer_groups = validated_data.pop('visible_layer_groups', [])
         stage = models.FormStage.objects.create(**validated_data)
         map(
@@ -953,6 +979,16 @@ class FormStageFixtureSerializer (serializers.ModelSerializer):
         )
         if viewport_data is not None:
             models.MapViewport.objects.create(stage=stage, **viewport_data)
+        for module_data in modules_data:
+            serializer = OrderedModuleSerializer(
+                data=module_data,
+                context={"stage": stage},
+            )
+            if not serializer.is_valid():
+                raise serializers.ValidationError(
+                    "FormStage failed to validate: {}".format(serializer.errors)
+                )
+            serializer.save()
         return stage
 
 

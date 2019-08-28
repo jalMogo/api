@@ -18,7 +18,20 @@
     {
       "form": "form1",
       "order": 1,
-      "visible_layer_groups": ["layer1", "layer2"]
+      "visible_layer_groups": ["layer1", "layer2"],
+      "modules": [
+        {
+          "order": 1,
+          "visible": true,
+          "radiofield": {
+            "key": "project",
+            "options": [],
+            "prompt": "what is your project idea?",
+            "label": "my project idea is:",
+            "variant": "radio"
+          }
+        }
+      ]
     },
     {
       "form": "form1",
@@ -31,7 +44,8 @@
         "bearing": 24,
         "transition_duration": 80,
         "pitch": 20
-      }
+      },
+      "modules": []
     }
   ],
   "flavor": {

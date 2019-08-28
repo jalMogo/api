@@ -570,7 +570,7 @@ class TestFormDeserializers (TestCase):
 
         # create our LayerGroup models:
         layer_group_serializer = LayerGroupSerializer(
-            data=data['layer_groups'], 
+            data=data['layer_groups'],
             many=True,
         )
         self.assertTrue(layer_group_serializer.is_valid())
@@ -583,7 +583,7 @@ class TestFormDeserializers (TestCase):
 
         # create our FormStage models:
         form_stage_serializer = FormStageFixtureSerializer(
-            data=data['form_stages'], 
+            data=data['form_stages'],
             many=True,
         )
         self.assertTrue(form_stage_serializer.is_valid())
@@ -601,3 +601,7 @@ class TestFormDeserializers (TestCase):
         # assert that our form stages are valid:
         self.assertEqual(form.stages.all()[0].visible_layer_groups.all()[0].label, "layer1")
         self.assertEqual(form.stages.all()[1].map_viewport.zoom, 12)
+        self.assertEqual(
+            form.stages.all()[0].modules.all()[0].radiofield.label,
+            "my project idea is:"
+        )
