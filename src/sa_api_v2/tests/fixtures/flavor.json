@@ -25,10 +25,15 @@
           "visible": true,
           "radiofield": {
             "key": "project",
-            "options": [],
             "prompt": "what is your project idea?",
             "label": "my project idea is:",
-            "variant": "radio"
+            "variant": "radio",
+            "options": [
+              {
+                "label": "Art",
+                "value": "art"
+              }
+            ]
           }
         }
       ]

@@ -753,7 +753,7 @@ class BaseFormFieldOptionSerializer (serializers.ModelSerializer):
 
 class RadioOptionSerializer (BaseFormFieldOptionSerializer):
 
-    class Meta(BaseFormFieldOptionSerializer):
+    class Meta(BaseFormFieldOptionSerializer.Meta):
         model = models.RadioOption
         fields = BaseFormFieldOptionSerializer.Meta.fields + ['label', 'value']
 
@@ -809,7 +809,7 @@ class FileFieldModuleSerializer (serializers.ModelSerializer):
 
 
 class RadioFieldModuleSerializer (serializers.ModelSerializer):
-    options = RadioOptionSerializer(many=True)
+    options = RadioOptionSerializer(many=True, required=False)
 
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.RadioField
@@ -818,6 +818,11 @@ class RadioFieldModuleSerializer (serializers.ModelSerializer):
     def create(self, validated_data):
         options_data = validated_data.pop('options', None)
         radiofield = models.RadioField.objects.create(**validated_data)
+        for option_data in options_data:
+            models.RadioOption.objects.create(
+                field=radiofield,
+                **option_data
+            )
         return radiofield
 
 class AbstractFormModuleSerializer (serializers.ModelSerializer):

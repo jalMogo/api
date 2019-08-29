@@ -598,7 +598,7 @@ class RadioOption(FormFieldOption):
     )
 
     def __unicode__(self):
-        return "RadioOption with label: {} on field: {}".format(self.label, self.field)
+        return "RadioOption with label: '{}' on field: {}".format(self.label, self.field)
 
     class Meta:
         db_table = 'ms_api_form_module_option_radio'

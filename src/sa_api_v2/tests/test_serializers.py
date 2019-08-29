@@ -605,3 +605,7 @@ class TestFormDeserializers (TestCase):
             form.stages.all()[0].modules.all()[0].radiofield.label,
             "my project idea is:"
         )
+        self.assertEqual(
+            form.stages.all()[0].modules.all()[0].radiofield.options.all()[0].label,
+            "Art"
+        )
