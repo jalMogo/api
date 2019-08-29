@@ -56,6 +56,20 @@
               }
             ]
           }
+        },
+        {
+          "order": 3,
+          "visible": true,
+          "numberfield": {
+            "key": "water-lines",
+            "prompt": "how many meters of waterlines are on your property?",
+            "label": "waterlines (in meters):",
+            "required": true,
+            "private": true,
+            "placeholder": "enter meters of waterlines here (eg: 32)",
+            "minimum": 5,
+            "units": "miles"
+          }
         }
       ]
     },

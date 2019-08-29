@@ -121,3 +121,12 @@ class AttachmentSerializerMixin (EmptyModelSerializer, serializers.ModelSerializ
         ret = super(AttachmentSerializerMixin, self).to_representation(instance)
         ret['id'] = instance.pk
         return ret
+
+
+class FormModulesSerializer (serializers.ModelSerializer):
+    def validate(self, data):
+        if hasattr(self, 'initial_data'):
+            unknown_keys = set(self.initial_data.keys()) - set(data.keys())
+            if unknown_keys:
+                raise serializers.ValidationError("Got unknown fields: {}".format(unknown_keys))
+        return data

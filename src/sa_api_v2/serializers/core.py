@@ -14,6 +14,7 @@ from .mixins import (
     EmptyModelSerializer,
     DataBlobProcessor,
     AttachmentSerializerMixin,
+    FormModulesSerializer,
 )
 
 from .fields import (
@@ -723,6 +724,9 @@ class ActionSerializer (EmptyModelSerializer, serializers.ModelSerializer):
 
         return serializer.data
 
+#################################################################################
+# Form Serializers
+#################################################################################
 
 class SkipStageModuleSerializer (serializers.ModelSerializer):
     class Meta:
@@ -765,62 +769,44 @@ class RadioOptionSerializer (BaseFormFieldOptionSerializer):
         fields = BaseFormFieldOptionSerializer.Meta.fields + ['label', 'value']
 
 
-class BaseFormFieldSerializer (serializers.ModelSerializer):
+class BaseFormFieldSerializer (FormModulesSerializer):
     class Meta:
         abstract = True
         fields = ['key', 'prompt', 'label', 'private', 'required']
 
 
-class GeocodingFieldModuleSerializer (serializers.ModelSerializer):
+class GeocodingFieldModuleSerializer (FormModulesSerializer):
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.GeocodingField
         fields = BaseFormFieldSerializer.Meta.fields + ['placeholder']
 
 
-class CheckboxFieldModuleSerializer (serializers.ModelSerializer):
-    options = CheckboxOptionSerializer(many=True, required=False)
-
-    class Meta(BaseFormFieldSerializer.Meta):
-        model = models.CheckboxField
-        fields = BaseFormFieldSerializer.Meta.fields + ['options']
-
-    def create(self, validated_data):
-        options_data = validated_data.pop('options', None)
-        checkboxfield = models.CheckboxField.objects.create(**validated_data)
-        for option_data in options_data:
-            models.CheckboxOption.objects.create(
-                field=checkboxfield,
-                **option_data
-            )
-        return checkboxfield
-
-
-class TextAreaFieldModuleSerializer (serializers.ModelSerializer):
+class TextAreaFieldModuleSerializer (FormModulesSerializer):
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.TextAreaField
         fields = BaseFormFieldSerializer.Meta.fields + ['placeholder']
 
 
-class TextFieldModuleSerializer (serializers.ModelSerializer):
+class TextFieldModuleSerializer (FormModulesSerializer):
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.TextField
         fields = BaseFormFieldSerializer.Meta.fields + ['placeholder']
 
 
-class DateFieldModuleSerializer (serializers.ModelSerializer):
+class DateFieldModuleSerializer (FormModulesSerializer):
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.DateField
         fields = BaseFormFieldSerializer.Meta.fields + ['placeholder', 'include_ongoing']
 
 
-class NumberFieldModuleSerializer (serializers.ModelSerializer):
+class NumberFieldModuleSerializer (FormModulesSerializer):
 
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.NumberField
         fields = BaseFormFieldSerializer.Meta.fields + ['placeholder', 'minimum', 'units']
 
 
-class FileFieldModuleSerializer (serializers.ModelSerializer):
+class FileFieldModuleSerializer (FormModulesSerializer):
 
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.FileField
@@ -844,7 +830,26 @@ class RadioFieldModuleSerializer (serializers.ModelSerializer):
             )
         return radiofield
 
-class AbstractFormModuleSerializer (serializers.ModelSerializer):
+
+class CheckboxFieldModuleSerializer (FormModulesSerializer):
+    options = CheckboxOptionSerializer(many=True, required=False)
+
+    class Meta(BaseFormFieldSerializer.Meta):
+        model = models.CheckboxField
+        fields = BaseFormFieldSerializer.Meta.fields + ['options']
+
+    def create(self, validated_data):
+        options_data = validated_data.pop('options', None)
+        checkboxfield = models.CheckboxField.objects.create(**validated_data)
+        for option_data in options_data:
+            models.CheckboxOption.objects.create(
+                field=checkboxfield,
+                **option_data
+            )
+        return checkboxfield
+
+
+class AbstractFormModuleSerializer (FormModulesSerializer):
     htmlmodule = HtmlModuleSerializer(required=False)
     skipstagemodule = SkipStageModuleSerializer(required=False)
     radiofield = RadioFieldModuleSerializer(required=False)
@@ -901,6 +906,18 @@ class GroupModuleSerializer (serializers.ModelSerializer):
         model = models.GroupModule
         fields = ['label', 'modules']
 
+MODULES = {
+    "htmlmodule": HtmlModuleSerializer,
+    "skipstagemodule": SkipStageModuleSerializer,
+    "radiofield": RadioFieldModuleSerializer,
+    "numberfield": NumberFieldModuleSerializer,
+    "filefield": FileFieldModuleSerializer,
+    "datefield": DateFieldModuleSerializer,
+    "checkboxfield": CheckboxFieldModuleSerializer,
+    "textfield": TextFieldModuleSerializer,
+    "geocodingfield": GeocodingFieldModuleSerializer,
+    "textareafield": TextAreaFieldModuleSerializer,
+}
 
 class OrderedModuleSerializer (AbstractFormModuleSerializer):
     groupmodule = GroupModuleSerializer(required=False)
@@ -910,8 +927,10 @@ class OrderedModuleSerializer (AbstractFormModuleSerializer):
         exclude = ['stage']
 
     def create(self, validated_data):
-        radiofield_data = validated_data.pop('radiofield', None)
-        checkbox_data = validated_data.pop('checkboxfield', None)
+        fieldname = next(
+            fieldname for fieldname in MODULES.keys() if validated_data.has_key(fieldname) 
+        )
+        field_data = validated_data.pop(fieldname)
 
         stage = self.context.get("stage")
         ordered_module = models.OrderedModule.objects.create(
@@ -919,23 +938,18 @@ class OrderedModuleSerializer (AbstractFormModuleSerializer):
             **validated_data
         )
 
-        if radiofield_data is not None:
-            radiofield_serializer = RadioFieldModuleSerializer(data=radiofield_data)
-            if not radiofield_serializer.is_valid():
+        if field_data is not None:
+            field_serializer = MODULES[fieldname](
+                data=self.initial_data.get(fieldname)
+            )
+            if not field_serializer.is_valid():
                 raise serializers.ValidationError(
-                    "OrderedModuleSerializer failed to validate: {}".format(radiofield_serializer.errors)
+                    "OrderedModuleSerializer failed to validate: {}".format(field_serializer.errors)
                 )
-            rf = radiofield_serializer.save()
-            rf.ordered_modules.add(ordered_module)
-
-        if checkbox_data is not None:
-            checkboxfield_serializer = CheckboxFieldModuleSerializer(data=checkbox_data)
-            if not checkboxfield_serializer.is_valid():
-                raise serializers.ValidationError(
-                    "OrderedModuleSerializer failed to validate: {}".format(checkboxfield_serializer.errors)
-                )
-            cf = checkboxfield_serializer.save()
-            cf.ordered_modules.add(ordered_module)
+            field = field_serializer.save()
+            field.ordered_modules.add(ordered_module)
+        else:
+            raise serializers.ValidationError("no data found for fieldname: {}".format(fieldname))
 
         return ordered_module
 
@@ -980,7 +994,7 @@ class FlavorSerializer (serializers.ModelSerializer):
 
 
 ################################################################################
-# Fixture serializers
+# Form Fixture serializers
 ################################################################################
 
 class FormStageFixtureSerializer (serializers.ModelSerializer):
@@ -1016,7 +1030,9 @@ class FormStageFixtureSerializer (serializers.ModelSerializer):
         )
         if viewport_data is not None:
             models.MapViewport.objects.create(stage=stage, **viewport_data)
-        for module_data in modules_data:
+        # use self.initial data instead of modules_data, so that we can validate
+        # it within our module serializer:
+        for module_data in  self.initial_data[0].get('modules'):
             serializer = OrderedModuleSerializer(
                 data=module_data,
                 context={"stage": stage},
