@@ -36,7 +36,6 @@
     {
       "form": "form1",
       "order": 2,
-      "visible_layer_groups": ["layer1", "layer2"],
       "map_viewport": {
         "zoom": 12,
         "latitude": 44.4,

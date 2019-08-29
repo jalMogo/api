@@ -956,6 +956,7 @@ class FormStageFixtureSerializer (serializers.ModelSerializer):
         many=True,
         slug_field="label",
         queryset=models.LayerGroup.objects.all(),
+        required=False,
     )
 
     map_viewport = MapViewportSerializer(required=False)
@@ -974,6 +975,7 @@ class FormStageFixtureSerializer (serializers.ModelSerializer):
         modules_data = validated_data.pop('modules')
         layer_groups = validated_data.pop('visible_layer_groups', [])
         stage = models.FormStage.objects.create(**validated_data)
+        # Since LayerGroups are many-to-many, we need to create the FormStage before adding the LayerGroups to it:
         map(
             lambda layer_group, stage=stage: stage.visible_layer_groups.add(layer_group), layer_groups
         )
