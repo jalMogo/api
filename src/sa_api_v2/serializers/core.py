@@ -751,6 +751,13 @@ class BaseFormFieldOptionSerializer (serializers.ModelSerializer):
         fields = ['visibility_triggers']
 
 
+class CheckboxOptionSerializer (BaseFormFieldOptionSerializer):
+
+    class Meta(BaseFormFieldOptionSerializer.Meta):
+        model = models.CheckboxOption
+        fields = BaseFormFieldOptionSerializer.Meta.fields + ['label', 'value']
+
+
 class RadioOptionSerializer (BaseFormFieldOptionSerializer):
 
     class Meta(BaseFormFieldOptionSerializer.Meta):
@@ -771,9 +778,21 @@ class GeocodingFieldModuleSerializer (serializers.ModelSerializer):
 
 
 class CheckboxFieldModuleSerializer (serializers.ModelSerializer):
+    options = CheckboxOptionSerializer(many=True, required=False)
+
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.CheckboxField
-        fields = BaseFormFieldSerializer.Meta.fields
+        fields = BaseFormFieldSerializer.Meta.fields + ['options']
+
+    def create(self, validated_data):
+        options_data = validated_data.pop('options', None)
+        checkboxfield = models.CheckboxField.objects.create(**validated_data)
+        for option_data in options_data:
+            models.CheckboxOption.objects.create(
+                field=checkboxfield,
+                **option_data
+            )
+        return checkboxfield
 
 
 class TextAreaFieldModuleSerializer (serializers.ModelSerializer):
@@ -892,6 +911,7 @@ class OrderedModuleSerializer (AbstractFormModuleSerializer):
 
     def create(self, validated_data):
         radiofield_data = validated_data.pop('radiofield', None)
+        checkbox_data = validated_data.pop('checkboxfield', None)
 
         stage = self.context.get("stage")
         ordered_module = models.OrderedModule.objects.create(
@@ -907,6 +927,16 @@ class OrderedModuleSerializer (AbstractFormModuleSerializer):
                 )
             rf = radiofield_serializer.save()
             rf.ordered_modules.add(ordered_module)
+
+        if checkbox_data is not None:
+            checkboxfield_serializer = CheckboxFieldModuleSerializer(data=checkbox_data)
+            if not checkboxfield_serializer.is_valid():
+                raise serializers.ValidationError(
+                    "OrderedModuleSerializer failed to validate: {}".format(checkboxfield_serializer.errors)
+                )
+            cf = checkboxfield_serializer.save()
+            cf.ordered_modules.add(ordered_module)
+
         return ordered_module
 
 class LayerGroupSerializer (serializers.ModelSerializer):

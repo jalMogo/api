@@ -35,6 +35,27 @@
               }
             ]
           }
+        },
+        {
+          "order": 2,
+          "visible": true,
+          "checkboxfield": {
+            "key": "project",
+            "prompt": "what is your ethnicity?",
+            "label": "my ethnicity is:",
+            "required": true,
+            "private": true,
+            "options": [
+              {
+                "label": "White",
+                "value": "white"
+              },
+              {
+                "label": "Black",
+                "value": "black"
+              }
+            ]
+          }
         }
       ]
     },
