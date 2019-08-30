@@ -752,7 +752,7 @@ class BaseFormFieldOptionSerializer (serializers.ModelSerializer):
 
     class Meta:
         abstract = True
-        fields = ['visibility_triggers']
+        fields = ['visibility_triggers', 'order']
 
 
 class CheckboxOptionSerializer (BaseFormFieldOptionSerializer):
@@ -832,14 +832,14 @@ class RadioFieldModuleSerializer (serializers.ModelSerializer):
 
 
 class CheckboxFieldModuleSerializer (FormModulesSerializer):
-    options = CheckboxOptionSerializer(many=True, required=False)
+    options = CheckboxOptionSerializer(many=True)
 
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.CheckboxField
         fields = BaseFormFieldSerializer.Meta.fields + ['options']
 
     def create(self, validated_data):
-        options_data = validated_data.pop('options', None)
+        options_data = validated_data.pop('options')
         checkboxfield = models.CheckboxField.objects.create(**validated_data)
         for option_data in options_data:
             models.CheckboxOption.objects.create(
@@ -928,7 +928,7 @@ class OrderedModuleSerializer (AbstractFormModuleSerializer):
 
     def create(self, validated_data):
         fieldname = next(
-            fieldname for fieldname in MODULES.keys() if validated_data.has_key(fieldname) 
+            fieldname for fieldname in MODULES.keys() if validated_data.has_key(fieldname)
         )
         field_data = validated_data.pop(fieldname)
 

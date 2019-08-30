@@ -611,9 +611,10 @@ class TestFormDeserializers (TestCase):
             "Art"
         )
 
+        options = form.stages.all()[0].modules.all()[1].checkboxfield.options.all()
         self.assertEqual(
-            form.stages.all()[0].modules.all()[1].checkboxfield.options.all()[1].label,
-            "Black"
+            map(lambda option: option.label, options),
+            ['Black', 'White']
         )
 
         self.assertEqual(

@@ -47,14 +47,14 @@
             "private": true,
             "options": [
               {
-                "order": 1,
-                "label": "White",
-                "value": "white"
-              },
-              {
                 "order": 2,
                 "label": "Black",
                 "value": "black"
+              },
+              {
+                "order": 1,
+                "label": "White",
+                "value": "white"
               }
             ]
           }
