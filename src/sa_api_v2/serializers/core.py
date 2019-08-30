@@ -14,7 +14,8 @@ from .mixins import (
     EmptyModelSerializer,
     DataBlobProcessor,
     AttachmentSerializerMixin,
-    FormModulesSerializer,
+    FormModulesValidator,
+    FormFieldOptionsCreator,
 )
 
 from .fields import (
@@ -728,18 +729,6 @@ class ActionSerializer (EmptyModelSerializer, serializers.ModelSerializer):
 # Form Serializers
 #################################################################################
 
-class SkipStageModuleSerializer (serializers.ModelSerializer):
-    class Meta:
-        model = models.SkipStageModule
-        fields = ['label']
-
-
-class HtmlModuleSerializer (serializers.ModelSerializer):
-    class Meta:
-        model = models.HtmlModule
-        fields = ['content', 'label']
-
-
 class OrderedModuleIdentityField (serializers.ModelSerializer):
     class Meta:
         model = models.OrderedModule
@@ -754,6 +743,7 @@ class BaseFormFieldOptionSerializer (serializers.ModelSerializer):
         abstract = True
         fields = ['visibility_triggers', 'order']
 
+# Form Field Options
 
 class CheckboxOptionSerializer (BaseFormFieldOptionSerializer):
 
@@ -768,88 +758,107 @@ class RadioOptionSerializer (BaseFormFieldOptionSerializer):
         model = models.RadioOption
         fields = BaseFormFieldOptionSerializer.Meta.fields + ['label', 'value']
 
+# Form Modules
 
-class BaseFormFieldSerializer (FormModulesSerializer):
+class SkipStageModuleSerializer (
+    # FormModulesValidator,
+    serializers.ModelSerializer
+):
+    class Meta:
+        model = models.SkipStageModule
+        fields = ['label']
+
+
+class HtmlModuleSerializer (
+    # FormModulesValidator,
+    serializers.ModelSerializer
+):
+    class Meta:
+        model = models.HtmlModule
+        fields = ['content', 'label']
+
+# Form Fields
+
+class BaseFormFieldSerializer (
+    FormModulesValidator,
+    serializers.ModelSerializer
+):
     class Meta:
         abstract = True
         fields = ['key', 'prompt', 'label', 'private', 'required']
 
 
-class GeocodingFieldModuleSerializer (FormModulesSerializer):
+class GeocodingFieldModuleSerializer (BaseFormFieldSerializer):
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.GeocodingField
         fields = BaseFormFieldSerializer.Meta.fields + ['placeholder']
 
 
-class TextAreaFieldModuleSerializer (FormModulesSerializer):
+class TextAreaFieldModuleSerializer (BaseFormFieldSerializer):
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.TextAreaField
         fields = BaseFormFieldSerializer.Meta.fields + ['placeholder']
 
 
-class TextFieldModuleSerializer (FormModulesSerializer):
+class TextFieldModuleSerializer (BaseFormFieldSerializer):
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.TextField
         fields = BaseFormFieldSerializer.Meta.fields + ['placeholder']
 
 
-class DateFieldModuleSerializer (FormModulesSerializer):
+class DateFieldModuleSerializer (BaseFormFieldSerializer):
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.DateField
         fields = BaseFormFieldSerializer.Meta.fields + ['placeholder', 'include_ongoing']
 
 
-class NumberFieldModuleSerializer (FormModulesSerializer):
+class NumberFieldModuleSerializer (BaseFormFieldSerializer):
 
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.NumberField
         fields = BaseFormFieldSerializer.Meta.fields + ['placeholder', 'minimum', 'units']
 
 
-class FileFieldModuleSerializer (FormModulesSerializer):
+class FileFieldModuleSerializer (BaseFormFieldSerializer):
 
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.FileField
         fields = BaseFormFieldSerializer.Meta.fields
 
 
-class RadioFieldModuleSerializer (serializers.ModelSerializer):
+NESTED_MODULES = {
+    "radiofield": models.RadioOption,
+    "checkboxfield": models.RadioOption
+}
+
+
+class RadioFieldModuleSerializer (
+    FormFieldOptionsCreator,
+    BaseFormFieldSerializer
+):
     options = RadioOptionSerializer(many=True, required=False)
 
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.RadioField
         fields = BaseFormFieldSerializer.Meta.fields + ['variant', 'dropdown_placeholder', 'options']
-
-    def create(self, validated_data):
-        options_data = validated_data.pop('options', None)
-        radiofield = models.RadioField.objects.create(**validated_data)
-        for option_data in options_data:
-            models.RadioOption.objects.create(
-                field=radiofield,
-                **option_data
-            )
-        return radiofield
+        # custom attrs:
+        options_model = models.RadioOption
 
 
-class CheckboxFieldModuleSerializer (FormModulesSerializer):
+class CheckboxFieldModuleSerializer (
+    FormFieldOptionsCreator,
+    BaseFormFieldSerializer
+):
     options = CheckboxOptionSerializer(many=True)
 
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.CheckboxField
         fields = BaseFormFieldSerializer.Meta.fields + ['options']
-
-    def create(self, validated_data):
-        options_data = validated_data.pop('options')
-        checkboxfield = models.CheckboxField.objects.create(**validated_data)
-        for option_data in options_data:
-            models.CheckboxOption.objects.create(
-                field=checkboxfield,
-                **option_data
-            )
-        return checkboxfield
+        # custom attrs:
+        options_model = models.CheckboxOption
 
 
-class AbstractFormModuleSerializer (FormModulesSerializer):
+class AbstractFormModuleSerializer (serializers.ModelSerializer):
     htmlmodule = HtmlModuleSerializer(required=False)
     skipstagemodule = SkipStageModuleSerializer(required=False)
     radiofield = RadioFieldModuleSerializer(required=False)

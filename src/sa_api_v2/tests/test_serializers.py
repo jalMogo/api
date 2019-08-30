@@ -581,7 +581,6 @@ class TestFormDeserializers (TestCase):
         self.assertTrue(form_serializer.is_valid())
         form_serializer.save()
 
-
         # create our Flavor models:
         flavor_serializer = FlavorFixtureSerializer(data=data['flavor'])
         self.assertTrue(flavor_serializer.is_valid())

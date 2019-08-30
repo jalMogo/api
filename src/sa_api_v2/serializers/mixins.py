@@ -123,7 +123,20 @@ class AttachmentSerializerMixin (EmptyModelSerializer, serializers.ModelSerializ
         return ret
 
 
-class FormModulesSerializer (serializers.ModelSerializer):
+class FormFieldOptionsCreator (object):
+    def create(self, validated_data):
+        options_data = validated_data.pop('options', None)
+        field = self.Meta.model.objects.create(**validated_data)
+        for option_data in options_data:
+            # read from our custom attrs:
+            self.Meta.options_model.objects.create(
+                field=field,
+                **option_data
+            )
+        return field
+
+
+class FormModulesValidator (object):
     def validate(self, data):
         if hasattr(self, 'initial_data'):
             unknown_keys = set(self.initial_data.keys()) - set(data.keys())
