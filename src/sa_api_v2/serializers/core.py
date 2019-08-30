@@ -1010,20 +1010,19 @@ class FormStageFixtureSerializer (serializers.ModelSerializer):
 
     map_viewport = MapViewportSerializer(required=False)
 
-    form = serializers.SlugRelatedField(
-        slug_field="label",
-        queryset=models.Form.objects.all(),
-    )
-
     class Meta:
         model = models.FormStage
-        fields = ['visible_layer_groups', 'map_viewport', 'order', 'form', 'modules']
+        fields = ['visible_layer_groups', 'map_viewport', 'order', 'modules']
 
     def create(self, validated_data):
         viewport_data = validated_data.pop('map_viewport', None)
         modules_data = validated_data.pop('modules')
         layer_groups = validated_data.pop('visible_layer_groups', [])
-        stage = models.FormStage.objects.create(**validated_data)
+        form = self.context.get('form')
+        stage = models.FormStage.objects.create(
+            form=form,
+            **validated_data
+        )
         # Since LayerGroups are many-to-many, we need to create the FormStage before adding the LayerGroups to it:
         map(
             lambda layer_group, stage=stage: stage.visible_layer_groups.add(layer_group), layer_groups
@@ -1032,7 +1031,7 @@ class FormStageFixtureSerializer (serializers.ModelSerializer):
             models.MapViewport.objects.create(stage=stage, **viewport_data)
         # use self.initial data instead of modules_data, so that we can validate
         # it within our module serializer:
-        for module_data in  self.initial_data[0].get('modules'):
+        for module_data in  self.initial_data.get('modules'):
             serializer = OrderedModuleSerializer(
                 data=module_data,
                 context={"stage": stage},
@@ -1046,6 +1045,7 @@ class FormStageFixtureSerializer (serializers.ModelSerializer):
 
 
 class FormFixtureSerializer (serializers.ModelSerializer):
+    stages = FormStageFixtureSerializer(many=True)
     dataset = serializers.SlugRelatedField(
         slug_field='slug',
         queryset=models.DataSet.objects.all(),
@@ -1053,7 +1053,24 @@ class FormFixtureSerializer (serializers.ModelSerializer):
 
     class Meta:
         model = models.Form
-        fields = ['label', 'is_enabled', 'dataset']
+        fields = ['label', 'is_enabled', 'dataset', 'stages']
+
+    def create(self, validated_data):
+        stages_data = validated_data.pop('stages')
+        form = models.Form.objects.create(**validated_data)
+        # use self.initial data instead of stages_data, so that we can validate
+        # it within our module serializer:
+        for stage_data in self.initial_data[0].get('stages'):
+            serializer = FormStageFixtureSerializer(
+                data=stage_data,
+                context={"form": form}
+            )
+            if not serializer.is_valid():
+                raise serializers.ValidationError(
+                    "FormStage failed to validate: {}".format(serializer.errors)
+                )
+            serializer.save()
+        return form
 
 class FlavorFixtureSerializer (serializers.ModelSerializer):
     forms = serializers.SlugRelatedField(

@@ -11,82 +11,80 @@
     {
       "label": "form1",
       "is_enabled": true,
-      "dataset": "test-dataset"
-    }
-  ],
-  "form_stages": [
-    {
-      "form": "form1",
-      "order": 1,
-      "visible_layer_groups": ["layer1", "layer2"],
-      "modules": [
+      "dataset": "test-dataset",
+      "stages": [
         {
           "order": 1,
-          "visible": true,
-          "radiofield": {
-            "key": "project",
-            "prompt": "what is your project idea?",
-            "label": "my project idea is:",
-            "variant": "radio",
-            "options": [
-              {
-                "label": "Art",
-                "value": "art"
+          "visible_layer_groups": ["layer1", "layer2"],
+          "modules": [
+            {
+              "order": 1,
+              "visible": true,
+              "radiofield": {
+                "key": "project",
+                "prompt": "what is your project idea?",
+                "label": "my project idea is:",
+                "variant": "radio",
+                "options": [
+                  {
+                    "label": "Art",
+                    "value": "art"
+                  }
+                ]
               }
-            ]
-          }
+            },
+            {
+              "order": 2,
+              "visible": true,
+              "checkboxfield": {
+                "key": "project",
+                "prompt": "what is your ethnicity?",
+                "label": "my ethnicity is:",
+                "required": true,
+                "private": true,
+                "options": [
+                  {
+                    "order": 2,
+                    "label": "Black",
+                    "value": "black"
+                  },
+                  {
+                    "order": 1,
+                    "label": "White",
+                    "value": "white"
+                  }
+                ]
+              }
+            },
+            {
+              "order": 3,
+              "visible": true,
+              "numberfield": {
+                "key": "water-lines",
+                "prompt": "how many meters of waterlines are on your property?",
+                "label": "waterlines (in meters):",
+                "required": true,
+                "private": true,
+                "placeholder": "enter meters of waterlines here (eg: 32)",
+                "minimum": 5,
+                "units": "miles"
+              }
+            }
+          ]
         },
         {
           "order": 2,
-          "visible": true,
-          "checkboxfield": {
-            "key": "project",
-            "prompt": "what is your ethnicity?",
-            "label": "my ethnicity is:",
-            "required": true,
-            "private": true,
-            "options": [
-              {
-                "order": 2,
-                "label": "Black",
-                "value": "black"
-              },
-              {
-                "order": 1,
-                "label": "White",
-                "value": "white"
-              }
-            ]
-          }
-        },
-        {
-          "order": 3,
-          "visible": true,
-          "numberfield": {
-            "key": "water-lines",
-            "prompt": "how many meters of waterlines are on your property?",
-            "label": "waterlines (in meters):",
-            "required": true,
-            "private": true,
-            "placeholder": "enter meters of waterlines here (eg: 32)",
-            "minimum": 5,
-            "units": "miles"
-          }
+          "map_viewport": {
+            "zoom": 12,
+            "latitude": 44.4,
+            "longitude": -120.4,
+            "bearing": 24,
+            "transition_duration": 80,
+            "pitch": 20
+          },
+          "modules": []
         }
       ]
-    },
-    {
-      "form": "form1",
-      "order": 2,
-      "map_viewport": {
-        "zoom": 12,
-        "latitude": 44.4,
-        "longitude": -120.4,
-        "bearing": 24,
-        "transition_duration": 80,
-        "pitch": 20
-      },
-      "modules": []
     }
   ],
   "flavor": {

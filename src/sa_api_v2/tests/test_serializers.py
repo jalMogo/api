@@ -581,20 +581,13 @@ class TestFormDeserializers (TestCase):
         self.assertTrue(form_serializer.is_valid())
         form_serializer.save()
 
-        # create our FormStage models:
-        form_stage_serializer = FormStageFixtureSerializer(
-            data=data['form_stages'],
-            many=True,
-        )
-        self.assertTrue(form_stage_serializer.is_valid())
-        form_stage_serializer.save()
 
         # create our Flavor models:
         flavor_serializer = FlavorFixtureSerializer(data=data['flavor'])
         self.assertTrue(flavor_serializer.is_valid())
         flavor = flavor_serializer.save()
         forms = flavor.forms.all()
-        form = forms[0]
+        form = forms.first()
 
         # assert that our form is valid:
         self.assertEqual(form.dataset.id, self.dataset.id)
