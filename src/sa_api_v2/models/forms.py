@@ -542,6 +542,7 @@ class FormFieldOption(models.Model):
         blank=True,
         related_name='+',
     )
+    order = models.PositiveSmallIntegerField(default=0, blank=False, null=False)
 
     def clean(self):
         if not hasattr(self, 'field') or self.field is None:
@@ -555,6 +556,7 @@ class FormFieldOption(models.Model):
     class Meta:
         app_label = 'sa_api_v2'
         abstract = True
+        ordering = ['order']
 
 
 class CheckboxOption(FormFieldOption):
