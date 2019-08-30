@@ -761,7 +761,7 @@ class RadioOptionSerializer (BaseFormFieldOptionSerializer):
 # Form Modules
 
 class SkipStageModuleSerializer (
-    # FormModulesValidator,
+    FormModulesValidator,
     serializers.ModelSerializer
 ):
     class Meta:
@@ -770,7 +770,7 @@ class SkipStageModuleSerializer (
 
 
 class HtmlModuleSerializer (
-    # FormModulesValidator,
+    FormModulesValidator,
     serializers.ModelSerializer
 ):
     class Meta:
