@@ -475,6 +475,8 @@ class AbstractOrderedModule(models.Model):
         super(AbstractOrderedModule, self).save(*args, **kwargs)
 
     class Meta:
+        app_label = 'sa_api_v2'
+        ordering = ['order']
         abstract = True
 
 
@@ -500,10 +502,8 @@ class OrderedModule(AbstractOrderedModule):
             related_modules.append(self.groupmodule)
         return related_modules
 
-    class Meta:
-        app_label = 'sa_api_v2'
+    class Meta(AbstractOrderedModule.Meta):
         db_table = 'ms_api_form_ordered_module'
-        ordering = ['order']
         default_related_name = "ordered_modules"
 
 
@@ -514,10 +514,8 @@ class NestedOrderedModule(AbstractOrderedModule):
         on_delete=models.CASCADE,
     )
 
-    class Meta:
-        app_label = 'sa_api_v2'
+    class Meta(AbstractOrderedModule.Meta):
         db_table = 'ms_api_form_nested_ordered_module'
-        ordering = ['order']
         default_related_name = "nested_ordered_modules"
 
 
@@ -579,7 +577,7 @@ class CheckboxOption(FormFieldOption):
     def __unicode__(self):
         return "CheckboxOption with label: {} on field: {}".format(self.label, self.field)
 
-    class Meta:
+    class Meta(FormFieldOption.Meta):
         db_table = 'ms_api_form_module_option_checkbox'
 
 
@@ -602,5 +600,5 @@ class RadioOption(FormFieldOption):
     def __unicode__(self):
         return "RadioOption with label: '{}' on field: {}".format(self.label, self.field)
 
-    class Meta:
+    class Meta(FormFieldOption.Meta):
         db_table = 'ms_api_form_module_option_radio'
