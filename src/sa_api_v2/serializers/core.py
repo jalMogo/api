@@ -859,20 +859,6 @@ class CheckboxFieldModuleSerializer (
 
 
 # Ordered Form Modules (our join table):
-
-MODULES = {
-    "htmlmodule": HtmlModuleSerializer,
-    "skipstagemodule": SkipStageModuleSerializer,
-    "radiofield": RadioFieldModuleSerializer,
-    "numberfield": NumberFieldModuleSerializer,
-    "filefield": FileFieldModuleSerializer,
-    "datefield": DateFieldModuleSerializer,
-    "checkboxfield": CheckboxFieldModuleSerializer,
-    "textfield": TextFieldModuleSerializer,
-    "geocodingfield": GeocodingFieldModuleSerializer,
-    "textareafield": TextAreaFieldModuleSerializer,
-}
-
 class AbstractFormModuleSerializer (serializers.ModelSerializer):
     htmlmodule = HtmlModuleSerializer(required=False)
     skipstagemodule = SkipStageModuleSerializer(required=False)
@@ -917,35 +903,50 @@ class AbstractFormModuleSerializer (serializers.ModelSerializer):
         return ret
 
     def create(self, validated_data):
-        fieldname = next(
-            fieldname for fieldname in MODULES.keys() if validated_data.has_key(fieldname)
+        related_module_name = next(
+            fieldname for fieldname in self.Meta.available_modules.keys() if validated_data.has_key(fieldname)
         )
-        field_data = validated_data.pop(fieldname)
+        field_data = validated_data.pop(related_module_name)
 
         parent = self.context.get(self.Meta.parent_field)
         validated_data[self.Meta.parent_field] = parent
-        ordered_module = self.Meta.model.objects.create(**validated_data)
+        module = self.Meta.model.objects.create(**validated_data)
 
         if field_data is not None:
-            field_serializer = MODULES[fieldname](
-                data=self.initial_data.get(fieldname)
+            related_module_serializer = self.Meta.available_modules[related_module_name](
+                data=self.initial_data.get(related_module_name)
             )
-            if not field_serializer.is_valid():
+            if not related_module_serializer.is_valid():
                 raise serializers.ValidationError(
-                    "OrderedModuleSerializer failed to validate: {}".format(field_serializer.errors)
+                    "(Nested)OrderedModuleSerializer failed to validate: {}".format(related_module_serializer.errors)
                 )
-            field = field_serializer.save()
-            field.ordered_modules.add(ordered_module)
+            related_module = related_module_serializer.save()
+            module.add_related_module(related_module)
         else:
-            raise serializers.ValidationError("no data found for fieldname: {}".format(fieldname))
+            raise serializers.ValidationError("no data found for fieldname: {}".format(related_module_name))
 
-        return ordered_module
+        return module
+
+
+MODULES = {
+    "htmlmodule": HtmlModuleSerializer,
+    "skipstagemodule": SkipStageModuleSerializer,
+    "radiofield": RadioFieldModuleSerializer,
+    "numberfield": NumberFieldModuleSerializer,
+    "filefield": FileFieldModuleSerializer,
+    "datefield": DateFieldModuleSerializer,
+    "checkboxfield": CheckboxFieldModuleSerializer,
+    "textfield": TextFieldModuleSerializer,
+    "geocodingfield": GeocodingFieldModuleSerializer,
+    "textareafield": TextAreaFieldModuleSerializer,
+}
 
 class NestedOrderedModuleSerializer (AbstractFormModuleSerializer):
     class Meta:
         model = models.NestedOrderedModule
         parent_field = 'group'
         exclude = ['group']
+        available_modules = MODULES
 
 
 class GroupModuleSerializer (serializers.ModelSerializer):
@@ -955,6 +956,31 @@ class GroupModuleSerializer (serializers.ModelSerializer):
         model = models.GroupModule
         fields = ['label', 'modules']
 
+    def create(self, validated_data):
+        modules_data = validated_data.pop('modules')
+        # form = self.context.get('form')
+        group = models.GroupModule.objects.create(
+            **validated_data
+        )
+        # use self.initial data instead of modules_data, so that we can validate
+        # it within our module serializer:
+        for module_data in  self.initial_data.get('modules'):
+            serializer = NestedOrderedModuleSerializer(
+                data=module_data,
+                context={"group": group},
+            )
+            if not serializer.is_valid():
+                raise serializers.ValidationError(
+                    "NestedOrderedModuleSerializer failed to validate: {}".format(serializer.errors)
+                )
+            serializer.save()
+        return group
+
+
+MODULES_WITH_GROUP_MODULE = MODULES.copy()
+MODULES_WITH_GROUP_MODULE.update({"groupmodule": GroupModuleSerializer})
+
+
 class OrderedModuleSerializer (AbstractFormModuleSerializer):
     groupmodule = GroupModuleSerializer(required=False)
 
@@ -962,7 +988,7 @@ class OrderedModuleSerializer (AbstractFormModuleSerializer):
         model = models.OrderedModule
         parent_field = 'stage'
         exclude = ['stage']
-
+        available_modules = MODULES_WITH_GROUP_MODULE
 
 # Form Stage and related:
 

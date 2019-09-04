@@ -69,6 +69,23 @@
                 "minimum": 5,
                 "units": "miles"
               }
+            },
+            {
+              "order": 4,
+              "visible": true,
+              "groupmodule": {
+                "label": "a group module",
+                "modules": [
+                  {
+                    "order": 1,
+                    "visible": true,
+                    "htmlmodule": {
+                      "label": "end of survey",
+                      "content": "<p>thanks for taking the survey</p>"
+                    }
+                  }
+                ]
+              }
             }
           ]
         },

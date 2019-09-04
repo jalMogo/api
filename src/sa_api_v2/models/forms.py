@@ -496,6 +496,10 @@ class OrderedModule(AbstractOrderedModule):
         null=True,
     )
 
+    # related_module is an instance of RelatedFormModule
+    def add_related_module(self, related_module):
+        related_module.ordered_modules.add(self)
+
     def _get_related_modules(self):
         related_modules = super(OrderedModule, self)._get_related_modules()
         if self.groupmodule:
@@ -513,6 +517,10 @@ class NestedOrderedModule(AbstractOrderedModule):
         related_name="modules",
         on_delete=models.CASCADE,
     )
+
+    # related_module is an instance of RelatedFormModule
+    def add_related_module(self, related_module):
+        related_module.nested_ordered_modules.add(self)
 
     class Meta(AbstractOrderedModule.Meta):
         db_table = 'ms_api_form_nested_ordered_module'

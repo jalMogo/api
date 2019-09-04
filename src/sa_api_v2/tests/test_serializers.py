@@ -613,3 +613,14 @@ class TestFormDeserializers (TestCase):
             form.stages.all().first().modules.all().get(order=3).numberfield.placeholder,
             "enter meters of waterlines here (eg: 32)"
         )
+
+        # assert that our nested modules are valid:
+        groupmodule = form.stages.all().first().modules.all().get(order=4).groupmodule
+        self.assertEqual(
+            groupmodule.label,
+            "a group module"
+        )
+        self.assertEqual(
+            groupmodule.modules.all().first().htmlmodule.label,
+            "end of survey"
+        )
