@@ -591,15 +591,15 @@ class TestFormDeserializers (TestCase):
         # assert that our form is valid:
         self.assertEqual(form.dataset.id, self.dataset.id)
         # assert that our form stages are valid:
-        self.assertEqual(form.stages.all()[0].visible_layer_groups.all()[0].label, "layer1")
-        self.assertEqual(form.stages.all()[1].map_viewport.zoom, 12)
+        self.assertEqual(form.stages.all().first().visible_layer_groups.all().first().label, "layer1")
+        self.assertEqual(form.stages.all().get(order=2).map_viewport.zoom, 12)
         # assert that our ordered modules, and their fields, are valid:
         self.assertEqual(
-            form.stages.all()[0].modules.all()[0].radiofield.label,
+            form.stages.all().first().modules.all().first().radiofield.label,
             "my project idea is:"
         )
         self.assertEqual(
-            form.stages.all()[0].modules.all()[0].radiofield.options.all()[0].label,
+            form.stages.all().first().modules.all().first().radiofield.options.all().first().label,
             "Art"
         )
 
@@ -610,6 +610,6 @@ class TestFormDeserializers (TestCase):
         )
 
         self.assertEqual(
-            form.stages.all()[0].modules.all()[2].numberfield.placeholder,
+            form.stages.all().first().modules.all().get(order=3).numberfield.placeholder,
             "enter meters of waterlines here (eg: 32)"
         )

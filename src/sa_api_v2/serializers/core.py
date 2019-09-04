@@ -858,6 +858,21 @@ class CheckboxFieldModuleSerializer (
         options_model = models.CheckboxOption
 
 
+# Ordered Form Modules (our join table):
+
+MODULES = {
+    "htmlmodule": HtmlModuleSerializer,
+    "skipstagemodule": SkipStageModuleSerializer,
+    "radiofield": RadioFieldModuleSerializer,
+    "numberfield": NumberFieldModuleSerializer,
+    "filefield": FileFieldModuleSerializer,
+    "datefield": DateFieldModuleSerializer,
+    "checkboxfield": CheckboxFieldModuleSerializer,
+    "textfield": TextFieldModuleSerializer,
+    "geocodingfield": GeocodingFieldModuleSerializer,
+    "textareafield": TextAreaFieldModuleSerializer,
+}
+
 class AbstractFormModuleSerializer (serializers.ModelSerializer):
     htmlmodule = HtmlModuleSerializer(required=False)
     skipstagemodule = SkipStageModuleSerializer(required=False)
@@ -901,51 +916,15 @@ class AbstractFormModuleSerializer (serializers.ModelSerializer):
 
         return ret
 
-
-class NestedOrderedModuleSerializer (AbstractFormModuleSerializer):
-    class Meta:
-        model = models.NestedOrderedModule
-        exclude = ['group']
-
-
-class GroupModuleSerializer (serializers.ModelSerializer):
-    modules = NestedOrderedModuleSerializer(many=True)
-
-    class Meta:
-        model = models.GroupModule
-        fields = ['label', 'modules']
-
-MODULES = {
-    "htmlmodule": HtmlModuleSerializer,
-    "skipstagemodule": SkipStageModuleSerializer,
-    "radiofield": RadioFieldModuleSerializer,
-    "numberfield": NumberFieldModuleSerializer,
-    "filefield": FileFieldModuleSerializer,
-    "datefield": DateFieldModuleSerializer,
-    "checkboxfield": CheckboxFieldModuleSerializer,
-    "textfield": TextFieldModuleSerializer,
-    "geocodingfield": GeocodingFieldModuleSerializer,
-    "textareafield": TextAreaFieldModuleSerializer,
-}
-
-class OrderedModuleSerializer (AbstractFormModuleSerializer):
-    groupmodule = GroupModuleSerializer(required=False)
-
-    class Meta:
-        model = models.OrderedModule
-        exclude = ['stage']
-
     def create(self, validated_data):
         fieldname = next(
             fieldname for fieldname in MODULES.keys() if validated_data.has_key(fieldname)
         )
         field_data = validated_data.pop(fieldname)
 
-        stage = self.context.get("stage")
-        ordered_module = models.OrderedModule.objects.create(
-            stage=stage,
-            **validated_data
-        )
+        parent = self.context.get(self.Meta.parent_field)
+        validated_data[self.Meta.parent_field] = parent
+        ordered_module = self.Meta.model.objects.create(**validated_data)
 
         if field_data is not None:
             field_serializer = MODULES[fieldname](
@@ -961,6 +940,31 @@ class OrderedModuleSerializer (AbstractFormModuleSerializer):
             raise serializers.ValidationError("no data found for fieldname: {}".format(fieldname))
 
         return ordered_module
+
+class NestedOrderedModuleSerializer (AbstractFormModuleSerializer):
+    class Meta:
+        model = models.NestedOrderedModule
+        parent_field = 'group'
+        exclude = ['group']
+
+
+class GroupModuleSerializer (serializers.ModelSerializer):
+    modules = NestedOrderedModuleSerializer(many=True)
+
+    class Meta:
+        model = models.GroupModule
+        fields = ['label', 'modules']
+
+class OrderedModuleSerializer (AbstractFormModuleSerializer):
+    groupmodule = GroupModuleSerializer(required=False)
+
+    class Meta:
+        model = models.OrderedModule
+        parent_field = 'stage'
+        exclude = ['stage']
+
+
+# Form Stage and related:
 
 class LayerGroupSerializer (serializers.ModelSerializer):
     class Meta:
