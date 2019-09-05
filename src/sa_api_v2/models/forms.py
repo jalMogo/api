@@ -99,7 +99,7 @@ class FormStage(models.Model):
 
 
 class MapViewport(models.Model):
-    zoom = models.PositiveSmallIntegerField(null=True, blank=True)
+    zoom = models.FloatField(null=True, blank=True)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
     transition_duration = models.PositiveSmallIntegerField(null=True, blank=True)

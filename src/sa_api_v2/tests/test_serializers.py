@@ -565,7 +565,7 @@ class TestFormDeserializers (TestCase):
     def test_deserialize_flavor(self):
         test_dir = path.dirname(__file__)
         fixture_dir = path.join(test_dir, 'fixtures')
-        flavor_data_file = path.join(fixture_dir, 'flavor.json')
+        flavor_data_file = path.join(fixture_dir, 'test_flavor.json')
         data = json.load(open(flavor_data_file))
 
         # create our LayerGroup models:
@@ -626,3 +626,29 @@ class TestFormDeserializers (TestCase):
             groupmodule.modules.all().first().htmlmodule.label,
             "end of survey"
         )
+
+    def test_deserialize_bike_share_flavor(self):
+        test_dir = path.dirname(__file__)
+        fixture_dir = path.join(test_dir, 'fixtures')
+        flavor_data_file = path.join(fixture_dir, 'bellevue_bike_share_flavor.json')
+        data = json.load(open(flavor_data_file))
+
+        # create our LayerGroup models:
+        layer_group_serializer = LayerGroupSerializer(
+            data=data['layer_groups'],
+            many=True,
+        )
+        self.assertTrue(layer_group_serializer.is_valid())
+        layer_group_serializer.save()
+
+        # create our Form models:
+        form_serializer = FormFixtureSerializer(data=data['forms'], many=True)
+        self.assertTrue(form_serializer.is_valid())
+        form_serializer.save()
+
+        # create our Flavor models:
+        flavor_serializer = FlavorFixtureSerializer(data=data['flavor'])
+        self.assertTrue(flavor_serializer.is_valid())
+        flavor = flavor_serializer.save()
+        forms = flavor.forms.all()
+        form = forms.first()
