@@ -36,7 +36,6 @@ from sa_api_v2.serializers import (
     LayerGroupSerializer,
     FormFixtureSerializer,
     FlavorFixtureSerializer,
-    FormStageFixtureSerializer,
 )
 from social_django.models import UserSocialAuth
 import json
