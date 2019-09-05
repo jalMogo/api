@@ -777,6 +777,16 @@ class HtmlModuleSerializer (
         model = models.HtmlModule
         fields = ['content', 'label']
 
+
+class SubmitButtonModuleSerializer (
+    FormModulesValidator,
+    serializers.ModelSerializer
+):
+    class Meta:
+        model = models.SubmitButtonModule
+        fields = ['label']
+
+
 # Form Fields
 
 class BaseFormFieldSerializer (
@@ -826,13 +836,6 @@ class FileFieldModuleSerializer (BaseFormFieldSerializer):
         fields = BaseFormFieldSerializer.Meta.fields
 
 
-class SubmitButtonModuleSerializer (BaseFormFieldSerializer):
-
-    class Meta(BaseFormFieldSerializer.Meta):
-        model = models.SubmitButtonModule
-        fields = BaseFormFieldSerializer.Meta.fields + ['label']
-
-
 class RadioFieldModuleSerializer (
     FormFieldOptionsCreator,
     BaseFormFieldSerializer
@@ -871,6 +874,7 @@ class AbstractFormModuleSerializer (serializers.ModelSerializer):
     textfield = TextFieldModuleSerializer(required=False)
     geocodingfield = GeocodingFieldModuleSerializer(required=False)
     textareafield = TextAreaFieldModuleSerializer(required=False)
+    submitbuttonmodule = SubmitButtonModuleSerializer(required=False)
 
     # removes "null" fields
     def to_representation(self, instance):

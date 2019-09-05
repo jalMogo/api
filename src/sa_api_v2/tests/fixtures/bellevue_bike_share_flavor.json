@@ -193,6 +193,12 @@
                 "label": "Add image",
                 "prompt": "Have an image of this location? Add it!"
               }
+            },
+            {
+              "order": 7,
+              "submitbuttonmodule": {
+                "label": "Suggest it!"
+              }
             }
           ]
         }
