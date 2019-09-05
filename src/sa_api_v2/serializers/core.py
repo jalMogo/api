@@ -826,10 +826,11 @@ class FileFieldModuleSerializer (BaseFormFieldSerializer):
         fields = BaseFormFieldSerializer.Meta.fields
 
 
-NESTED_MODULES = {
-    "radiofield": models.RadioOption,
-    "checkboxfield": models.RadioOption
-}
+class SubmitButtonModuleSerializer (BaseFormFieldSerializer):
+
+    class Meta(BaseFormFieldSerializer.Meta):
+        model = models.SubmitButtonModule
+        fields = BaseFormFieldSerializer.Meta.fields + ['label']
 
 
 class RadioFieldModuleSerializer (
@@ -939,7 +940,12 @@ MODULES = {
     "textfield": TextFieldModuleSerializer,
     "geocodingfield": GeocodingFieldModuleSerializer,
     "textareafield": TextAreaFieldModuleSerializer,
+    "submitbuttonmodule": SubmitButtonModuleSerializer,
 }
+# sanity check that to ensure we have accounted for newly added modules:
+for related_module in models.RELATED_MODULES:
+    if MODULES.get(related_module) is None:
+            raise ValidationError("Missing related module serializer:", related_module)
 
 class NestedOrderedModuleSerializer (AbstractFormModuleSerializer):
     class Meta:

@@ -451,22 +451,11 @@ class RadioFieldAdmin(HiddenModelAdmin, nested_admin.NestedModelAdmin):
 
 class AbstractFormModuleAdmin (HiddenModelAdmin, admin.ModelAdmin):
     model = models.GroupModule
-    fields = (
-        "visible",
-        "htmlmodule",
-        "skipstagemodule",
-        "radiofield",
-        "filefield",
-        "datefield",
-        "numberfield",
-        "geocodingfield",
-        "checkboxfield",
-        "textareafield",
-        "textfield",
-    )
+    fields = ['visible'] + models.RELATED_MODULES
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         Model = None
+        # TODO: update models.RELATED_MODULES and make this read from it:
         if db_field.name == "radiofield":
             Model = models.RadioField
         elif db_field.name == "filefield":
@@ -483,12 +472,15 @@ class AbstractFormModuleAdmin (HiddenModelAdmin, admin.ModelAdmin):
             Model = models.TextAreaField
         elif db_field.name == "checkboxfield":
             Model = models.CheckboxField
+        # NOTE: groupmodule is an exception:
         elif db_field.name == "groupmodule":
             Model = models.GroupModule
         elif db_field.name == "htmlmodule":
             Model = models.HtmlModule
         elif db_field.name == "skipstagemodule":
             Model = models.SkipStageModule
+        elif db_field.name == "submitbuttonmodule":
+            Model = models.SubmitButtonModule
         else:
             raise FieldDoesNotExist("db_field name does not exist: {}".format(db_field.name))
 
@@ -502,7 +494,7 @@ class AbstractFormModuleAdmin (HiddenModelAdmin, admin.ModelAdmin):
 class OrderedModuleAdmin(AbstractFormModuleAdmin):
     model = models.OrderedModule
     readonly_fields = ('formstage', 'order')
-    fields = ('formstage',) + AbstractFormModuleAdmin.fields + ("groupmodule",)
+    fields = ['formstage'] + AbstractFormModuleAdmin.fields + ["groupmodule"]
 
     def _get_related_queryset(self, queryset):
         # include only in the queryset RelatedModules that are within this Flavor, or unattached:
@@ -530,7 +522,7 @@ class OrderedModuleAdmin(AbstractFormModuleAdmin):
 class NestedOrderedModuleAdmin(AbstractFormModuleAdmin):
     model = models.NestedOrderedModule
     readonly_fields = ('parent_group_module', 'order')
-    fields = ('parent_group_module',) + AbstractFormModuleAdmin.fields
+    fields = ['parent_group_module'] + AbstractFormModuleAdmin.fields
 
     def _get_related_queryset(self, queryset):
         # include only in the queryset RelatedModules that are within
@@ -766,6 +758,7 @@ admin.site.register(models.MapViewport, HiddenModelAdmin)
 admin.site.register(models.RadioField, RadioFieldAdmin)
 admin.site.register(models.HtmlModule, HiddenModelAdmin)
 admin.site.register(models.SkipStageModule, HiddenModelAdmin)
+admin.site.register(models.SubmitButtonModule, HiddenModelAdmin)
 admin.site.register(models.TextField, HiddenModelAdmin)
 admin.site.register(models.TextAreaField, HiddenModelAdmin)
 admin.site.register(models.DateField, HiddenModelAdmin)

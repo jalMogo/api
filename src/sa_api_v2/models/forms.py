@@ -17,6 +17,7 @@ __all__ = [
     'GroupModule',
     'HtmlModule',
     'SkipStageModule',
+    'SubmitButtonModule',
     'FormFieldOption',
     'CheckboxOption',
     'GeocodingField',
@@ -28,6 +29,21 @@ __all__ = [
     'TextField',
     'TextAreaField',
     'CheckboxField',
+    'RELATED_MODULES',
+]
+
+RELATED_MODULES = [
+    "htmlmodule",
+    "skipstagemodule",
+    "radiofield",
+    "numberfield",
+    "filefield",
+    "datefield",
+    "checkboxfield",
+    "textfield",
+    "geocodingfield",
+    "textareafield",
+    "submitbuttonmodule",
 ]
 
 
@@ -186,6 +202,19 @@ class SkipStageModule(RelatedFormModule):
 
     class Meta:
         db_table = 'ms_api_form_module_skip_stage'
+
+
+class SubmitButtonModule(RelatedFormModule):
+    label = models.TextField(
+        help_text="This is the label that the submit button will have",
+        default='Submit',
+    )
+
+    def summary(self):
+        return "submit button with label: \"{}\"".format(self.label[:40])
+
+    class Meta:
+        db_table = 'ms_api_form_module_submit_button'
 
 
 class FormField(RelatedFormModule):
@@ -427,6 +456,13 @@ class AbstractOrderedModule(models.Model):
         null=True,
     )
 
+    submitbuttonmodule = models.ForeignKey(
+        SubmitButtonModule,
+        on_delete=models.SET_NULL,
+        help_text=HELP_TEXT.format("submit button module"),
+        blank=True,
+        null=True,
+    )
     def __unicode__(self):
         related_module = self.get_related_module()
         return 'order: {order}, with Related Module: {related}'.format(related=related_module, order=self.order)
@@ -442,26 +478,12 @@ class AbstractOrderedModule(models.Model):
 
     def _get_related_modules(self):
         related_modules = []
-        if self.numberfield:
-            related_modules.append(self.numberfield)
-        if self.filefield:
-            related_modules.append(self.filefield)
-        if self.datefield:
-            related_modules.append(self.datefield)
-        if self.radiofield:
-            related_modules.append(self.radiofield)
-        if self.geocodingfield:
-            related_modules.append(self.geocodingfield)
-        if self.textfield:
-            related_modules.append(self.textfield)
-        if self.textareafield:
-            related_modules.append(self.textareafield)
-        if self.checkboxfield:
-            related_modules.append(self.checkboxfield)
-        if self.htmlmodule:
-            related_modules.append(self.htmlmodule)
-        if self.skipstagemodule:
-            related_modules.append(self.skipstagemodule)
+        for related_module_name in RELATED_MODULES:
+            related_module = getattr(self, related_module_name)
+            if related_module:
+                # if the related_module field is instantiated, then add it to
+                # our collection
+                related_modules.append(related_module)
         return related_modules
 
     def clean(self):

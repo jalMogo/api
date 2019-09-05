@@ -553,7 +553,7 @@ class TestFlavorSerializer (TestCase):
         )
 
 
-class TestFormDeserializers (TestCase):
+class TestFlavorDeserializers (TestCase):
     @classmethod
     def setUpTestData(self):
         User.objects.all().delete()
