@@ -592,7 +592,9 @@ class TestFormDeserializers (TestCase):
         self.assertEqual(form.dataset.id, self.dataset.id)
         # assert that our form stages are valid:
         self.assertEqual(form.stages.all().first().visible_layer_groups.all().first().label, "layer1")
+        # assert that our MapViewport is valid:
         self.assertEqual(form.stages.all().get(order=2).map_viewport.zoom, 12)
+        self.assertEqual(form.stages.all().get(order=2).map_viewport.transition_duration, None)
         # assert that our ordered modules, and their fields, are valid:
         self.assertEqual(
             form.stages.all().first().modules.all().first().radiofield.label,

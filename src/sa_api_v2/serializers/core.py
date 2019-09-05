@@ -1001,7 +1001,6 @@ class LayerGroupSerializer (serializers.ModelSerializer):
 class MapViewportSerializer (serializers.ModelSerializer):
     class Meta:
         model = models.MapViewport
-        # fields = ['zoom', 'latitude', 'longitude', ']
         fields = '__all__'
 
 

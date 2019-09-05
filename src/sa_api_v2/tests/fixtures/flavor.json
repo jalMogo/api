@@ -96,7 +96,6 @@
             "latitude": 44.4,
             "longitude": -120.4,
             "bearing": 24,
-            "transition_duration": 80,
             "pitch": 20
           },
           "modules": []

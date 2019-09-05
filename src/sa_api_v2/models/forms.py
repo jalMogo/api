@@ -99,12 +99,12 @@ class FormStage(models.Model):
 
 
 class MapViewport(models.Model):
-    zoom = models.PositiveSmallIntegerField(null=False, blank=False)
-    latitude = models.FloatField(null=False, blank=False)
-    longitude = models.FloatField(null=False, blank=False)
-    transition_duration = models.PositiveSmallIntegerField(null=False, blank=False)
-    bearing = models.PositiveSmallIntegerField(null=False, blank=False)
-    pitch = models.PositiveSmallIntegerField(null=False, blank=False)
+    zoom = models.PositiveSmallIntegerField(null=True, blank=True)
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
+    transition_duration = models.PositiveSmallIntegerField(null=True, blank=True)
+    bearing = models.PositiveSmallIntegerField(null=True, blank=True)
+    pitch = models.PositiveSmallIntegerField(null=True, blank=True)
 
     stage = models.OneToOneField(
         FormStage,
