@@ -15,7 +15,7 @@ import logging
 import json
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 
 class Command(BaseCommand):
@@ -26,7 +26,7 @@ class Command(BaseCommand):
     """
 
     def handle(self, *args, **options):
-        logger.info('parsing json files')
+        logger.debug('parsing json files')
         test_dir = path.dirname(__file__)
         fixture_dir = path.join(test_dir, 'fixtures')
         flavor_data_file = path.join(
@@ -43,7 +43,7 @@ class Command(BaseCommand):
 
             # delete all Forms
             sa_models.Form.objects.all().delete()
-            logger.info('models deleted!')
+            logger.debug('models deleted!')
 
             # create our LayerGroup models:
             layer_group_serializer = LayerGroupSerializer(
@@ -54,7 +54,7 @@ class Command(BaseCommand):
                 raise ValidationError("layer_group_serializer is not valid:", layer_group_serializer.errors)
 
             layer_group_serializer.save()
-            logger.info('layerGroups created!')
+            logger.debug('layerGroups created!')
 
             # create our Form models:
             form_serializer = FormFixtureSerializer(data=data['forms'], many=True)
@@ -62,7 +62,7 @@ class Command(BaseCommand):
                 raise ValidationError("form_serializer is not valid:", form_serializer.errors)
 
             form_serializer.save()
-            logger.info('forms created!')
+            logger.debug('forms created!')
 
             # create our Flavor models:
             flavor_serializer = FlavorFixtureSerializer(data=data['flavor'])
@@ -70,4 +70,4 @@ class Command(BaseCommand):
                 raise ValidationError("flavor_serializer is not valid:", flavor_serializer.errors)
 
             flavor = flavor_serializer.save()
-            logger.info('flavor created!')
+            logger.debug('flavor created!')
