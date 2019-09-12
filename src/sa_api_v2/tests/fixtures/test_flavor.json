@@ -103,9 +103,11 @@
       ]
     }
   ],
-  "flavor": {
-    "display_name": "test-flavor",
-    "slug": "test-flavor",
-    "forms": ["form1"]
-  }
+  "flavors": [
+    {
+      "display_name": "test-flavor",
+      "slug": "test-flavor",
+      "forms": ["form1"]
+    }
+  ]
 }

@@ -65,7 +65,10 @@ class Command(BaseCommand):
             logger.debug('forms created!')
 
             # create our Flavor models:
-            flavor_serializer = FlavorFixtureSerializer(data=data['flavor'])
+            flavor_serializer = FlavorFixtureSerializer(
+                data=data['flavors'],
+                many=True,
+            )
             if flavor_serializer.is_valid() is not True:
                 raise ValidationError("flavor_serializer is not valid:", flavor_serializer.errors)
 

@@ -205,9 +205,11 @@
       ]
     }
   ],
-  "flavor": {
-    "display_name": "bellevue-bike-share",
-    "slug": "bellevue-bike-share",
-    "forms": ["bellevue-bike-share"]
-  }
+  "flavors": [
+    {
+      "display_name": "bellevue-bike-share",
+      "slug": "bellevue-bike-share",
+      "forms": ["bellevue-bike-share"]
+    }
+  ]
 }
