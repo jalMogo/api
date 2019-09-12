@@ -629,39 +629,10 @@ class TestFlavorDeserializers (TestCase):
             "end of survey"
         )
 
-    def test_deserialize_bike_share_flavor(self):
+    def test_deserialize_staging_flavors(self):
         test_dir = path.dirname(__file__)
         fixture_dir = path.join(test_dir, 'fixtures')
-        flavor_data_file = path.join(fixture_dir, 'bellevue_bike_share_flavor.json')
-        data = json.load(open(flavor_data_file))
-
-        # create our LayerGroup models:
-        layer_group_serializer = LayerGroupSerializer(
-            data=data['layer_groups'],
-            many=True,
-        )
-        self.assertTrue(layer_group_serializer.is_valid())
-        layer_group_serializer.save()
-
-        # create our Form models:
-        form_serializer = FormFixtureSerializer(data=data['forms'], many=True)
-        self.assertTrue(form_serializer.is_valid())
-        form_serializer.save()
-
-        # create our Flavor models:
-        flavor_serializer = FlavorFixtureSerializer(
-            data=data['flavors'],
-            many=True
-        )
-        self.assertTrue(flavor_serializer.is_valid())
-        flavors = flavor_serializer.save()
-        forms = flavors.first().forms.all()
-        form = forms.first()
-
-    def test_deserialize_bike_share_flavor(self):
-        test_dir = path.dirname(__file__)
-        fixture_dir = path.join(test_dir, 'fixtures')
-        flavor_data_file = path.join(fixture_dir, 'bellevue_bike_share_flavor.json')
+        flavor_data_file = path.join(fixture_dir, 'staging_flavors.json')
         data = json.load(open(flavor_data_file))
 
         # create our LayerGroup models:

@@ -20,9 +20,196 @@
     },
     {
       "label": "bellevue-bike-share"
+    },
+    {
+      "label": "light-satellite"
+    },
+    {
+      "label": "wa-state-large-fires-1973-2018"
+    },
+    {
+      "label": "kittitas-county-outline"
+    },
+    {
+      "label": "kittitas-forest-type"
+    },
+    {
+      "label": "kittitas-county-cities"
+    },
+    {
+      "label": "wa-state-wildfire-start-sites-2008-group"
+    },
+    {
+      "label": "kittitas-burn-risk"
+    },
+    {
+      "label": "kittitas-fire-districts"
+    },
+    {
+      "label": "kittitas-firewise-communities"
+    },
+    {
+      "label": "kittitas-firewise-input"
     }
   ],
   "forms": [
+    {
+      "label": "kittitas-fire",
+      "is_enabled": true,
+      "dataset": "test-dataset",
+      "stages": [
+        {
+          "order": 1,
+          "visible_layer_groups": [
+            "light-satellite",
+            "wa-state-large-fires-1973-2018",
+            "kittitas-county-outline"
+          ],
+          "map_viewport": {
+            "latitude": 47.04829,
+            "zoom": 6.65,
+            "longitude": -120.60682,
+            "bearing": 0,
+            "pitch": 40
+          },
+          "modules": []
+        },
+        {
+          "order": 2,
+          "visible_layer_groups": [
+            "light-satellite",
+            "kittitas-forest-type",
+            "kittitas-county-cities",
+            "kittitas-county-outline"
+          ],
+          "map_viewport": {
+            "latitude": 47.04829,
+            "zoom": 8.5,
+            "longitude": -120.60682,
+            "transitionDuration": 1500,
+            "bearing": 0,
+            "pitch": 40
+          },
+          "modules": []
+        },
+        {
+          "order": 3,
+          "visible_layer_groups": [
+            "light-satellite",
+            "wa-state-large-fires-1973-2018",
+            "wa-state-wildfire-start-sites-2008-group",
+            "kittitas-burn-risk",
+            "kittitas-county-outline"
+          ],
+          "map_viewport": {
+            "latitude": 47.04829,
+            "zoom": 8.5,
+            "longitude": -120.60682,
+            "transitionDuration": 1500,
+            "bearing": 0,
+            "pitch": 40
+          },
+          "modules": []
+        },
+        {
+          "order": 4,
+          "visible_layer_groups": [
+            "light-satellite",
+            "kittitas-fire-districts",
+            "kittitas-county-cities",
+            "kittitas-firewise-communities",
+            "kittitas-county-outline"
+          ],
+          "map_viewport": {
+            "latitude": 47.04829,
+            "zoom": 8.5,
+            "longitude": -120.60682,
+            "transitionDuration": 1500,
+            "bearing": 0,
+            "pitch": 40
+          },
+          "modules": []
+        },
+        {
+          "order": 5,
+          "visible_layer_groups": [
+            "light-satellite",
+            "kittitas-fire-districts",
+            "kittitas-county-cities",
+            "kittitas-firewise-communities",
+            "kittitas-county-outline"
+          ],
+          "modules": []
+        },
+        {
+          "order": 6,
+          "visible_layer_groups": [
+            "light-satellite",
+            "kittitas-fire-districts",
+            "kittitas-county-cities",
+            "kittitas-firewise-communities",
+            "kittitas-county-outline"
+          ],
+          "modules": []
+        },
+        {
+          "order": 7,
+          "visible_layer_groups": [
+            "light-satellite",
+            "kittitas-fire-districts",
+            "kittitas-county-cities",
+            "kittitas-firewise-communities",
+            "kittitas-county-outline"
+          ],
+          "modules": []
+        },
+        {
+          "order": 8,
+          "visible_layer_groups": [
+            "light-satellite",
+            "kittitas-fire-districts",
+            "kittitas-county-cities",
+            "kittitas-firewise-communities",
+            "kittitas-county-outline"
+          ],
+          "modules": []
+        },
+        {
+          "order": 9,
+          "visible_layer_groups": [
+            "light-satellite",
+            "kittitas-fire-districts",
+            "kittitas-county-cities",
+            "kittitas-firewise-communities",
+            "kittitas-county-outline"
+          ],
+          "modules": []
+        },
+        {
+          "order": 10,
+          "visible_layer_groups": [
+            "light-satellite",
+            "kittitas-fire-districts",
+            "kittitas-county-cities",
+            "kittitas-firewise-communities",
+            "kittitas-county-outline"
+          ],
+          "modules": []
+        },
+        {
+          "order": 11,
+          "visible_layer_groups": [
+            "light-satellite",
+            "kittitas-fire-districts",
+            "kittitas-county-cities",
+            "kittitas-firewise-communities",
+            "kittitas-county-outline",
+            "kittitas-firewise-input"
+          ],
+          "modules": []
+        }
+      ]
+    },
     {
       "label": "bellevue-bike-share",
       "is_enabled": true,
@@ -210,6 +397,11 @@
       "display_name": "bellevue-bike-share",
       "slug": "bellevue-bike-share",
       "forms": ["bellevue-bike-share"]
+    },
+    {
+      "display_name": "kittitas-fire",
+      "slug": "kittitas-fire",
+      "forms": ["kittitas-fire"]
     }
   ]
 }

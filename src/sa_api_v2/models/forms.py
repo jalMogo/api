@@ -48,7 +48,7 @@ RELATED_MODULES = [
 
 
 class Form(models.Model):
-    label = models.CharField(max_length=128)
+    label = models.CharField(max_length=127)
     is_enabled = models.BooleanField(default=True)
 
     dataset = models.ForeignKey(
@@ -76,7 +76,7 @@ class Form(models.Model):
 
 
 class LayerGroup(models.Model):
-    label = models.CharField(max_length=128, unique=True)
+    label = models.CharField(max_length=127, unique=True)
 
     class Meta:
         app_label = 'sa_api_v2'
@@ -160,7 +160,7 @@ class RelatedFormModule(models.Model):
 class GroupModule(RelatedFormModule):
     label = models.CharField(
         help_text="For naming purposes only - this won't be displayed to end users. Use this label to more easily identify this module whle building the form.",
-        max_length=128,
+        max_length=127,
         blank=True,
         default='',
     )
@@ -175,7 +175,7 @@ class GroupModule(RelatedFormModule):
 class HtmlModule(RelatedFormModule):
     label = models.CharField(
         help_text="For naming purposes only - this won't be displayed to end users. Use this label to more easily identify this module whle building the form.",
-        max_length=128,
+        max_length=127,
         blank=True,
         default='',
     )
@@ -205,9 +205,10 @@ class SkipStageModule(RelatedFormModule):
 
 
 class SubmitButtonModule(RelatedFormModule):
-    label = models.TextField(
+    label = models.CharField(
         help_text="This is the label that the submit button will have",
         default='Submit',
+        max_length=127,
     )
 
     def summary(self):
@@ -219,16 +220,18 @@ class SubmitButtonModule(RelatedFormModule):
 
 class FormField(RelatedFormModule):
     key = models.CharField(
-        max_length=128,
+        max_length=127,
         help_text="The key onto which the field's response will be saved",
     )
-    label = models.TextField(
+    label = models.CharField(
         blank=True,
+        max_length=127,
         default="",
         help_text="This label will be used when displaying the submitted form field (eg: \"My project idea is:\")",
     )
-    prompt = models.TextField(
+    prompt = models.CharField(
         blank=True,
+        max_length=255,
         default="",
         help_text="Some helpful text to guide the user on how to fill out this field (eg: \"What is your project idea?\")",
     )
@@ -257,7 +260,7 @@ placeholder_kwargs = {
 
 # Used for CharField:
 units_kwargs = {
-    "max_length": 128,
+    "max_length": 127,
     "default": "",
     "blank": True,
     "help_text": "Units are used for labelling numerical submissions (eg: \"13 acres\")",
@@ -330,7 +333,7 @@ class RadioField(FormField):
         (TOGGLE, 'a toggle switch, choosing one of 2 choices'),
     ]
 
-    variant = models.CharField(max_length=128, choices=CHOICES, default=RADIO)
+    variant = models.CharField(max_length=127, choices=CHOICES, default=RADIO)
     dropdown_placeholder = models.CharField(**placeholder_kwargs)
 
     def summary(self):
@@ -359,6 +362,18 @@ class TextAreaField(FormField):
 
 
 class TextField(FormField):
+    EMAIL = "EM"
+    PHONE = "PH"
+    TEXT_FIELD_VARIANTS = (
+        (EMAIL, 'Email'),
+        (PHONE, 'Phone'),
+    )
+    variant = models.CharField(
+        max_length=127,
+        blank=True,
+        choices=TEXT_FIELD_VARIANTS,
+    )
+
     placeholder = models.CharField(**placeholder_kwargs)
 
     def summary(self):
@@ -589,12 +604,12 @@ class FormFieldOption(models.Model):
 
 class CheckboxOption(FormFieldOption):
     label = models.CharField(
-        max_length=128,
+        max_length=127,
         help_text="For display purposes only. This is how the option will be presented on the form, or labelled in a submission summary.",
 
     )
     value = models.CharField(
-        max_length=128,
+        max_length=127,
         help_text="This is the value that will be associated with the field's key.",
     )
 
@@ -613,11 +628,11 @@ class CheckboxOption(FormFieldOption):
 
 class RadioOption(FormFieldOption):
     label = models.CharField(
-        max_length=128,
+        max_length=127,
         help_text="For display purposes only. This is how the option will be presented on the form, or labelled in a submission summary.",
     )
     value = models.CharField(
-        max_length=128,
+        max_length=127,
         help_text="This is the value that will be associated with the field's key.",
     )
 
