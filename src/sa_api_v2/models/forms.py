@@ -21,6 +21,7 @@ __all__ = [
     'FormFieldOption',
     'CheckboxOption',
     'GeocodingField',
+    'LatLngField',
     'DateField',
     'NumberField',
     'FileField',
@@ -42,6 +43,7 @@ RELATED_MODULES = [
     "checkboxfield",
     "textfield",
     "geocodingfield",
+    'latlngfield',
     "textareafield",
     "submitbuttonmodule",
 ]
@@ -313,7 +315,29 @@ class FileField(FormField):
         db_table = 'ms_api_form_module_field_file'
 
 
+class LatLngField(FormField):
+    """
+    Saves the address from the LatLng field.
+    This field is optional, since we are always collecting lat lng.
+    Typically only needed when lat/lng validation is required.
+    """
+    validate = models.BooleanField(
+        default=False,
+        blank=True,
+        help_text="Validates that the lat lng has been set before proceeding to the next form stage",
+    )
+
+    def summary(self):
+        return "latlng field with prompt: \"{}\"".format(self.prompt)
+
+    class Meta:
+        db_table = 'ms_api_form_module_field_latlng'
+
+
 class GeocodingField(FormField):
+    """
+    Saves the address from the LatLng field
+    """
     placeholder = models.CharField(**placeholder_kwargs)
 
     def summary(self):
@@ -424,6 +448,13 @@ class AbstractOrderedModule(models.Model):
         null=True,
     )
 
+    latlngfield = models.ForeignKey(
+        LatLngField,
+        on_delete=models.SET_NULL,
+        help_text=HELP_TEXT.format("field to represent lat lng collection"),
+        blank=True,
+        null=True,
+    )
     geocodingfield = models.ForeignKey(
         GeocodingField,
         on_delete=models.SET_NULL,

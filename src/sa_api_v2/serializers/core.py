@@ -804,6 +804,12 @@ class GeocodingFieldModuleSerializer (BaseFormFieldSerializer):
         fields = BaseFormFieldSerializer.Meta.fields + ['placeholder']
 
 
+class LatLngFieldModuleSerializer (BaseFormFieldSerializer):
+    class Meta(BaseFormFieldSerializer.Meta):
+        model = models.LatLngField
+        fields = BaseFormFieldSerializer.Meta.fields + ['validate']
+
+
 class TextAreaFieldModuleSerializer (BaseFormFieldSerializer):
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.TextAreaField
@@ -813,7 +819,7 @@ class TextAreaFieldModuleSerializer (BaseFormFieldSerializer):
 class TextFieldModuleSerializer (BaseFormFieldSerializer):
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.TextField
-        fields = BaseFormFieldSerializer.Meta.fields + ['placeholder']
+        fields = BaseFormFieldSerializer.Meta.fields + ['placeholder', 'variant']
 
 
 class DateFieldModuleSerializer (BaseFormFieldSerializer):
@@ -873,6 +879,7 @@ class AbstractFormModuleSerializer (serializers.ModelSerializer):
     checkboxfield = CheckboxFieldModuleSerializer(required=False)
     textfield = TextFieldModuleSerializer(required=False)
     geocodingfield = GeocodingFieldModuleSerializer(required=False)
+    latlngfield = LatLngFieldModuleSerializer(required=False)
     textareafield = TextAreaFieldModuleSerializer(required=False)
     submitbuttonmodule = SubmitButtonModuleSerializer(required=False)
 
@@ -908,9 +915,12 @@ class AbstractFormModuleSerializer (serializers.ModelSerializer):
         return ret
 
     def create(self, validated_data):
-        related_module_name = next(
+        module_names = [
             fieldname for fieldname in self.Meta.available_modules.keys() if validated_data.has_key(fieldname)
-        )
+        ]
+        if len(module_names) == 0 or len(module_names) > 1:
+            raise serializers.ValidationError("invalid form module added for stage: {}".format(self))
+        related_module_name = module_names[0]
         field_data = validated_data.pop(related_module_name)
 
         parent = self.context.get(self.Meta.parent_field)
@@ -923,7 +933,10 @@ class AbstractFormModuleSerializer (serializers.ModelSerializer):
             )
             if not related_module_serializer.is_valid():
                 raise serializers.ValidationError(
-                    "(Nested)OrderedModuleSerializer failed to validate: {}".format(related_module_serializer.errors)
+                    "(Nested)OrderedModuleSerializer related module name: '{}' failed to validate: {}".format(
+                        related_module_name,
+                        related_module_serializer.errors
+                    )
                 )
             related_module = related_module_serializer.save()
             module.add_related_module(related_module)
@@ -943,6 +956,7 @@ MODULES = {
     "checkboxfield": CheckboxFieldModuleSerializer,
     "textfield": TextFieldModuleSerializer,
     "geocodingfield": GeocodingFieldModuleSerializer,
+    "latlngfield": LatLngFieldModuleSerializer,
     "textareafield": TextAreaFieldModuleSerializer,
     "submitbuttonmodule": SubmitButtonModuleSerializer,
 }

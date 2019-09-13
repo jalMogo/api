@@ -72,7 +72,32 @@
             "bearing": 0,
             "pitch": 40
           },
-          "modules": []
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "large_fires_header",
+                "content": "<h1 style='font-family:Raleway-ExtraBold,sans-serif;margin:0;color:rgba(0,0,0,0.7);'>Kittitas County:</h1><h2 style='font-family:Raleway-ExtraBold,sans-serif;border-bottom:3px solid #ef5f46;color:#888;margin-top:0;padding-top:4px;padding-bottom:8px;margin-bottom:0;'>a Fire Environment</h2><figure style='margin: 16px 0 0 0;'><img src='/static/css/images/table-mountain-fire.jpg' alt='Table Mountain fire' style='width: 100%;' /><figcaption style='font-style:italic; font-size: 1rem; color: #888;'>The Table Mountain Fire burns in 2012.</figcaption></figure>"
+              }
+            },
+            {
+              "order": 2,
+              "textfield": {
+                "key": "private-landowner_email",
+                "variant": "EM",
+                "placeholder": "Your email address will never be shared",
+                "prompt": "Enter your email address to make sure you get information about an onsite wildfire consultation at the end of this survey. You'll learn about your wildfire risk and forest conditions:",
+                "private": true
+              }
+            },
+            {
+              "order": 3,
+              "htmlmodule": {
+                "label": "large_fires_information",
+                "content": "<p class='mapseed-form-stage-body'>Kittitas County is in the heart of fire-prone country. 36 large fires have burned here since 1973.</p><p class='mapseed-form-stage-body' style='font-family:Raleway,sans-serif;'>Click on fires on the map to learn more about them, and use the slider in the lower left to explore the changing wildfire risk in central Washington.</p><div style='display:flex;align-items:center;margin-left:32px;margin-bottom:8px;'><img src='/static/css/images/geologic-hazard-legend.png' alt='Map legend item' style='width:30px;'/><span style='color:#777;font-style:italic;margin-left:16px;'>Large wildfires in Kittitas County</span></div><div style='display:flex;align-items:center;margin-left:32px;margin-bottom:16px;'><img src='/static/css/images/wildfire-legend.png' alt='Map legend item' style='width:30px;' /><span style='color:#777;font-style:italic;margin-left:16px;'>Large wildfires elsewhere in Washington</span></div><div style='margin-top:36px;display:grid;grid-row-gap:16px;grid-template-columns:1fr 3fr;'><span style='color:#115588;font-size:2rem;align-self:end;text-align:right;font-family:Raleway-Regular,sans-serif;'>36</span><span style='color:#555;align-self:end;text-transform:uppercase;padding-left:16px;font-size:1.1rem;'>Large wildfires started since 1973</span><span style='color:#115588;font-size:2rem;align-self:end;text-align:right;font-family:Raleway-Regular,sans-serif;'>227,533</span><span style='color:#555;align-self:end;text-transform:uppercase;padding-left:16px;font-size:1.1rem;'>Total acres burned</span></div>"
+              }
+            }
+          ]
         },
         {
           "order": 2,
@@ -90,7 +115,52 @@
             "bearing": 0,
             "pitch": 40
           },
-          "modules": []
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "forest_type_header",
+                "content": "<h1 style='font-family:Raleway-ExtraBold,sans-serif;margin:0 0 16px 0;color:rgba(0,0,0,0.7);border-bottom:3px solid #ef5f46;padding-bottom: 8px;'>Changing Forest Conditions</h1>"
+              }
+            },
+            {
+              "order": 2,
+              "radiofield": {
+                "key": "forest_type",
+                "prompt": "On your land, which forest type is predominant? (See below for descriptions and images of forest types.)",
+                "required": true,
+                "options": [
+                  {
+                    "label": "Subalpine",
+                    "value": "subalpine"
+                  },
+                  {
+                    "label": "Moist Mixed Conifer",
+                    "value": "moist-mixed-conifer"
+                  },
+                  {
+                    "label": "Dry Forest",
+                    "value": "dry-forest"
+                  },
+                  {
+                    "label": "Ponderosa Pine",
+                    "value": "ponderosa-pine"
+                  },
+                  {
+                    "label": "Non-forest Rangeland",
+                    "value": "non-forest-rangeland"
+                  }
+                ]
+              }
+            },
+            {
+              "order": 3,
+              "htmlmodule": {
+                "label": "forest_type_information",
+                "content": "<div style='margin:42px 0 16px 0;padding:0 16px 0 16px;display:flex;align-items:center;'><p style='flex:1;margin:0 16px 0 0;'><span style='font-family:Raleway-ExtraBold,sans-serif;'>Subalpine:</span> Subalpine fir generally occupies colder, higher elevation mountain forests. Fires are typically stand-replacing events at approximately 200-year or greater intervals. When wildfire occurs, this forest is more susceptible to high intensity crown fires.</p><figure style='flex:1;margin:0;'><img style='max-width:100%' src='/static/css/images/subalpine-fir.png' alt='Subalpine fir' /><figcaption style='font-size:0.8rem;color:#666;'><em>Example of Subalpine forest type (Credit: The Nature Conservancy)</em></figcaption></figure></div><div style='display:flex;align-items:baseline;margin:0 16px 4px 16px;'><span style='font-size:0.9rem;text-transform:uppercase;color:#888;'>Fire return interval</span><span style='font-family:Raleway-ExtraBold,sans-serif;color:#666;font-size:1.2rem;margin-left:auto;'>200+ years</span></div><div style='background-color:#ccc;height:10px;border-radius:5px;margin:0 16px;'><div style='background-color:#fed976;height:10px;border-radius:5px;'></div></div></div><hr style='border:0;border-bottom:1px dashed #888;margin-top:24px;' /><div style='margin:16px 0;padding:0 16px 0 16px;display:flex;align-items:center;'><p style='flex:1;margin-right:16px;'><span style='font-family:Raleway-ExtraBold,sans-serif;'>Moist Mix Conifer:</span> Forests of grand fir, white fir, and Douglas-fir with an average fire return interval of 45-100 years. When wildfire occurs in this forest type it can vary from medium to high severity.</p><figure style='flex:1;margin:0;'><img style='max-width:100%' src='/static/css/images/moist-mix-conifer.png' alt='Moist mix conifer' /><figcaption style='font-size:0.8rem;color:#666;'><em>Example of Moist Mix Conifer forest type (Credit: The Nature Conservancy)</em></figcaption></figure></div><div style='display:flex;align-items:baseline;margin:0 16px 4px 16px;'><span style='font-size:0.9rem;text-transform:uppercase;color:#888;'>Fire return interval</span><span style='font-family:Raleway-ExtraBold,sans-serif;color:#666;font-size:1.2rem;margin-left:auto;'>45-100 years</span></div><div style='background-color:#eee;height:10px;border-radius:5px;margin:0 16px;position:relative;'><span style='position:absolute;top:0;left:0;background:repeating-linear-gradient(-45deg, #ffab6e, #ffab6e 10px, #ffd7ba 10px, #ffd7ba 20px);width:50%;height:10px;border-radius:5px;opacity:0.6;'></span><span style='position:absolute;top:0;left:0;background-color:#fd8d3c;height:10px;border-top-left-radius:5px;border-bottom-left-radius:5px;width:22.5%;'></span></div></div><hr style='border:0;border-bottom:1px dashed #888;margin-top:24px;' /><div style='margin:16px 0;padding:0 16px 0 16px;display:flex;align-items:center;'><p style='flex:1;margin-right:16px;'><span style='font-family:Raleway-ExtraBold,sans-serif;'>Dry Forest:</span> A forest dominated by ponderosa pine, with understory conifers like Douglas Fir and Grand Fir. Lack of wildfire can result in dense stands highly susceptible to medium to high intensity fires. The wildfire return intervals are 15-25 years.</p><figure style='flex:1;margin:0;'><img style='max-width:100%' src='/static/css/images/dry-forest.png' alt='Dry forest' /><figcaption style='font-size:0.8rem;color:#666;'><em>Example of Dry Forest forest type (Credit: John Marshall Photography (c) The Nature Conservancy)</em></figcaption></figure></div><div style='display:flex;align-items:baseline;margin:0 16px 4px 16px;'><span style='font-size:0.9rem;text-transform:uppercase;color:#888;'>Fire return interval</span><span style='font-family:Raleway-ExtraBold,sans-serif;color:#666;font-size:1.2rem;margin-left:auto;'>15-25 years</span></div><div style='background-color:#eee;height:10px;border-radius:5px;margin:0 16px;position:relative;'><span style='position:absolute;top:0;left:0;background:repeating-linear-gradient(-45deg, #de4547, #de4547 10px, #e8aaab 10px, #e8aaab 20px);width:12.5%;height:10px;border-radius:5px;opacity:0.6;'></span><span style='position:absolute;top:0;left:0;background-color:#e31a1c;height:10px;border-top-left-radius:5px;border-bottom-left-radius:5px;width:7.5%;'></span></div></div><hr style='border:0;border-bottom:1px dashed #888;margin-top:24px;' /><div style='margin:16px 0;padding:0 16px 0 16px;display:flex;align-items:center;'><p style='flex:1;margin-right:16px;'><span style='font-family:Raleway-ExtraBold,sans-serif;'>Ponderosa Pine:</span> Straddles the line between rangelands and forest with an overstory of ponderosa pine trees and an understory of shrubs, grasses, and forbs. Wildfires were historically common in this forest type, with return intervals of 8-15 years.</p><figure style='flex:1;margin:0;'><img style='max-width:100%' src='/static/css/images/ponderosa-pine.png' alt='Ponderosa pine' /><figcaption style='font-size:0.8rem;color:#666;'><em>Example of Ponderosa Pine forest type</em></figcaption></figure></div><div style='display:flex;align-items:baseline;margin:0 16px 4px 16px;'><span style='font-size:0.9rem;text-transform:uppercase;color:#888;'>Fire return interval</span><span style='font-family:Raleway-ExtraBold,sans-serif;color:#666;font-size:1.2rem;margin-left:auto;'>8-15 years</span></div><div style='background-color:#eee;height:10px;border-radius:5px;margin:0 16px;position:relative;'><span style='position:absolute;top:0;left:0;background:repeating-linear-gradient(-45deg, #de4547, #de4547 10px, #e8aaab 10px, #e8aaab 20px);width:7.5%;height:10px;border-radius:5px;opacity:0.6;'></span><span style='position:absolute;top:0;left:0;background-color:#e31a1c;height:10px;border-top-left-radius:5px;border-bottom-left-radius:5px;width:4%;'></span></div></div><hr style='border:0;border-bottom:1px dashed #888;margin-top:24px;' /><div style='margin:16px 0;padding:0 16px 0 16px;display:flex;align-items:center;'><p style='flex:1;margin-right:16px;'><span style='font-family:Raleway-ExtraBold,sans-serif;'>Non-forest Rangeland:</span> Rangeland (shrub steppe with sagebrush and grasses) with fire intervals of 5-15 years. When wildfire occurs in this land cover type, the severity is dependent on the vegetation density and weather (wind-driven).</p><figure style='flex:1;margin:0;'><img style='max-width:100%' src='/static/css/images/non-forest-rangeland.png' alt='Non-forest rangeland' /><figcaption style='font-size:0.8rem;color:#666;'><em>Example of Non-forest Rangeland (Credit: KCCD)</em></figcaption></figure></div><div style='display:flex;align-items:baseline;margin:0 16px 4px 16px;'><span style='font-size:0.9rem;text-transform:uppercase;color:#888;'>Fire return interval</span><span style='font-family:Raleway-ExtraBold,sans-serif;color:#666;font-size:1.2rem;margin-left:auto;'>5-15 years</span></div><div style='background-color:#eee;height:10px;border-radius:5px;margin:0 16px;position:relative;'><span style='position:absolute;top:0;left:0;background:repeating-linear-gradient(-45deg, #de4547, #de4547 10px, #e8aaab 10px, #e8aaab 20px);width:7.5%;height:10px;border-radius:5px;opacity:0.6;'></span><span style='position:absolute;top:0;left:0;background-color:#e31a1c;height:10px;border-top-left-radius:5px;border-bottom-left-radius:5px;width:2.5%;'></span></div></div>"
+              }
+            }
+          ]
         },
         {
           "order": 3,
@@ -109,7 +179,22 @@
             "bearing": 0,
             "pitch": 40
           },
-          "modules": []
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "fire_risk_header",
+                "content": "<h1 style='font-family:Raleway-ExtraBold;margin:0;color:rgba(0,0,0,0.7);border-bottom:3px solid #ef5f46;padding-bottom: 8px;'>Kittitas County Wildfire Risk</h1>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
+                "label": "fire_risk_information",
+                "content": "<figure style='margin:16px 0 0 0;'><img src='/static/css/images/wildfire-3.jpg' alt='Wildfire burning' style='width: 100%;' /></figure><p class='mapseed-form-stage-body'>Wildfire risk varies throughout Kittitas County. The probability of wildfire is based on historical fires, vegetation and public safety.</p><div style='display:flex;align-items:center;'><div style='flex:1;border-right:1px solid #ddd;margin-right:24px;'><div style='margin-left:16px;display:flex;align-items:center;'><div style='width:20px;height:20px;background-color:#d73027;margin-right:12px;opacity:0.8;'></div><p style='color:#888;margin:0;'><em>Severe risk</em></p></div><div style='margin:16px 0 0 16px;display:flex;align-items:center;'><div style='width:20px;height:20px;background-color:#f46d43;margin-right:12px;opacity:0.8;'></div></div><div style='margin:16px 0 0 16px;display:flex;align-items:center;'><div style='width:20px;height:20px;background-color:#fdae61;margin-right:12px;opacity:0.8;'></div></div><div style='margin:16px 0 0 16px;display:flex;align-items:center;'><div style='width:20px;height:20px;background-color:#fee08b;margin-right:12px;opacity:0.8;'></div></div><div style='margin:16px 0 0 16px;display:flex;align-items:center;'><div style='width:20px;height:20px;background-color:#d9ef8b;margin-right:12px;opacity:0.8'></div><p style='color:#888;margin:0;'><em>Low risk</em></p></div></div><div style='flex:2;'><p class='mapseed-form-stage-body' style='margin:0;'>This map shows general wildfire risk. Wind-blown embers generated during wildfires are the single biggest hazard wildfires pose to homes. So Look at the risk level not just where your home is located but at least in a one mile radius to better understand your risk from these burning pieces of airborne wood and/or vegetation.</p></div></div><p class='mapseed-form-stage-body'>This map also shows large wildfires and individual wildfire start sites from the last several years. Click on a start site to learn more about it.</p>"
+              }
+            }
+          ]
         },
         {
           "order": 4,
@@ -128,7 +213,30 @@
             "bearing": 0,
             "pitch": 40
           },
-          "modules": []
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "fire_resources_header",
+                "content": "<h1 style='font-family:Raleway-ExtraBold,sans-serif;margin:0;color:rgba(0,0,0,0.7);border-bottom:3px solid #ef5f46;padding-bottom:8px;'>Kittitas County Fire Resources</h1><figure style='margin: 16px 0 24px 0;'><img src='/static/css/images/kittitas-county-fire-rescue.jpeg' alt='Kittitas County Fire and Rescue' style='width: 100%;' /><figcaption style='font-style:italic; font-size: 1rem; color: #888;'>Image: www.kittitascountyfirerescue.com</figcaption></figure>"
+              }
+            },
+            {
+              "order": 2,
+              "geocodingfield": {
+                "key": "private-address",
+                "placeholder": "Your address will never be shared",
+                "private": true
+              }
+            },
+            {
+              "order": 3,
+              "htmlmodule": {
+                "label": "fire_resources_information",
+                "content": "<p class='mapseed-form-stage-body'>Kittitas County has numerous fire resources you should be aware of, including fire districts and <a target='_blank' href='https://www.nfpa.org/Public-Education/By-topic/Wildfire/Firewise-USA'>Firewise USA communities.</a></p><p class='mapseed-form-stage-body'>Search for your address above (or zoom and scroll the map) to explore resources in your area.</p><p class='mapseed-form-stage-body'>If you know your tax parcel number but not your address, go to <a href='https://gis.co.kittitas.wa.us/compas/default.aspx' target='_blank'>https://gis.co.kittitas.wa.us/compas/default.aspx</a> and enter your parcel number to find more information including the \"situs\" address.</p><p style='font-weight:800;'>If your property resides in a fire district, it does not guarantee that the fire district or fire department will be able to defend your property during a wildfire event.</p>"
+              }
+            }
+          ]
         },
         {
           "order": 5,
@@ -139,7 +247,22 @@
             "kittitas-firewise-communities",
             "kittitas-county-outline"
           ],
-          "modules": []
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "fire_resiliency_header",
+                "content": "<h2 style='font-family:Raleway-ExtraBold,sans-serif;padding-bottom:8px;border-bottom:3px solid #ef5f46;margin:0;color:rgba(0,0,0,0.7)'>Your Path to Wildfire Resilience</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
+                "label": "fire_resiliency_information",
+                "content": "<p class='mapseed-form-stage-body'>Be resilient! As a landowner in a fire environment, what you do (and don't do!) on your property matters.</p><p class='mapseed-form-stage-body'>Tell us a bit about your property and practices, and we'll send you a customized report with fire resiliency resources and other information.</p><div style='margin: 8px 0 16px 0; position: relative; padding-bottom: 56.25%; padding-top: 25px; height: 0;'><iframe src='https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2F132247553480077%2Fvideos%2F1197040390469832%2F&show_text=0&width=560' style='position: absolute; top: 0; left: 0; width: 100%; height: 100%;' scrolling='no' frameborder='0' allowTransparency='true' allowFullScreen='true'></iframe></div><p class='mapseed-form-stage-body'>We'll ask about your fire resiliency practices in three zones around your property:</p><ul style='list-style:none;'><li style='display:flex;align-items:center;'><img style='width:40px;padding-right:8px;' src='/static/css/images/fire-icon.png' alt='Fire icon' /><strong>Immediate Zone: 0 - 5 feet from house</strong></li><li style='display:flex;align-items:center;'><img style='width:40px;padding-right:8px;' src='/static/css/images/fire-icon.png' alt='Fire icon' /><strong>Intermediate Zone: 5 - 30 feet from house</strong></li><li style='display:flex;align-items:center;'><img style='width:40px;padding-right:8px;' src='/static/css/images/fire-icon.png' alt='Fire icon' /><strong>Extended Zone: 30 - 100 feet from house</strong></li></ul>"
+              }
+            }
+          ]
         },
         {
           "order": 6,
@@ -150,7 +273,154 @@
             "kittitas-firewise-communities",
             "kittitas-county-outline"
           ],
-          "modules": []
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "immediate_zone_header",
+                "content": "<h2 style='font-family:Raleway-ExtraBold,sans-serif;padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>Immediate Zone Actions</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
+                "label": "immediate_zone_information",
+                "content": "<p style='font-size:1.2rem;font-style:italic'>The immediate zone extends to 5 feet from your house. This zone is the most vulnerable to embers. Start here with your fire resiliency efforts.</p>"
+              }
+            },
+            {
+              "order": 3,
+              "radiofield": {
+                "key": "clean_roofs",
+                "prompt": "I clean roofs and gutters of dead leaves, debris and pine needles that could catch embers and I keep my roof in good repair.",
+                "label": "Clean roofs and gutters",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "label": "No, but I'm interested",
+                    "value": "interested"
+                  },
+                  {
+                    "label": "Not applicable",
+                    "value": "not_applicable"
+                  }
+                ]
+              }
+            },
+            {
+              "order": 4,
+              "radiofield": {
+                "key": "replace_shingles",
+                "prompt": "I replace or repair any loose or missing shingles or roof tiles to prevent ember penetration",
+                "label": "Replace or repair loose shingles",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "label": "No, but I'm interested",
+                    "value": "interested"
+                  },
+                  {
+                    "label": "Not applicable",
+                    "value": "not_applicable"
+                  }
+                ]
+              }
+            },
+            {
+              "order": 5,
+              "radiofield": {
+                "key": "reduce_embers",
+                "prompt": "I reduce embers that could pass through vents by installing 1/8 inch metal mesh screening on foundations and/or exterior attic vents.",
+                "label": "Reduce embers",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "label": "No, but I'm interested",
+                    "value": "interested"
+                  },
+                  {
+                    "label": "Not applicable",
+                    "value": "not_applicable"
+                  }
+                ]
+              }
+            },
+            {
+              "order": 6,
+              "radiofield": {
+                "key": "clean_debris_attic_vents",
+                "prompt": "I clean debris from exterior attic vents and install 1/8 inch metal mesh screening to reduce embers",
+                "label": "Clean debris from attic vents",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "label": "No, but I'm interested",
+                    "value": "interested"
+                  },
+                  {
+                    "label": "Not applicable",
+                    "value": "not_applicable"
+                  }
+                ]
+              }
+            },
+            {
+              "order": 6,
+              "radiofield": {
+                "key": "repair_screens",
+                "prompt": "I’ve screened in areas below patios and decks with wire mesh to prevent debris and combustible materials from accumulating",
+                "label": "Repair or replace window screens",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "label": "No, but I'm interested",
+                    "value": "interested"
+                  },
+                  {
+                    "label": "Not applicable",
+                    "value": "not_applicable"
+                  }
+                ]
+              }
+            },
+            {
+              "order": 7,
+              "radiofield": {
+                "key": "move_flammable_material",
+                "prompt": "I’ve moved any flammable material away from wall exteriors--mulch, flammable plants, leaves and needles, firewood piles--anything that can burn as well as anything stored underneath decks or porches.",
+                "label": "Move flammable material",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "label": "No, but I'm interested",
+                    "value": "interested"
+                  },
+                  {
+                    "label": "Not applicable",
+                    "value": "not_applicable"
+                  }
+                ]
+              }
+            }
+          ]
         },
         {
           "order": 7,
@@ -161,7 +431,176 @@
             "kittitas-firewise-communities",
             "kittitas-county-outline"
           ],
-          "modules": []
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "intermediate_zone_header",
+                "content": "<h2 style='font-family:Raleway-ExtraBold,sans-serif;padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>Intermediate Zone Actions</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
+                "label": "intermediate_zone_information",
+                "content": "<p style='font-size:1.2rem;font-style:italic'>The intermediate zone extends between 5 and 30 feet from your house. In this zone, using careful landscaping or hardscaping techniques to create fuel breaks can help decrease fire behavior.</p>"
+              }
+            },
+            {
+              "order": 3,
+              "radiofield": {
+                "key": "clear_vegetation",
+                "prompt": "I clear vegetation from under and in a 5-foot perimeter around my propane tank",
+                "label": "Clear vegetation from propane tanks",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "label": "No, but I'm interested",
+                    "value": "interested"
+                  },
+                  {
+                    "label": "Not applicable",
+                    "value": "not_applicable"
+                  }
+                ]
+              }
+            },
+            {
+              "order": 4,
+              "radiofield": {
+                "key": "create_fuel_breaks",
+                "prompt": "I’ve created fuel breaks with driveways, walkways/paths, patios, and decks",
+                "label": "Create fuel breaks",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "label": "No, but I'm interested",
+                    "value": "interested"
+                  },
+                  {
+                    "label": "Not applicable",
+                    "value": "not_applicable"
+                  }
+                ]
+              }
+            },
+            {
+              "order": 5,
+              "radiofield": {
+                "key": "mow_to_four_inches",
+                "prompt": "I keep lawns and native grasses mowed to a height of four inches",
+                "label": "Keep lawns mowed to four inches",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "label": "No, but I'm interested",
+                    "value": "interested"
+                  },
+                  {
+                    "label": "Not applicable",
+                    "value": "not_applicable"
+                  }
+                ]
+              }
+            },
+            {
+              "order": 6,
+              "radiofield": {
+                "key": "remove_ladder_fuels",
+                "prompt": "I prune tree limbs so the lowest branches are 6 to 10 feet above the ground to help reduce the chance of fire getting into the crowns of the trees",
+                "label": "Remove ladder fuels",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "label": "No, but I'm interested",
+                    "value": "interested"
+                  },
+                  {
+                    "label": "Not applicable",
+                    "value": "not_applicable"
+                  }
+                ]
+              }
+            },
+            {
+              "order": 7,
+              "radiofield": {
+                "key": "space_trees",
+                "prompt": "I space trees to have a minimum of 18 feet between crowns, with the distance increasing with the percentage of slope",
+                "label": "Space trees to eighteen feet",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "label": "No, but I'm interested",
+                    "value": "interested"
+                  },
+                  {
+                    "label": "Not applicable",
+                    "value": "not_applicable"
+                  }
+                ]
+              }
+            },
+            {
+              "order": 8,
+              "radiofield": {
+                "key": "tree_placement",
+                "prompt": "I ensure that mature tree canopy is no closer than ten feet to the edge of any structures on my property",
+                "label": "Keep tree canopy ten feet from structures",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "label": "No, but I'm interested",
+                    "value": "interested"
+                  },
+                  {
+                    "label": "Not applicable",
+                    "value": "not_applicable"
+                  }
+                ]
+              }
+            },
+            {
+              "order": 9,
+              "radiofield": {
+                "key": "small_tree_clusters",
+                "prompt": "I ensure that trees and shrubs in the intermediate zone are limited to small clusters of a few each to break up the continuity of vegetation",
+                "label": "Break up continuity of vegetation",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "label": "No, but I'm interested",
+                    "value": "interested"
+                  },
+                  {
+                    "label": "Not applicable",
+                    "value": "not_applicable"
+                  }
+                ]
+              }
+            }
+          ]
         },
         {
           "order": 8,
@@ -333,7 +772,7 @@
           "modules": [
             {
               "order": 1,
-              "geocodingfield": {
+              "latlngfield": {
                 "key": "n/a",
                 "prompt": "",
                 "required": true
@@ -402,6 +841,11 @@
       "display_name": "kittitas-fire",
       "slug": "kittitas-fire",
       "forms": ["kittitas-fire"]
+    },
+    {
+      "display_name": "mississippi",
+      "slug": "mississippi",
+      "forms": []
     }
   ]
 }

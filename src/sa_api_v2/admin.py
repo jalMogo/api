@@ -466,6 +466,8 @@ class AbstractFormModuleAdmin (HiddenModelAdmin, admin.ModelAdmin):
             Model = models.DateField
         elif db_field.name == "geocodingfield":
             Model = models.GeocodingField
+        elif db_field.name == "latlngfield":
+            Model = models.LatLngField
         elif db_field.name == "textfield":
             Model = models.TextField
         elif db_field.name == "textareafield":
@@ -766,6 +768,7 @@ admin.site.register(models.NumberField, HiddenModelAdmin)
 admin.site.register(models.FileField, HiddenModelAdmin)
 admin.site.register(models.CheckboxField, CheckboxFieldAdmin)
 admin.site.register(models.GeocodingField, HiddenModelAdmin)
+admin.site.register(models.LatLngField, HiddenModelAdmin)
 admin.site.register(models.GroupModule, GroupModuleAdmin)
 
 admin.site.site_header = 'Mapseed API Server Administration'
