@@ -737,11 +737,15 @@ class OrderedModuleIdentityField (serializers.ModelSerializer):
 
 
 class BaseFormFieldOptionSerializer (serializers.ModelSerializer):
-    visibility_triggers = OrderedModuleIdentityField(read_only=True, required=False, many=True)
+    group_visibility_triggers = OrderedModuleIdentityField(
+        read_only=True, 
+        required=False, 
+        many=True,
+    )
 
     class Meta:
         abstract = True
-        fields = ['visibility_triggers', 'order']
+        fields = ['group_visibility_triggers', 'order']
 
 # Form Field Options
 

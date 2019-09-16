@@ -385,13 +385,13 @@ class SubmissionAdmin(SubmittedThingAdmin):
 
 
 class FormFieldOptionInlineForm(ModelForm):
-    visibility_triggers = ModelMultipleChoiceField(
+    group_visibility_triggers = ModelMultipleChoiceField(
         widget=CheckboxSelectMultiple,
         queryset=models.NestedOrderedModule.objects.none(),
-        help_text=unicode(models.FormFieldOption._meta.get_field('visibility_triggers').help_text),
+        help_text=unicode(models.FormFieldOption._meta.get_field('group_visibility_triggers').help_text),
         required=False,
     )
-    fields = ('visibility_triggers',)
+    fields = ('group_visibility_triggers',)
 
     def __init__(self, *args, **kwargs):
         super(FormFieldOptionInlineForm, self).__init__(*args, **kwargs)
@@ -404,11 +404,11 @@ class FormFieldOptionInlineForm(ModelForm):
             if 'instance' in kwargs else []
         if len(group_module_ids) > 0:
 
-            # limit the selectable visibility_triggers to NestedOrderedModules
-            # that belong to the same form, and are not visible by
-            # default
+            # limit the selectable group_visibility_triggers to
+            # NestedOrderedModules that belong to the same form, and are not
+            # visible by default
             nested_ordered_module_ids = self.instance.field.nested_ordered_modules.all()
-            self.fields['visibility_triggers'].queryset = models.\
+            self.fields['group_visibility_triggers'].queryset = models.\
                 NestedOrderedModule.objects.select_related('group').\
                 filter(
                     # filter out this option's OrderedModule, because we

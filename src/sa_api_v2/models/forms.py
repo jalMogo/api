@@ -609,13 +609,14 @@ def delete(sender, instance, using, **kwargs):
 
 class FormFieldOption(models.Model):
 
-    visibility_triggers = models.ManyToManyField(
+    group_visibility_triggers = models.ManyToManyField(
         # Triggers are constrained to NestedOrderedModules only.
         NestedOrderedModule,
         help_text="Triggers an update to make the following NestedOrderedModules visible. Only default invisible modules are within this module's group are selectable here.",
         blank=True,
         related_name='+',
     )
+
     order = models.PositiveSmallIntegerField(default=0, blank=False, null=False)
 
     def clean(self):
