@@ -1111,6 +1111,17 @@
       ]
     }
   ],
+  "group_visibility_triggers": [
+    {
+      "form": "kittitas-fire",
+      "stage_order": 9,
+      "group_order": 2,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3, 4, 5, 6]
+    }
+  ],
   "flavors": [
     {
       "display_name": "bellevue-bike-share",

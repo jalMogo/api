@@ -628,6 +628,35 @@ class FormFieldOption(models.Model):
         self.clean()
         super(FormFieldOption, self).save(*args, **kwargs)
 
+    # This is only used for importing visibility trigger relationships from a
+    # JSON source
+    @staticmethod
+    def import_group_triggers(field_data, form):
+        for field in field_data:
+            # First get the field option to which we'll add the group triggers:
+            FieldOption = RadioOption if field['type'] == 'radiofield' else CheckboxOption
+            field_option = FieldOption.objects.get(
+                value=field['option_value'],
+                field__nested_ordered_modules__order=field['field_order'],
+                field__nested_ordered_modules__group__ordered_modules__order=field['group_order'],
+                field__nested_ordered_modules__group__ordered_modules__stage__order=field['stage_order'],
+                field__nested_ordered_modules__group__ordered_modules__stage__form__label=field['form'],
+            )
+            # get the GroupModule that contains the field_option:
+            group = GroupModule.objects.get(
+                modules__in=field_option.field.nested_ordered_modules.all()
+            )
+            # get the hidden modules that we want to trigger when this field
+            # option is selected:
+            nested_ordered_modules_to_trigger = NestedOrderedModule.objects.filter(
+                order__in=field['group_visibility_triggers'],
+                group_id=group.id,
+            )
+            field_option.group_visibility_triggers.add(
+                *[module for module in nested_ordered_modules_to_trigger.all()]
+            )
+            field_option.save()
+
     class Meta:
         app_label = 'sa_api_v2'
         abstract = True
@@ -675,7 +704,7 @@ class RadioOption(FormFieldOption):
     )
 
     def __unicode__(self):
-        return "RadioOption with label: '{}' on field: {}".format(self.label, self.field)
+        return "RadioOption with label: '{}' and order: {} on field: {}".format(self.label, self.order, self.field)
 
     class Meta(FormFieldOption.Meta):
         db_table = 'ms_api_form_module_option_radio'

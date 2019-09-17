@@ -18,6 +18,7 @@ from sa_api_v2.models import (
     FormStage,
     OrderedModule,
     NestedOrderedModule,
+    FormFieldOption,
     RadioField,
     RadioOption,
     HtmlModule,
@@ -655,5 +656,19 @@ class TestFlavorDeserializers (TestCase):
         )
         self.assertTrue(flavor_serializer.is_valid())
         flavors = flavor_serializer.save()
+        forms = flavors[1].forms.all()
+        form = forms.get(label='kittitas-fire')
+
+        # create our group visibility triggers:
+        group_triggers = data['group_visibility_triggers']
+        FormFieldOption.import_group_triggers(group_triggers, form)
+
+        self.assertEqual(
+            [module.order for module in form.stages.get(order=9).modules.get(order=2).groupmodule.modules.get(order=1).radiofield.options.first().group_visibility_triggers.all()],
+            [2,3,4,5,6]
+        )
+
+        # ensure that we aren't creating duplicate stages
         forms = flavors[0].forms.all()
-        form = forms.first()
+        bellevue_form = forms.first()
+        self.assertEqual(len(bellevue_form.stages.all()), 6)

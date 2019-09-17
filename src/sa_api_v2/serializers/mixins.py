@@ -127,7 +127,14 @@ class FormFieldOptionsCreator (object):
     def create(self, validated_data):
         options_data = validated_data.pop('options', None)
         field = self.Meta.model.objects.create(**validated_data)
+        order = 1
+
         for option_data in options_data:
+            if 'order' in option_data.keys():
+                raise serializers.ValidationError("Order should not be supplied when creating a FormField option")
+
+            option_data['order'] = order
+            order += 1
             # read from our custom attrs:
             self.Meta.options_model.objects.create(
                 field=field,
