@@ -738,7 +738,6 @@ class OrderedModuleIdentityField (serializers.ModelSerializer):
 
 class BaseFormFieldOptionSerializer (serializers.ModelSerializer):
     group_visibility_triggers = OrderedModuleIdentityField(
-        read_only=True, 
         required=False, 
         many=True,
     )
@@ -1126,7 +1125,10 @@ class FormFixtureSerializer (serializers.ModelSerializer):
         form = models.Form.objects.create(**validated_data)
         # use self.initial data instead of stages_data, so that we can validate
         # it within our module serializer:
-        for stage_data in self.initial_data[0].get('stages'):
+        form_data = next(
+            form_data for form_data in self.initial_data if form_data['label'] == form.label
+        )
+        for stage_data in form_data.get('stages'):
             serializer = FormStageFixtureSerializer(
                 data=stage_data,
                 context={"form": form}
