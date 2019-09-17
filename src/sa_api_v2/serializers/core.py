@@ -744,7 +744,12 @@ class BaseFormFieldOptionSerializer (serializers.ModelSerializer):
 
     class Meta:
         abstract = True
-        fields = ['group_visibility_triggers', 'order']
+        fields = [
+            'default',
+            'make_private', 
+             'group_visibility_triggers', 
+             'order'
+        ]
 
 # Form Field Options
 

@@ -617,6 +617,18 @@ class FormFieldOption(models.Model):
         related_name='+',
     )
 
+    default = models.BooleanField(
+        default=False,
+        blank=True,
+        help_text="If true, then this field will be selected by default.",
+    )
+
+    make_private = models.BooleanField(
+        default=False,
+        blank=True,
+        help_text="If true, then the Place's 'private' field will be set to true when this option is selected.",
+    )
+
     order = models.PositiveSmallIntegerField(default=0, blank=False, null=False)
 
     def clean(self):

@@ -913,7 +913,79 @@
             "kittitas-firewise-communities",
             "kittitas-county-outline"
           ],
-          "modules": []
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "assistance_information_header",
+                "content": "<h2 style='font-family:Raleway-ExtraBold,sans-serif;padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7);margin-bottom:24px;'>Technical and Financial Assistance</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "radiofield": {
+                "key": "landowner_confidence",
+                "required": true,
+                "prompt": "How do you feel about your answers to list of tasks in the area around your home?",
+                "options": [
+                  {
+                    "label": "I’m very confident that I’ve taken the actions that reduce my risk in a wildfire",
+                    "value": "very_confident"
+                  },
+                  {
+                    "label": "I’m somewhat confident that I’ve taken the actions that reduce my risk in a wildfire",
+                    "value": "somewhat_confident"
+                  },
+                  {
+                    "label": "I’ve completed some of these actions, but have many left to do",
+                    "value": "completed_some"
+                  },
+                  {
+                    "label": "I’m overwhelmed by the list of actions and concerned about my property and my neighborhood",
+                    "value": "overwhelmed"
+                  }
+                ]
+              }
+            },
+            {
+              "order": 3,
+              "checkboxfield": {
+                "key": "not_completed_reasons",
+                "prompt": "If you have not completed some of the tasks, why not? (check all that apply)",
+                "options": [
+                  {
+                    "label": "I didn’t know they were important to reducing my risk",
+                    "value": "unaware_importance"
+                  },
+                  {
+                    "label": "I am not able to do the work myself",
+                    "value": "unable_do_work"
+                  },
+                  {
+                    "label": "I can’t afford to have the work done",
+                    "value": "unable_afford_work"
+                  }
+                ]
+              }
+            },
+            {
+              "order": 4,
+              "checkboxfield": {
+                "key": "interested_assistance",
+                "prompt": "There are people and programs here to help you with assessing your property, determining next steps and securing grants to help with the financial burden of completing work. Just let us know what you need",
+                "options": [
+                  {
+                    "label": "I’m interested in technical advice on what my home and property need",
+                    "value": "interested_technical_advice"
+                  },
+                  {
+                    "label": "I’m interested in learning more about available financial assistance",
+                    "value": "interested_financial_assistance"
+                  }
+                ]
+              }
+            }
+          ]
         },
         {
           "order": 11,
@@ -925,7 +997,104 @@
             "kittitas-county-outline",
             "kittitas-firewise-input"
           ],
-          "modules": []
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "landowner_information_header",
+                "content": "<h2 style='font-family:Raleway-ExtraBold,sans-serif;padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7);margin-bottom:24px;'>Almost Done!</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "geocodingfield": {
+                "key": "private-final_address",
+                "placeholder": "Your address will never be shared",
+                "private": true
+              }
+            },
+            {
+              "order": 3,
+              "textfield": {
+                "key": "private-landowner_name",
+                "placeholder": "Your name will only be shared if you are logged in",
+                "prompt": "What is your name?",
+                "private": true,
+                "required": true
+              }
+            },
+            {
+              "order": 4,
+              "radiofield": {
+                "key": "private-is_shareable",
+                "private": true,
+                "prompt": "Would you be willing to share your wildfire resiliency efforts with the public? Checking \"yes\" below will place a pin on the map upon submission and a brief summary of your actions will be visible to the public.",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "no",
+                    "default": true,
+                    "make_private": true
+                  },
+                  {
+                    "label": "No",
+                    "value": "yes"
+                  }
+                ]
+              }
+            },
+            {
+              "order": 5,
+              "textfield": {
+                "key": "private-landowner_phone",
+                "prompt": "What is your phone number?",
+                "placeholder": "Your phone number will never be shared",
+                "variant": "PH",
+                "private": true
+              }
+            },
+            {
+              "order": 6,
+              "radiofield": {
+                "key": "private-use_photos",
+                "prompt": "Can Kittitas County Conservation District highlight your photos on our website?",
+                "private": true,
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "label": "No",
+                    "value": "no",
+                    "default": true
+                  }
+                ]
+              }
+            },
+            {
+              "order": 7,
+              "filefield": {
+                "key": "my_image",
+                "label": "Add an image",
+                "prompt": "Share images of your resiliency efforts!"
+              }
+            },
+            {
+              "order": 8,
+              "textareafield": {
+                "key": "other-comments",
+                "prompt": "Add any additional comments about your wildfire preparedness efforts",
+                "label": "Comment"
+              }
+            },
+            {
+              "order": 9,
+              "submitbuttonmodule": {
+                "label": "Submit!"
+              }
+            }
+          ]
         }
       ]
     },
