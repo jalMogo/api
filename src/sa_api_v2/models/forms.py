@@ -643,7 +643,7 @@ class FormFieldOption(models.Model):
     # This is only used for importing visibility trigger relationships from a
     # JSON source
     @staticmethod
-    def import_group_triggers(field_data, form):
+    def import_group_triggers(field_data):
         for field in field_data:
             # First get the field option to which we'll add the group triggers:
             FieldOption = RadioOption if field['type'] == 'radiofield' else CheckboxOption

@@ -561,6 +561,10 @@ class TestFlavorDeserializers (TestCase):
         self.owner = User.objects.create(username='myuser')
         self.dataset = DataSet.objects.create(slug='test-dataset',
                                               owner_id=self.owner.id)
+        self.dataset2 = DataSet.objects.create(slug='kittitas-firewise-input',
+                                              owner_id=self.owner.id)
+        self.dataset3 = DataSet.objects.create(slug='bellevue-bike-share',
+                                              owner_id=self.owner.id)
 
     def test_deserialize_flavor(self):
         test_dir = path.dirname(__file__)
@@ -656,12 +660,14 @@ class TestFlavorDeserializers (TestCase):
         )
         self.assertTrue(flavor_serializer.is_valid())
         flavors = flavor_serializer.save()
+        # TODO: refactor to add trigger into our test_form,
+        # then remove this code. (this method will eventually be deleted too)
         forms = flavors[1].forms.all()
-        form = forms.get(label='kittitas-fire')
+        form = forms.get(label='kittitas-firewise-input')
 
         # create our group visibility triggers:
         group_triggers = data['group_visibility_triggers']
-        FormFieldOption.import_group_triggers(group_triggers, form)
+        FormFieldOption.import_group_triggers(group_triggers)
 
         self.assertEqual(
             [module.order for module in form.stages.get(order=9).modules.get(order=2).groupmodule.modules.get(order=1).radiofield.options.first().group_visibility_triggers.all()],

@@ -54,9 +54,9 @@
   ],
   "forms": [
     {
-      "label": "kittitas-fire",
+      "label": "kittitas-firewise-input",
       "is_enabled": true,
-      "dataset": "test-dataset",
+      "dataset": "kittitas-firewise-input",
       "stages": [
         {
           "order": 1,
@@ -1101,7 +1101,7 @@
     {
       "label": "bellevue-bike-share",
       "is_enabled": true,
-      "dataset": "test-dataset",
+      "dataset": "bellevue-bike-share",
       "stages": [
         {
           "order": 1,
@@ -1282,7 +1282,7 @@
   ],
   "group_visibility_triggers": [
     {
-      "form": "kittitas-fire",
+      "form": "kittitas-firewise-input",
       "stage_order": 9,
       "group_order": 2,
       "field_order": 1,
@@ -1298,9 +1298,9 @@
       "forms": ["bellevue-bike-share"]
     },
     {
-      "display_name": "kittitas-fire",
-      "slug": "kittitas-fire",
-      "forms": ["kittitas-fire"]
+      "display_name": "kittitas-wildfire-action",
+      "slug": "kittitas-wildfire-action",
+      "forms": ["kittitas-firewise-input"]
     },
     {
       "display_name": "mississippi",

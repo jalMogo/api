@@ -2,7 +2,7 @@ from __future__ import print_function
 from django.core.management.base import BaseCommand
 from django.core.exceptions import ValidationError
 from django.db import transaction
-from sa_api_v2 import models as sa_models
+from sa_api_v2 import models
 from sa_api_v2.serializers import (
     FlavorSerializer,
     LayerGroupSerializer,
@@ -27,22 +27,22 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         logger.debug('parsing json files')
-        test_dir = path.dirname(__file__)
-        fixture_dir = path.join(test_dir, 'fixtures')
+        curr_dir = path.dirname(__file__)
+        test_fixture_dir = path.join(curr_dir, '..', '..', 'tests', 'fixtures')
         flavor_data_file = path.join(
-            fixture_dir, 'initial_flavors_and_forms.json'
+            test_fixture_dir, 'staging_flavors.json'
         )
         data = json.load(open(flavor_data_file))
         with transaction.atomic():
             # This should delete all forms, modules, etc.
             # delete all LayerGroups
-            sa_models.LayerGroup.objects.all().delete()
+            models.LayerGroup.objects.all().delete()
 
             # delete all Flavors
-            sa_models.Flavor.objects.all().delete()
+            models.Flavor.objects.all().delete()
 
             # delete all Forms
-            sa_models.Form.objects.all().delete()
+            models.Form.objects.all().delete()
             logger.debug('models deleted!')
 
             # create our LayerGroup models:
@@ -63,6 +63,11 @@ class Command(BaseCommand):
 
             form_serializer.save()
             logger.debug('forms created!')
+
+            # create our group visibility triggers:
+            group_triggers = data['group_visibility_triggers']
+            models.FormFieldOption.import_group_triggers(group_triggers)
+            logger.debug('group triggers created!')
 
             # create our Flavor models:
             flavor_serializer = FlavorFixtureSerializer(
