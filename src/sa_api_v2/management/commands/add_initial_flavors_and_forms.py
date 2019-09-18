@@ -11,11 +11,7 @@ from sa_api_v2.serializers import (
 )
 from os import path
 import re
-import logging
 import json
-
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
 
 
 class Command(BaseCommand):
@@ -26,7 +22,7 @@ class Command(BaseCommand):
     """
 
     def handle(self, *args, **options):
-        logger.debug('parsing json files')
+        print('parsing json files')
         curr_dir = path.dirname(__file__)
         test_fixture_dir = path.join(curr_dir, '..', '..', 'tests', 'fixtures')
         flavor_data_file = path.join(
@@ -43,7 +39,7 @@ class Command(BaseCommand):
 
             # delete all Forms
             models.Form.objects.all().delete()
-            logger.debug('models deleted!')
+            print.debug('models deleted!')
 
             # create our LayerGroup models:
             layer_group_serializer = LayerGroupSerializer(
@@ -54,7 +50,7 @@ class Command(BaseCommand):
                 raise ValidationError("layer_group_serializer is not valid:", layer_group_serializer.errors)
 
             layer_group_serializer.save()
-            logger.debug('layerGroups created!')
+            print.debug('layerGroups created!')
 
             # create our Form models:
             form_serializer = FormFixtureSerializer(data=data['forms'], many=True)
@@ -62,12 +58,12 @@ class Command(BaseCommand):
                 raise ValidationError("form_serializer is not valid:", form_serializer.errors)
 
             form_serializer.save()
-            logger.debug('forms created!')
+            print.debug('forms created!')
 
             # create our group visibility triggers:
             group_triggers = data['group_visibility_triggers']
             models.FormFieldOption.import_group_triggers(group_triggers)
-            logger.debug('group triggers created!')
+            print.debug('group triggers created!')
 
             # create our Flavor models:
             flavor_serializer = FlavorFixtureSerializer(
@@ -78,4 +74,4 @@ class Command(BaseCommand):
                 raise ValidationError("flavor_serializer is not valid:", flavor_serializer.errors)
 
             flavor = flavor_serializer.save()
-            logger.debug('flavor created!')
+            print.debug('flavor created!')
