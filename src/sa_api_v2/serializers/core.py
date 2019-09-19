@@ -730,6 +730,13 @@ class ActionSerializer (EmptyModelSerializer, serializers.ModelSerializer):
 #################################################################################
 
 class BaseFormFieldOptionSerializer (serializers.ModelSerializer):
+    stage_visibility_triggers = serializers.SlugRelatedField(
+        many=True,
+        slug_field="id",
+        queryset=models.FormStage.objects.all(),
+        required=False,
+    )
+
     group_visibility_triggers = serializers.SlugRelatedField(
         many=True,
         slug_field="id",
@@ -1043,7 +1050,13 @@ class FormStageSerializer (serializers.ModelSerializer):
 
     class Meta:
         model = models.FormStage
-        fields = ['visible_layer_groups', 'map_viewport', 'modules', 'order']
+        fields = [
+            'visible_layer_groups',
+            'map_viewport',
+            'modules',
+            'order',
+            'visible',
+        ]
 
 
 class FormSerializer (serializers.ModelSerializer):

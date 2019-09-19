@@ -103,6 +103,19 @@ class FormStage(models.Model):
         related_name='+',
     )
 
+    label = models.CharField(
+        default="",
+        blank=True,
+        max_length=255,
+        help_text="An option label that can be used to describe the form stage. Currently it is only used internally.",
+    )
+
+    visible = models.BooleanField(
+        default=True,
+        blank=True,
+        help_text="Determines whether the stage is visible by default.",
+    )
+
     def __unicode__(self):
         return 'order: {}, containing {} modules, on form: \"{}\"'.format(
             self.order,
@@ -609,8 +622,15 @@ def delete(sender, instance, using, **kwargs):
 
 class FormFieldOption(models.Model):
 
+    stage_visibility_triggers = models.ManyToManyField(
+        FormStage,
+        help_text="Triggers an update to make the following FormStages visible. Only default invisible stages are within this module's Form are selectable here",
+        blank=True,
+        related_name='+',
+    )
+
     group_visibility_triggers = models.ManyToManyField(
-        # Triggers are constrained to NestedOrderedModules only.
+        # Triggers are constrained to NestedOrderedModules within the GroupModule.
         NestedOrderedModule,
         help_text="Triggers an update to make the following NestedOrderedModules visible. Only default invisible modules are within this module's group are selectable here.",
         blank=True,
