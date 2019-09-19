@@ -750,8 +750,46 @@ class BaseFormFieldOptionSerializer (serializers.ModelSerializer):
             'default',
             'make_private', 
              'group_visibility_triggers', 
+             'stage_visibility_triggers',
              'order'
         ]
+
+    def to_representation(self, instance):
+        """
+        Object instance -> Dict of primitive datatypes.
+        """
+        ret = OrderedDict()
+        fields = self._readable_fields
+
+        for field in fields:
+            try:
+                attribute = field.get_attribute(instance)
+            except SkipField:
+                continue
+
+            # KEY IS HERE:
+            if field.field_name == 'group_visibility_triggers' and len(attribute) == 0:
+                continue
+            elif field.field_name == 'stage_visibility_triggers' and len(attribute) == 0:
+                continue
+            elif field.field_name == 'make_private' and attribute == False:
+                continue
+            elif field.field_name == 'default' and attribute == False:
+                continue
+
+            # We skip `to_representation` for `None` values so that fields do
+            # not have to explicitly deal with that case.
+            #
+            # For related fields with `use_pk_only_optimization` we need to
+            # resolve the pk value.
+            check_for_none = attribute.pk if isinstance(attribute, PKOnlyObject) else attribute
+            if check_for_none is None:
+                print("Field has a none value (?):", field.field_name)
+                ret[field.field_name] = None
+            else:
+                ret[field.field_name] = field.to_representation(attribute)
+
+        return ret
 
 # Form Field Options
 
