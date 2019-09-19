@@ -76,6 +76,43 @@
                 "modules": [
                   {
                     "order": 1,
+                    "radiofield": {
+                      "key": "question-1",
+                      "label": "question 1:",
+                      "prompt": "Do you want a park?",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "visible": false,
+                    "radiofield": {
+                      "key": "question-2",
+                      "prompt": "Why did you choose 'yes' to the previous question?",
+                      "label": "Reason why:",
+                      "options": [
+                        {
+                          "label": "Because I want a park",
+                          "value": "park"
+                        },
+                        {
+                          "label": "Because it was the easiest choice",
+                          "value": "easy"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 3,
                     "visible": true,
                     "htmlmodule": {
                       "label": "end of survey",
@@ -99,6 +136,17 @@
           "modules": []
         }
       ]
+    }
+  ],
+  "group_visibility_triggers": [
+    {
+      "form": "form1",
+      "stage_order": 1,
+      "group_order": 4,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
     }
   ],
   "flavors": [

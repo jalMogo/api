@@ -585,6 +585,10 @@ class TestFlavorDeserializers (TestCase):
         self.assertTrue(form_serializer.is_valid())
         form_serializer.save()
 
+        # create our group visibility triggers:
+        group_triggers = data['group_visibility_triggers']
+        FormFieldOption.import_group_triggers(group_triggers)
+
         # create our Flavor models:
         flavor_serializer = FlavorFixtureSerializer(
             data=data['flavors'],
@@ -594,6 +598,13 @@ class TestFlavorDeserializers (TestCase):
         flavors = flavor_serializer.save()
         forms = flavors[0].forms.all()
         form = forms.first()
+
+
+        # check that our visibility triggers are valid:
+        self.assertEqual(
+            [module.order for module in form.stages.get(order=1).modules.get(order=4).groupmodule.modules.get(order=1).radiofield.options.first().group_visibility_triggers.all()],
+            [2]
+        )
 
         # assert that our form is valid:
         self.assertEqual(form.dataset.id, self.dataset.id)
@@ -630,7 +641,7 @@ class TestFlavorDeserializers (TestCase):
             "a group module"
         )
         self.assertEqual(
-            groupmodule.modules.all().first().htmlmodule.label,
+            groupmodule.modules.all().last().htmlmodule.label,
             "end of survey"
         )
 
@@ -660,15 +671,12 @@ class TestFlavorDeserializers (TestCase):
         )
         self.assertTrue(flavor_serializer.is_valid())
         flavors = flavor_serializer.save()
-        # TODO: refactor to add trigger into our test_form,
-        # then remove this code. (this method will eventually be deleted too)
-        forms = flavors[1].forms.all()
-        form = forms.get(label='kittitas-firewise-input')
-
         # create our group visibility triggers:
         group_triggers = data['group_visibility_triggers']
         FormFieldOption.import_group_triggers(group_triggers)
 
+        forms = flavors[1].forms.all()
+        form = forms.get(label='kittitas-firewise-input')
         self.assertEqual(
             [module.order for module in form.stages.get(order=9).modules.get(order=2).groupmodule.modules.get(order=1).radiofield.options.first().group_visibility_triggers.all()],
             [2,3,4,5,6]
