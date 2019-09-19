@@ -729,17 +729,12 @@ class ActionSerializer (EmptyModelSerializer, serializers.ModelSerializer):
 # Form Serializers
 #################################################################################
 
-class OrderedModuleIdentityField (serializers.ModelSerializer):
-    class Meta:
-        model = models.OrderedModule
-        # TODO: make this a unique url
-        fields = ['id']
-
-
 class BaseFormFieldOptionSerializer (serializers.ModelSerializer):
-    group_visibility_triggers = OrderedModuleIdentityField(
-        required=False, 
+    group_visibility_triggers = serializers.SlugRelatedField(
         many=True,
+        slug_field="id",
+        queryset=models.OrderedModule.objects.all(),
+        required=False,
     )
 
     class Meta:
@@ -1027,7 +1022,7 @@ class OrderedModuleSerializer (AbstractFormModuleSerializer):
 class LayerGroupSerializer (serializers.ModelSerializer):
     class Meta:
         model = models.LayerGroup
-        fields = ['label']
+        fields = '__all__'
 
 
 class MapViewportSerializer (serializers.ModelSerializer):
@@ -1038,7 +1033,12 @@ class MapViewportSerializer (serializers.ModelSerializer):
 
 class FormStageSerializer (serializers.ModelSerializer):
     modules = OrderedModuleSerializer(many=True)
-    visible_layer_groups = LayerGroupSerializer(many=True)
+    visible_layer_groups = serializers.SlugRelatedField(
+        many=True,
+        slug_field="label",
+        queryset=models.LayerGroup.objects.all(),
+        required=False,
+    )
     map_viewport = MapViewportSerializer()
 
     class Meta:
