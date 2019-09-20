@@ -21,7 +21,7 @@ __all__ = [
     'Modal',
     'FormFieldOption',
     'CheckboxOption',
-    'GeocodingField',
+    'AddressField',
     'LatLngField',
     'DateField',
     'NumberField',
@@ -43,7 +43,7 @@ RELATED_MODULES = [
     "datefield",
     "checkboxfield",
     "textfield",
-    "geocodingfield",
+    "addressfield",
     'latlngfield',
     "textareafield",
     "submitbuttonmodule",
@@ -370,7 +370,7 @@ class LatLngField(FormField):
         db_table = 'ms_api_form_module_field_latlng'
 
 
-class GeocodingField(FormField):
+class AddressField(FormField):
     """
     Saves the address from the LatLng field
     """
@@ -382,10 +382,10 @@ class GeocodingField(FormField):
     )
 
     def summary(self):
-        return "geocoding field with prompt: \"{}\"".format(self.prompt)
+        return "address field with prompt: \"{}\"".format(self.prompt)
 
     class Meta:
-        db_table = 'ms_api_form_module_field_geocoding'
+        db_table = 'ms_api_form_module_field_address'
 
 
 class RadioField(FormField):
@@ -496,10 +496,10 @@ class AbstractOrderedModule(models.Model):
         blank=True,
         null=True,
     )
-    geocodingfield = models.ForeignKey(
-        GeocodingField,
+    addressfield = models.ForeignKey(
+        AddressField,
         on_delete=models.SET_NULL,
-        help_text=HELP_TEXT.format("geocoding field"),
+        help_text=HELP_TEXT.format("address field"),
         blank=True,
         null=True,
     )

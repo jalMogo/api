@@ -107,7 +107,7 @@
             },
             {
               "order": 5,
-              "geocodingfield": {
+              "addressfield": {
                 "key": "private-address",
                 "private": true,
                 "reverse_geocode": false,
@@ -2103,7 +2103,7 @@
             },
             {
               "order": 2,
-              "geocodingfield": {
+              "addressfield": {
                 "key": "private-address",
                 "placeholder": "Your address will never be shared",
                 "reverse_geocode": false,
@@ -2888,7 +2888,7 @@
             },
             {
               "order": 2,
-              "geocodingfield": {
+              "addressfield": {
                 "key": "private-final_address",
                 "placeholder": "Your address will never be shared",
                 "reverse_geocode": true,

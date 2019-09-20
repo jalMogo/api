@@ -911,9 +911,9 @@ class BaseFormFieldSerializer (
 
         return ret
 
-class GeocodingFieldModuleSerializer (BaseFormFieldSerializer):
+class AddressFieldModuleSerializer (BaseFormFieldSerializer):
     class Meta(BaseFormFieldSerializer.Meta):
-        model = models.GeocodingField
+        model = models.AddressField
         fields = BaseFormFieldSerializer.Meta.fields + ['placeholder', 'reverse_geocode']
 
 
@@ -991,7 +991,7 @@ class AbstractFormModuleSerializer (serializers.ModelSerializer):
     datefield = DateFieldModuleSerializer(required=False)
     checkboxfield = CheckboxFieldModuleSerializer(required=False)
     textfield = TextFieldModuleSerializer(required=False)
-    geocodingfield = GeocodingFieldModuleSerializer(required=False)
+    addressfield = AddressFieldModuleSerializer(required=False)
     latlngfield = LatLngFieldModuleSerializer(required=False)
     textareafield = TextAreaFieldModuleSerializer(required=False)
     submitbuttonmodule = SubmitButtonModuleSerializer(required=False)
@@ -1068,7 +1068,7 @@ MODULES = {
     "datefield": DateFieldModuleSerializer,
     "checkboxfield": CheckboxFieldModuleSerializer,
     "textfield": TextFieldModuleSerializer,
-    "geocodingfield": GeocodingFieldModuleSerializer,
+    "addressfield": AddressFieldModuleSerializer,
     "latlngfield": LatLngFieldModuleSerializer,
     "textareafield": TextAreaFieldModuleSerializer,
     "submitbuttonmodule": SubmitButtonModuleSerializer,

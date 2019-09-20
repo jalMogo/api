@@ -464,8 +464,8 @@ class AbstractFormModuleAdmin (HiddenModelAdmin, admin.ModelAdmin):
             Model = models.NumberField
         elif db_field.name == "datefield":
             Model = models.DateField
-        elif db_field.name == "geocodingfield":
-            Model = models.GeocodingField
+        elif db_field.name == "addressfield":
+            Model = models.AddressField
         elif db_field.name == "latlngfield":
             Model = models.LatLngField
         elif db_field.name == "textfield":
@@ -767,7 +767,7 @@ admin.site.register(models.DateField, HiddenModelAdmin)
 admin.site.register(models.NumberField, HiddenModelAdmin)
 admin.site.register(models.FileField, HiddenModelAdmin)
 admin.site.register(models.CheckboxField, CheckboxFieldAdmin)
-admin.site.register(models.GeocodingField, HiddenModelAdmin)
+admin.site.register(models.AddressField, HiddenModelAdmin)
 admin.site.register(models.LatLngField, HiddenModelAdmin)
 admin.site.register(models.GroupModule, GroupModuleAdmin)
 
