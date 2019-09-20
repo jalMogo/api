@@ -352,6 +352,11 @@ class GeocodingField(FormField):
     Saves the address from the LatLng field
     """
     placeholder = models.CharField(**placeholder_kwargs)
+    reverse_geocode = models.BooleanField(
+        default=True,
+        blank=True,
+        help_text="Inidicates whether the field will auto-update with a new address based on the map's location.",
+    )
 
     def summary(self):
         return "geocoding field with prompt: \"{}\"".format(self.prompt)

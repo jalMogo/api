@@ -50,9 +50,239 @@
     },
     {
       "label": "kittitas-firewise-input"
+    },
+    {
+      "label": "satellite"
+    },
+    {
+      "label": "spokane-input"
+    },
+    {
+      "label": "spokane-county-outline"
     }
   ],
   "forms": [
+    {
+      "label": "spokane-input",
+      "is_enabled": true,
+      "dataset": "spokane-input",
+      "stages": [
+        {
+          "order": 1,
+          "visible_layer_groups": [
+            "satellite",
+            "spokane-input",
+            "spokane-county-outline"
+          ],
+          "modules": [
+            {
+              "order": 1,
+              "latlngfield": {
+                "key": "n/a",
+                "prompt": "",
+                "required": true,
+                "validate": true
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
+                "label": "location_information_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>1. Your property</h2><figure style='margin:8px 0 0 0;'><img style='width:100%;' src='/static/css/images/header-your-property.jpg' alt='Your property section'/></figure>"
+              }
+            },
+            {
+              "order": 3,
+              "htmlmodule": {
+                "label": "location_why",
+                "content": "<p>At the end of this survey you will be able to hide your contact information and location information or voluntarily choose to make it public for the VSP report.</p>"
+              }
+            },
+            {
+              "order": 4,
+              "htmlmodule": {
+                "label": "drag_map_info",
+                "content": "<div style='display:flex;align-items:center;padding:24px'><span class='fa fa-globe' style='color:#999999;font-size:1.5rem;margin-right:16px;'></span><p style='display:inline;margin:0;padding-left:8px'>Please drag and zoom the map to center the pin on your property.</p></div>"
+              }
+            },
+            {
+              "order": 5,
+              "geocodingfield": {
+                "key": "private-address",
+                "private": true,
+                "reverse_geocode": false,
+                "prompt": "Or, search by address:",
+                "placeholder": "Your address will never be shared"
+              }
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "visible_layer_groups": [
+            "satellite",
+            "spokane-input",
+            "spokane-county-outline"
+          ],
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "practice_types_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>2. Land Use</h2><figure style='margin:8px 0 0 0;'><img style='width:100%;' src='/static/css/images/header-land-use.jpg' alt='Practice types section'/></figure>"
+              }
+            },
+            {
+              "order": 2,
+              "checkboxfield": {
+                "key": "practice_types",
+                "prompt": "Which of the following uses apply to your land? (Check all that apply)",
+                "required": true,
+                "options": [
+                  {
+                    "label": "Agriculture",
+                    "value": "agriculture"
+                  },
+                  {
+                    "label": "Livestock",
+                    "value": "livestock"
+                  },
+                  {
+                    "label": "Forestry",
+                    "value": "forestry"
+                  }
+                ]
+              }
+            },
+            {
+              "order": 3,
+              "htmlmodule": {
+                "label": "practice_types_questions",
+                "content": "<p style='font-size: 0.9rem; color: #444;'>Questions? Call Doug Phelps at 509-535-7274 x240</p>"
+              }
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "label": "agriculture",
+          "visible": false,
+          "visible_layer_groups": [
+            "satellite",
+            "spokane-input",
+            "spokane-county-outline"
+          ],
+          "modules": [
+            {
+              "order": 1,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "no_till",
+                      "prompt": "No till",
+                      "label": "No till",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but interested",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "visible": false,
+                    "numberfield": {
+                      "key": "no_till_quantity",
+                      "prompt": "On how many acres do you practice no till?",
+                      "minimum": 0,
+                      "placeholder": "Approximate acreage",
+                      "units": "acres"
+                    }
+                  },
+                  {
+                    "order": 3,
+                    "visible": false,
+                    "radiofield": {
+                      "key": "no_till_duration",
+                      "prompt": "For how long have you been practicing no till?",
+                      "variant": "dropdown",
+                      "options": [
+                        {
+                          "label": "0-5 years",
+                          "value": "0-5"
+                        },
+                        {
+                          "label": "6-10 years",
+                          "value": "6-10"
+                        },
+                        {
+                          "label": "11-15 years",
+                          "value": "11-15"
+                        },
+                        {
+                          "label": "16-20 years",
+                          "value": "16-20"
+                        },
+                        {
+                          "label": "21-35 years",
+                          "value": "21-35"
+                        },
+                        {
+                          "label": "36 years or more",
+                          "value": "36-or-more"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "order": 4,
+          "label": "livestock",
+          "visible": false,
+          "visible_layer_groups": [
+            "satellite",
+            "spokane-input",
+            "spokane-county-outline"
+          ],
+          "modules": []
+        },
+        {
+          "order": 5,
+          "label": "forestry",
+          "visible": false,
+          "visible_layer_groups": [
+            "satellite",
+            "spokane-input",
+            "spokane-county-outline"
+          ],
+          "modules": []
+        },
+        {
+          "order": 6,
+          "visible_layer_groups": [
+            "satellite",
+            "spokane-input",
+            "spokane-county-outline"
+          ],
+          "modules": []
+        }
+      ]
+    },
     {
       "label": "kittitas-firewise-input",
       "is_enabled": true,
@@ -226,6 +456,7 @@
               "geocodingfield": {
                 "key": "private-address",
                 "placeholder": "Your address will never be shared",
+                "reverse_geocode": false,
                 "private": true
               }
             },
@@ -1010,6 +1241,7 @@
               "geocodingfield": {
                 "key": "private-final_address",
                 "placeholder": "Your address will never be shared",
+                "reverse_geocode": true,
                 "private": true
               }
             },
@@ -1289,6 +1521,16 @@
       "type": "radiofield",
       "option_value": "yes",
       "group_visibility_triggers": [2, 3, 4, 5, 6]
+    },
+    {
+      "form": "spokane-input",
+      "stage_order": 3,
+      "group_order": 1,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    }
     }
   ],
   "flavors": [
@@ -1301,6 +1543,11 @@
       "display_name": "kittitas-wildfire-action",
       "slug": "kittitas-wildfire-action",
       "forms": ["kittitas-firewise-input"]
+    },
+    {
+      "display_name": "spokane-vsp",
+      "slug": "spokane-vsp",
+      "forms": []
     },
     {
       "display_name": "mississippi",

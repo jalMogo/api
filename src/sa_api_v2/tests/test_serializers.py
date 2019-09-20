@@ -565,6 +565,8 @@ class TestFlavorDeserializers (TestCase):
                                               owner_id=self.owner.id)
         self.dataset3 = DataSet.objects.create(slug='bellevue-bike-share',
                                               owner_id=self.owner.id)
+        self.dataset4 = DataSet.objects.create(slug='spokane-input',
+                                              owner_id=self.owner.id)
 
     def test_deserialize_flavor(self):
         test_dir = path.dirname(__file__)
@@ -656,12 +658,21 @@ class TestFlavorDeserializers (TestCase):
             data=data['layer_groups'],
             many=True,
         )
-        self.assertTrue(layer_group_serializer.is_valid())
+        try:
+            self.assertTrue(layer_group_serializer.is_valid())
+        except AssertionError:
+            print("LayerGroupSerializer failed with error:", layer_group_serializer.errors)
+            raise
         layer_group_serializer.save()
 
         # create our Form models:
         form_serializer = FormFixtureSerializer(data=data['forms'], many=True)
-        self.assertTrue(form_serializer.is_valid())
+        try:
+            self.assertTrue(form_serializer.is_valid())
+        except AssertionError:
+            print("FormSerializer failed with error:", form_serializer.errors)
+            raise
+
         form_serializer.save()
 
         # create our Flavor models:
@@ -669,7 +680,11 @@ class TestFlavorDeserializers (TestCase):
             data=data['flavors'],
             many=True
         )
-        self.assertTrue(flavor_serializer.is_valid())
+        try:
+            self.assertTrue(flavor_serializer.is_valid())
+        except AssertionError:
+            print("FlavorSerializer failed with error:", flavor_serializer.errors)
+            raise
         flavors = flavor_serializer.save()
         # create our group visibility triggers:
         group_triggers = data['group_visibility_triggers']

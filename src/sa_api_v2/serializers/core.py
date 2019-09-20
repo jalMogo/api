@@ -849,7 +849,7 @@ class BaseFormFieldSerializer (
 class GeocodingFieldModuleSerializer (BaseFormFieldSerializer):
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.GeocodingField
-        fields = BaseFormFieldSerializer.Meta.fields + ['placeholder']
+        fields = BaseFormFieldSerializer.Meta.fields + ['placeholder', 'reverse_geocode']
 
 
 class LatLngFieldModuleSerializer (BaseFormFieldSerializer):
