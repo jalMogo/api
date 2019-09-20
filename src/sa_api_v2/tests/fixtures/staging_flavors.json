@@ -251,6 +251,912 @@
                   }
                 ]
               }
+            },
+            {
+              "order": 2,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "visible": false,
+                    "radiofield": {
+                      "key": "conventional_till",
+                      "prompt": "Conventional till",
+                      "label": "Conventional till",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but interested",
+                          "value": "interested"
+                        }
+                      ],
+                      "info_modal": {
+                        "header": "Conventional till",
+                        "content": "<div style='width:300px;'><p>This practice consists of multiple tillage passes with soil inversion and seed bed preparation.</p></div>"
+                      }
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "visible": false,
+                    "numberfield": {
+                      "key": "conventional_till_quantity",
+                      "prompt": "On how many acres do you use conventional till techniques?",
+                      "minimum": 0,
+                      "placeholder": "Approximate acreage",
+                      "units": "acres"
+                    }
+                  },
+                  {
+                    "order": 3,
+                    "visible": false,
+                    "radiofield": {
+                      "key": "conventinal_till_duration",
+                      "variant": "dropdown",
+                      "prompt": "For how long have you been using conventional till techniques?",
+                      "options": [
+                        {
+                          "label": "0-5 years",
+                          "value": "0-5"
+                        },
+                        {
+                          "label": "6-10 years",
+                          "value": "6-10"
+                        },
+                        {
+                          "label": "11-15 years",
+                          "value": "11-15"
+                        },
+                        {
+                          "label": "16-20 years",
+                          "value": "16-20"
+                        },
+                        {
+                          "label": "21-35 years",
+                          "value": "21-35"
+                        },
+                        {
+                          "label": "36 years or more",
+                          "value": "36-or-more"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "order": 3,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "reduced_till",
+                      "prompt": "Reduced till",
+                      "label": "Reduced till",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but interested",
+                          "value": "interested"
+                        }
+                      ],
+                      "info_modal": {
+                        "header": "Reduced till",
+                        "content": "<div style='width:300px;'><img style='width:100%;' src='/static/css/images/practice-reduced-till.jpg' alt='Reduced till' /><p><strong>NRCS code:</strong> 345</p><p>This practice consists of seed and fertilizer placement while allowing the majority of crop residue and stubble to remain on the ground.<p></div>"
+                      }
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "visible": false,
+                    "numberfield": {
+                      "key": "reduced_till_quantity",
+                      "prompt": "On how many acres do you use reduced till techniques?",
+                      "minimum": 0,
+                      "placeholder": "Approximate acreage",
+                      "units": "acres"
+                    }
+                  },
+                  {
+                    "order": 3,
+                    "visible": false,
+                    "radiofield": {
+                      "key": "reduced_till_duration",
+                      "variant": "dropdown",
+                      "prompt": "For how long have you been using reduced till techniques?",
+                      "options": [
+                        {
+                          "label": "0-5 years",
+                          "value": "0-5"
+                        },
+                        {
+                          "label": "6-10 years",
+                          "value": "6-10"
+                        },
+                        {
+                          "label": "11-15 years",
+                          "value": "11-15"
+                        },
+                        {
+                          "label": "16-20 years",
+                          "value": "16-20"
+                        },
+                        {
+                          "label": "21-35 years",
+                          "value": "21-35"
+                        },
+                        {
+                          "label": "36 years or more",
+                          "value": "36-or-more"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "order": 4,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "soil_tests",
+                      "prompt": "Do you conduct soil tests?",
+                      "label": "Soil tests",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but interested",
+                          "value": "interested"
+                        }
+                      ],
+                      "info_modal": {
+                        "header": "Soil tests",
+                        "content": "<div style='width:300px;'><img style='width: 100%;' src='/static/css/images/practice-soil-tests.jpg' alt='Soil tests' /><p><strong>NRCS code:</strong> 590</p><p>Soil tests monitor, at a minimum, organic matter, phosphorus (P), potassium (K), and pH every four years.</p></div>"
+                      }
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "visible": false,
+                    "radiofield": {
+                      "key": "soil_tests_zone_map",
+                      "prompt": "Do you zone and map your fields based off of soil tests?",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "soil-tests-zone-map"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no-soil-tests-zone-map"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 3,
+                    "visible": false,
+                    "numberfield": {
+                      "key": "soil_tests_quantity",
+                      "prompt": "On how many acres do you conduct soil tests?",
+                      "minimum": 0,
+                      "placeholder": "Approximate acreage",
+                      "units": "acres"
+                    }
+                  },
+                  {
+                    "order": 4,
+                    "visible": false,
+                    "radiofield": {
+                      "key": "soil_tests_duration",
+                      "variant": "dropdown",
+                      "prompt": "For how long have you been conducting soil tests?",
+                      "options": [
+                        {
+                          "label": "0-5 years",
+                          "value": "0-5"
+                        },
+                        {
+                          "label": "6-10 years",
+                          "value": "6-10"
+                        },
+                        {
+                          "label": "11-15 years",
+                          "value": "11-15"
+                        },
+                        {
+                          "label": "16-20 years",
+                          "value": "16-20"
+                        },
+                        {
+                          "label": "21-35 years",
+                          "value": "21-35"
+                        },
+                        {
+                          "label": "36 years or more",
+                          "value": "36-or-more"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "order": 5,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "fertilization",
+                      "prompt": "How do you fertilize your field?",
+                      "label": "Field fertilization",
+                      "options": [
+                        {
+                          "label": "Synthetically",
+                          "value": "synthetically"
+                        },
+                        {
+                          "label": "Organically",
+                          "value": "organically"
+                        },
+                        {
+                          "label": "Not applicable",
+                          "value": "not-applicable"
+                        }
+                      ],
+                      "info_modal": {
+                        "header": "Fertilization",
+                        "content": "<div style='width:300px;'><img style='width: 100%;' src='/static/css/images/practice-fertilization.jpg' alt='Fertilization' /><p><strong>NRCS code: 590</strong> 590</p><p>Crops can be fertilized with various products and application methods.</p></div>"
+                      }
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "visible": false,
+                    "checkboxfield": {
+                      "key": "synthetic_fertilization_types",
+                      "prompt": "Choose all fertilization types that apply:",
+                      "options": [
+                        {
+                          "label": "Top dress",
+                          "value": "top_dress"
+                        },
+                        {
+                          "label": "Aerial",
+                          "value": "aerial"
+                        },
+                        {
+                          "label": "Subsurface fertilization while seeding",
+                          "value": "subsurface_fertilization"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 3,
+                    "visible": false,
+                    "radiofield": {
+                      "key": "synthetic_fertilization_yield_map",
+                      "prompt": "Do you base your synthetic fertilizing off of a yield map?",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "synthetic-yield-map"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no-synthetic-yield-map"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 4,
+                    "visible": false,
+                    "radiofield": {
+                      "key": "synthetic_fertilization_zone_map",
+                      "prompt": "Have you developed a zone map for synthetic fertilization?",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "synthetic-zone-map"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no-synthetic-zone-map"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 5,
+                    "visible": false,
+                    "numberfield": {
+                      "key": "synthetic_fertilization_quantity",
+                      "prompt": "On how many acres do you use synthetic fertilizer?",
+                      "minimum": 0,
+                      "placeholder": "Approximate acreage",
+                      "units": "acres"
+                    }
+                  },
+                  {
+                    "order": 6,
+                    "visible": false,
+                    "radiofield": {
+                      "key": "synthetic_fertilization_duration",
+                      "variant": "dropdown",
+                      "prompt": "For how long have you been fertilizing your fields synthetically?",
+                      "options": [
+                        {
+                          "label": "0-5 years",
+                          "value": "0-5"
+                        },
+                        {
+                          "label": "6-10 years",
+                          "value": "6-10"
+                        },
+                        {
+                          "label": "11-15 years",
+                          "value": "11-15"
+                        },
+                        {
+                          "label": "16-20 years",
+                          "value": "16-20"
+                        },
+                        {
+                          "label": "21-35 years",
+                          "value": "21-35"
+                        },
+                        {
+                          "label": "36 years or more",
+                          "value": "36-or-more"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 7,
+                    "visible": false,
+                    "checkboxfield": {
+                      "key": "organic_fertilization_types",
+                      "prompt": "Choose all fertilization types that apply:",
+                      "options": [
+                        {
+                          "label": "Top dress",
+                          "value": "top_dress"
+                        },
+                        {
+                          "label": "Aerial",
+                          "value": "aerial"
+                        },
+                        {
+                          "label": "Subsurface fertilization while seeding",
+                          "value": "subsurface_fertilization"
+                        },
+                        {
+                          "label": "Biosolid",
+                          "value": "biosolid"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 8,
+                    "visible": false,
+                    "radiofield": {
+                      "key": "organic_fertilization_yield_map",
+                      "prompt": "Do you base your organic fertilizing off of a yield map?",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "organic-yield-map"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no-organic-yield-map"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 9,
+                    "visible": false,
+                    "radiofield": {
+                      "key": "organic_fertilization_zone_map",
+                      "prompt": "Have you developed a zone map for organic fertilization?",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "organic-zone-map"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no-organic-zone-map"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 10,
+                    "visible": false,
+                    "numberfield": {
+                      "key": "organic_fertilization_quantity",
+                      "prompt": "On how many acres do you use organic fertilizer?",
+                      "minimum": 0,
+                      "placeholder": "Approximate acreage",
+                      "units": "acres"
+                    }
+                  },
+                  {
+                    "order": 11,
+                    "visible": false,
+                    "radiofield": {
+                      "key": "organic_fertilization_duration",
+                      "variant": "dropdown",
+                      "prompt": "For how long have you been fertilizing your fields organically?",
+                      "options": [
+                        {
+                          "label": "0-5 years",
+                          "value": "0-5"
+                        },
+                        {
+                          "label": "6-10 years",
+                          "value": "6-10"
+                        },
+                        {
+                          "label": "11-15 years",
+                          "value": "11-15"
+                        },
+                        {
+                          "label": "16-20 years",
+                          "value": "16-20"
+                        },
+                        {
+                          "label": "21-35 years",
+                          "value": "21-35"
+                        },
+                        {
+                          "label": "36 years or more",
+                          "value": "36-or-more"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "order": 6,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "buffers",
+                      "prompt": "Do you have buffers on your waterways?",
+                      "label": "Buffers",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but interested",
+                          "value": "interested"
+                        }
+                      ],
+                      "info_modal": {
+                        "header": "Buffers",
+                        "content": "<div style='width: 300px;'><img style='width: 100%;' src='/static/css/images/practice-buffers-new.jpg' alt='Buffers' /><p><strong>NRCS codes:</strong> 342, 391, 580, 386, 393</p><p>Vegetated buffers reduce erosion and provide wildlife habitat.</p></div>"
+                      }
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "visible": false,
+                    "checkboxfield": {
+                      "key": "buffer_types",
+                      "prompt": "Which types of buffers do you have on your waterways?",
+                      "options": [
+                        {
+                          "label": "Riparian Forest Buffer",
+                          "value": "riparian_forest_buffer"
+                        },
+                        {
+                          "label": "Filter Strip",
+                          "value": "filter_strip"
+                        },
+                        {
+                          "label": "Grass Waterway",
+                          "value": "grass_waterway"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 3,
+                    "visible": false,
+                    "radiofield": {
+                      "key": "other_buffer_type",
+                      "prompt": "Do you have any other types of buffers on your property?",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes-other-buffers"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no-other-buffers"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 4,
+                    "visible": false,
+                    "textareafield": {
+                      "key": "other_buffer_type_description",
+                      "prompt": "Please describe your other buffer(s)"
+                    }
+                  },
+                  {
+                    "order": 5,
+                    "visible": false,
+                    "numberfield": {
+                      "key": "buffers_quantity",
+                      "prompt": "How many feet of buffers have you installed?",
+                      "minimum": 0,
+                      "placeholder": "Approximate footage",
+                      "units": "feet"
+                    }
+                  },
+                  {
+                    "order": 6,
+                    "visible": false,
+                    "radiofield": {
+                      "key": "buffers_duration",
+                      "variant": "dropdown",
+                      "prompt": "For how long have you been installing buffers?",
+                      "options": [
+                        {
+                          "label": "0-5 years",
+                          "value": "0-5"
+                        },
+                        {
+                          "label": "6-10 years",
+                          "value": "6-10"
+                        },
+                        {
+                          "label": "11-15 years",
+                          "value": "11-15"
+                        },
+                        {
+                          "label": "16-20 years",
+                          "value": "16-20"
+                        },
+                        {
+                          "label": "21-35 years",
+                          "value": "21-35"
+                        },
+                        {
+                          "label": "36 years or more",
+                          "value": "36-or-more"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 7,
+                    "visible": false,
+                    "radiofield": {
+                      "key": "buffer_program",
+                      "prompt": "Did you install these buffers through a program?",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "buffer-program"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no-buffer-program"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 8,
+                    "visible": false,
+                    "checkboxfield": {
+                      "key": "buffer_program_types",
+                      "prompt": "Which programs? (check all that apply)",
+                      "options": [
+                        {
+                          "label": "NRCS CRP",
+                          "value": "nrcs_crop"
+                        },
+                        {
+                          "label": "Commodity Buffer Program",
+                          "value": "commodity_buffer_program"
+                        },
+                        {
+                          "label": "Other agency program",
+                          "value": "other_agency_program"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "order": 7,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "grassed_waterways",
+                      "prompt": "Grassed waterways",
+                      "label": "Grassed waterways",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but interested",
+                          "value": "interested"
+                        }
+                      ],
+                      "info_modal": {
+                        "header": "Grassed waterways",
+                        "content": "<div style='width:300px'><p><strong>NRCS code:</strong> 412</p><p>A grassed waterway is a shaped or graded channel that is established with suitable vegetation to convey surface water at a non-erosive velocity using a broad and shallow cross section to a stable outlet.</p></div>"
+                      }
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "visible": false,
+                    "numberfield": {
+                      "key": "grassed_waterways_quantity",
+                      "prompt": "On how many acres do you use grassed waterways?",
+                      "minimum": 0,
+                      "placeholder": "Approximate acreage",
+                      "units": "acres"
+                    }
+                  },
+                  {
+                    "order": 3,
+                    "visible": false,
+                    "radiofield": {
+                      "key": "grassed_waterways_duration",
+                      "variant": "dropdown",
+                      "prompt": "For how long have you been using grassed waterways?",
+                      "options": [
+                        {
+                          "label": "0-5 years",
+                          "value": "0-5"
+                        },
+                        {
+                          "label": "6-10 years",
+                          "value": "6-10"
+                        },
+                        {
+                          "label": "11-15 years",
+                          "value": "11-15"
+                        },
+                        {
+                          "label": "16-20 years",
+                          "value": "16-20"
+                        },
+                        {
+                          "label": "21-35 years",
+                          "value": "21-35"
+                        },
+                        {
+                          "label": "36 years or more",
+                          "value": "36-or-more"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "order": 8,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "commodity_buffer",
+                      "prompt": "I participate in the commodity buffer program",
+                      "label": "Commodity buffer program",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but interested",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "visible": false,
+                    "radiofield": {
+                      "key": "commodity_buffer_duration",
+                      "variant": "dropdown",
+                      "prompt": "For how long have you been participating in the commodity buffer program?",
+                      "options": [
+                        {
+                          "label": "0-5 years",
+                          "value": "0-5"
+                        },
+                        {
+                          "label": "6-10 years",
+                          "value": "6-10"
+                        },
+                        {
+                          "label": "11-15 years",
+                          "value": "11-15"
+                        },
+                        {
+                          "label": "16-20 years",
+                          "value": "16-20"
+                        },
+                        {
+                          "label": "21-35 years",
+                          "value": "21-35"
+                        },
+                        {
+                          "label": "36 years or more",
+                          "value": "36-or-more"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "order": 9,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "riparian_forest",
+                      "prompt": "Do you have any wildlife habitat enhancements on your property?",
+                      "label": "Wildlife habitat enhancements",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but interested",
+                          "value": "interested"
+                        }
+                      ],
+                      "info_modal": {
+                        "header": "Habitat enhancements",
+                        "content": "<div style='width: 300px'><img style='width:100%;' src='/static/css/images/practice-habitat-enhancements.jpg' alt='Wildlife habitat enhancements' /><p><strong>NRCS codes:</strong> 395, 420, 644, 645</p><p>A corridor of trees and/or shrubs planted adjacent to a river, stream, wetland or water body. The planting is of sufficient width and up-gradient and near the water body to insure adequate functioning for the desired purpose.</p></div>"
+                      }
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "visible": false,
+                    "numberfield": {
+                      "key": "riparian_forest_quantity",
+                      "prompt": "How many acres of wildlife habitat have you enhanced?",
+                      "minimum": 0,
+                      "placeholder": "Approximate acreage",
+                      "units": "acres"
+                    }
+                  },
+                  {
+                    "order": 3,
+                    "visible": false,
+                    "radiofield": {
+                      "key": "riparian_forest_duration",
+                      "variant": "dropdown",
+                      "prompt": "For how long have you been enhancing wildlife habitat?",
+                      "options": [
+                        {
+                          "label": "0-5 years",
+                          "value": "0-5"
+                        },
+                        {
+                          "label": "6-10 years",
+                          "value": "6-10"
+                        },
+                        {
+                          "label": "11-15 years",
+                          "value": "11-15"
+                        },
+                        {
+                          "label": "16-20 years",
+                          "value": "16-20"
+                        },
+                        {
+                          "label": "21-35 years",
+                          "value": "21-35"
+                        },
+                        {
+                          "label": "36 years or more",
+                          "value": "36-or-more"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 4,
+                    "visible": false,
+                    "textareafield": {
+                      "key": "riparian_forest_description",
+                      "prompt": "Please describe your wildlife habitat enhancements:"
+                    }
+                  },
+                  {
+                    "order": 5,
+                    "visible": false,
+                    "htmlmodule": {
+                      "label": "agriculture_questions",
+                      "content": "<p style='font-size: 0.9rem; color: #444;'>Questions? Call Doug Phelps at 509-535-7274 x240</p>"
+                    }
+                  }
+                ]
+              }
             }
           ]
         },
@@ -263,7 +1169,378 @@
             "spokane-input",
             "spokane-county-outline"
           ],
-          "modules": []
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "livestock_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>4. Livestock</h2><figure style='margin:8px 0 0 0;'><img style='width:100%;' src='/static/css/images/header-livestock.jpg' alt='Livestock section'/></figure>"
+              }
+            },
+            {
+              "order": 2,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "stream_crossing",
+                      "prompt": "Stream crossings",
+                      "label": "Stream crossings",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but interested",
+                          "value": "interested"
+                        }
+                      ],
+                      "info_modal": {
+                        "header": "Stream crossings",
+                        "content": "<div style='width: 300px;'><img style='width: 100%;' src='/static/css/images/practice-stream-crossings-new.jpg' alt='Stream crossings' /><p><strong>NRCS code:</strong> 578</p><p>A stream crossing is a stabilized area or structure constructed across a stream to provide a travel way for people, livestock, equipment, or vehicles.</p></div>"
+                      }
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "visible": false,
+                    "checkboxfield": {
+                      "key": "stream_crossing_type",
+                      "prompt": "Which types of crossings have you installed? (Check all that apply)",
+                      "options": [
+                        {
+                          "label": "Unimproved",
+                          "value": "unimproved"
+                        },
+                        {
+                          "label": "Improved - Hardened",
+                          "value": "improved_hardened"
+                        },
+                        {
+                          "label": "Improved - Bridge",
+                          "value": "improved_bridge"
+                        },
+                        {
+                          "label": "Improved - Culvert",
+                          "value": "improved_culvert"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 3,
+                    "visible": false,
+                    "numberfield": {
+                      "key": "stream_crossing_quantity",
+                      "prompt": "How many stream crossings have you installed?",
+                      "minimum": 0,
+                      "placeholder": "Approximate number",
+                      "units": "crossings"
+                    }
+                  },
+                  {
+                    "order": 4,
+                    "visible": false,
+                    "radiofield": {
+                      "key": "stream_crossing_duration",
+                      "variant": "dropdown",
+                      "prompt": "For how long have you been installing stream crossings?",
+                      "options": [
+                        {
+                          "label": "0-5 years",
+                          "value": "0-5"
+                        },
+                        {
+                          "label": "6-10 years",
+                          "value": "6-10"
+                        },
+                        {
+                          "label": "11-15 years",
+                          "value": "11-15"
+                        },
+                        {
+                          "label": "16-20 years",
+                          "value": "16-20"
+                        },
+                        {
+                          "label": "21-35 years",
+                          "value": "21-35"
+                        },
+                        {
+                          "label": "36 years or more",
+                          "value": "36-or-more"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "order": 3,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "fencing",
+                      "prompt": "Fencing",
+                      "label": "Fencing",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but interested",
+                          "value": "interested"
+                        }
+                      ],
+                      "info_modal": {
+                        "header": "Fencing",
+                        "content": "<div style='width:300px;'><img style='width: 100%;' src='/static/css/images/practice-fencing.jpg' alt='Fencing' /><p><strong>NRCS code:</strong> 382</p><p>There are many different purposes for and types of fences. Generally, fences shall be appropriately planned, designed, and installed to control animals, vehicles, or people.</p></div>"
+                      }
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "numberfield": {
+                      "key": "fencing_quantity",
+                      "prompt": "How many feet of fencing have you installed?",
+                      "minimum": 0,
+                      "placeholder": "Approximate footage",
+                      "units": "acres"
+                    }
+                  },
+                  {
+                    "order": 3,
+                    "radiofield": {
+                      "key": "fencing_duration",
+                      "variant": "dropdown",
+                      "prompt": "For how long have you been installing and maintaining fencing?",
+                      "options": [
+                        {
+                          "label": "0-5 years",
+                          "value": "0-5"
+                        },
+                        {
+                          "label": "6-10 years",
+                          "value": "6-10"
+                        },
+                        {
+                          "label": "11-15 years",
+                          "value": "11-15"
+                        },
+                        {
+                          "label": "16-20 years",
+                          "value": "16-20"
+                        },
+                        {
+                          "label": "21-35 years",
+                          "value": "21-35"
+                        },
+                        {
+                          "label": "36 years or more",
+                          "value": "36-or-more"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "order": 4,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "mud_manure_management",
+                      "prompt": "Mud and manure management",
+                      "label": "Mud and manure management",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but interested",
+                          "value": "interested"
+                        }
+                      ],
+                      "info_modal": {
+                        "header": "Mud and manure management",
+                        "content": "<div style='width:300px;'><img style='width: 100%;' src='/static/css/images/practice-mud-manure-management-new.jpg' alt='Mud and manure management' /><p><strong>NRCS code:</strong> 561</p><p>Heavy Use Area Protection is used to stabilize a ground surface that is frequently and intensively used by people, animals, or vehicles.</p></div>"
+                      }
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "visible": false,
+                    "numberfield": {
+                      "key": "mud_manure_management_quantity",
+                      "prompt": "On how many acres do you practice mud and manure management?",
+                      "minimum": 0,
+                      "placeholder": "Approximate acreage",
+                      "units": "acres"
+                    }
+                  },
+                  {
+                    "order": 3,
+                    "visible": false,
+                    "checkboxfield": {
+                      "key": "mud_manure_management_type",
+                      "prompt": "Which types of mud and manure management do you practice? (Check all that apply)",
+                      "options": [
+                        {
+                          "label": "Gutters and downspouts",
+                          "value": "gutters_downspouts"
+                        },
+
+                        {
+                          "label": "Heavy use area",
+                          "value": "heavy_use_area"
+                        },
+                        {
+                          "label": "Hardened stream crossings",
+                          "value": "hardened_stream_crossings"
+                        },
+                        {
+                          "label": "Waste storage",
+                          "value": "waste_storage"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 4,
+                    "visible": false,
+                    "radiofield": {
+                      "key": "mud_manure_management_duration",
+                      "variant": "dropdown",
+                      "prompt": "For how long have you been practicing mud and manure management?",
+                      "options": [
+                        {
+                          "label": "0-5 years",
+                          "value": "0-5"
+                        },
+                        {
+                          "label": "6-10 years",
+                          "value": "6-10"
+                        },
+                        {
+                          "label": "11-15 years",
+                          "value": "11-15"
+                        },
+                        {
+                          "label": "16-20 years",
+                          "value": "16-20"
+                        },
+                        {
+                          "label": "21-35 years",
+                          "value": "21-35"
+                        },
+                        {
+                          "label": "36 years or more",
+                          "value": "36-or-more"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "order": 5,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "off_creek_stock_watering",
+                      "prompt": "Off creek stock watering",
+                      "label": "Off creek stock watering",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but interested",
+                          "value": "interested"
+                        }
+                      ],
+                      "info_modal": {
+                        "header": "Off creek stock watering",
+                        "content": "<div style='width:300px;'><img style='width:100%;' src='/static/css/images/practice-off-creek-watering.jpg' alt='Off creek stock watering' /><p><strong>NRCS codes:</strong> 516, 533, 614, 561, 642</p><p>A means of providing drinking water to livestock away from streams and wetlands.</p></div>"
+                      }
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "visible": false,
+                    "radiofield": {
+                      "key": "off_creek_stock_watering_duration",
+                      "variant": "dropdown",
+                      "prompt": "For how long have you been maintaining off creek stock watering systems?",
+                      "options": [
+                        {
+                          "label": "0-5 years",
+                          "value": "0-5"
+                        },
+                        {
+                          "label": "6-10 years",
+                          "value": "6-10"
+                        },
+                        {
+                          "label": "11-15 years",
+                          "value": "11-15"
+                        },
+                        {
+                          "label": "16-20 years",
+                          "value": "16-20"
+                        },
+                        {
+                          "label": "21-35 years",
+                          "value": "21-35"
+                        },
+                        {
+                          "label": "36 years or more",
+                          "value": "36-or-more"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 3,
+                    "htmlmodule": {
+                      "label": "livestock_questions",
+                      "content": "<p style='font-size: 0.9rem; color: #444;'>Questions? Call Doug Phelps at 509-535-7274 x240</p>"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
         },
         {
           "order": 5,
@@ -274,7 +1551,145 @@
             "spokane-input",
             "spokane-county-outline"
           ],
-          "modules": []
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "forest_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>5. Forestry</h2><figure style='margin:8px 0 0 0;'><img style='width:100%;' src='/static/css/images/header-forestry.jpg' alt='Forestry section'/></figure>"
+              }
+            },
+            {
+              "order": 2,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "forest_management",
+                      "prompt": "Do you have a forest you are managing?",
+                      "label": "Forest management",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but interested",
+                          "value": "interested"
+                        }
+                      ],
+                      "info_modal": {
+                        "header": "Forest management",
+                        "content": "<div style='width:300px;'><img style='width:100%;' src='/static/css/images/practice-forest-management.jpg' alt='Forest management' /><p><strong>NRCS codes:</strong> 612, 660, 666</p><p>Management practices can include planning, planting, pruning and the removal of undesirable vegetation.</p></div>"
+                      }
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "visible": false,
+                    "textareafield": {
+                      "key": "forest_management_description",
+                      "prompt": "Please describe:"
+                    }
+                  },
+                  {
+                    "order": 3,
+                    "visible": false,
+                    "numberfield": {
+                      "key": "forest_management_stand_size",
+                      "prompt": "How many acres is your timber stand?",
+                      "minimum": 0,
+                      "placeholder": "Approximate acreage",
+                      "units": "acres"
+                    }
+                  },
+                  {
+                    "order": 4,
+                    "visible": false,
+                    "radiofield": {
+                      "key": "forest_management_duration",
+                      "variant": "dropdown",
+                      "prompt": "For how long have you been managing your forest?",
+                      "options": [
+                        {
+                          "label": "0-5 years",
+                          "value": "0-5"
+                        },
+                        {
+                          "label": "6-10 years",
+                          "value": "6-10"
+                        },
+                        {
+                          "label": "11-15 years",
+                          "value": "11-15"
+                        },
+                        {
+                          "label": "16-20 years",
+                          "value": "16-20"
+                        },
+                        {
+                          "label": "21-35 years",
+                          "value": "21-35"
+                        },
+                        {
+                          "label": "36 years or more",
+                          "value": "36-or-more"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 5,
+                    "visible": false,
+                    "radiofield": {
+                      "key": "forest_management_plan",
+                      "prompt": "Do you have any type of forest management plan?",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "forest-management-plan"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no-forest-management-plan"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 6,
+                    "visible": false,
+                    "radiofield": {
+                      "key": "forest_management_active_management",
+                      "prompt": "Are you actively managing your forest as prescribed by your plan?",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "active-forest-management"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no-active-forest-management"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "order": 3,
+              "htmlmodule": {
+                "label": "forest_questions",
+                "content": "<p style='font-size: 0.9rem; color: #444;'>Questions? Call Doug Phelps at 509-535-7274 x240</p>"
+              }
+            }
+          ]
         },
         {
           "order": 6,
@@ -283,7 +1698,238 @@
             "spokane-input",
             "spokane-county-outline"
           ],
-          "modules": []
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "additional_info_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>6. Almost completed</h2><figure style='margin:8px 0 0 0;'><img style='width:100%;' src='/static/css/images/header-almost-completed.jpg' alt='Additional info section'/></figure>"
+              }
+            },
+            {
+              "order": 2,
+              "textareafield": {
+                "key": "practices_description",
+                "prompt": "Add a description of your stewardship practices",
+                "placeholder": "Description:"
+              }
+            },
+            {
+              "order": 3,
+              "textareafield": {
+                "key": "stewardship_difficulties",
+                "prompt": "What challenges or difficulties have you experienced as a voluntary steward?"
+              }
+            },
+            {
+              "order": 4,
+              "textfield": {
+                "key": "private-landowner_name",
+                "placeholder": "Your name will only be shared if you are logged in",
+                "prompt": "What is your name?",
+                "required": true
+              }
+            },
+            {
+              "order": 5,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "share_story",
+                      "prompt": "Can Spokane County VSP share your stewardship story with the public?",
+                      "options": [
+                        {
+                          "value": "yes-share",
+                          "label": "Yes"
+                        },
+                        {
+                          "value": "no-share",
+                          "label": "No"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "visible": false,
+                    "filefield": {
+                      "key": "my_image",
+                      "prompt": "Upload photos before, during or after you implemented your stewardship practices:",
+                      "label": "Upload photos"
+                    }
+                  },
+                  {
+                    "order": 3,
+                    "visible": false,
+                    "radiofield": {
+                      "key": "private-use_photos",
+                      "prompt": "Can Spokane County VSP highlight your photos on our website?",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "use-photos"
+                        },
+                        {
+                          "label": "No",
+                          "default": true,
+                          "value": "no-use-photos"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 4,
+                    "visible": false,
+                    "textfield": {
+                      "key": "title",
+                      "prompt": "What is your farm's name?"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "order": 6,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "allow_followup",
+                      "prompt": "May we follow up with you if we have any questions?",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "allow-followup"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no-allow-followup"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "visible": false,
+                    "textfield": {
+                      "key": "private-landowner_email",
+                      "variant": "EM",
+                      "placeholder": "Your email address will never be shared",
+                      "prompt": "What is your email address?"
+                    }
+                  },
+                  {
+                    "order": 3,
+                    "visible": false,
+                    "textfield": {
+                      "key": "private-landowner_phone",
+                      "variant": "PH",
+                      "prompt": "What is your phone number?",
+                      "placeholder": "Your phone number will never be shared"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "order": 7,
+              "radiofield": {
+                "key": "easements",
+                "prompt": "Do you have a conservation easement?",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "easements"
+                  },
+                  {
+                    "label": "No",
+                    "value": "no-easements"
+                  }
+                ]
+              }
+            },
+            {
+              "order": 8,
+              "radiofield": {
+                "key": "farm_plan",
+                "prompt": "Do you have a Farm Plan or Stewardship Plan in place, or would you like to initiate one?",
+                "options": [
+                  {
+                    "label": "I have a Farm Plan or Stewardship Plan in place",
+                    "value": "have_plan"
+                  },
+                  {
+                    "label": "I am interested in initiating a Farm Plan or Stewardship Plan",
+                    "value": "have_interest"
+                  },
+                  {
+                    "label": "I have no interest in a Farm Plan or Stewardship Plan",
+                    "value": "no_interest"
+                  }
+                ]
+              }
+            },
+            {
+              "order": 9,
+              "checkboxfield": {
+                "key": "land_ownership",
+                "prompt": "Who owns the land that you work? Please check all that apply:",
+                "options": [
+                  {
+                    "label": "Personally owned",
+                    "value": "personally_owned"
+                  },
+                  {
+                    "label": "Family owned",
+                    "value": "family_owned"
+                  },
+                  {
+                    "label": "Leased by producer (from family)",
+                    "value": "leased_by_producer_from_family"
+                  },
+                  {
+                    "label": "Leased by producer (from landlord)",
+                    "value": "leased_by_producer_from_landlord"
+                  }
+                ]
+              }
+            },
+            {
+              "order": 9,
+              "radiofield": {
+                "key": "private-is_shareable",
+                "prompt": "Place your pin on the map? (Your address and other property identifying information will not be published.)",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "no"
+                  },
+                  {
+                    "label": "No",
+                    "value": "yes",
+                    "default": true,
+                    "make_private": true
+                  }
+                ]
+              }
+            },
+            {
+              "order": 10,
+              "htmlmodule": {
+                "label": "thank_you",
+                "content": "<p style='font-size:1.2rem;'><strong>Thank you for taking the time to voluntarily report your stewardship practices.</strong></p>"
+              }
+            },
+            {
+              "order": 11,
+              "submitbuttonmodule": {
+                "label": "Submit"
+              }
+            }
+          ]
         }
       ]
     },
@@ -1268,13 +2914,13 @@
                 "options": [
                   {
                     "label": "Yes",
-                    "value": "no",
-                    "default": true,
-                    "make_private": true
+                    "value": "no"
                   },
                   {
                     "label": "No",
-                    "value": "yes"
+                    "value": "yes",
+                    "default": true,
+                    "make_private": true
                   }
                 ]
               }
@@ -1533,6 +3179,177 @@
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "spokane-input",
+      "stage_order": 3,
+      "group_order": 2,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "spokane-input",
+      "stage_order": 3,
+      "group_order": 3,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "spokane-input",
+      "stage_order": 3,
+      "group_order": 4,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3, 4]
+    },
+    {
+      "form": "spokane-input",
+      "stage_order": 3,
+      "group_order": 5,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "synthetically",
+      "group_visibility_triggers": [2, 3, 4, 5, 6]
+    },
+    {
+      "form": "spokane-input",
+      "stage_order": 3,
+      "group_order": 5,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "organically",
+      "group_visibility_triggers": [7, 8, 9, 10, 11]
+    },
+    {
+      "form": "spokane-input",
+      "stage_order": 3,
+      "group_order": 6,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3, 5, 6, 7]
+    },
+    {
+      "form": "spokane-input",
+      "stage_order": 3,
+      "group_order": 6,
+      "field_order": 3,
+      "type": "radiofield",
+      "option_value": "yes-other-buffers",
+      "group_visibility_triggers": [4]
+    },
+    {
+      "form": "spokane-input",
+      "stage_order": 3,
+      "group_order": 6,
+      "field_order": 7,
+      "type": "radiofield",
+      "option_value": "buffer-program",
+      "group_visibility_triggers": [8]
+    },
+    {
+      "form": "spokane-input",
+      "stage_order": 3,
+      "group_order": 7,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "spokane-input",
+      "stage_order": 3,
+      "group_order": 8,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "spokane-input",
+      "stage_order": 3,
+      "group_order": 9,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3, 4, 5]
+    },
+    {
+      "form": "spokane-input",
+      "stage_order": 4,
+      "group_order": 2,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3, 4]
+    },
+    {
+      "form": "spokane-input",
+      "stage_order": 4,
+      "group_order": 3,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "spokane-input",
+      "stage_order": 4,
+      "group_order": 4,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3, 4]
+    },
+    {
+      "form": "spokane-input",
+      "stage_order": 4,
+      "group_order": 5,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "spokane-input",
+      "stage_order": 5,
+      "group_order": 2,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3, 4, 5]
+    },
+    {
+      "form": "spokane-input",
+      "stage_order": 5,
+      "group_order": 2,
+      "field_order": 5,
+      "type": "radiofield",
+      "option_value": "forest-management-plan",
+      "group_visibility_triggers": [6]
+    },
+    {
+      "form": "spokane-input",
+      "stage_order": 6,
+      "group_order": 5,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes-share",
+      "group_visibility_triggers": [2, 3, 4]
+    },
+    {
+      "form": "spokane-input",
+      "stage_order": 6,
+      "group_order": 6,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "allow-followup",
       "group_visibility_triggers": [2, 3]
     }
   ],
