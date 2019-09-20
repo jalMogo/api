@@ -875,12 +875,42 @@ class BaseFormFieldSerializer (
             modal = serializer.save()
             form_field = self.Meta.model.objects.create(**validated_data)
             form_field.info_modal = modal
-            form_field.save()
-            return form_field
         else:
             form_field = self.Meta.model.objects.create(**validated_data)
-            form_field.save()
-            return form_field
+        form_field.save()
+        return form_field
+
+    # hide info_modal when it is null
+    def to_representation(self, instance):
+        """
+        Object instance -> Dict of primitive datatypes.
+        """
+        ret = OrderedDict()
+        fields = self._readable_fields
+
+        for field in fields:
+            try:
+                attribute = field.get_attribute(instance)
+            except SkipField:
+                continue
+
+            # KEY IS HERE:
+            if field.field_name == 'info_modal' and attribute == None:
+                continue
+
+            # We skip `to_representation` for `None` values so that fields do
+            # not have to explicitly deal with that case.
+            #
+            # For related fields with `use_pk_only_optimization` we need to
+            # resolve the pk value.
+            check_for_none = attribute.pk if isinstance(attribute, PKOnlyObject) else attribute
+            if check_for_none is None:
+                print("Field has a none value (?):", field.field_name)
+                ret[field.field_name] = None
+            else:
+                ret[field.field_name] = field.to_representation(attribute)
+
+        return ret
 
 class GeocodingFieldModuleSerializer (BaseFormFieldSerializer):
     class Meta(BaseFormFieldSerializer.Meta):
