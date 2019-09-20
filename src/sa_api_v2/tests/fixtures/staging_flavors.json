@@ -196,7 +196,11 @@
                           "label": "No, but interested",
                           "value": "interested"
                         }
-                      ]
+                      ],
+                      "info_modal": {
+                        "header": "No till",
+                        "content": "<div style='width:300px;'><img style='width:100%;' src='/static/css/images/practice-no-till.jpg' alt='No till' /><p><strong>NRCS code:</strong> 329</p><p>No till consists of one pass seed and fertilizer placement.</p></div>"
+                      }
                     }
                   },
                   {

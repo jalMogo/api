@@ -126,7 +126,7 @@ class AttachmentSerializerMixin (EmptyModelSerializer, serializers.ModelSerializ
 class FormFieldOptionsCreator (object):
     def create(self, validated_data):
         options_data = validated_data.pop('options', None)
-        field = self.Meta.model.objects.create(**validated_data)
+        field = super(FormFieldOptionsCreator, self).create(validated_data)
         order = 1
 
         for option_data in options_data:

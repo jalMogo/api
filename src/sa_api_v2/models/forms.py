@@ -18,6 +18,7 @@ __all__ = [
     'HtmlModule',
     'SkipStageModule',
     'SubmitButtonModule',
+    'Modal',
     'FormFieldOption',
     'CheckboxOption',
     'GeocodingField',
@@ -233,6 +234,22 @@ class SubmitButtonModule(RelatedFormModule):
         db_table = 'ms_api_form_module_submit_button'
 
 
+class Modal(models.Model):
+    # We are assuming that these fields must be filled out.
+    header = models.CharField(
+        help_text="This is the label that the submit button will have",
+        max_length=127,
+    )
+
+    content = models.TextField(
+        help_text="Add HTML here that will be displayed as a modal alongside the FormField. Make sure that the html is valid and sanitized!",
+    )
+
+    class Meta:
+        app_label = 'sa_api_v2'
+        db_table = 'ms_api_form_field_modal'
+
+
 class FormField(RelatedFormModule):
     key = models.CharField(
         max_length=127,
@@ -259,6 +276,12 @@ class FormField(RelatedFormModule):
         default=False,
         blank=True,
         help_text="If true, then the form cannot be submitted unless this field has received a response",
+    )
+    info_modal = models.OneToOneField(
+        Modal,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
     )
 
     class Meta:

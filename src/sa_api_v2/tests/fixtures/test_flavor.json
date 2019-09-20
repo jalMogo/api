@@ -34,7 +34,11 @@
                     "label": "Show me form stage 2!",
                     "value": "show-stage-2"
                   }
-                ]
+                ],
+                "info_modal": {
+                  "header": "test modal",
+                  "content": "<div style='width:300px;'><img style='width:100%;' src='/static/css/images/practice-no-till.jpg' alt='No till' /><p><strong>NRCS code:</strong> 329</p><p>No till consists of one pass seed and fertilizer placement.</p></div>"
+                }
               }
             },
             {

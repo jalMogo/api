@@ -635,15 +635,20 @@ class TestFlavorDeserializers (TestCase):
             "Art"
         )
 
-        options = form.stages.all().first().modules.all().get(order=2).checkboxfield.options.all()
+        options = form.stages.first().modules.get(order=2).checkboxfield.options.all()
         self.assertEqual(
             map(lambda option: option.label, options),
             ['White', 'Black']
         )
 
         self.assertEqual(
-            form.stages.all().first().modules.all().get(order=3).numberfield.placeholder,
+            form.stages.first().modules.get(order=3).numberfield.placeholder,
             "enter meters of waterlines here (eg: 32)"
+        )
+
+        self.assertEqual(
+            form.stages.first().modules.first().radiofield.info_modal.header,
+            "test modal"
         )
 
         # assert that our nested modules are valid:

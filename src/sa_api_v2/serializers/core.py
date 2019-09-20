@@ -836,15 +836,52 @@ class SubmitButtonModuleSerializer (
 
 
 # Form Fields
+class ModalSerializer(
+    FormModulesValidator,
+    serializers.ModelSerializer
+):
+    class Meta:
+        model = models.Modal
+        fields = ['header', 'content']
+
 
 class BaseFormFieldSerializer (
     FormModulesValidator,
     serializers.ModelSerializer
 ):
+    info_modal = ModalSerializer(required=False)
     class Meta:
         abstract = True
-        fields = ['key', 'prompt', 'label', 'private', 'required']
+        fields = [
+            'key',
+            'prompt',
+            'label',
+            'private',
+            'required',
+            'info_modal'
+        ]
 
+    def create(self, validated_data):
+        if 'info_modal' in validated_data.keys():
+            # print("creating FormField with validated_data:", validated_data)
+            info_modal_data = validated_data.pop('info_modal')
+            # create our Modal instance, and add it to our FormField:
+            serializer = ModalSerializer(
+                    data=info_modal_data
+            )
+            if not serializer.is_valid():
+                raise serializers.ValidationError(
+                    "ModalSerializer failed to validate: {}".format(serializer.errors)
+                )
+            modal = serializer.save()
+            form_field = self.Meta.model.objects.create(**validated_data)
+            form_field.info_modal = modal
+            form_field.save()
+            return form_field
+        else:
+            form_field = self.Meta.model.objects.create(**validated_data)
+            form_field.save()
+            return form_field
 
 class GeocodingFieldModuleSerializer (BaseFormFieldSerializer):
     class Meta(BaseFormFieldSerializer.Meta):
