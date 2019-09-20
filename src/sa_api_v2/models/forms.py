@@ -22,7 +22,7 @@ __all__ = [
     'FormFieldOption',
     'CheckboxOption',
     'AddressField',
-    'LatLngField',
+    'LngLatField',
     'DateField',
     'NumberField',
     'FileField',
@@ -44,7 +44,7 @@ RELATED_MODULES = [
     "checkboxfield",
     "textfield",
     "addressfield",
-    'latlngfield',
+    'lnglatfield',
     "textareafield",
     "submitbuttonmodule",
 ]
@@ -351,9 +351,9 @@ class FileField(FormField):
         db_table = 'ms_api_form_module_field_file'
 
 
-class LatLngField(FormField):
+class LngLatField(FormField):
     """
-    Saves the address from the LatLng field.
+    Saves the address from the LngLat field.
     This field is optional, since we are always collecting lat lng.
     Typically only needed when lat/lng validation is required.
     """
@@ -364,15 +364,15 @@ class LatLngField(FormField):
     )
 
     def summary(self):
-        return "latlng field with prompt: \"{}\"".format(self.prompt)
+        return "lnglat field with prompt: \"{}\"".format(self.prompt)
 
     class Meta:
-        db_table = 'ms_api_form_module_field_latlng'
+        db_table = 'ms_api_form_module_field_lnglat'
 
 
 class AddressField(FormField):
     """
-    Saves the address from the LatLng field
+    Saves the address from the LngLat field
     """
     placeholder = models.CharField(**placeholder_kwargs)
     reverse_geocode = models.BooleanField(
@@ -489,8 +489,8 @@ class AbstractOrderedModule(models.Model):
         null=True,
     )
 
-    latlngfield = models.ForeignKey(
-        LatLngField,
+    lnglatfield = models.ForeignKey(
+        LngLatField,
         on_delete=models.SET_NULL,
         help_text=HELP_TEXT.format("field to represent lat lng collection"),
         blank=True,
