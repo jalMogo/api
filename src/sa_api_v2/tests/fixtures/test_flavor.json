@@ -29,6 +29,10 @@
                   {
                     "label": "Art",
                     "value": "art"
+                  },
+                  {
+                    "label": "Show me form stage 2!",
+                    "value": "show-stage-2"
                   }
                 ]
               }
@@ -147,6 +151,16 @@
       "type": "radiofield",
       "option_value": "yes",
       "group_visibility_triggers": [2]
+    }
+  ],
+  "stage_visibility_triggers": [
+    {
+      "form": "form1",
+      "stage_order": 1,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "show-stage-2",
+      "stage_visibility_triggers": [2]
     }
   ],
   "flavors": [

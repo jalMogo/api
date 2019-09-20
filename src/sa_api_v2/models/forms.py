@@ -694,6 +694,31 @@ class FormFieldOption(models.Model):
             )
             field_option.save()
 
+    # This is only used for importing visibility trigger relationships from a
+    # JSON source
+
+    # NOTE: imports are limited to FormFieldOptions that are NOT inside of a
+    # group
+    @staticmethod
+    def import_stage_triggers(field_data):
+        for field in field_data:
+            # First get the field option to which we'll add the stage triggers:
+            FieldOption = RadioOption if field['type'] == 'radiofield' else CheckboxOption
+            field_option = FieldOption.objects.get(
+                value=field['option_value'],
+                field__ordered_modules__order=field['field_order'],
+                field__ordered_modules__stage__order=field['stage_order'],
+                field__ordered_modules__stage__form__label=field['form'],
+            )
+            stages_to_trigger = FormStage.objects.filter(
+                order__in=field['stage_visibility_triggers'],
+                form__label=field['form']
+            )
+            field_option.stage_visibility_triggers.add(
+                *[stage for stage in stages_to_trigger.all()]
+            )
+            field_option.save()
+
     class Meta:
         app_label = 'sa_api_v2'
         abstract = True

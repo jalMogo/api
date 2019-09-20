@@ -591,6 +591,10 @@ class TestFlavorDeserializers (TestCase):
         group_triggers = data['group_visibility_triggers']
         FormFieldOption.import_group_triggers(group_triggers)
 
+        # create our staging visibility triggers:
+        stage_triggers = data['stage_visibility_triggers']
+        FormFieldOption.import_stage_triggers(stage_triggers)
+
         # create our Flavor models:
         flavor_serializer = FlavorFixtureSerializer(
             data=data['flavors'],
@@ -605,6 +609,12 @@ class TestFlavorDeserializers (TestCase):
         # check that our visibility triggers are valid:
         self.assertEqual(
             [module.order for module in form.stages.get(order=1).modules.get(order=4).groupmodule.modules.get(order=1).radiofield.options.first().group_visibility_triggers.all()],
+            [2]
+        )
+
+        # check that our staging triggers are valid:
+        self.assertEqual(
+            [stage.order for stage in form.stages.get(order=1).modules.get(order=1).radiofield.options.last().stage_visibility_triggers.all()],
             [2]
         )
 
@@ -686,6 +696,7 @@ class TestFlavorDeserializers (TestCase):
             print("FlavorSerializer failed with error:", flavor_serializer.errors)
             raise
         flavors = flavor_serializer.save()
+
         # create our group visibility triggers:
         group_triggers = data['group_visibility_triggers']
         FormFieldOption.import_group_triggers(group_triggers)
@@ -695,6 +706,17 @@ class TestFlavorDeserializers (TestCase):
         self.assertEqual(
             [module.order for module in form.stages.get(order=9).modules.get(order=2).groupmodule.modules.get(order=1).radiofield.options.first().group_visibility_triggers.all()],
             [2,3,4,5,6]
+        )
+
+        # create our stage visibility triggers:
+        stage_triggers = data['stage_visibility_triggers']
+        FormFieldOption.import_stage_triggers(stage_triggers)
+
+        forms = flavors[2].forms.all()
+        form = forms.get(label='spokane-input')
+        self.assertEqual(
+            [stage.order for stage in form.stages.get(order=2).modules.get(order=2).checkboxfield.options.first().stage_visibility_triggers.all()],
+            [3]
         )
 
         # ensure that we aren't creating duplicate stages

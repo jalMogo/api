@@ -1531,6 +1531,31 @@
       "option_value": "yes",
       "group_visibility_triggers": [2, 3]
     }
+  ],
+  "stage_visibility_triggers": [
+    {
+      "form": "spokane-input",
+      "stage_order": 2,
+      "field_order": 2,
+      "type": "checkboxfield",
+      "option_value": "agriculture",
+      "stage_visibility_triggers": [3]
+    },
+    {
+      "form": "spokane-input",
+      "stage_order": 2,
+      "field_order": 2,
+      "type": "checkboxfield",
+      "option_value": "livestock",
+      "stage_visibility_triggers": [4]
+    },
+    {
+      "form": "spokane-input",
+      "stage_order": 2,
+      "field_order": 2,
+      "type": "checkboxfield",
+      "option_value": "forestry",
+      "stage_visibility_triggers": [5]
     }
   ],
   "flavors": [
@@ -1547,7 +1572,7 @@
     {
       "display_name": "spokane-vsp",
       "slug": "spokane-vsp",
-      "forms": []
+      "forms": ["spokane-input"]
     },
     {
       "display_name": "mississippi",

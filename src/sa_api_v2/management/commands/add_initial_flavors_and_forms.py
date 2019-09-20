@@ -65,6 +65,11 @@ class Command(BaseCommand):
             models.FormFieldOption.import_group_triggers(group_triggers)
             print('group triggers created!')
 
+            # create our stage visibility triggers:
+            stage_triggers = data['stage_visibility_triggers']
+            models.FormFieldOption.import_stage_triggers(stage_triggers)
+            print('stage triggers created!')
+
             # create our Flavor models:
             flavor_serializer = FlavorFixtureSerializer(
                 data=data['flavors'],
