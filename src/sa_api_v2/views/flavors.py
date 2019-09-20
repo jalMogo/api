@@ -3,9 +3,10 @@ from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from .. import serializers
+from .mixins import CorsEnabledMixin
 
 
-class FlavorInstanceView (generics.RetrieveAPIView):
+class FlavorInstanceView (CorsEnabledMixin, generics.RetrieveAPIView):
     """
     GET
     ---
@@ -25,16 +26,7 @@ class FlavorInstanceView (generics.RetrieveAPIView):
                                   Prefetch(
                                       'forms__stages__modules',
                                       queryset=models.OrderedModule.objects.select_related(
-                                          'skipstagemodule',
-                                          'htmlmodule',
-                                          'groupmodule',
-                                          'filefield',
-                                          'numberfield',
-                                          'datefield',
-                                          'radiofield',
-                                          'textfield',
-                                          'textareafield',
-                                          'checkboxfield',
+                                          *models.RELATED_MODULES
                                       ),
                                   ),
                               )
