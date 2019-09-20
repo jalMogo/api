@@ -1,3 +1,4 @@
+from .. import cors
 
 class CorsEnabledMixin (object):
     """
