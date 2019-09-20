@@ -784,7 +784,6 @@ class BaseFormFieldOptionSerializer (serializers.ModelSerializer):
             # resolve the pk value.
             check_for_none = attribute.pk if isinstance(attribute, PKOnlyObject) else attribute
             if check_for_none is None:
-                print("Field has a none value (?):", field.field_name)
                 ret[field.field_name] = None
             else:
                 ret[field.field_name] = field.to_representation(attribute)
