@@ -22,7 +22,6 @@ __all__ = [
     'FormFieldOption',
     'CheckboxOption',
     'AddressField',
-    'LngLatField',
     'DateField',
     'NumberField',
     'FileField',
@@ -44,7 +43,6 @@ RELATED_MODULES = [
     "checkboxfield",
     "textfield",
     "addressfield",
-    'lnglatfield',
     "textareafield",
     "submitbuttonmodule",
 ]
@@ -115,6 +113,12 @@ class FormStage(models.Model):
         default=True,
         blank=True,
         help_text="Determines whether the stage is visible by default.",
+    )
+
+    validate_geometry = models.BooleanField(
+        default=False,
+        blank=True,
+        help_text="Determines whether we should validate whether a correct lng/lat has been entered at this stage.",
     )
 
     def __unicode__(self):
@@ -351,28 +355,9 @@ class FileField(FormField):
         db_table = 'ms_api_form_module_field_file'
 
 
-class LngLatField(FormField):
-    """
-    Saves the address from the LngLat field.
-    This field is optional, since we are always collecting lat lng.
-    Typically only needed when lat/lng validation is required.
-    """
-    validate = models.BooleanField(
-        default=False,
-        blank=True,
-        help_text="Validates that the lat lng has been set before proceeding to the next form stage",
-    )
-
-    def summary(self):
-        return "lnglat field with prompt: \"{}\"".format(self.prompt)
-
-    class Meta:
-        db_table = 'ms_api_form_module_field_lnglat'
-
-
 class AddressField(FormField):
     """
-    Saves the address from the LngLat field
+    Saves the address from the map's lng/lat values
     """
     placeholder = models.CharField(**placeholder_kwargs)
     reverse_geocode = models.BooleanField(
@@ -489,13 +474,6 @@ class AbstractOrderedModule(models.Model):
         null=True,
     )
 
-    lnglatfield = models.ForeignKey(
-        LngLatField,
-        on_delete=models.SET_NULL,
-        help_text=HELP_TEXT.format("field to represent lat lng collection"),
-        blank=True,
-        null=True,
-    )
     addressfield = models.ForeignKey(
         AddressField,
         on_delete=models.SET_NULL,

@@ -917,12 +917,6 @@ class AddressFieldModuleSerializer (BaseFormFieldSerializer):
         fields = BaseFormFieldSerializer.Meta.fields + ['placeholder', 'reverse_geocode']
 
 
-class LngLatFieldModuleSerializer (BaseFormFieldSerializer):
-    class Meta(BaseFormFieldSerializer.Meta):
-        model = models.LngLatField
-        fields = BaseFormFieldSerializer.Meta.fields + ['validate']
-
-
 class TextAreaFieldModuleSerializer (BaseFormFieldSerializer):
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.TextAreaField
@@ -992,7 +986,6 @@ class AbstractFormModuleSerializer (serializers.ModelSerializer):
     checkboxfield = CheckboxFieldModuleSerializer(required=False)
     textfield = TextFieldModuleSerializer(required=False)
     addressfield = AddressFieldModuleSerializer(required=False)
-    lnglatfield = LngLatFieldModuleSerializer(required=False)
     textareafield = TextAreaFieldModuleSerializer(required=False)
     submitbuttonmodule = SubmitButtonModuleSerializer(required=False)
 
@@ -1069,7 +1062,6 @@ MODULES = {
     "checkboxfield": CheckboxFieldModuleSerializer,
     "textfield": TextFieldModuleSerializer,
     "addressfield": AddressFieldModuleSerializer,
-    "lnglatfield": LngLatFieldModuleSerializer,
     "textareafield": TextAreaFieldModuleSerializer,
     "submitbuttonmodule": SubmitButtonModuleSerializer,
 }
@@ -1160,6 +1152,7 @@ class FormStageSerializer (serializers.ModelSerializer):
             'modules',
             'order',
             'visible',
+            'validate_geometry',
         ]
 
 

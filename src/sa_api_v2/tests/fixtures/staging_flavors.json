@@ -74,39 +74,31 @@
             "spokane-input",
             "spokane-county-outline"
           ],
+          "validate_geometry": true,
           "modules": [
             {
               "order": 1,
-              "lnglatfield": {
-                "key": "n/a",
-                "prompt": "",
-                "required": true,
-                "validate": true
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "location_information_header",
                 "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>1. Your property</h2><figure style='margin:8px 0 0 0;'><img style='width:100%;' src='/static/css/images/header-your-property.jpg' alt='Your property section'/></figure>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "htmlmodule": {
                 "label": "location_why",
                 "content": "<p>At the end of this survey you will be able to hide your contact information and location information or voluntarily choose to make it public for the VSP report.</p>"
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "htmlmodule": {
                 "label": "drag_map_info",
                 "content": "<div style='display:flex;align-items:center;padding:24px'><span class='fa fa-globe' style='color:#999999;font-size:1.5rem;margin-right:16px;'></span><p style='display:inline;margin:0;padding-left:8px'>Please drag and zoom the map to center the pin on your property.</p></div>"
               }
             },
             {
-              "order": 5,
+              "order": 4,
               "addressfield": {
                 "key": "private-address",
                 "private": true,
@@ -3100,24 +3092,17 @@
             "bellevue-grid",
             "bellevue-bike-share"
           ],
+          "validate_geometry": true,
           "modules": [
             {
               "order": 1,
-              "lnglatfield": {
-                "key": "n/a",
-                "prompt": "",
-                "required": true
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "submission_info",
                 "content": "<h1 style='font-family: PTSansBold, sans-serif; margin: 0 0 16px 0;'>What do <span style='font-style:italic;'>you</span> think?</h1><p class='form-stage-text'>Drag and zoom the map to let us know where you think we should add a bikeshare hub! Fill out the form below to give us some more information about your suggestion:</p>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "textfield": {
                 "key": "title",
                 "label": "Title:",
@@ -3126,7 +3111,7 @@
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "textfield": {
                 "key": "private-submitter_name",
                 "prompt": "Your name",
@@ -3135,7 +3120,7 @@
               }
             },
             {
-              "order": 5,
+              "order": 4,
               "filefield": {
                 "key": "my_image",
                 "label": "Add image",
@@ -3143,7 +3128,7 @@
               }
             },
             {
-              "order": 6,
+              "order": 5,
               "submitbuttonmodule": {
                 "label": "Suggest it!"
               }
