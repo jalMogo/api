@@ -52,7 +52,7 @@ class Form(models.Model):
     label = models.CharField(max_length=127)
     is_enabled = models.BooleanField(default=True)
 
-    dataset = models.ForeignKey(
+    dataset = models.OneToOneField(
         DataSet,
         related_name='+',
         on_delete=models.CASCADE,
