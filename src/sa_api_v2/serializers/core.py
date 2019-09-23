@@ -1154,6 +1154,7 @@ class FormStageSerializer (serializers.ModelSerializer):
     class Meta:
         model = models.FormStage
         fields = [
+            'id',
             'visible_layer_groups',
             'map_viewport',
             'modules',
@@ -1168,7 +1169,13 @@ class FormSerializer (serializers.ModelSerializer):
 
     class Meta:
         model = models.Form
-        fields = ['label', 'is_enabled', 'dataset', 'stages']
+        fields = [
+            'id',
+            'label',
+            'is_enabled',
+            'dataset',
+            'stages'
+        ]
 
 
 class FlavorSerializer (serializers.ModelSerializer):
