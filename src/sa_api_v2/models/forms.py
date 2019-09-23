@@ -52,6 +52,13 @@ class Form(models.Model):
     label = models.CharField(max_length=127)
     is_enabled = models.BooleanField(default=True)
 
+    icon = models.CharField(
+        default='',
+        max_length=127,
+        blank=True,
+        help_text="An URL for the location of this forms's icon. Useful when selecting one of multiple forms on a flavor. This field is optional.",
+    )
+
     dataset = models.OneToOneField(
         DataSet,
         related_name='+',
@@ -653,6 +660,13 @@ class FormFieldOption(models.Model):
         default=False,
         blank=True,
         help_text="If true, then the Place's 'private' field will be set to true when this option is selected.",
+    )
+
+    icon = models.CharField(
+        default='',
+        max_length=127,
+        blank=True,
+        help_text="An URL for the location of this option's icon. This field is optional.",
     )
 
     order = models.PositiveSmallIntegerField(default=0, blank=False, null=False)

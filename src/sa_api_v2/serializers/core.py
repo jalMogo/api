@@ -896,6 +896,8 @@ class BaseFormFieldSerializer (
             # KEY IS HERE:
             if field.field_name == 'info_modal' and attribute == None:
                 continue
+            if field.field_name == 'icon' and attribute == '':
+                continue
 
             # We skip `to_representation` for `None` values so that fields do
             # not have to explicitly deal with that case.
@@ -1165,6 +1167,7 @@ class FormSerializer (serializers.ModelSerializer):
         fields = [
             'id',
             'label',
+            'icon',
             'is_enabled',
             'dataset',
             'stages'
@@ -1244,7 +1247,13 @@ class FormFixtureSerializer (serializers.ModelSerializer):
 
     class Meta:
         model = models.Form
-        fields = ['label', 'is_enabled', 'dataset', 'stages']
+        fields = [
+            'label',
+            'is_enabled',
+            'icon',
+            'dataset',
+            'stages',
+        ]
 
     def create(self, validated_data):
         stages_data = validated_data.pop('stages')
