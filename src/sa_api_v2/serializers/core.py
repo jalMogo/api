@@ -1183,7 +1183,12 @@ class FlavorSerializer (serializers.ModelSerializer):
 
     class Meta:
         model = models.Flavor
-        fields = ['display_name', 'slug', 'forms']
+        fields = [
+            'id',
+            'display_name',
+            'slug',
+            'forms',
+        ]
 
 
 ################################################################################
@@ -1277,4 +1282,8 @@ class FlavorFixtureSerializer (serializers.ModelSerializer):
 
     class Meta:
         model = models.Flavor
-        fields = ['display_name', 'slug', 'forms']
+        fields = [
+            'display_name',
+            'slug',
+            'forms',
+        ]
