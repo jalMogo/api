@@ -3128,15 +3128,6 @@
             {
               "order": 4,
               "textfield": {
-                "key": "title",
-                "label": "Title:",
-                "prompt": "Add a descriptive title:",
-                "placeholder": "Enter title..."
-              }
-            },
-            {
-              "order": 5,
-              "textfield": {
                 "key": "private-submitter_name",
                 "prompt": "Your name",
                 "placeholder": "Name",
@@ -3144,7 +3135,7 @@
               }
             },
             {
-              "order": 6,
+              "order": 5,
               "filefield": {
                 "key": "my_image",
                 "label": "Add image",
@@ -3152,7 +3143,7 @@
               }
             },
             {
-              "order": 7,
+              "order": 6,
               "submitbuttonmodule": {
                 "label": "Suggest it!"
               }
