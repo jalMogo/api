@@ -1983,7 +1983,7 @@
             "latitude": 47.04829,
             "zoom": 8.5,
             "longitude": -120.60682,
-            "transitionDuration": 1500,
+            "transition_duration": 1500,
             "bearing": 0,
             "pitch": 40
           },
@@ -2047,7 +2047,7 @@
             "latitude": 47.04829,
             "zoom": 8.5,
             "longitude": -120.60682,
-            "transitionDuration": 1500,
+            "transition_duration": 1500,
             "bearing": 0,
             "pitch": 40
           },
@@ -2081,7 +2081,7 @@
             "latitude": 47.04829,
             "zoom": 8.5,
             "longitude": -120.60682,
-            "transitionDuration": 1500,
+            "transition_duration": 1500,
             "bearing": 0,
             "pitch": 40
           },
@@ -3028,7 +3028,7 @@
             "longitude": -122.19668,
             "zoom": 14.9,
             "pitch": 30,
-            "transitionDuration": 2000
+            "transition_duration": 2000
           },
           "modules": [
             {
