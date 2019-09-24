@@ -390,6 +390,10 @@ class TestFlavorSerializer (TestCase):
             slug='data',
             owner_id=self.owner.id
         )
+        self.dataset2 = DataSet.objects.create(
+            slug='data-2',
+            owner_id=self.owner.id
+        )
 
         self.flavor = Flavor.objects.create(
             display_name='myflavor',
@@ -475,7 +479,7 @@ class TestFlavorSerializer (TestCase):
 
         self.form2 = Form.objects.create(
             label='form2',
-            dataset=self.dataset1,
+            dataset=self.dataset2,
             flavor=self.flavor,
         )
 
