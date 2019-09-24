@@ -85,9 +85,10 @@ class TestFlavorInstanceView (APITestMixin, TestCase):
             radiofield=radio_field,
         )
 
+        dataset2 = DataSet.objects.create(slug='ds2', owner=self.owner)
         Form.objects.create(
             label='form2',
-            dataset=self.dataset,
+            dataset=dataset2,
             flavor=self.flavor,
         )
 
