@@ -749,9 +749,10 @@ class BaseFormFieldOptionSerializer (serializers.ModelSerializer):
         fields = [
             'default',
             'make_private', 
-             'group_visibility_triggers', 
-             'stage_visibility_triggers',
-             'order'
+            'icon', 
+            'group_visibility_triggers', 
+            'stage_visibility_triggers',
+            'order'
         ]
 
     def to_representation(self, instance):
@@ -775,6 +776,8 @@ class BaseFormFieldOptionSerializer (serializers.ModelSerializer):
             elif field.field_name == 'make_private' and attribute == False:
                 continue
             elif field.field_name == 'default' and attribute == False:
+                continue
+            elif field.field_name == 'icon' and attribute == '':
                 continue
 
             # We skip `to_representation` for `None` values so that fields do
@@ -857,7 +860,7 @@ class BaseFormFieldSerializer (
             'label',
             'private',
             'required',
-            'info_modal'
+            'info_modal',
         ]
 
     def create(self, validated_data):
@@ -895,8 +898,6 @@ class BaseFormFieldSerializer (
 
             # KEY IS HERE:
             if field.field_name == 'info_modal' and attribute == None:
-                continue
-            if field.field_name == 'icon' and attribute == '':
                 continue
 
             # We skip `to_representation` for `None` values so that fields do
@@ -1114,6 +1115,11 @@ MODULES_WITH_GROUP_MODULE.update({"groupmodule": GroupModuleSerializer})
 
 class OrderedModuleSerializer (AbstractFormModuleSerializer):
     groupmodule = GroupModuleSerializer(required=False)
+    permitted_group = serializers.SlugRelatedField(
+        slug_field="name",
+        queryset=models.Group.objects.all(),
+        required=False,
+    )
 
     class Meta:
         model = models.OrderedModule

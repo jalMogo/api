@@ -796,3 +796,62 @@ class TestFormModel (TestCase):
 
         # Test that attached modules still exists:
         radio_field.refresh_from_db()
+
+    def test_module_field_permitted_group(self):
+        # Create a Group / Dataset which are not associated with our Form:
+        self.owner = User.objects.create(username='myuser')
+        outside_dataset = DataSet.objects.create(slug='other-dataset',
+                                              owner_id=self.owner.id)
+        outside_group = Group.objects.create(dataset=outside_dataset, name='admins')
+
+        # Create a Group on our Forms dataset:
+        self.dataset = DataSet.objects.create(slug='data',
+                                              owner_id=self.owner.id)
+        admin_group = Group.objects.create(dataset=self.dataset, name='admins')
+
+        # create a field that will only be accessible to admins:
+        admin_radio_field = RadioField.objects.create(
+            key="rating",
+            prompt="what is this project's rating?",
+        )
+
+        RadioOption.objects.create(
+            label="Good",
+            value="good",
+            field=admin_radio_field,
+        )
+        RadioOption.objects.create(
+            label="Bad",
+            value="bad",
+            field=admin_radio_field,
+        )
+
+        # try attaching a Group to a FormField before the FromField is
+        # associated with a Stage/Form/Dataset
+        with self.assertRaises(ValidationError) as context:
+            OrderedModule.objects.create(
+                order=2,
+                stage=self.stages[0],
+                radiofield=admin_radio_field,
+                permitted_group=admin_group,
+            )
+        self.assertTrue(
+            '[FORM_MODULE_MODEL] Dataset must be assigned before adding Restrcted Group to module' in context.exception.message
+        )
+
+        # set the form's dataset, and it should work now:
+        self.form.dataset = self.dataset
+        ordered_module = OrderedModule.objects.create(
+            order=2,
+            stage=self.stages[0],
+            radiofield=admin_radio_field,
+            permitted_group=admin_group,
+        )
+
+        # try resetting the Restricted Group to an outside group:
+        with self.assertRaises(ValidationError) as context:
+            ordered_module.permitted_group = outside_group
+            ordered_module.save()
+        self.assertTrue(
+            "[FORM_MODULE_MODEL] permitted_group is not within this form's dataset" in context.exception.message
+        )

@@ -2,6 +2,9 @@ from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.contrib.gis.db import models
 from .core import DataSet
+from .profiles import (
+    Group,
+)
 from .flavors import Flavor
 import logging
 from django.core.exceptions import ValidationError
@@ -294,7 +297,6 @@ class FormField(RelatedFormModule):
         blank=True,
         null=True,
     )
-
     class Meta:
         abstract = True
 
@@ -535,6 +537,7 @@ class AbstractOrderedModule(models.Model):
         blank=True,
         null=True,
     )
+
     def __unicode__(self):
         related_module = self.get_related_module()
         return 'order: {order}, with Related Module: {related}'.format(related=related_module, order=self.order)
@@ -563,6 +566,14 @@ class AbstractOrderedModule(models.Model):
         if len(related_modules) > 1:
             message = '[FORM_MODULE_MODEL] Instance has more than one related model: {}'.format([related_modules])
             raise ValidationError(message)
+        # Validate permitted_group on OrderedModule:
+        if hasattr(self, 'permitted_group') and self.permitted_group is not None:
+            # every OrderedModule has a stage, and every stage has a form.
+            if self.stage.form.dataset is None:
+                raise ValidationError("[FORM_MODULE_MODEL] Dataset must be assigned before adding Restrcted Group to module: {}".format(self))
+            dataset = self.stage.form.dataset
+            if self.permitted_group.dataset != dataset:
+                raise ValidationError("[FORM_MODULE_MODEL] permitted_group is not within this form's dataset: {}".format(dataset))
 
     def save(self, *args, **kwargs):
         self.clean()
@@ -586,6 +597,15 @@ class OrderedModule(AbstractOrderedModule):
         GroupModule,
         on_delete=models.SET_NULL,
         help_text=AbstractOrderedModule.HELP_TEXT.format("group module"),
+        blank=True,
+        null=True,
+    )
+
+    # This can only be added if the OrderedModule is associated with a Form.
+    permitted_group = models.ForeignKey(
+        Group,
+        on_delete=models.SET_NULL,
+        help_text="Only this Group is allowed to edit this module's field. If null, any group can edit.",
         blank=True,
         null=True,
     )
