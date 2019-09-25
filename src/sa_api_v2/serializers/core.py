@@ -1114,7 +1114,6 @@ MODULES_WITH_GROUP_MODULE.update({"groupmodule": GroupModuleSerializer})
 
 
 class OrderedModuleSerializer (AbstractFormModuleSerializer):
-
     groupmodule = GroupModuleSerializer(required=False)
 
     # Groups don't have url's, so we are using the id instead:

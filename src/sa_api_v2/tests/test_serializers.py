@@ -576,9 +576,30 @@ class TestFlavorDeserializers (TestCase):
                                               owner_id=self.owner.id)
         self.dataset4 = DataSet.objects.create(slug='spokane-input',
                                               owner_id=self.owner.id)
+        self.dataset5 = DataSet.objects.create(slug='pbdurham',
+                                              owner_id=self.owner.id)
+        pbdurham_projects = DataSet.objects.create(slug='pbdurham-projects',
+                                              owner_id=self.owner.id)
+        Group.objects.create(
+            dataset=self.dataset5,
+            name='administrators',
+        )
+        projects_admin_group = Group.objects.create(
+            dataset=pbdurham_projects,
+            name='administrators',
+        )
+        Group.objects.create(
+            dataset=pbdurham_projects,
+            name='delegates',
+        )
+        Group.objects.create(
+            dataset=pbdurham_projects,
+            name='tech-reviewers',
+        )
+
         # creating Groups with duplicate names on different datasets for testing:
         self.dataset1_admins_group = Group.objects.create(
-            id=4,  # this id is hard-coded into our permitted_group_id field
+            id=9999,  # this id is hard-coded into our permitted_group_id field
             dataset=self.dataset,
             name='administrators',
         )

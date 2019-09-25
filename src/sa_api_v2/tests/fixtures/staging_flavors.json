@@ -63,6 +63,212 @@
   ],
   "forms": [
     {
+      "label": "pbdurham-input-2019",
+      "is_enabled": true,
+      "dataset": "pbdurham",
+      "stages": [
+        {
+          "order": 1,
+          "label": "location type selection",
+          "modules": [
+            {
+              "order": 1,
+              "radiofield": {
+                "key": "location_type",
+                "required": true,
+                "options": [
+                  {
+                    "label": "Art & Culture",
+                    "value": "culture",
+                    "icon": "/static/css/images/markers/fountain.png"
+                  },
+                  {
+                    "icon": "/static/css/images/markers/tree.png",
+                    "value": "parks",
+                    "label": "Parks & Recreation"
+                  },
+                  {
+                    "icon": "/static/css/images/markers/street-sidewalk.png",
+                    "value": "streets",
+                    "label": "Streets & Sidewalks"
+                  },
+                  {
+                    "icon": "/static/css/images/markers/health.png",
+                    "value": "health",
+                    "label": "Health & Wellness"
+                  },
+                  {
+                    "icon": "/static/css/images/markers/safety.png",
+                    "value": "safety",
+                    "label": "Safety & Environment"
+                  },
+                  {
+                    "icon": "/static/css/images/markers/idea.png",
+                    "value": "other",
+                    "label": "Other"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "label": "this is the rest of the form",
+          "modules": [
+            {
+              "order": 1,
+              "textfield": {
+                "key": "title",
+                "required": true,
+                "prompt": "Title:",
+                "label": "Title:",
+                "placeholder": "Choose a descriptive title for your idea"
+              }
+            },
+            {
+              "order": 2,
+              "textareafield": {
+                "key": "idea-what",
+                "prompt": "What is your idea for what should be improved in your neighborhood?",
+                "label": "My project idea is:",
+                "placeholder": "Ideas should be one-time project expenditures that address a community need"
+              }
+            },
+            {
+              "order": 3,
+              "textareafield": {
+                "key": "idea-why",
+                "prompt": "Why is this important? What need in the community does this serve?",
+                "placeholder": "Let us know how your idea helps the City of Durham!"
+              }
+            },
+            {
+              "order": 3,
+              "filefield": {
+                "key": "my_image",
+                "prompt": "Image",
+                "label": "Add an Image"
+              }
+            },
+            {
+              "order": 4,
+              "textfield": {
+                "key": "private-age",
+                "private": true,
+                "prompt": "Your age:",
+                "label": "",
+                "placeholder": "Your age will not appear on the map"
+              }
+            },
+            {
+              "order": 5,
+              "checkboxfield": {
+                "key": "private-ethnicity",
+                "private": true,
+                "prompt": "Your race/ethnicity (check all that apply; your race/ethnicity will not appear on the map):",
+                "label": "Ethnicity:",
+                "options": [
+                  {
+                    "label": "American Indian/Alaskan Native",
+                    "value": "indian-alaskan"
+                  },
+                  {
+                    "label": "Asian",
+                    "value": "asian"
+                  },
+                  {
+                    "label": "Black or African American",
+                    "value": "black"
+                  },
+                  {
+                    "label": "Hispanic or Latinx",
+                    "value": "hispanic"
+                  },
+                  {
+                    "label": "Native Hawaiian or Pacific Islander",
+                    "value": "hawaiian-pacific"
+                  },
+                  {
+                    "label": "White",
+                    "value": "white"
+                  },
+                  {
+                    "label": "Other",
+                    "value": "other-ethnicity"
+                  }
+                ]
+              }
+            },
+            {
+              "order": 6,
+              "addressfield": {
+                "key": "private-home_address",
+                "private": true,
+                "prompt": "Your home address:",
+                "placeholder": "Your home address will not appear on the map",
+                "reverse_geocode": false
+              }
+            },
+            {
+              "order": 7,
+              "textfield": {
+                "key": "submitter_name",
+                "required": true,
+                "prompt": "Your name:",
+                "placeholder": "Name"
+              }
+            },
+            {
+              "order": 8,
+              "textfield": {
+                "key": "private-submitter_email",
+                "required": true,
+                "private": true,
+                "prompt": "Your Email:",
+                "placeholder": "Your email will not appear on the map"
+              }
+            },
+
+            {
+              "order": 9,
+              "textfield": {
+                "key": "private-phone",
+                "prompt": "Your phone number:",
+                "variant": "PH",
+                "placeholder": "Your phone number will not appear on the map"
+              }
+            },
+            {
+              "order": 10,
+              "radiofield": {
+                "key": "private-volunteer",
+                "private": true,
+                "variant": "toggle",
+                "prompt": "I'd like to volunteer as a Budget Delegate",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "label": "No",
+                    "value": "no"
+                  }
+                ]
+              }
+            },
+            {
+              "order": 11,
+              "submitbuttonmodule": {
+                "label": "Put it on the map!"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
       "label": "spokane-input",
       "is_enabled": true,
       "dataset": "spokane-input",
@@ -3370,6 +3576,11 @@
       "display_name": "spokane-vsp",
       "slug": "spokane-vsp",
       "forms": ["spokane-input"]
+    },
+    {
+      "display_name": "pbdurham",
+      "slug": "pbdurham",
+      "forms": [ "pbdurham-input-2019"]
     },
     {
       "display_name": "mississippi",
