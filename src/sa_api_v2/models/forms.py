@@ -606,6 +606,7 @@ class OrderedModule(AbstractOrderedModule):
         Group,
         on_delete=models.SET_NULL,
         help_text="Only this Group is allowed to edit this module's field. If null, any group can edit.",
+        related_name="+",
         blank=True,
         null=True,
     )

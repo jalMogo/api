@@ -3,6 +3,9 @@ from django.test import TestCase
 from django.test.client import RequestFactory
 from django.core.files.base import ContentFile
 from django.core.urlresolvers import reverse
+from django.core.exceptions import (
+    ValidationError,
+)
 from nose.tools import istest
 from sa_api_v2.cache import cache_buffer
 from sa_api_v2.models import (
@@ -563,14 +566,26 @@ class TestFlavorDeserializers (TestCase):
         User.objects.all().delete()
         DataSet.objects.all().delete()
         self.owner = User.objects.create(username='myuser')
-        self.dataset = DataSet.objects.create(slug='test-dataset',
-                                              owner_id=self.owner.id)
+        self.dataset = DataSet.objects.create(
+            slug='test-dataset',
+            owner_id=self.owner.id
+        )
         self.dataset2 = DataSet.objects.create(slug='kittitas-firewise-input',
                                               owner_id=self.owner.id)
         self.dataset3 = DataSet.objects.create(slug='bellevue-bike-share',
                                               owner_id=self.owner.id)
         self.dataset4 = DataSet.objects.create(slug='spokane-input',
                                               owner_id=self.owner.id)
+        # creating Groups with duplicate names on different datasets for testing:
+        self.dataset1_admins_group = Group.objects.create(
+            id=4,  # this id is hard-coded into our permitted_group_id field
+            dataset=self.dataset,
+            name='administrators',
+        )
+        Group.objects.create(
+            dataset=self.dataset2,
+            name='administrators',
+        )
 
     def test_deserialize_flavor(self):
         test_dir = path.dirname(__file__)
@@ -588,7 +603,8 @@ class TestFlavorDeserializers (TestCase):
 
         # create our Form models:
         form_serializer = FormFixtureSerializer(data=data['forms'], many=True)
-        self.assertTrue(form_serializer.is_valid())
+        if not form_serializer.is_valid():
+            raise ValidationError("FormSerializer failed with error{}:".format(form_serializer.errors))
         form_serializer.save()
 
         # create our group visibility triggers:
@@ -604,7 +620,8 @@ class TestFlavorDeserializers (TestCase):
             data=data['flavors'],
             many=True,
         )
-        self.assertTrue(flavor_serializer.is_valid())
+        if not flavor_serializer.is_valid():
+            raise ValidationError("FlavorSerializer failed with error: {}".format(flavor_serializer.errors))
         flavors = flavor_serializer.save()
         forms = flavors[0].forms.all()
         form = forms.first()
@@ -655,6 +672,12 @@ class TestFlavorDeserializers (TestCase):
             "test modal"
         )
 
+        # assert that our permitted_groups have been created properly:
+        self.assertEqual(
+            form.stages.first().modules.get(order=3).permitted_group,
+            self.dataset1_admins_group,
+        )
+
         # assert that our nested modules are valid:
         groupmodule = form.stages.all().first().modules.all().get(order=4).groupmodule
         self.assertEqual(
@@ -677,20 +700,14 @@ class TestFlavorDeserializers (TestCase):
             data=data['layer_groups'],
             many=True,
         )
-        try:
-            self.assertTrue(layer_group_serializer.is_valid())
-        except AssertionError:
-            print("LayerGroupSerializer failed with error:", layer_group_serializer.errors)
-            raise
+        if not layer_group_serializer.is_valid():
+            raise AssertionError("LayerGroupSerializer failed with error: {}".format(layer_group_serializer.errors))
         layer_group_serializer.save()
 
         # create our Form models:
         form_serializer = FormFixtureSerializer(data=data['forms'], many=True)
-        try:
-            self.assertTrue(form_serializer.is_valid())
-        except AssertionError:
-            print("FormSerializer failed with error:", form_serializer.errors)
-            raise
+        if not form_serializer.is_valid():
+            raise AssertionError("FormSerializer failed with error: {}".format(form_serializer.errors))
 
         form_serializer.save()
 
@@ -699,11 +716,8 @@ class TestFlavorDeserializers (TestCase):
             data=data['flavors'],
             many=True
         )
-        try:
-            self.assertTrue(flavor_serializer.is_valid())
-        except AssertionError:
-            print("FlavorSerializer failed with error:", flavor_serializer.errors)
-            raise
+        if not flavor_serializer.is_valid():
+            raise AssertionError("FlavorSerializer failed with error: {}".format( flavor_serializer.errors))
         flavors = flavor_serializer.save()
 
         # create our group visibility triggers:

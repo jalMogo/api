@@ -65,6 +65,7 @@
             {
               "order": 3,
               "visible": true,
+              "permitted_group_id": 4,
               "numberfield": {
                 "key": "water-lines",
                 "prompt": "how many meters of waterlines are on your property?",

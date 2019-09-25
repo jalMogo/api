@@ -1114,11 +1114,15 @@ MODULES_WITH_GROUP_MODULE.update({"groupmodule": GroupModuleSerializer})
 
 
 class OrderedModuleSerializer (AbstractFormModuleSerializer):
+
     groupmodule = GroupModuleSerializer(required=False)
-    permitted_group = serializers.SlugRelatedField(
-        slug_field="name",
-        queryset=models.Group.objects.all(),
+
+    # Groups don't have url's, so we are using the id instead:
+    permitted_group_id = serializers.PrimaryKeyRelatedField(
+        write_only=True,
         required=False,
+        queryset=models.Group.objects.all(),
+        source="permitted_group",
     )
 
     class Meta:
