@@ -586,14 +586,17 @@ class TestFlavorDeserializers (TestCase):
         )
         projects_admin_group = Group.objects.create(
             dataset=pbdurham_projects,
+            id=45, # this id is hard-coded into our permitted_group_id field
             name='administrators',
         )
         Group.objects.create(
             dataset=pbdurham_projects,
+            id=47, # this id is hard-coded into our permitted_group_id field
             name='delegates',
         )
         Group.objects.create(
             dataset=pbdurham_projects,
+            id=48, # this id is hard-coded into our permitted_group_id field
             name='tech-reviewers',
         )
 

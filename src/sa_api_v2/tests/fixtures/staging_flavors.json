@@ -63,7 +63,250 @@
   ],
   "forms": [
     {
-      "label": "pbdurham-input-2019",
+      "label": "pbdurham-projects",
+      "is_enabled": true,
+      "dataset": "pbdurham-projects",
+      "stages": [
+        {
+          "order": 1,
+          "label": "location type selection",
+          "modules": [
+            {
+              "order": 1,
+              "permitted_group_id": 45,
+              "radiofield": {
+                "key": "location_type",
+                "required": true,
+                "options": [
+                  {
+                    "icon": "/static/css/images/markers/money-greyscale.png",
+                    "label": "Project Proposal",
+                    "value": "project"
+                  },
+                  {
+                    "icon": "/static/css/images/markers/money.png",
+                    "label": "Cycle 1 Winner",
+                    "value": "cycle1-projects"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "modules": [
+            {
+              "order": 1,
+              "permitted_group_id": 45,
+              "radiofield": {
+                "key": "private-shareable",
+                "prompt": "Publish or unpublish this project. Published projects will be visible to all users. Unpublished projects will be visible to administrators, delegates, and technical reviewers.",
+                "required": true,
+                "private": true,
+                "options": [
+                  {
+                    "label": "Published",
+                    "value": "no"
+                  },
+                  {
+                    "label": "Unpublished",
+                    "value": "yes",
+                    "default": true,
+                    "make_private": true
+                  }
+                ]
+              }
+            },
+            {
+              "order": 2,
+              "textfield": {
+                "key": "title",
+                "prompt": "Proposal Name",
+                "placeholder": "...",
+                "required": true
+              }
+            },
+            {
+              "order": 3,
+              "textfield": {
+                "key": "related_ideas",
+                "prompt": "Idea(s) it comes from: (List idea tracker number(s), separated by a space)",
+                "label": "Related ideas:",
+                "placeholder": "..."
+              }
+            },
+            {
+              "order": 4,
+              "textareafield": {
+                "key": "project_description",
+                "prompt": "Brief Project Description: (less than 100 words)",
+                "label": "Description of this project proposal:",
+                "placeholder": "Briefly describe the project"
+              }
+            },
+            {
+              "order": 5,
+
+              "textareafield": {
+                "key": "impact_statement",
+                "prompt": "Impact Statement: (less than 200 words)",
+                "label": "Impact Statement:",
+                "placeholder": "Briefly describe the project"
+              }
+            },
+            {
+              "order": 6,
+              "radiofield": {
+                "key": "ward",
+                "prompt": "Is this project located in Ward 1, Ward 2, Ward 3, or Citywide?",
+                "label": "Ward:",
+                "options": [
+                  {
+                    "label": "Ward 1",
+                    "value": "ward_1"
+                  },
+                  {
+                    "label": "Ward 2",
+                    "value": "ward_2"
+                  },
+                  {
+                    "label": "Ward 3",
+                    "value": "ward_3"
+                  },
+                  {
+                    "label": "Citywide",
+                    "value": "citywide"
+                  }
+                ]
+              }
+            },
+            {
+              "order": 7,
+              "permitted_group_id": 47,
+              "htmlmodule": {
+                "label": "delegates_header",
+                "content": "<h1>Budget Delegates section</h1><p>This section is intended to be completed by Budget Delegates.</p>"
+              }
+            },
+            {
+              "order": 8,
+              "permitted_group_id": 47,
+              "radiofield": {
+                "key": "delegate_equity_score",
+                "prompt": "Equity Score",
+                "label": "Equity Assessment Score:",
+                "options": [
+                  {
+                    "label": "1 - Low contribution to advancing equity",
+                    "value": "1"
+                  },
+                  {
+                    "label": "2 - Medium contribution to advancing equity",
+                    "value": "2"
+                  },
+                  {
+                    "label": "3 - High contribution to advancing equity",
+                    "value": "3"
+                  }
+                ]
+              }
+            },
+            {
+              "order": 9,
+              "permitted_group_id": 47,
+              "radiofield": {
+                "key": "delegate_impact_score",
+                "prompt": "Impact Score",
+                "label": "Impact Assessment Score:",
+                "options": [
+                  {
+                    "label": "1 - Low impact",
+                    "value": "1"
+                  },
+                  {
+                    "label": "2 - Medium impact",
+                    "value": "2"
+                  },
+                  {
+                    "label": "3 - High impact",
+                    "value": "3"
+                  }
+                ]
+              }
+            },
+            {
+              "order": 10,
+              "permitted_group_id": 48,
+              "htmlmodule": {
+                "label": "staff_review_header",
+                "content": "<h1>Internal Staff Review Section</h1><p>This section is intended to be completed by members of the City of Durham internal staff committee.</p>"
+              }
+            },
+            {
+              "order": 11,
+              "permitted_group_id": 48,
+
+              "radiofield": {
+                "key": "staff_feasibility_score",
+                "prompt": "Feasibility Score",
+                "label": "Feasibility Assessment Score",
+                "options": [
+                  {
+                    "label": "1 - Project is not feasible",
+                    "value": "1"
+                  },
+                  {
+                    "label": "2 - Project may or may not be feasible",
+                    "value": "2"
+                  },
+                  {
+                    "label": "3 - Project is highly likely to be feasible",
+                    "value": "3"
+                  }
+                ]
+              }
+            },
+            {
+              "order": 12,
+              "permitted_group_id": 48,
+              "textfield": {
+                "key": "staff_project_budget",
+                "prompt": "Project Budget",
+                "label": "Project Budget:",
+                "placeholder": "..."
+              }
+            },
+            {
+              "order": 13,
+              "permitted_group_id": 48,
+              "textfield": {
+                "key": "staff_cost_estimation",
+                "prompt": "Ongoing Maintenance Cost",
+                "label": "Ongoing Maintenance Cost:",
+                "placeholder": "..."
+              }
+            },
+            {
+              "order": 14,
+              "filefield": {
+                "key": "my_image",
+                "prompt": "Image",
+                "label": "Add an Image"
+              }
+            },
+            {
+              "order": 15,
+              "submitbuttonmodule": {
+                "label": "Put it on the map!"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "pbdurham-input",
       "is_enabled": true,
       "dataset": "pbdurham",
       "stages": [
@@ -3580,7 +3823,7 @@
     {
       "display_name": "pbdurham",
       "slug": "pbdurham",
-      "forms": [ "pbdurham-input-2019"]
+      "forms": ["pbdurham-input", "pbdurham-projects"]
     },
     {
       "display_name": "mississippi",
