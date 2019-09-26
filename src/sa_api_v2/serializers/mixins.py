@@ -127,6 +127,8 @@ class FormFieldOptionsCreator (object):
     def create(self, validated_data):
         options_data = validated_data.pop('options', None)
         field = super(FormFieldOptionsCreator, self).create(validated_data)
+        # ensure that no order has been supplied, because we auto-generate it
+        # upon creation:
         order = 1
 
         for option_data in options_data:
@@ -142,11 +144,10 @@ class FormFieldOptionsCreator (object):
             )
         return field
 
-
 class FormModulesValidator (object):
     def validate(self, data):
         if hasattr(self, 'initial_data'):
             unknown_keys = set(self.initial_data.keys()) - set(data.keys())
             if unknown_keys:
-                raise serializers.ValidationError("Got unknown fields: {}".format(unknown_keys))
+                raise serializers.ValidationError("Got unknown fields: {}".format(list(unknown_keys)))
         return data
