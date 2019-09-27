@@ -176,25 +176,25 @@ class TestActionSerializer (TestCase):
 class TestSocialUserSerializer (TestCase):
 
     @classmethod
-    def setUpTestData(self):
+    def setUpTestData(cls):
         test_dir = path.dirname(__file__)
         fixture_dir = path.join(test_dir, 'fixtures')
         twitter_user_data_file = path.join(fixture_dir, 'twitter_user.json')
         facebook_user_data_file = path.join(fixture_dir, 'facebook_user.json')
 
-        self.twitter_user = User.objects.create_user(
+        cls.twitter_user = User.objects.create_user(
             username='my_twitter_user', password='mypassword')
-        self.twitter_social_auth = UserSocialAuth.objects.create(
-            user=self.twitter_user, provider='twitter', uid='1234',
+        cls.twitter_social_auth = UserSocialAuth.objects.create(
+            user=cls.twitter_user, provider='twitter', uid='1234',
             extra_data=json.load(open(twitter_user_data_file)))
 
-        self.facebook_user = User.objects.create_user(
+        cls.facebook_user = User.objects.create_user(
             username='my_facebook_user', password='mypassword')
-        self.facebook_social_auth = UserSocialAuth.objects.create(
-            user=self.facebook_user, provider='facebook', uid='1234',
+        cls.facebook_social_auth = UserSocialAuth.objects.create(
+            user=cls.facebook_user, provider='facebook', uid='1234',
             extra_data=json.load(open(facebook_user_data_file)))
 
-        self.no_social_user = User.objects.create_user(
+        cls.no_social_user = User.objects.create_user(
             username='my_antisocial_user', password='password')
 
     def tearDown(self):
@@ -342,23 +342,23 @@ class TestSubmissionSerializer (TestCase):
 class TestDataSetSerializer (TestCase):
 
     @classmethod
-    def setUpTestData(self):
+    def setUpTestData(cls):
         User.objects.all().delete()
         DataSet.objects.all().delete()
         Place.objects.all().delete()
         Submission.objects.all().delete()
         cache_buffer.reset()
 
-        self.owner = User.objects.create(username='myuser')
-        self.dataset = DataSet.objects.create(slug='data',
-                                              owner_id=self.owner.id)
-        self.place = Place.objects.create(dataset=self.dataset,
+        cls.owner = User.objects.create(username='myuser')
+        cls.dataset = DataSet.objects.create(slug='data',
+                                              owner_id=cls.owner.id)
+        cls.place = Place.objects.create(dataset=cls.dataset,
                                           geometry='POINT(2 3)')
-        Submission.objects.create(dataset=self.dataset,
-                                  place_model=self.place,
+        Submission.objects.create(dataset=cls.dataset,
+                                  place_model=cls.place,
                                   set_name='comments')
-        Submission.objects.create(dataset=self.dataset,
-                                  place_model=self.place,
+        Submission.objects.create(dataset=cls.dataset,
+                                  place_model=cls.place,
                                   set_name='comments')
 
     def tearDown(self):
@@ -386,43 +386,43 @@ class TestFlavorSerializer (TestCase):
 
     # ./src/manage.py test -s sa_api_v2.tests.test_serializers:TestFlavorSerializer
     @classmethod
-    def setUpTestData(self):
+    def setUpTestData(cls):
 
-        self.owner = User.objects.create(username='myuser')
-        self.dataset1 = DataSet.objects.create(
+        cls.owner = User.objects.create(username='myuser')
+        cls.dataset1 = DataSet.objects.create(
             slug='data',
-            owner_id=self.owner.id
+            owner_id=cls.owner.id
         )
-        self.dataset2 = DataSet.objects.create(
+        cls.dataset2 = DataSet.objects.create(
             slug='data-2',
-            owner_id=self.owner.id
+            owner_id=cls.owner.id
         )
 
-        self.flavor = Flavor.objects.create(
+        cls.flavor = Flavor.objects.create(
             display_name='myflavor',
         )
 
-        self.form1 = Form.objects.create(
+        cls.form1 = Form.objects.create(
             label='form1',
-            dataset=self.dataset1,
-            flavor=self.flavor,
+            dataset=cls.dataset1,
+            flavor=cls.flavor,
         )
 
-        self.stages = [
+        cls.stages = [
             FormStage.objects.create(
                 order=0,
-                form=self.form1,
+                form=cls.form1,
             ),
             FormStage.objects.create(
                 order=1,
-                form=self.form1,
+                form=cls.form1,
             )
         ]
 
-        self.html_module_content = "<p>Hey there!</p>"
+        cls.html_module_content = "<p>Hey there!</p>"
 
         html_module = HtmlModule.objects.create(
-            content=self.html_module_content,
+            content=cls.html_module_content,
         )
 
         radio_field = RadioField.objects.create(
@@ -448,11 +448,11 @@ class TestFlavorSerializer (TestCase):
         related_group_module = GroupModule.objects.create(
             label="This is a group",
         )
-        self.grouped_html_module_content = "<p>html within a group!</p>"
+        cls.grouped_html_module_content = "<p>html within a group!</p>"
         html_grouped_module = HtmlModule.objects.create(
-            content=self.grouped_html_module_content,
+            content=cls.grouped_html_module_content,
         )
-        self.nested_ordered_modules = [
+        cls.nested_ordered_modules = [
             NestedOrderedModule.objects.create(
                 order=1,
                 group=related_group_module,
@@ -462,28 +462,28 @@ class TestFlavorSerializer (TestCase):
 
         OrderedModule.objects.create(
             order=1,
-            stage=self.stages[0],
+            stage=cls.stages[0],
             radiofield=radio_field
         ),
         OrderedModule.objects.create(
             order=2,
-            stage=self.stages[0],
+            stage=cls.stages[0],
             htmlmodule=html_module,
         ),
         OrderedModule.objects.create(
             order=3,
-            stage=self.stages[0],
+            stage=cls.stages[0],
             groupmodule=related_group_module,
         )
         OrderedModule.objects.create(
             order=0,
-            stage=self.stages[1],
+            stage=cls.stages[1],
         )
 
-        self.form2 = Form.objects.create(
+        cls.form2 = Form.objects.create(
             label='form2',
-            dataset=self.dataset2,
-            flavor=self.flavor,
+            dataset=cls.dataset2,
+            flavor=cls.flavor,
         )
 
     def tearDown(self):
@@ -560,28 +560,28 @@ class TestFlavorSerializer (TestCase):
         )
 
 
-class TestFlavorDeserializers (TestCase):
+class TestFlavorDeserializer (TestCase):
     @classmethod
-    def setUpTestData(self):
+    def setUpTestData(cls):
         User.objects.all().delete()
         DataSet.objects.all().delete()
-        self.owner = User.objects.create(username='myuser')
-        self.dataset = DataSet.objects.create(
+        cls.owner = User.objects.create(username='myuser')
+        cls.dataset = DataSet.objects.create(
             slug='test-dataset',
-            owner_id=self.owner.id
+            owner_id=cls.owner.id
         )
-        self.dataset2 = DataSet.objects.create(slug='kittitas-firewise-input',
-                                              owner_id=self.owner.id)
-        self.dataset3 = DataSet.objects.create(slug='bellevue-bike-share',
-                                              owner_id=self.owner.id)
-        self.dataset4 = DataSet.objects.create(slug='spokane-input',
-                                              owner_id=self.owner.id)
-        self.dataset5 = DataSet.objects.create(slug='pbdurham',
-                                              owner_id=self.owner.id)
+        cls.dataset2 = DataSet.objects.create(slug='kittitas-firewise-input',
+                                              owner_id=cls.owner.id)
+        cls.dataset3 = DataSet.objects.create(slug='bellevue-bike-share',
+                                              owner_id=cls.owner.id)
+        cls.dataset4 = DataSet.objects.create(slug='spokane-input',
+                                              owner_id=cls.owner.id)
+        cls.dataset5 = DataSet.objects.create(slug='pbdurham',
+                                              owner_id=cls.owner.id)
         pbdurham_projects = DataSet.objects.create(slug='pbdurham-projects',
-                                              owner_id=self.owner.id)
+                                              owner_id=cls.owner.id)
         Group.objects.create(
-            dataset=self.dataset5,
+            dataset=cls.dataset5,
             name='administrators',
         )
         projects_admin_group = Group.objects.create(
@@ -601,13 +601,13 @@ class TestFlavorDeserializers (TestCase):
         )
 
         # creating Groups with duplicate names on different datasets for testing:
-        self.dataset1_admins_group = Group.objects.create(
+        cls.dataset1_admins_group = Group.objects.create(
             id=9999,  # this id is hard-coded into our permitted_group_id field
-            dataset=self.dataset,
+            dataset=cls.dataset,
             name='administrators',
         )
         Group.objects.create(
-            dataset=self.dataset2,
+            dataset=cls.dataset2,
             name='administrators',
         )
 

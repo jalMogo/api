@@ -171,17 +171,21 @@ class RelatedFormModule(models.Model):
         app_label = 'sa_api_v2'
         abstract = True
 
-    # returns whether the instances has ordered_modules or
-    # nested_ordered_modules pointing to it.
-    def has_any_ordered_modules(self):
-        # Note that GroupModule doesn't have a
-        # 'nested_ordered_modules' attribute, so we check that
-        # explicitly:
-        return len(self.ordered_modules.all()) > 0 or \
-           (hasattr(self, 'nested_ordered_modules') and len(self.nested_ordered_modules.all()) > 0)
+    def _has_ordered_module(self):
+        return (hasattr(self, 'orderedmodule')) and \
+            OrderedModule.objects.filter(id=self.orderedmodule.id).exists()    
+
+    def _has_nested_ordered_module(self):
+        return (hasattr(self, 'nestedorderedmodule')) and \
+            NestedOrderedModule.objects.filter(id=self.nestedorderedmodule.id).exists()    
+
+    # returns whether the instances has ordered_module or
+    # nested_ordered_module pointing to it.
+    def has_any_ordered_module(self):
+        return self._has_ordered_module() or self._has_nested_ordered_module()
 
     def __unicode__(self):
-        if not self.has_any_ordered_modules():
+        if not self.has_any_ordered_module():
             return "{} (unnattached)".format(self.summary())
         else:
             return self.summary()
@@ -449,9 +453,9 @@ class AbstractOrderedModule(models.Model):
         blank=True,
         help_text="Determines whether the module is visible by default.",
     )
-    HELP_TEXT = "Choose a {} by creating a new one, or selecting one that already exists within this flavor. Only one field or one module can be selected for this OrderedModule."
+    HELP_TEXT = "Choose a {} by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule."
 
-    numberfield = models.ForeignKey(
+    numberfield = models.OneToOneField(
         NumberField,
         on_delete=models.SET_NULL,
         help_text=HELP_TEXT.format("number"),
@@ -459,7 +463,7 @@ class AbstractOrderedModule(models.Model):
         null=True,
     )
 
-    filefield = models.ForeignKey(
+    filefield = models.OneToOneField(
         FileField,
         on_delete=models.SET_NULL,
         help_text=HELP_TEXT.format("file"),
@@ -467,7 +471,7 @@ class AbstractOrderedModule(models.Model):
         null=True,
     )
 
-    datefield = models.ForeignKey(
+    datefield = models.OneToOneField(
         DateField,
         on_delete=models.SET_NULL,
         help_text=HELP_TEXT.format("date"),
@@ -475,7 +479,7 @@ class AbstractOrderedModule(models.Model):
         null=True,
     )
 
-    radiofield = models.ForeignKey(
+    radiofield = models.OneToOneField(
         RadioField,
         on_delete=models.SET_NULL,
         help_text=HELP_TEXT.format("radio"),
@@ -483,14 +487,14 @@ class AbstractOrderedModule(models.Model):
         null=True,
     )
 
-    addressfield = models.ForeignKey(
+    addressfield = models.OneToOneField(
         AddressField,
         on_delete=models.SET_NULL,
         help_text=HELP_TEXT.format("address field"),
         blank=True,
         null=True,
     )
-    checkboxfield = models.ForeignKey(
+    checkboxfield = models.OneToOneField(
         CheckboxField,
         on_delete=models.SET_NULL,
         help_text=HELP_TEXT.format("checkbox field"),
@@ -498,7 +502,7 @@ class AbstractOrderedModule(models.Model):
         null=True,
     )
 
-    textareafield = models.ForeignKey(
+    textareafield = models.OneToOneField(
         TextAreaField,
         on_delete=models.SET_NULL,
         help_text=HELP_TEXT.format("textarea field"),
@@ -506,7 +510,7 @@ class AbstractOrderedModule(models.Model):
         null=True,
     )
 
-    textfield = models.ForeignKey(
+    textfield = models.OneToOneField(
         TextField,
         on_delete=models.SET_NULL,
         help_text=HELP_TEXT.format("text field"),
@@ -514,7 +518,7 @@ class AbstractOrderedModule(models.Model):
         null=True,
     )
 
-    htmlmodule = models.ForeignKey(
+    htmlmodule = models.OneToOneField(
         HtmlModule,
         on_delete=models.SET_NULL,
         help_text=HELP_TEXT.format("html module"),
@@ -522,7 +526,7 @@ class AbstractOrderedModule(models.Model):
         null=True,
     )
 
-    skipstagemodule = models.ForeignKey(
+    skipstagemodule = models.OneToOneField(
         SkipStageModule,
         on_delete=models.SET_NULL,
         help_text=HELP_TEXT.format("skip stage module"),
@@ -530,7 +534,7 @@ class AbstractOrderedModule(models.Model):
         null=True,
     )
 
-    submitbuttonmodule = models.ForeignKey(
+    submitbuttonmodule = models.OneToOneField(
         SubmitButtonModule,
         on_delete=models.SET_NULL,
         help_text=HELP_TEXT.format("submit button module"),
@@ -577,6 +581,11 @@ class AbstractOrderedModule(models.Model):
 
     def save(self, *args, **kwargs):
         self.clean()
+        super(RelatedFormModule, self).save(*args, **kwargs)
+
+
+    def save(self, *args, **kwargs):
+        self.clean()
         super(AbstractOrderedModule, self).save(*args, **kwargs)
 
     class Meta:
@@ -593,7 +602,7 @@ class OrderedModule(AbstractOrderedModule):
         on_delete=models.CASCADE,
     )
 
-    groupmodule = models.ForeignKey(
+    groupmodule = models.OneToOneField(
         GroupModule,
         on_delete=models.SET_NULL,
         help_text=AbstractOrderedModule.HELP_TEXT.format("group module"),
@@ -613,7 +622,7 @@ class OrderedModule(AbstractOrderedModule):
 
     # related_module is an instance of RelatedFormModule
     def add_related_module(self, related_module):
-        related_module.ordered_modules.add(self)
+        related_module.orderedmodule = self
 
     def _get_related_modules(self):
         related_modules = super(OrderedModule, self)._get_related_modules()
@@ -623,7 +632,6 @@ class OrderedModule(AbstractOrderedModule):
 
     class Meta(AbstractOrderedModule.Meta):
         db_table = 'ms_api_form_ordered_module'
-        default_related_name = "ordered_modules"
 
 
 class NestedOrderedModule(AbstractOrderedModule):
@@ -635,22 +643,21 @@ class NestedOrderedModule(AbstractOrderedModule):
 
     # related_module is an instance of RelatedFormModule
     def add_related_module(self, related_module):
-        related_module.nested_ordered_modules.add(self)
+        related_module.nestedorderedmodule = self
 
     class Meta(AbstractOrderedModule.Meta):
         db_table = 'ms_api_form_nested_ordered_module'
-        default_related_name = "nested_ordered_modules"
 
 
 @receiver(post_delete, sender=OrderedModule)
 @receiver(post_delete, sender=NestedOrderedModule)
 def delete(sender, instance, using, **kwargs):
     # Delete any "dangling" RelatedModules that have no
-    # OrderedModule or NestedOrderedModule references.
+    # OrderedModule or NestedOrderedModule reference.
     for related_module in instance._get_related_modules():
         if related_module is None:
             return
-        if not related_module.has_any_ordered_modules():
+        if not related_module.has_any_ordered_module():
             related_module.delete()
 
 
@@ -710,14 +717,14 @@ class FormFieldOption(models.Model):
             FieldOption = RadioOption if field['type'] == 'radiofield' else CheckboxOption
             field_option = FieldOption.objects.get(
                 value=field['option_value'],
-                field__nested_ordered_modules__order=field['field_order'],
-                field__nested_ordered_modules__group__ordered_modules__order=field['group_order'],
-                field__nested_ordered_modules__group__ordered_modules__stage__order=field['stage_order'],
-                field__nested_ordered_modules__group__ordered_modules__stage__form__label=field['form'],
+                field__nestedorderedmodule__order=field['field_order'],
+                field__nestedorderedmodule__group__orderedmodule__order=field['group_order'],
+                field__nestedorderedmodule__group__orderedmodule__stage__order=field['stage_order'],
+                field__nestedorderedmodule__group__orderedmodule__stage__form__label=field['form'],
             )
             # get the GroupModule that contains the field_option:
             group = GroupModule.objects.get(
-                modules__in=field_option.field.nested_ordered_modules.all()
+                modules=field_option.field.nestedorderedmodule
             )
             # get the hidden modules that we want to trigger when this field
             # option is selected:
@@ -742,9 +749,9 @@ class FormFieldOption(models.Model):
             FieldOption = RadioOption if field['type'] == 'radiofield' else CheckboxOption
             field_option = FieldOption.objects.get(
                 value=field['option_value'],
-                field__ordered_modules__order=field['field_order'],
-                field__ordered_modules__stage__order=field['stage_order'],
-                field__ordered_modules__stage__form__label=field['form'],
+                field__orderedmodule__order=field['field_order'],
+                field__orderedmodule__stage__order=field['stage_order'],
+                field__orderedmodule__stage__form__label=field['form'],
             )
             stages_to_trigger = FormStage.objects.filter(
                 order__in=field['stage_visibility_triggers'],

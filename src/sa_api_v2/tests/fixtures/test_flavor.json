@@ -130,6 +130,14 @@
                   }
                 ]
               }
+            },
+            {
+              "order": 5,
+              "visible": true,
+              "htmlmodule": {
+                "label": "html module",
+                "content": "<div>hi</div>"
+              }
             }
           ]
         },

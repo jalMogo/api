@@ -398,25 +398,22 @@ class FormFieldOptionInlineForm(ModelForm):
         # Only add visibility triggers if we are inside of a
         # GroupModule. If so, only allow trigger onto modules that are
         # within the same GroupModule as this Option's FormField
-        group_module_ids = map(lambda form_group_module:
-                               form_group_module.group.id,
-                               self.instance.field.nested_ordered_modules.all()) \
-            if 'instance' in kwargs else []
-        if len(group_module_ids) > 0:
+        group_module_id = self.instance.field.nestedorderedmodule.group.id
+        if group_module_id is not None:
 
             # limit the selectable group_visibility_triggers to
             # NestedOrderedModules that belong to the same form, and are not
             # visible by default
-            nested_ordered_module_ids = self.instance.field.nested_ordered_modules.all()
+            nested_ordered_module_id = self.instance.field.nestedorderedmodule.id
             self.fields['group_visibility_triggers'].queryset = models.\
                 NestedOrderedModule.objects.select_related('group').\
                 filter(
                     # filter out this option's OrderedModule, because we
                     # don't want to trigger our own field:
-                    ~Q(id__in=nested_ordered_module_ids),
+                    ~Q(id=nested_ordered_module_id),
                     # Only select NestedOrderedModules under the same
                     # GroupModule as this instance's field:
-                    group_id__in=group_module_ids,
+                    group_id=group_module_id,
                     visible=False,
                 )
 
@@ -498,14 +495,14 @@ class OrderedModuleAdmin(AbstractFormModuleAdmin):
 
     def _get_related_queryset(self, queryset):
         # include only in the queryset RelatedModules that are within this Flavor, or unattached:
-        return queryset.prefetch_related('ordered_modules').filter(
-            Q(ordered_modules__id__in=self.ordered_modules) | Q(ordered_modules=None),
+        return queryset.prefetch_related('orderedmodule').filter(
+            Q(orderedmodule__id=self.orderedmodule) | Q(orderedmodule=None),
         )
 
     def get_form(self, request, obj=None, **kwargs):
         # filter RadioFields that have ALL modules within the same flavor as this module:
         # https://www.agiliq.com/blog/2014/04/django-backward-relationship-lookup/
-        self.ordered_modules = models.OrderedModule.objects.select_related('stage__form__flavor').filter(
+        self.orderedmodule = models.OrderedModule.objects.select_related('stage__form__flavor').filter(
             stage__form__flavor__id=obj.stage.form.flavor.id,
         )
         form = super(OrderedModuleAdmin, self).get_form(request, obj, **kwargs)
@@ -529,21 +526,15 @@ class NestedOrderedModuleAdmin(AbstractFormModuleAdmin):
         # this Flavor, or unattached:
         # (It's helpful to link multiple FormModule to a RelatedModule when we are cloning/tweaking
         # forms...)
-        return queryset.prefetch_related('nested_ordered_modules').filter(
-            Q(nested_ordered_modules__id__in=self.nested_ordered_module_ids) | Q(nested_ordered_modules=None),
+        return queryset.prefetch_related('nestedorderedmodule').filter(
+            Q(nestedorderedmodule__id__in=self.nestedorderedmodule_id) | Q(nestedorderedmodule=None),
         )
 
     def get_form(self, request, obj=None, **kwargs):
         # Get all NestedOrderedModules within this flavor:
         # First, get the flavor id:
-        flavor_ids = set(map(lambda x: x.stage.form.flavor.id, obj.group.ordered_modules.all()))
-        if len(flavor_ids) > 1:
-            # all stage_modules attached to the GroupModule should belong to the same flavor!
-            raise ValidationError("FormGroupModelAdmin.get_form: invariant violated: more than 1 flavor associated with module: {}".form(obj))
-        flavor_id = flavor_ids.pop()
-        self.nested_ordered_module_ids = models.NestedOrderedModule.objects.prefetch_related('group__ordered_modules__stage__form__flavor').filter(
-            group__ordered_modules__stage__form__flavor__id=flavor_id,
-        ).values_list('id', flat=True)
+        flavor_id = obj.group.orderedmodule.stage.form.flavor.id
+        self.nestedorderedmodule_id = models.NestedOrderedModule.objects.prefetch_related('group__orderedmodule__stage__form__flavor').values_list('id', flat=True)
         form = super(NestedOrderedModuleAdmin, self).get_form(request, obj, **kwargs)
         return form
 

@@ -1049,6 +1049,7 @@ class AbstractFormModuleSerializer (serializers.ModelSerializer):
                 )
             related_module = related_module_serializer.save()
             module.add_related_module(related_module)
+            module.save()
         else:
             raise serializers.ValidationError("no data found for fieldname: {}".format(related_module_name))
 

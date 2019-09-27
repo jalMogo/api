@@ -667,7 +667,7 @@ class TestFormModel (TestCase):
         DataSet.objects.all().delete()
         User.objects.all().delete()
 
-    def test_fails_with_multiple_relations_on_form_module(self):
+    def test_error_with_multiple_relations_on_form_module(self):
         with self.assertRaises(ValidationError) as context:
             radio_field = RadioField.objects.create(
                 key="ward",
@@ -748,12 +748,6 @@ class TestFormModel (TestCase):
         radio_field = RadioField.objects.create(
             key="option_test",
             prompt="test",
-        )
-
-        OrderedModule.objects.create(
-            order=3,
-            stage=mut_stages[0],
-            radiofield=radio_field,
         )
 
         group_module = GroupModule.objects.create(
