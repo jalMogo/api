@@ -50,7 +50,7 @@ django-closuretree==1.2.0
 
 # TODO: Using temporary fork until PR is merged:
 # https://github.com/python-social-auth/social-core/pull/384
--e git+https://github.com/modulitos/social-core.git@adea1dec7014812ce02a0bd53f8f8b6cd801051d#egg=social_auth_core
+-e git+https://github.com/modulitos/social-core.git@31460b799752630d93e872f5bb50225f7e590a80#egg=social_auth_core
 -e git+https://github.com/modulitos/social-app-django.git@99600f11090b874b190106efe9901b560d275b98#egg=social_auth_app_django
 
 django-loginas==0.2.2
