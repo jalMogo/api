@@ -1034,24 +1034,23 @@ class AbstractFormModuleSerializer (serializers.ModelSerializer):
 
         parent = self.context.get(self.Meta.parent_field)
         validated_data[self.Meta.parent_field] = parent
-        module = self.Meta.model.objects.create(**validated_data)
 
-        if field_data is not None:
-            related_module_serializer = self.Meta.available_modules[related_module_name](
-                data=self.initial_data.get(related_module_name)
-            )
-            if not related_module_serializer.is_valid():
-                raise serializers.ValidationError(
-                    "(Nested)OrderedModuleSerializer related module name: '{}' failed to validate: {}".format(
-                        related_module_name,
-                        related_module_serializer.errors
-                    )
-                )
-            related_module = related_module_serializer.save()
-            module.add_related_module(related_module)
-            module.save()
-        else:
+        if field_data is None:
             raise serializers.ValidationError("no data found for fieldname: {}".format(related_module_name))
+
+        related_module_serializer = self.Meta.available_modules[related_module_name](
+            data=self.initial_data.get(related_module_name)
+        )
+        if not related_module_serializer.is_valid():
+            raise serializers.ValidationError(
+                "(Nested)OrderedModuleSerializer related module name: '{}' failed to validate: {}".format(
+                    related_module_name,
+                    related_module_serializer.errors
+                )
+            )
+        related_module = related_module_serializer.save()
+        validated_data[related_module_name] = related_module
+        module = self.Meta.model.objects.create(**validated_data)
 
         return module
 

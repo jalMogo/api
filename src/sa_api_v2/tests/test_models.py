@@ -687,6 +687,35 @@ class TestFormModel (TestCase):
             '[FORM_MODULE_MODEL] Instance has more than one related model' in context.exception.message
         )
 
+    def test_error_on_multiple_ordered_modules_for_related_module(self):
+        # This radio field should not be deleted on cascade, because
+        # it is attached to a form that won't be deleted:
+        radio_field = RadioField.objects.create(
+            key="option_test",
+            prompt="test",
+        )
+
+        group_module = GroupModule.objects.create(
+            label="this GroupModule won't be deleted."
+        )
+
+        NestedOrderedModule.objects.create(
+            order=0,
+            group=group_module,
+            radiofield=radio_field,
+        )
+
+        with self.assertRaises(ValidationError) as context:
+            OrderedModule.objects.create(
+                order=3,
+                stage=self.stages[0],
+                radiofield=radio_field,
+            )
+        self.assertTrue(
+            '[FORM_MODULE_MODEL] RelatedModule has both an OrderedModule and a NestedOrderedModule pointing toward it' in context.exception.message
+        )
+
+
     def test_module_field_deletion_sets_null(self):
         mut_radio_field = RadioField.objects.create(
             key="option_test",

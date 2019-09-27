@@ -578,6 +578,9 @@ class AbstractOrderedModule(models.Model):
             dataset = self.stage.form.dataset
             if self.permitted_group.dataset != dataset:
                 raise ValidationError("[FORM_MODULE_MODEL] permitted_group is not within this form's dataset: {}".format(dataset))
+        if len(related_modules) == 1 and related_modules[0].has_any_ordered_module():
+            raise ValidationError("[FORM_MODULE_MODEL] RelatedModule has both an OrderedModule and a NestedOrderedModule pointing toward it: {}".format(related_modules[0]))
+
 
     def save(self, *args, **kwargs):
         self.clean()
