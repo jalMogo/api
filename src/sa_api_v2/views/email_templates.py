@@ -107,12 +107,8 @@ class EmailTemplateMixin(object):
             # If we didn't find any errors, then render the email and send.
             logger.debug('[EMAIL] Going ahead, no errors')
 
-            # TODO: if this is a comment notification, then add a
-            # `comment` key to the context as well. Note that we'll
-            # have to change the Origin:EmailTemplate to be One:Many
-            # for this to work.
             context_data = RequestContext(self.request, {
-                'place': obj,
+                'submission': obj,
                 'email': recipient_email,
                 'jwt_public': obj.make_jwt()
             })
