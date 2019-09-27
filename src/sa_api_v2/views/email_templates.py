@@ -110,7 +110,7 @@ class EmailTemplateMixin(object):
             context_data = RequestContext(self.request, {
                 'submission': obj,
                 'email': recipient_email,
-                'jwt_public': obj.make_jwt()
+                'jwt_public': obj.make_jwt() if hasattr(obj, "make_jwt") else ""
             })
 
             logger.debug('[EMAIL] Got context data')
