@@ -14,6 +14,7 @@ from ..models import (
     FormStage,
     OrderedModule,
     GroupModule,
+    SkipStageModule,
     NestedOrderedModule,
     HtmlModule,
     RadioField,
@@ -593,30 +594,30 @@ class DataPermissionTests (TestCase):
 class TestFormModel (TestCase):
     # ./src/manage.py test -s sa_api_v2.tests.test_models:TestFormModel
     @classmethod
-    def setUpTestData(self):
-        self.form = Form.objects.create(label="form 1")
+    def setUpTestData(cls):
+        cls.form = Form.objects.create(label="form 1")
 
-        self.stages = [
-            FormStage.objects.create(order=0, form=self.form),
+        cls.stages = [
+            FormStage.objects.create(order=0, form=cls.form),
         ]
 
         html_module = HtmlModule.objects.create(
             content="<p>Html test module model</p>",
         )
 
-        self.radio_field = RadioField.objects.create(
+        cls.radio_field = RadioField.objects.create(
             key="ward",
             prompt="where is your ward?",
         )
         RadioOption.objects.create(
             label="Ward 1",
             value="ward_1",
-            field=self.radio_field,
+            field=cls.radio_field,
         )
         RadioOption.objects.create(
             label="Ward 2",
             value="ward_2",
-            field=self.radio_field,
+            field=cls.radio_field,
         )
 
         html_grouped_module = HtmlModule.objects.create(
@@ -631,7 +632,7 @@ class TestFormModel (TestCase):
             label="This is a group",
         )
 
-        self.nested_ordered_modules = [
+        cls.nested_ordered_modules = [
             NestedOrderedModule.objects.create(
                 order=1,
                 group=related_group_module,
@@ -644,20 +645,20 @@ class TestFormModel (TestCase):
             ),
         ]
 
-        self.ordered_modules = [
+        cls.ordered_modules = [
             OrderedModule.objects.create(
                 order=1,
-                stage=self.stages[0],
+                stage=cls.stages[0],
                 htmlmodule=html_module,
             ),
             OrderedModule.objects.create(
                 order=2,
-                stage=self.stages[0],
-                radiofield=self.radio_field,
+                stage=cls.stages[0],
+                radiofield=cls.radio_field,
             ),
             OrderedModule.objects.create(
                 order=3,
-                stage=self.stages[0],
+                stage=cls.stages[0],
                 groupmodule=related_group_module,
             ),
         ]
@@ -684,7 +685,7 @@ class TestFormModel (TestCase):
                 radiofield=radio_field,
             ),
         self.assertTrue(
-            '[FORM_MODULE_MODEL] Instance has more than one related model' in context.exception.message
+            '[FormModuleModel] Instance has more than one related model' in context.exception.message
         )
 
     def test_error_on_multiple_ordered_modules_for_related_module(self):
@@ -712,9 +713,36 @@ class TestFormModel (TestCase):
                 radiofield=radio_field,
             )
         self.assertTrue(
-            '[FORM_MODULE_MODEL] RelatedModule has both an OrderedModule and a NestedOrderedModule pointing toward it' in context.exception.message
+            '[FormModuleModel] RelatedModule cannot have more than one (Nested)OrderedModules pointing to it' in context.exception.message
         )
 
+
+    def test_error_with_stage_skip_module_in_different_form(self):
+        other_form = Form.objects.create(label="form 2")
+
+        other_stages = [
+            FormStage.objects.create(order=0, form=other_form),
+            FormStage.objects.create(order=1, form=other_form),
+        ]
+
+        module = SkipStageModule.objects.create(
+            stage=other_stages[0],
+        )
+
+        with self.assertRaises(ValidationError) as context:
+            OrderedModule.objects.create(
+                order=4,
+                stage=self.stages[0],
+                skipstagemodule=module,
+            )
+        self.assertTrue(
+            '[SkipStageModule] self.stage has a different Form than this module:' in context.exception.message
+        )
+        OrderedModule.objects.create(
+            order=4,
+            stage=other_stages[1],
+            skipstagemodule=module,
+        )
 
     def test_module_field_deletion_sets_null(self):
         mut_radio_field = RadioField.objects.create(
@@ -859,7 +887,7 @@ class TestFormModel (TestCase):
                 permitted_group=admin_group,
             )
         self.assertTrue(
-            '[FORM_MODULE_MODEL] Dataset must be assigned before adding Restrcted Group to module' in context.exception.message
+            '[FormModuleModel] Dataset must be assigned before adding Restrcted Group to module' in context.exception.message
         )
 
         # set the form's dataset, and it should work now:
@@ -876,5 +904,5 @@ class TestFormModel (TestCase):
             ordered_module.permitted_group = outside_group
             ordered_module.save()
         self.assertTrue(
-            "[FORM_MODULE_MODEL] permitted_group is not within this form's dataset" in context.exception.message
+            "[FormModuleModel] permitted_group is not within this form's dataset" in context.exception.message
         )

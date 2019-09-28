@@ -171,6 +171,8 @@ class RelatedFormModule(models.Model):
         app_label = 'sa_api_v2'
         abstract = True
 
+    # If the model's cache has a (nested)OrderedModule, then verify with the db
+    # and return if that's true
     def _has_ordered_module(self):
         return (hasattr(self, 'orderedmodule')) and \
             OrderedModule.objects.filter(id=self.orderedmodule.id).exists()    
@@ -183,6 +185,18 @@ class RelatedFormModule(models.Model):
     # nested_ordered_module pointing to it.
     def has_any_ordered_module(self):
         return self._has_ordered_module() or self._has_nested_ordered_module()
+
+    # returns the ordered module
+    def get_ordered_module(self):
+        if self._has_ordered_module(): 
+            return self.orderedmodule
+        elif self._has_nested_ordered_module():
+            return self.nestedorderedmodule
+        else:
+            return None
+
+    def validate(self, ordered_module):
+        pass
 
     def __unicode__(self):
         if not self.has_any_ordered_module():
@@ -230,6 +244,19 @@ class SkipStageModule(RelatedFormModule):
         blank=True,
         default='',
     )
+
+    stage = models.ForeignKey(
+        FormStage,
+        on_delete=models.SET_NULL,
+        help_text="If null, skip to the next stage. Otherwise, we skip to the associated FormStage.",
+        blank=True,
+        null=True,
+    )
+
+    def validate(self, ordered_module):
+        if hasattr(self, 'stage') and \
+            ordered_module.stage.form != self.stage.form:
+            raise ValidationError("[SkipStageModule] self.stage has a different Form than this module: {}".format(self.stage))
 
     def summary(self):
         return "skip stage module with label: \"{}\"".format(self.label[:40])
@@ -568,18 +595,25 @@ class AbstractOrderedModule(models.Model):
     def clean(self):
         related_modules = self._get_related_modules()
         if len(related_modules) > 1:
-            message = '[FORM_MODULE_MODEL] Instance has more than one related model: {}'.format([related_modules])
+            message = '[FormModuleModel] Instance has more than one related model: {}'.format([related_modules])
             raise ValidationError(message)
         # Validate permitted_group on OrderedModule:
         if hasattr(self, 'permitted_group') and self.permitted_group is not None:
             # every OrderedModule has a stage, and every stage has a form.
             if self.stage.form.dataset is None:
-                raise ValidationError("[FORM_MODULE_MODEL] Dataset must be assigned before adding Restrcted Group to module: {}".format(self))
+                raise ValidationError("[FormModuleModel] Dataset must be assigned before adding Restrcted Group to module: {}".format(self))
             dataset = self.stage.form.dataset
             if self.permitted_group.dataset != dataset:
-                raise ValidationError("[FORM_MODULE_MODEL] permitted_group is not within this form's dataset: {}".format(dataset))
-        if len(related_modules) == 1 and related_modules[0].has_any_ordered_module():
-            raise ValidationError("[FORM_MODULE_MODEL] RelatedModule has both an OrderedModule and a NestedOrderedModule pointing toward it: {}".format(related_modules[0]))
+                raise ValidationError("[FormModuleModel] permitted_group is not within this form's dataset: {}".format(dataset))
+        if len(related_modules) == 1:
+            related_module = related_modules[0]
+            related_ordered_module = related_module.get_ordered_module()
+            # check to ensure that the (nested)ordered modules are the same:
+            if related_ordered_module and \
+                related_ordered_module != self:
+                raise ValidationError("[FormModuleModel] RelatedModule cannot have more than one (Nested)OrderedModules pointing to it: {}".format(related_modules[0]))
+            # Perform validation specific to the related module.
+            related_module.validate(self)
 
 
     def save(self, *args, **kwargs):
@@ -623,9 +657,6 @@ class OrderedModule(AbstractOrderedModule):
         null=True,
     )
 
-    # related_module is an instance of RelatedFormModule
-    def add_related_module(self, related_module):
-        related_module.orderedmodule = self
 
     def _get_related_modules(self):
         related_modules = super(OrderedModule, self)._get_related_modules()
@@ -643,10 +674,6 @@ class NestedOrderedModule(AbstractOrderedModule):
         related_name="modules",
         on_delete=models.CASCADE,
     )
-
-    # related_module is an instance of RelatedFormModule
-    def add_related_module(self, related_module):
-        related_module.nestedorderedmodule = self
 
     class Meta(AbstractOrderedModule.Meta):
         db_table = 'ms_api_form_nested_ordered_module'
