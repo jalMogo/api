@@ -84,7 +84,7 @@ class EmailTemplateMixin(object):
             errors = []
 
             if email_template.default_recipient_email:
-                recipient_email = default_recipient_email
+                recipient_email = email_template.default_recipient_email
             else:
                 try:
                     email_field = email_template.recipient_email_field
