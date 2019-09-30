@@ -22,6 +22,7 @@ from sa_api_v2.models import (
     OrderedModule,
     NestedOrderedModule,
     FormFieldOption,
+    SkipStageModule,
     RadioField,
     RadioOption,
     HtmlModule,
@@ -639,6 +640,10 @@ class TestFlavorDeserializer (TestCase):
         stage_triggers = data['stage_visibility_triggers']
         FormFieldOption.import_stage_triggers(stage_triggers)
 
+        # create our skip staging modules:
+        skip_stage_modules = data['skip_stage_modules']
+        SkipStageModule.import_skip_stage_modules(skip_stage_modules)
+
         # create our Flavor models:
         flavor_serializer = FlavorFixtureSerializer(
             data=data['flavors'],
@@ -661,6 +666,12 @@ class TestFlavorDeserializer (TestCase):
         self.assertEqual(
             [stage.order for stage in form.stages.get(order=1).modules.get(order=2).radiofield.options.last().stage_visibility_triggers.all()],
             [2]
+        )
+
+        # assert that our SkipFormStage module is correct
+        self.assertEqual(
+            form.stages.first().modules.first().skipstagemodule.stage,
+            form.stages.get(order=3)
         )
 
         # assert that our form is valid:

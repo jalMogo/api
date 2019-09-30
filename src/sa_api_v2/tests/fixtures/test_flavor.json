@@ -20,7 +20,7 @@
           {
             "order": 1,
             "skipstagemodule": {
-                "label": "TODO: make this skip to last stage"
+                "label": "make this skip to last stage"
             }
 
           },
@@ -193,6 +193,14 @@
       "type": "radiofield",
       "option_value": "show-stage-2",
       "stage_visibility_triggers": [2]
+    }
+  ],
+  "skip_stage_modules": [
+    {
+      "form": "form1",
+      "stage_order": 1,
+      "module_order": 1,
+      "destination_stage_order": 3
     }
   ],
   "flavors": [

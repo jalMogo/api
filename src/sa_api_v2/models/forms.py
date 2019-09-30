@@ -186,7 +186,7 @@ class RelatedFormModule(models.Model):
     def has_any_ordered_module(self):
         return self._has_ordered_module() or self._has_nested_ordered_module()
 
-    # returns the ordered module
+    # returns the (nested)ordered module
     def get_ordered_module(self):
         if self._has_ordered_module(): 
             return self.orderedmodule
@@ -257,6 +257,26 @@ class SkipStageModule(RelatedFormModule):
         if self.stage is not None and \
             ordered_module.stage.form != self.stage.form:
             raise ValidationError("[SkipStageModule] self.stage has a different Form than this module: {}".format(self.stage))
+
+
+    # This is only used for importing SkipStageModules relationships from a JSON
+    # source
+
+    # NOTE: imports are limited to SkipStageModules that are NOT inside of a
+    # group
+    @staticmethod
+    def import_skip_stage_modules(skip_stage_modules):
+        for module_data in skip_stage_modules:
+            module = SkipStageModule.objects.get(
+                orderedmodule__stage__form__label=module_data['form'],
+                orderedmodule__order=module_data['module_order'],
+            )
+            stage = FormStage.objects.get(
+                form__label=module_data['form'],
+                order=module_data['destination_stage_order']
+            )
+            module.stage = stage
+            module.save()
 
     def summary(self):
         return "skip stage module with label: \"{}\"".format(self.label[:40])
@@ -656,7 +676,6 @@ class OrderedModule(AbstractOrderedModule):
         blank=True,
         null=True,
     )
-
 
     def _get_related_modules(self):
         related_modules = super(OrderedModule, self)._get_related_modules()
