@@ -3,6 +3,7 @@ from django.contrib.gis.db import models
 from django.contrib.gis.db.models import query
 from django.conf import settings
 from django.core.files.storage import get_storage_class
+from django.core.exceptions import ValidationError
 from django.utils.timezone import now
 import jwt
 from jwt.exceptions import (
@@ -250,7 +251,14 @@ class PlaceEmailTemplate (TimeStampedModel):
         refer to all submission sets.'
     )
     event = models.CharField(max_length=128, choices=EVENT_CHOICES, default='add')
-    recipient_email_field = models.CharField(max_length=128)
+    recipient_email_field = models.CharField(blank=True, default='', null=True, max_length=128)
+    default_recipient_email = models.EmailField(
+        blank=True,
+        null=True,
+        default=None,
+        help_text='An optional "Default recipient email" will take precedence \
+            over a Submission\'s "Recipient email field".'
+    )
     from_email = models.EmailField()
     bcc_email_1 = models.EmailField(blank=True, null=True, default=None)
     bcc_email_2 = models.EmailField(blank=True, null=True, default=None)
@@ -260,6 +268,10 @@ class PlaceEmailTemplate (TimeStampedModel):
     subject = models.CharField(max_length=512)
     body_text = models.TextField()
     body_html = models.TextField(blank=True, default=None)
+
+    def clean(self):
+        if not self.recipient_email_field and not self.default_recipient_email:
+            raise ValidationError('Either a "recipient_email_field" or a "default_recipient_email" must be supplied.')
 
     class Meta:
         app_label = 'sa_api_v2'
