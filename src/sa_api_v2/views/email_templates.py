@@ -108,12 +108,15 @@ class EmailTemplateMixin(object):
             # If we didn't find any errors, then render the email and send.
             logger.debug('[EMAIL] Going ahead, no errors')
 
+            # TODO: change the Origin:EmailTemplate to be One:Many
+            # relationship.
             context_data = RequestContext(self.request, {
                 'place': obj if submission_set_name == 'places' else None,
                 'comment': obj if submission_set_name == 'comments' else None,
                 'data': json.loads(obj.data),
                 'email': recipient_email,
-                'jwt_public': obj.make_jwt() if hasattr(obj, "make_jwt") else ""
+                'jwt_public': obj.make_jwt() if hasattr(obj, "make_jwt") else "",
+                'request_origin': request_origin
             })
 
             logger.debug('[EMAIL] Got context data')
