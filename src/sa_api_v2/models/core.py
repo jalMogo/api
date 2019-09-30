@@ -251,7 +251,7 @@ class PlaceEmailTemplate (TimeStampedModel):
         refer to all submission sets.'
     )
     event = models.CharField(max_length=128, choices=EVENT_CHOICES, default='add')
-    recipient_email_field = models.CharField(blank=True, default='', max_length=128)
+    recipient_email_field = models.CharField(blank=True, default=None, null=True, max_length=128)
     default_recipient_email = models.EmailField(
         blank=True,
         null=True,
