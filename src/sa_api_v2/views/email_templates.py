@@ -3,6 +3,7 @@ from ..models import PlaceEmailTemplate
 from rest_framework.renderers import StaticHTMLRenderer
 from rest_framework.response import Response
 from django.http import Http404
+import json
 
 from .. import cors
 from django.template import RequestContext, Template
@@ -108,7 +109,9 @@ class EmailTemplateMixin(object):
             logger.debug('[EMAIL] Going ahead, no errors')
 
             context_data = RequestContext(self.request, {
-                'submission': obj,
+                'place': obj if submission_set_name == 'places' else None,
+                'comment': obj if submission_set_name == 'comments' else None,
+                'data': json.loads(obj.data),
                 'email': recipient_email,
                 'jwt_public': obj.make_jwt() if hasattr(obj, "make_jwt") else ""
             })
