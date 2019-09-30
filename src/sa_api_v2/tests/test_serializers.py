@@ -777,6 +777,16 @@ class TestFlavorDeserializer (TestCase):
             [3]
         )
 
+        # create our skip staging modules:
+        skip_stage_modules = data['skip_stage_modules']
+        SkipStageModule.import_skip_stage_modules(skip_stage_modules)
+
+        bellevue_form = next(flavor for flavor in flavors if flavor.slug == 'bellevue-bike-share').forms.first()
+        self.assertEqual(
+            bellevue_form.stages.first().modules.first().skipstagemodule.stage,
+            bellevue_form.stages.get(order=6)
+        )
+
         # ensure that we aren't creating duplicate stages
         forms = flavors[0].forms.all()
         bellevue_form = forms.first()

@@ -70,6 +70,11 @@ class Command(BaseCommand):
             models.FormFieldOption.import_stage_triggers(stage_triggers)
             print('stage triggers created!')
 
+            # create our skip staging modules:
+            skip_stage_modules = data['skip_stage_modules']
+            models.SkipStageModule.import_skip_stage_modules(skip_stage_modules)
+            print('skip stage module relationships created!')
+
             # create our Flavor models:
             flavor_serializer = FlavorFixtureSerializer(
                 data=data['flavors'],

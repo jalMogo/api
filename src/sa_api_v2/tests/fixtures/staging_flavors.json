@@ -3437,7 +3437,14 @@
           },
           "modules": [
             {
+
               "order": 1,
+              "skipstagemodule": {
+                "label": "Skip the introduction, I'm ready to request bikeshare parking!"
+              }
+            },
+            {
+              "order": 2,
               "htmlmodule": {
                 "label": "hub_information",
                 "content": "<h1 style='font-family: PTSansBold, sans-serif; margin: 0 0 16px 0;'>What is a hub?</h1><img style='width:100%;' src='/static/css/images/bike-share-hub.jpg' alt='Walkshed graphic' /><p class='form-stage-text' style='font-family: PTSans, sans-serif;'>Hubs are preferred parking areas for bikeshare bicycles. These are places where bikeshare users are encouraged to park when ending a trip and where Lime relocates bikes to provide convenient and reliable service.</p><p class='form-stage-text' >Hubs are marked with white boxes and symbols painted on sidewalks or street shoulders, and they are shown in operators’ mobile apps.</p>"
@@ -3802,6 +3809,14 @@
       "type": "checkboxfield",
       "option_value": "forestry",
       "stage_visibility_triggers": [5]
+    }
+  ],
+  "skip_stage_modules": [
+    {
+      "form": "bellevue-bike-share",
+      "stage_order": 1,
+      "module_order": 1,
+      "destination_stage_order": 6
     }
   ],
   "flavors": [
