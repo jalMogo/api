@@ -653,57 +653,57 @@ class TestFlavorDeserializer (TestCase):
 
         # check that our visibility triggers are valid:
         self.assertEqual(
-            [module.order for module in form.stages.get(order=1).modules.get(order=4).groupmodule.modules.get(order=1).radiofield.options.first().group_visibility_triggers.all()],
+            [module.order for module in form.stages.get(order=1).modules.get(order=5).groupmodule.modules.get(order=1).radiofield.options.first().group_visibility_triggers.all()],
             [2]
         )
 
         # check that our staging triggers are valid:
         self.assertEqual(
-            [stage.order for stage in form.stages.get(order=1).modules.get(order=1).radiofield.options.last().stage_visibility_triggers.all()],
+            [stage.order for stage in form.stages.get(order=1).modules.get(order=2).radiofield.options.last().stage_visibility_triggers.all()],
             [2]
         )
 
         # assert that our form is valid:
         self.assertEqual(form.dataset.id, self.dataset.id)
         # assert that our form stages are valid:
-        self.assertEqual(form.stages.all().first().visible_layer_groups.all().first().label, "layer1")
+        self.assertEqual(form.stages.first().visible_layer_groups.first().label, "layer1")
         # assert that our MapViewport is valid:
         self.assertEqual(form.stages.all().get(order=2).map_viewport.zoom, 12)
         self.assertEqual(form.stages.all().get(order=2).map_viewport.transition_duration, None)
         # assert that our ordered modules, and their fields, are valid:
         self.assertEqual(
-            form.stages.all().first().modules.all().first().radiofield.label,
+            form.stages.first().modules.get(order=2).radiofield.label,
             "my project idea is:"
         )
         self.assertEqual(
-            form.stages.all().first().modules.all().first().radiofield.options.all().first().label,
+            form.stages.first().modules.get(order=2).radiofield.options.first().label,
             "Art"
         )
 
-        options = form.stages.first().modules.get(order=2).checkboxfield.options.all()
+        options = form.stages.first().modules.get(order=3).checkboxfield.options.all()
         self.assertEqual(
             map(lambda option: option.label, options),
             ['White', 'Black']
         )
 
         self.assertEqual(
-            form.stages.first().modules.get(order=3).numberfield.placeholder,
+            form.stages.first().modules.get(order=4).numberfield.placeholder,
             "enter meters of waterlines here (eg: 32)"
         )
 
         self.assertEqual(
-            form.stages.first().modules.first().radiofield.info_modal.header,
+            form.stages.first().modules.get(order=2).radiofield.info_modal.header,
             "test modal"
         )
 
         # assert that our permitted_groups have been created properly:
         self.assertEqual(
-            form.stages.first().modules.get(order=3).permitted_group,
+            form.stages.first().modules.get(order=4).permitted_group,
             self.dataset1_admins_group,
         )
 
         # assert that our nested modules are valid:
-        groupmodule = form.stages.all().first().modules.all().get(order=4).groupmodule
+        groupmodule = form.stages.first().modules.get(order=5).groupmodule
         self.assertEqual(
             groupmodule.label,
             "a group module"

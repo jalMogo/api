@@ -254,7 +254,7 @@ class SkipStageModule(RelatedFormModule):
     )
 
     def validate(self, ordered_module):
-        if hasattr(self, 'stage') and \
+        if self.stage is not None and \
             ordered_module.stage.form != self.stage.form:
             raise ValidationError("[SkipStageModule] self.stage has a different Form than this module: {}".format(self.stage))
 

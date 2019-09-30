@@ -17,8 +17,15 @@
           "order": 1,
           "visible_layer_groups": ["layer1", "layer2"],
           "modules": [
+          {
+            "order": 1,
+            "skipstagemodule": {
+                "label": "TODO: make this skip to last stage"
+            }
+
+          },
             {
-              "order": 1,
+              "order": 2,
               "visible": true,
               "radiofield": {
                 "key": "project",
@@ -42,7 +49,7 @@
               }
             },
             {
-              "order": 2,
+              "order": 3,
               "visible": true,
               "checkboxfield": {
                 "key": "project",
@@ -63,7 +70,7 @@
               }
             },
             {
-              "order": 3,
+              "order": 4,
               "visible": true,
               "permitted_group_id": 9999,
               "numberfield": {
@@ -78,7 +85,7 @@
               }
             },
             {
-              "order": 4,
+              "order": 5,
               "visible": true,
               "groupmodule": {
                 "label": "a group module",
@@ -132,7 +139,7 @@
               }
             },
             {
-              "order": 5,
+              "order": 6,
               "visible": true,
               "htmlmodule": {
                 "label": "html module",
@@ -143,6 +150,18 @@
         },
         {
           "order": 2,
+          "visible": false,
+          "map_viewport": {
+            "zoom": 12,
+            "latitude": 44.4,
+            "longitude": -120.4,
+            "bearing": 24,
+            "pitch": 20
+          },
+          "modules": []
+        },
+        {
+          "order": 3,
           "map_viewport": {
             "zoom": 12,
             "latitude": 44.4,
@@ -159,7 +178,7 @@
     {
       "form": "form1",
       "stage_order": 1,
-      "group_order": 4,
+      "group_order": 5,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
@@ -170,7 +189,7 @@
     {
       "form": "form1",
       "stage_order": 1,
-      "field_order": 1,
+      "field_order": 2,
       "type": "radiofield",
       "option_value": "show-stage-2",
       "stage_visibility_triggers": [2]
