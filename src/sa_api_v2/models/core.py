@@ -251,23 +251,22 @@ class PlaceEmailTemplate (TimeStampedModel):
         refer to all submission sets.'
     )
     event = models.CharField(max_length=128, choices=EVENT_CHOICES, default='add')
-    recipient_email_field = models.CharField(blank=True, default=None, null=True, max_length=128)
+    recipient_email_field = models.CharField(blank=True, default='', max_length=128)
     default_recipient_email = models.EmailField(
         blank=True,
-        null=True,
-        default=None,
+        default='',
         help_text='A "Default recipient email" will take precedence \
             over a Submission\'s "Recipient email field".'
     )
     from_email = models.EmailField()
-    bcc_email_1 = models.EmailField(blank=True, null=True, default=None)
-    bcc_email_2 = models.EmailField(blank=True, null=True, default=None)
-    bcc_email_3 = models.EmailField(blank=True, null=True, default=None)
-    bcc_email_4 = models.EmailField(blank=True, null=True, default=None)
-    bcc_email_5 = models.EmailField(blank=True, null=True, default=None)
+    bcc_email_1 = models.EmailField(blank=True, default='')
+    bcc_email_2 = models.EmailField(blank=True, default='')
+    bcc_email_3 = models.EmailField(blank=True, default='')
+    bcc_email_4 = models.EmailField(blank=True, default='')
+    bcc_email_5 = models.EmailField(blank=True, default='')
     subject = models.CharField(max_length=512)
     body_text = models.TextField()
-    body_html = models.TextField(blank=True, default=None)
+    body_html = models.TextField(blank=True, default='')
 
     def clean(self):
         if not self.recipient_email_field and not self.default_recipient_email:
