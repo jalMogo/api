@@ -83,16 +83,13 @@ class EmailTemplateMixin(object):
 
             errors = []
 
-            try:
-                email_field = email_template.recipient_email_field
+            email_field = email_template.recipient_email_field
+            if email_field != "" and hasattr(self.request.data, email_field):
                 recipient_email = self.request.data[email_field]
                 logger.debug('[EMAIL] recipient_email: ' + recipient_email)
-            except KeyError:
-                if email_template.recipient_email_field is not None:
-                    recipient_email = email_template.recipient_email_field
-                else:
-                    logger.debug('[EMAIL] No primary recipient found. Setting primary recipient to the empty string.')
-                    recipient_email = ""
+            else: 
+                recipient_email = email_template.default_recipient_email
+                logger.debug('[EMAIL] No primary recipient found. Setting primary recipient to the default.')
 
             logger.debug('[EMAIL] Got to email')
 
