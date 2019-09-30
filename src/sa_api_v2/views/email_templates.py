@@ -3,6 +3,7 @@ from ..models import PlaceEmailTemplate
 from rest_framework.renderers import StaticHTMLRenderer
 from rest_framework.response import Response
 from django.http import Http404
+import json
 
 from .. import cors
 from django.template import RequestContext, Template
@@ -107,14 +108,15 @@ class EmailTemplateMixin(object):
             # If we didn't find any errors, then render the email and send.
             logger.debug('[EMAIL] Going ahead, no errors')
 
-            # TODO: if this is a comment notification, then add a
-            # `comment` key to the context as well. Note that we'll
-            # have to change the Origin:EmailTemplate to be One:Many
-            # for this to work.
+            # TODO: change the Origin:EmailTemplate to be One:Many
+            # relationship.
             context_data = RequestContext(self.request, {
-                'place': obj,
+                'place': obj if submission_set_name == 'places' else None,
+                'comment': obj if submission_set_name == 'comments' else None,
+                'data': json.loads(obj.data),
                 'email': recipient_email,
-                'jwt_public': obj.make_jwt()
+                'jwt_public': obj.make_jwt() if hasattr(obj, "make_jwt") else "",
+                'request_origin': request_origin
             })
 
             logger.debug('[EMAIL] Got context data')
