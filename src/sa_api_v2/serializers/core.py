@@ -814,9 +814,14 @@ class SkipStageModuleSerializer (
     FormModulesValidator,
     serializers.ModelSerializer
 ):
+    stage_id = serializers.PrimaryKeyRelatedField(
+        read_only=True,
+        required=False,
+        source='stage',
+    )
     class Meta:
         model = models.SkipStageModule
-        fields = ['label']
+        fields = ['label', 'stage_id']
 
 
 class HtmlModuleSerializer (
