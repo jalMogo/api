@@ -255,8 +255,7 @@ class PlaceEmailTemplate (TimeStampedModel):
     default_recipient_email = models.EmailField(
         blank=True,
         default='',
-        help_text='A "Default recipient email" will take precedence \
-            over a Submission\'s "Recipient email field".'
+        help_text='A "Default recipient email" will take precedence over a Submission\'s "Recipient email field".'
     )
     from_email = models.EmailField()
     bcc_email_1 = models.EmailField(blank=True, default='')
