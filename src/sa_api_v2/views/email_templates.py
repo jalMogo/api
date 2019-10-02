@@ -84,7 +84,7 @@ class EmailTemplateMixin(object):
             errors = []
 
             email_field = email_template.recipient_email_field
-            if email_field != "" and hasattr(self.request.data, email_field):
+            if email_field != "" and email_field in self.request.data:
                 recipient_email = self.request.data[email_field]
                 logger.debug('[EMAIL] recipient_email: ' + recipient_email)
             else: 
