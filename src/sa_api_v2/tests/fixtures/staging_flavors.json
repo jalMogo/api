@@ -1,13 +1,37 @@
 {
   "layer_groups": [
     {
-      "label": "kittitas-frequently-flooded"
+      "label": "bellevue-bike-network"
+    },
+    {
+      "label": "bellevue-bike-share"
+    },
+    {
+      "label": "bellevue-existing-hubs"
+    },
+    {
+      "label": "bellevue-grid"
+    },
+    {
+      "label": "bellevue-transit"
+    },
+    {
+      "label": "f4"
+    },
+    {
+      "label": "kittitas-burn-risk"
+    },
+    {
+      "label": "kittitas-conservation-areas"
+    },
+    {
+      "label": "kittitas-county-cities"
     },
     {
       "label": "kittitas-county-outline"
     },
     {
-      "label": "spokane-input"
+      "label": "kittitas-critical-aquifer"
     },
     {
       "label": "kittitas-fire-districts"
@@ -16,67 +40,43 @@
       "label": "kittitas-firewise-communities"
     },
     {
-      "label": "kittitas-geologic-hazard"
-    },
-    {
-      "label": "spokane-county-outline"
-    },
-    {
-      "label": "kittitas-wetlands"
-    },
-    {
-      "label": "wa-state-wildfire-start-sites-2008-group"
-    },
-    {
-      "label": "kittitas-critical-aquifer"
-    },
-    {
-      "label": "bellevue-existing-hubs"
+      "label": "kittitas-firewise-input"
     },
     {
       "label": "kittitas-forest-type"
     },
     {
-      "label": "bellevue-bike-network"
+      "label": "kittitas-frequently-flooded"
     },
     {
-      "label": "bellevue-bike-share"
-    },
-    {
-      "label": "kittitas-conservation-areas"
-    },
-    {
-      "label": "light-satellite"
-    },
-    {
-      "label": "kittitas-firewise-input"
-    },
-    {
-      "label": "satellite"
-    },
-    {
-      "label": "overlay"
+      "label": "kittitas-geologic-hazard"
     },
     {
       "label": "kittitas-vsp-input"
     },
     {
+      "label": "kittitas-wetlands"
+    },
+    {
+      "label": "light-satellite"
+    },
+    {
+      "label": "overlay"
+    },
+    {
+      "label": "satellite"
+    },
+    {
+      "label": "spokane-county-outline"
+    },
+    {
+      "label": "spokane-input"
+    },
+    {
       "label": "wa-state-large-fires-1973-2018"
     },
     {
-      "label": "bellevue-transit"
-    },
-    {
-      "label": "kittitas-county-cities"
-    },
-    {
-      "label": "kittitas-burn-risk"
-    },
-    {
-      "label": "f4"
-    },
-    {
-      "label": "bellevue-grid"
+      "label": "wa-state-wildfire-start-sites-2008-group"
     }
   ],
   "forms": [
