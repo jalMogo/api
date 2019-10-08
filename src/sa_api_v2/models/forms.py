@@ -240,7 +240,7 @@ class HtmlModule(RelatedFormModule):
 
 class SkipStageModule(RelatedFormModule):
     label = models.TextField(
-        help_text="The message to be displayed on the form. When clicked, it will skip to the next FormStage. Note that all modules within this FormStage should be optional for this to work properly. (eg: \"This section is not relevant to me.\")",
+        help_text="The message to be displayed on the form. When clicked, it will skip to the appropriate FormStage. Note that all modules within this FormStage should be optional for this to work properly. (eg: \"This section is not relevant to me.\")",
         blank=True,
         default='',
     )

@@ -940,7 +940,12 @@ class TextFieldModuleSerializer (BaseFormFieldSerializer):
 class DateFieldModuleSerializer (BaseFormFieldSerializer):
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.DateField
-        fields = BaseFormFieldSerializer.Meta.fields + ['placeholder', 'include_ongoing']
+        fields = BaseFormFieldSerializer.Meta.fields + [
+            'placeholder',
+            'include_ongoing',
+            'label_format',
+            'form_format',
+        ]
 
 
 class NumberFieldModuleSerializer (BaseFormFieldSerializer):

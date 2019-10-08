@@ -579,6 +579,8 @@ class TestFlavorDeserializer (TestCase):
                                               owner_id=cls.owner.id)
         cls.dataset5 = DataSet.objects.create(slug='pbdurham',
                                               owner_id=cls.owner.id)
+        cls.dataset6 = DataSet.objects.create(slug='kittitas-vsp-input',
+                                              owner_id=cls.owner.id)
         pbdurham_projects = DataSet.objects.create(slug='pbdurham-projects',
                                               owner_id=cls.owner.id)
         Group.objects.create(
@@ -770,7 +772,7 @@ class TestFlavorDeserializer (TestCase):
         stage_triggers = data['stage_visibility_triggers']
         FormFieldOption.import_stage_triggers(stage_triggers)
 
-        forms = flavors[2].forms.all()
+        forms = next(flavor for flavor in flavors if flavor.slug == 'spokane-vsp').forms.all()
         form = forms.get(label='spokane-input')
         self.assertEqual(
             [stage.order for stage in form.stages.get(order=2).modules.get(order=2).checkboxfield.options.first().stage_visibility_triggers.all()],
