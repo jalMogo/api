@@ -43,6 +43,33 @@
       "label": "f4"
     },
     {
+      "label": "garfield-county-outline"
+    },
+    {
+      "label": "garfield-critical-aquifer"
+    },
+    {
+      "label": "garfield-frequently-flooded"
+    },
+    {
+      "label": "garfield-geologic-hazard"
+    },
+    {
+      "label": "garfield-input"
+    },
+    {
+      "label": "garfield-salmon-steelhead-habitat"
+    },
+    {
+      "label": "garfield-watersheds"
+    },
+    {
+      "label": "garfield-wetlands"
+    },
+    {
+      "label": "garfield-wildlife"
+    },
+    {
       "label": "kittitas-burn-risk"
     },
     {
@@ -1615,6 +1642,1926 @@
             "satellite",
             "columbia-input",
             "columbia-county-border"
+          ]
+        }
+      ]
+    },
+    {
+      "dataset": "garfield-input",
+      "label": "garfield-input-form",
+      "icon": "/static/css/images/markers/map-pin-marker-red.png",
+      "stages": [
+        {
+          "order": 1,
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "location_information_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>1. Your property</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
+                "label": "location_why",
+                "content": "<p>At the end of this survey you will be able to hide your contact information and location information or voluntarily choose to make it public for the VSP report.</p><p>If you own multiple properties, please report on all your properties by watershed. If they are all within the same watershed, we would only need one pin. If you have property in multiple watersheds please complete this survey by watershed and place a pin in each watershed.</p>"
+              }
+            },
+            {
+              "order": 3,
+              "htmlmodule": {
+                "label": "drag_map_info",
+                "content": "<div style='display:flex;align-items:center;padding:24px'><span class='fa fa-globe' style='color:#e57c04;font-size:1.5rem'></span><p style='display:inline;margin:0;padding-left:8px'>Please drag and zoom the map to center pin on your property.  If you own/lease multiple properties you'll only need to place one pin, but if you have other properties in other watersheds we would request a separate survey in each watershed and report acres by watershed.</p></div>"
+              }
+            },
+            {
+              "order": 4,
+              "addressfield": {
+                "key": "address",
+                "private": false,
+                "required": false,
+                "prompt": "Search by address",
+                "placeholder": "Your address will never be shared",
+                "reverse_geocode": true
+              }
+            }
+          ],
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-input",
+            "garfield-county-outline"
+          ]
+        },
+        {
+          "order": 2,
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "analysis_units_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>2. Watershed analysis unit</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "radiofield": {
+                "key": "analysis_unit",
+                "private": false,
+                "required": true,
+                "prompt": "Of the eight watersheds on the map, which unit primarily represents your farm or ranch?  All reporting for VSP will be at the watershed scale level. Complete multiple surveys for areas that are distinctly different.",
+                "options": [
+                  {
+                    "label": "Alpowa Watershed",
+                    "value": "alpowa"
+                  },
+                  {
+                    "label": "Pataha Watershed",
+                    "value": "pataha"
+                  },
+                  {
+                    "label": "Deadman Watershed",
+                    "value": "deadman"
+                  },
+                  {
+                    "label": "Meadow Watershed",
+                    "value": "meadow"
+                  },
+                  {
+                    "label": "Snake River Watershed",
+                    "value": "snake-river"
+                  },
+                  {
+                    "label": "Tumalum Watershed",
+                    "value": "tumalum"
+                  },
+                  {
+                    "label": "New York Gulch Watershed",
+                    "value": "new-york-gulch"
+                  },
+                  {
+                    "label": "Dry Gulch Watershed",
+                    "value": "dry-gulch"
+                  }
+                ]
+              }
+            }
+          ],
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-county-outline",
+            "garfield-watersheds"
+          ]
+        },
+        {
+          "order": 3,
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "wetlands_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>3. Wetland Areas</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
+                "label": "wetlands_information",
+                "content": "<div style='display:flex;justify-content:center'><img style='height:150px' src='/static/css/images/wetlands.jpg' alt='Wetlands' /></div><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px;font-size:0.9em'><p style='margin:0'><strong>Wetland areas</strong> are inundated or saturated by surface water or groundwater.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/wetlands-legend.png' /></div></div></div>"
+              }
+            },
+            {
+              "order": 3,
+              "radiofield": {
+                "key": "private-property_on_wetlands",
+                "private": true,
+                "required": true,
+                "prompt": "Are there any wetlands? Please note locations are approximate.",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "label": "No",
+                    "value": "no"
+                  }
+                ]
+              }
+            }
+          ],
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-wetlands",
+            "garfield-county-outline"
+          ]
+        },
+        {
+          "order": 4,
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "salmon_steelhead_habitat_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>4. Salmon & Steelhead Habitat</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
+                "label": "salmon_steelhead_habitat_information",
+                "content": "<div style='display:flex;justify-content:center'><img style='height:150px' src='/static/css/images/fish-habitat.jpg' alt='Fish habitat' /></div><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px;font-size:0.9em'><p style='margin:0'><strong>Salmon & Steelhead Habitat</strong> are managed to maintain populations of salmon and steelhead.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/fish-habitat-legend.png' /></div></div></div>"
+              }
+            },
+            {
+              "order": 3,
+              "radiofield": {
+                "key": "private-property_on_salmon_steelhead_habitat",
+                "private": true,
+                "required": true,
+                "prompt": "Are there any fish bearing streams? Please note locations are approximate.",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "label": "No",
+                    "value": "no"
+                  }
+                ]
+              }
+            }
+          ],
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-salmon-steelhead-habitat",
+            "garfield-county-outline"
+          ]
+        },
+        {
+          "order": 5,
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "fish_wildlife_habitat_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>5. Fish & Wildlife Habitat (PHS)</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
+                "label": "fish_wildlife_habitat_information",
+                "content": "<div style='display:flex;justify-content:center'><img style='height:150px' src='/static/css/images/fish-wildlife-habitat.jpg' alt='Fish and wildife conservation areas' /></div><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px'><p style='margin:0;font-size:0.9em'><strong>Fish & wildlife habitats</strong> are managed to maintain populations of fish and wildlife.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/wildlife-conservation-legend.png' /></div></div></div>"
+              }
+            },
+            {
+              "order": 3,
+              "radiofield": {
+                "key": "private-property_on_fish_wildlife_habitat",
+                "private": true,
+                "required": true,
+                "prompt": "Are there any fish & wildlife conservation areas? Please note locations are approximate.",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "label": "No",
+                    "value": "no"
+                  }
+                ]
+              }
+            }
+          ],
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-wildlife",
+            "garfield-county-outline"
+          ]
+        },
+        {
+          "order": 6,
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "critical_aquifer_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>6. Critical Aquifer Recharge Areas</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
+                "label": "critical_aquifer_information",
+                "content": "<div style='display:flex;justify-content:center'><img style='height:150px' src='/static/css/images/critical-aquifer-recharge.jpg' alt='Critical aquifer recharge areas' /></div><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px'><p style='margin:0;font-size:0.9em'><strong>Critical aquifer recharge areas</strong> have a critical effect on aquifers used for potable water.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/critical-aquifer-legend.png' /></div></div></div>"
+              }
+            },
+            {
+              "order": 3,
+              "radiofield": {
+                "key": "private-property_on_critical_aquifer",
+                "private": true,
+                "required": true,
+                "prompt": "Are there any critical aquifer recharge areas? Please note locations are approximate.",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "label": "No",
+                    "value": "no"
+                  }
+                ]
+              }
+            }
+          ],
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-critical-aquifer",
+            "garfield-county-outline"
+          ]
+        },
+        {
+          "order": 7,
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "geologic_hazard_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>7. Severe Geologic Hazard Areas</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
+                "label": "geologic_hazard_information",
+                "content": "<div style='display:flex;justify-content:center'><img style='height:150px' src='/static/css/images/geologic-hazard-area.jpg' alt='Geologic hazard areas' /></div><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px'><p style='margin:0;font-size:0.9em'><strong>Severe geologic hazard areas</strong> are susceptible to erosion, sliding, earthquakes, and other events.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/geologic-hazard-legend.png' /></div></div></div>"
+              }
+            },
+            {
+              "order": 3,
+              "radiofield": {
+                "key": "private-property_on_geologic_hazard",
+                "private": true,
+                "required": true,
+                "prompt": "Are there any severe geologic hazard areas? Please note locations are approximate.",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "label": "No",
+                    "value": "no"
+                  }
+                ]
+              }
+            }
+          ],
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-geologic-hazard",
+            "garfield-county-outline"
+          ]
+        },
+        {
+          "order": 8,
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "frequently_flooded_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>8. Frequently Flooded Areas</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
+                "label": "frequently_flooded_information",
+                "content": "<div style='display:flex;justify-content:center'><img style='height:150px' src='/static/css/images/frequently-flooded.jpg' alt='Frequently flooded areas' /></div><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px'><p style='margin:0;font-size:0.9em'><strong>Frequently flooded areas</strong> are subject to a 1% or greater chance of flooding every year.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/frequently-flooded-legend.png' /></div></div></div>"
+              }
+            },
+            {
+              "order": 3,
+              "radiofield": {
+                "key": "private-property_on_frequently_flooded",
+                "private": true,
+                "required": true,
+                "prompt": "Are there any frequently flooded areas? Please note locations are approximate.",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "label": "No",
+                    "value": "no"
+                  }
+                ]
+              }
+            }
+          ],
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-frequently-flooded",
+            "garfield-county-outline"
+          ]
+        },
+        {
+          "order": 9,
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "residue_tillage_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>9. Residue and Tillage Management</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
+                "label": "residue_tillage_information",
+                "content": "<p style='margin: 0 0 24px 0;font-size:1.15rem;'>Please fill out the form below to report your residue and tillage management practices.</p>"
+              }
+            },
+            {
+              "order": 3,
+              "skipstagemodule": {
+                "label": "This section is not relevant to me. Proceed to next section. \uf061"
+              }
+            },
+            {
+              "order": 4,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "conventional_till",
+                      "private": false,
+                      "required": false,
+                      "label": "Conventional till",
+                      "prompt": "Conventional tillage system",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "numberfield": {
+                      "key": "conventional_till_quantity",
+                      "private": false,
+                      "required": true,
+                      "prompt": "How many acres?",
+                      "placeholder": "Approximate acreage",
+                      "minimum": 0,
+                      "units": "acres"
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "datefield": {
+                      "key": "conventional_till_datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you start using a conventional tillage system?",
+                      "placeholder": "Your best estimate",
+                      "form_format": "YYYY",
+                      "label_format": "YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 5,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "no_till",
+                      "private": false,
+                      "required": false,
+                      "label": "No till/direct seed",
+                      "prompt": "Residue and tillage management: no till, strip till, direct seed, 2-pass, 1-pass, or mulch till",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but I'm interested",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "numberfield": {
+                      "key": "no_till_quantity",
+                      "private": false,
+                      "required": true,
+                      "prompt": "On how many acres of land do you use residue and tillage management?",
+                      "placeholder": "Approximate acreage",
+                      "minimum": 0,
+                      "units": "acres"
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "datefield": {
+                      "key": "no_till_datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you start using residue and tillage management practices?",
+                      "placeholder": "Your best estimate",
+                      "form_format": "YYYY",
+                      "label_format": "YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            }
+          ],
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-input",
+            "garfield-county-outline"
+          ]
+        },
+        {
+          "order": 10,
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "pest_management_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>10. Pest Management</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
+                "label": "pest_management_information",
+                "content": "<p style='margin: 0 0 24px 0;font-size:1.15rem;'>Please fill out the form below to report your pest management practices.</p>"
+              }
+            },
+            {
+              "order": 3,
+              "skipstagemodule": {
+                "label": "This section is not relevant to me. Proceed to next section. \uf061"
+              }
+            },
+            {
+              "order": 4,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "pest_management",
+                      "private": false,
+                      "required": false,
+                      "label": "Pest management",
+                      "prompt": "Pest management practices: combination of weed and pest prevention, monitoring and suppression",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but I'm interested",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "numberfield": {
+                      "key": "pest_management_quantity",
+                      "private": false,
+                      "required": true,
+                      "prompt": "How many acres?",
+                      "placeholder": "Approximate acreage",
+                      "minimum": 0,
+                      "units": "acres"
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "datefield": {
+                      "key": "pest_management_datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you start using pest management practices?",
+                      "placeholder": "Your best estimate",
+                      "form_format": "YYYY",
+                      "label_format": "YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            }
+          ],
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-input",
+            "garfield-county-outline"
+          ]
+        },
+        {
+          "order": 11,
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "nutrient_management_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>11. Nutrient Management</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
+                "label": "nutrient_management_information",
+                "content": "<p style='margin: 0 0 24px 0;font-size:1.15rem;'>Please fill out the form below to report your nutrient management practices.</p>"
+              }
+            },
+            {
+              "order": 3,
+              "skipstagemodule": {
+                "label": "This section is not relevant to me. Proceed to next section. \uf061"
+              }
+            },
+            {
+              "order": 4,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "nutrient_management",
+                      "private": false,
+                      "required": false,
+                      "label": "Nutrient management",
+                      "prompt": "Nutrient management practices: soil and/or plant tissue tests",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but I'm interested",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "numberfield": {
+                      "key": "nutrient_management_quantity",
+                      "private": false,
+                      "required": true,
+                      "prompt": "How many acres?",
+                      "placeholder": "Approximate acreage",
+                      "minimum": 0,
+                      "units": "acres"
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "datefield": {
+                      "key": "nutrient_management_datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you start using nutrient management practices?",
+                      "placeholder": "Your best estimate",
+                      "form_format": "YYYY",
+                      "label_format": "YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            }
+          ],
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-input",
+            "garfield-county-outline"
+          ]
+        },
+        {
+          "order": 12,
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "water_management_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>12. Water Management</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
+                "label": "water_management_information",
+                "content": "<p style='margin: 0 0 24px 0;font-size:1.15rem;'>Please fill out the form below to report your water management practices.</p>"
+              }
+            },
+            {
+              "order": 3,
+              "skipstagemodule": {
+                "label": "This section is not relevant to me. Proceed to next section. \uf061"
+              }
+            },
+            {
+              "order": 4,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "irrigation",
+                      "private": false,
+                      "required": false,
+                      "label": "Irrigation",
+                      "prompt": "Irrigation practices:",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but I'm interested",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "numberfield": {
+                      "key": "irrigation_quantity",
+                      "private": false,
+                      "required": true,
+                      "prompt": "How many acres?",
+                      "placeholder": "Approximate acreage",
+                      "minimum": 0,
+                      "units": "acres"
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "datefield": {
+                      "key": "irrigation_datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you start irrigating?",
+                      "placeholder": "Your best estimate",
+                      "form_format": "YYYY",
+                      "label_format": "YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            }
+          ],
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-input",
+            "garfield-county-outline"
+          ]
+        },
+        {
+          "order": 13,
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "livestock_management",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>13. Livestock Management</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
+                "label": "livestock_management_information",
+                "content": "<p style='margin: 0 0 24px 0;font-size:1.15rem;'>Please fill out the form below to report your livestock management practices.</p>"
+              }
+            },
+            {
+              "order": 3,
+              "skipstagemodule": {
+                "label": "This section is not relevant to me. Proceed to next section. \uf061"
+              }
+            },
+            {
+              "order": 4,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "prescribed_grazing",
+                      "private": false,
+                      "required": false,
+                      "label": "Prescribed grazing",
+                      "prompt": "Prescribed grazing: managing the harvest of vegetation with rotation of grazing and/or browsing animals",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but I'm interested",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "numberfield": {
+                      "key": "prescribed_grazing_quantity",
+                      "private": false,
+                      "required": true,
+                      "prompt": "How many acres?",
+                      "placeholder": "Approximate acreage",
+                      "minimum": 0,
+                      "units": "acres"
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "datefield": {
+                      "key": "prescribed_grazing_datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you start using prescribed grazing practices?",
+                      "placeholder": "Your best estimate",
+                      "form_format": "YYYY",
+                      "label_format": "YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 5,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "range_plantings",
+                      "private": false,
+                      "required": false,
+                      "label": "Range plantings",
+                      "prompt": "Range plantings: establishment of adapted perennial or self-sustaining vegetation",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but I'm interested",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "numberfield": {
+                      "key": "range_plantings_quantity",
+                      "private": false,
+                      "required": true,
+                      "prompt": "How many acres?",
+                      "minimum": 0,
+                      "units": "acres"
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "datefield": {
+                      "key": "range_plantings_datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you start range plantings?",
+                      "placeholder": "Your best estimate",
+                      "form_format": "YYYY",
+                      "label_format": "YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 6,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "watering_facility",
+                      "private": false,
+                      "required": false,
+                      "label": "Watering facilities",
+                      "prompt": "Watering facilities: means of providing drinking water to livestock or wildlife",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but I'm interested",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "numberfield": {
+                      "key": "watering_facility_quantity",
+                      "private": false,
+                      "required": true,
+                      "prompt": "How many stock tanks?",
+                      "minimum": 0,
+                      "units": "stock tanks"
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "datefield": {
+                      "key": "watering_facility_datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you start using watering facilities?",
+                      "placeholder": "Your best estimate",
+                      "form_format": "YYYY",
+                      "label_format": "YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 7,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "water_wells",
+                      "private": false,
+                      "required": false,
+                      "label": "Water wells",
+                      "prompt": "Water wells: for domestic animals, wildlife or fire control",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but I'm interested",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "numberfield": {
+                      "key": "water_wells_quantity",
+                      "private": false,
+                      "required": true,
+                      "prompt": "How many wells?",
+                      "minimum": 0,
+                      "units": "wells"
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "datefield": {
+                      "key": "water_wells_datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you start operating water wells?",
+                      "placeholder": "Your best estimate",
+                      "form_format": "YYYY",
+                      "label_format": "YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 8,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "fencing",
+                      "private": false,
+                      "required": false,
+                      "label": "Fencing",
+                      "prompt": "Fencing: of springs, wetlands, or frequently flooded areas to control movement of livestock/vehicles or people",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but I'm interested",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "numberfield": {
+                      "key": "fencing_quantity",
+                      "private": false,
+                      "required": true,
+                      "prompt": "How many feet?",
+                      "placeholder": "Approximate footage",
+                      "minimum": 0,
+                      "units": "feet"
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "datefield": {
+                      "key": "fencing_datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you start establishing fencing?",
+                      "placeholder": "Your best estimate",
+                      "form_format": "YYYY",
+                      "label_format": "YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            }
+          ],
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-input",
+            "garfield-county-outline"
+          ]
+        },
+        {
+          "order": 14,
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "soil_management",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>14. Soil & Erosion Management</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
+                "label": "soil_management_information",
+                "content": "<p style='margin: 0 0 24px 0;font-size:1.15rem;'>Please fill out the form below to report your soil management practices.</p>"
+              }
+            },
+            {
+              "order": 3,
+              "skipstagemodule": {
+                "label": "This section is not relevant to me. Proceed to next section. \uf061"
+              }
+            },
+            {
+              "order": 4,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "pasture_hayland_planting",
+                      "private": false,
+                      "required": false,
+                      "label": "Pasture and hayland planting",
+                      "prompt": "Pasture and hayland planting:",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but I'm interested",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "numberfield": {
+                      "key": "pasture_hayland_planting_quantity",
+                      "private": false,
+                      "required": true,
+                      "prompt": "How many acres?",
+                      "placeholder": "Approximate acreage",
+                      "minimum": 0,
+                      "units": "acres"
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "datefield": {
+                      "key": "pasture_hayland_planting_datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you start pasture and hayland planting?",
+                      "placeholder": "Your best estimate",
+                      "form_format": "YYYY",
+                      "label_format": "YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 5,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "cover_crop",
+                      "private": false,
+                      "required": false,
+                      "label": "Cover crops",
+                      "prompt": "Cover crops: seasonal cover to reduce erosion and increase soil organic matter",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but I'm interested",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "numberfield": {
+                      "key": "cover_crop_quantity",
+                      "private": false,
+                      "required": true,
+                      "prompt": "How many acres?",
+                      "placeholder": "Approximate acreage",
+                      "minimum": 0,
+                      "units": "acres"
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "datefield": {
+                      "key": "cover_crop_datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you start planting cover crops?",
+                      "placeholder": "Your best estimate",
+                      "form_format": "YYYY",
+                      "label_format": "YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            }
+          ],
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-input",
+            "garfield-county-outline"
+          ]
+        },
+        {
+          "order": 15,
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "fish_wildlife_management",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>15. Fish & Wildlife Management</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
+                "label": "fish_wildlife_management_information",
+                "content": "<p style='margin: 0 0 24px 0;font-size:1.15rem;'>Please fill out the form below to report your fish & wildlife management practices.</p>"
+              }
+            },
+            {
+              "order": 3,
+              "skipstagemodule": {
+                "label": "This section is not relevant to me. Proceed to next section. \uf061"
+              }
+            },
+            {
+              "order": 4,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "conservation_cover",
+                      "private": false,
+                      "required": false,
+                      "label": "Conservation cover",
+                      "prompt": "Conservation cover: consists of establishment of permanent vegetative cover including CRP",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but I'm interested",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "numberfield": {
+                      "key": "conservation_cover_quantity",
+                      "private": false,
+                      "required": true,
+                      "prompt": "How many acres?",
+                      "placeholder": "Approximate acreage",
+                      "minimum": 0,
+                      "units": "acres"
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "datefield": {
+                      "key": "conservation_cover_datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you start planting conservation cover?",
+                      "placeholder": "Your best estimate",
+                      "form_format": "YYYY",
+                      "label_format": "YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 5,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "critical_area_planting",
+                      "private": false,
+                      "required": false,
+                      "label": "Critical area planting",
+                      "prompt": "Critical area planting: planting vegetation to stabilize critically eroding land",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but I'm interested",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "numberfield": {
+                      "key": "critical_area_planting_quantity",
+                      "private": false,
+                      "required": true,
+                      "prompt": "How many acres?",
+                      "placeholder": "Approximate acreage",
+                      "minimum": 0,
+                      "units": "acres"
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "datefield": {
+                      "key": "critical_area_planting_datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you start critical area planting?",
+                      "placeholder": "Your best estimate",
+                      "form_format": "YYYY",
+                      "label_format": "YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 6,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "weed_control",
+                      "private": false,
+                      "required": false,
+                      "label": "Weed control",
+                      "prompt": "Weed control on rangeland: can include chemical, mechanical, cultural or biological",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but I'm interested",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "numberfield": {
+                      "key": "weed_control_quantity",
+                      "private": false,
+                      "required": true,
+                      "prompt": "How many acres?",
+                      "placeholder": "Approximate acreage",
+                      "minimum": 0,
+                      "units": "acres"
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "datefield": {
+                      "key": "weed_control_datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you start controlling weeds?",
+                      "placeholder": "Your best estimate",
+                      "form_format": "YYYY",
+                      "label_format": "YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 7,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "tree_shrub",
+                      "private": false,
+                      "required": false,
+                      "label": "Tree/shrub establishment",
+                      "prompt": "Tree and shrub establishment: establishing woody plants by planting seedlings or cuttings",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but I'm interested",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "numberfield": {
+                      "key": "tree_shrub_quantity",
+                      "private": false,
+                      "required": true,
+                      "prompt": "How many acres?",
+                      "placeholder": "Approximate acreage",
+                      "minimum": 0,
+                      "units": "acres"
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "datefield": {
+                      "key": "tree_shrub_datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you start establishing new trees and shrubs?",
+                      "placeholder": "Your best estimate",
+                      "form_format": "YYYY",
+                      "label_format": "YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 8,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "wetland_wildlife_management",
+                      "private": false,
+                      "required": false,
+                      "label": "Wetland wildlife management",
+                      "prompt": "Wetland wildlife habitats management: creating, maintaining, or enhancing wetland habitats",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but I'm interested",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "numberfield": {
+                      "key": "wetland_wildlife_management_quantity",
+                      "private": false,
+                      "required": true,
+                      "prompt": "How many acres?",
+                      "placeholder": "Approximate acreage",
+                      "minimum": 0,
+                      "units": "acres"
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "datefield": {
+                      "key": "wetland_wildlife_management_datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you start managing wetland wildlife habitats?",
+                      "placeholder": "Your best estimate",
+                      "form_format": "YYYY",
+                      "label_format": "YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 9,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "upland_habitat",
+                      "private": false,
+                      "required": false,
+                      "label": "Upland habitat management",
+                      "prompt": "Upland wildlife habitats management: creating, maintaining, or enhancing areas to provide food, cover and habitat connectivity",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but I'm interested",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "numberfield": {
+                      "key": "upland_habitat_quantity",
+                      "private": false,
+                      "required": true,
+                      "prompt": "How many acres?",
+                      "placeholder": "Approximate acreage",
+                      "minimum": 0,
+                      "units": "acres"
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "datefield": {
+                      "key": "upland_habitat_datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you start managing upland wildlife habitats?",
+                      "placeholder": "Your best estimate",
+                      "form_format": "YYYY",
+                      "label_format": "YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 10,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "access_control",
+                      "private": false,
+                      "required": false,
+                      "label": "Access control",
+                      "prompt": "Access control: the temporary or permanent exclusion of animals, people, vehicles, and/or equipment from an area",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but I'm interested",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "numberfield": {
+                      "key": "access_control_quantity",
+                      "private": false,
+                      "required": true,
+                      "prompt": "How many acres?",
+                      "placeholder": "Approximate acreage",
+                      "minimum": 0,
+                      "units": "acres"
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "datefield": {
+                      "key": "access_control_datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you start controlling access to parts of your property?",
+                      "placeholder": "Your best estimate",
+                      "form_format": "YYYY",
+                      "label_format": "YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 11,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "stream_habitat_improvements",
+                      "private": false,
+                      "required": false,
+                      "label": "Instream habitat projects",
+                      "prompt": "Stream habitat improvements: structures placed instream for adult and juvenile salmonoids, such as post-assisted log structures and beaver dam analogs",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but I'm interested",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "numberfield": {
+                      "key": "stream_habitat_improvements_quantity",
+                      "private": false,
+                      "required": true,
+                      "prompt": "How many improvements?",
+                      "placeholder": "Approximate number",
+                      "minimum": 0,
+                      "units": "structures"
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "datefield": {
+                      "key": "stream_habitat_improvements_datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you start establishing stream habitat improvements?",
+                      "placeholder": "Your best estimate",
+                      "form_format": "YYYY",
+                      "label_format": "YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 12,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "streambank_protections",
+                      "private": false,
+                      "required": false,
+                      "label": "Streambank habitat projects",
+                      "prompt": "Streambank protections: soft streambank bioengineering to protect eroding banks",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but I'm interested",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "numberfield": {
+                      "key": "streambank_protections_quantity",
+                      "private": false,
+                      "required": true,
+                      "prompt": "How many feet?",
+                      "placeholder": "Approximate number",
+                      "minimum": 0,
+                      "units": "feet"
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "datefield": {
+                      "key": "streambank_protections_datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you start making streambank improvements?",
+                      "placeholder": "Your best estimate",
+                      "form_format": "YYYY",
+                      "label_format": "YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            }
+          ],
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-input",
+            "garfield-county-outline"
+          ]
+        },
+        {
+          "order": 16,
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "additional_info_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>17. Almost completed!</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
+                "label": "additional_info",
+                "content": "<p><strong>Thank you for taking the time to voluntarily report your stewardship practices.</strong></p><p>This page will determine how your information is shared.  We will report all practices at the watershed scale, but if you are interested in having your project showcased you can give us permission below.  Either way, we will be using your stewardship practice to capture how agriculture is protecting and/or restoring critical areas and maintaining the viability of agriculture.</p>"
+              }
+            },
+            {
+              "order": 3,
+              "filefield": {
+                "key": "my_image",
+                "private": false,
+                "required": false,
+                "label": "Upload photos",
+                "prompt": "Show your stewardship practices! Upload photos before, during, or after you implemented your stewardship practices:"
+              }
+            },
+            {
+              "order": 4,
+              "textareafield": {
+                "key": "practices_description",
+                "private": false,
+                "required": false,
+                "prompt": "Add a description of your stewardship practices!"
+              }
+            },
+            {
+              "order": 5,
+              "textfield": {
+                "key": "private-landowner_name",
+                "private": true,
+                "required": true,
+                "prompt": "What is your name?",
+                "placeholder": "Your name will only be shared if you are logged in"
+              }
+            },
+            {
+              "order": 6,
+              "radiofield": {
+                "key": "private-use_photos",
+                "private": true,
+                "required": true,
+                "prompt": "Can Garfield County VSP highlight your photos on our website?",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "label": "No",
+                    "value": "no",
+                    "default": true
+                  }
+                ]
+              }
+            },
+            {
+              "order": 7,
+              "radiofield": {
+                "key": "private",
+                "private": false,
+                "required": false,
+                "prompt": "Would you be willing to share your stewardship story with the public? Checking \"yes\" below will place a pin on the map upon submission and your stewardship actions will be visible to the public.",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "no"
+                  },
+                  {
+                    "label": "No",
+                    "value": "yes",
+                    "default": true,
+                    "make_private": true
+                  }
+                ]
+              }
+            },
+            {
+              "order": 8,
+              "textfield": {
+                "key": "private-landowner_email",
+                "private": true,
+                "required": false,
+                "prompt": "What is your email address?",
+                "placeholder": "Your email address will never be shared",
+                "variant": "EM"
+              }
+            },
+            {
+              "order": 9,
+              "textfield": {
+                "key": "private-landowner_phone",
+                "private": true,
+                "required": true,
+                "prompt": "What is your phone number?",
+                "placeholder": "Your phone number will never be shared",
+                "variant": "PH"
+              }
+            },
+            {
+              "order": 10,
+              "checkboxfield": {
+                "key": "learned_about_vsp_map",
+                "private": false,
+                "required": false,
+                "prompt": "How did you find out about the Whitman County VSP map? Please check all that apply:",
+                "options": [
+                  {
+                    "label": "Word of mouth",
+                    "value": "word_of_mouth"
+                  },
+                  {
+                    "label": "Fellow producer",
+                    "value": "fellow_producer"
+                  },
+                  {
+                    "label": "Conservation District staff",
+                    "value": "cd_staff"
+                  },
+                  {
+                    "label": "Grower meeting",
+                    "value": "grower_meeting"
+                  },
+                  {
+                    "label": "Other",
+                    "value": "other"
+                  }
+                ]
+              }
+            },
+            {
+              "order": 11,
+              "submitbuttonmodule": {
+                "label": "Submit!"
+              }
+            }
+          ],
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-input",
+            "garfield-county-outline"
           ]
         }
       ]
@@ -9246,6 +11193,195 @@
       "group_visibility_triggers": [2, 3]
     },
     {
+      "form": "garfield-input-form",
+      "stage_order": 9,
+      "group_order": 4,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "garfield-input-form",
+      "stage_order": 9,
+      "group_order": 5,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "garfield-input-form",
+      "stage_order": 10,
+      "group_order": 4,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "garfield-input-form",
+      "stage_order": 11,
+      "group_order": 4,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "garfield-input-form",
+      "stage_order": 12,
+      "group_order": 4,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "garfield-input-form",
+      "stage_order": 13,
+      "group_order": 4,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "garfield-input-form",
+      "stage_order": 13,
+      "group_order": 5,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "garfield-input-form",
+      "stage_order": 13,
+      "group_order": 6,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "garfield-input-form",
+      "stage_order": 13,
+      "group_order": 7,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "garfield-input-form",
+      "stage_order": 13,
+      "group_order": 8,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "garfield-input-form",
+      "stage_order": 14,
+      "group_order": 4,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "garfield-input-form",
+      "stage_order": 14,
+      "group_order": 5,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "garfield-input-form",
+      "stage_order": 15,
+      "group_order": 4,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "garfield-input-form",
+      "stage_order": 15,
+      "group_order": 5,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "garfield-input-form",
+      "stage_order": 15,
+      "group_order": 6,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "garfield-input-form",
+      "stage_order": 15,
+      "group_order": 7,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "garfield-input-form",
+      "stage_order": 15,
+      "group_order": 8,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "garfield-input-form",
+      "stage_order": 15,
+      "group_order": 9,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "garfield-input-form",
+      "stage_order": 15,
+      "group_order": 10,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "garfield-input-form",
+      "stage_order": 15,
+      "group_order": 11,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "garfield-input-form",
+      "stage_order": 15,
+      "group_order": 12,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
       "form": "kittitas-firewise-input",
       "stage_order": 9,
       "group_order": 2,
@@ -10125,6 +12261,11 @@
       "display_name": "columbia-vsp",
       "slug": "columbia-vsp",
       "forms": ["columbia-input-form"]
+    },
+    {
+      "display_name": "garfield-vsp",
+      "slug": "garfield-vsp",
+      "forms": ["garfield-input-form"]
     },
     {
       "display_name": "mississippi",
