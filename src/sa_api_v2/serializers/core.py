@@ -6,8 +6,6 @@ from collections import defaultdict
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
 from collections import OrderedDict
-from rest_framework.fields import SkipField
-from rest_framework.relations import PKOnlyObject
 
 from .mixins import (
     ActivityGenerator,
@@ -16,6 +14,7 @@ from .mixins import (
     AttachmentSerializerMixin,
     FormModulesValidator,
     FormFieldOptionsCreator,
+    OmitNullFieldsFromRepr,
 )
 
 from .fields import (
@@ -729,7 +728,10 @@ class ActionSerializer (EmptyModelSerializer, serializers.ModelSerializer):
 # Form Serializers
 #################################################################################
 
-class BaseFormFieldOptionSerializer (serializers.ModelSerializer):
+class BaseFormFieldOptionSerializer (
+    OmitNullFieldsFromRepr, 
+    serializers.ModelSerializer,
+    ):
     stage_visibility_triggers = serializers.SlugRelatedField(
         many=True,
         slug_field="id",
@@ -754,44 +756,14 @@ class BaseFormFieldOptionSerializer (serializers.ModelSerializer):
             'stage_visibility_triggers',
             'order'
         ]
+        fields_to_omit = [
+            'group_visibility_triggers',
+            'stage_visibility_triggers',
+            'make_private',
+            'default',
+            'icon',
+        ]
 
-    def to_representation(self, instance):
-        """
-        Object instance -> Dict of primitive datatypes.
-        """
-        ret = OrderedDict()
-        fields = self._readable_fields
-
-        for field in fields:
-            try:
-                attribute = field.get_attribute(instance)
-            except SkipField:
-                continue
-
-            # KEY IS HERE:
-            if field.field_name == 'group_visibility_triggers' and len(attribute) == 0:
-                continue
-            elif field.field_name == 'stage_visibility_triggers' and len(attribute) == 0:
-                continue
-            elif field.field_name == 'make_private' and attribute == False:
-                continue
-            elif field.field_name == 'default' and attribute == False:
-                continue
-            elif field.field_name == 'icon' and attribute == '':
-                continue
-
-            # We skip `to_representation` for `None` values so that fields do
-            # not have to explicitly deal with that case.
-            #
-            # For related fields with `use_pk_only_optimization` we need to
-            # resolve the pk value.
-            check_for_none = attribute.pk if isinstance(attribute, PKOnlyObject) else attribute
-            if check_for_none is None:
-                ret[field.field_name] = None
-            else:
-                ret[field.field_name] = field.to_representation(attribute)
-
-        return ret
 
 # Form Field Options
 
@@ -853,6 +825,7 @@ class ModalSerializer(
 
 
 class BaseFormFieldSerializer (
+    OmitNullFieldsFromRepr,
     FormModulesValidator,
     serializers.ModelSerializer
 ):
@@ -867,6 +840,7 @@ class BaseFormFieldSerializer (
             'required',
             'info_modal',
         ]
+        fields_to_omit = ['info_modal']
 
     def create(self, validated_data):
         if 'info_modal' in validated_data.keys():
@@ -887,37 +861,6 @@ class BaseFormFieldSerializer (
         form_field.save()
         return form_field
 
-    # hide info_modal when it is null
-    def to_representation(self, instance):
-        """
-        Object instance -> Dict of primitive datatypes.
-        """
-        ret = OrderedDict()
-        fields = self._readable_fields
-
-        for field in fields:
-            try:
-                attribute = field.get_attribute(instance)
-            except SkipField:
-                continue
-
-            # KEY IS HERE:
-            if field.field_name == 'info_modal' and attribute == None:
-                continue
-
-            # We skip `to_representation` for `None` values so that fields do
-            # not have to explicitly deal with that case.
-            #
-            # For related fields with `use_pk_only_optimization` we need to
-            # resolve the pk value.
-            check_for_none = attribute.pk if isinstance(attribute, PKOnlyObject) else attribute
-            if check_for_none is None:
-                print("Field has a none value (?):", field.field_name)
-                ret[field.field_name] = None
-            else:
-                ret[field.field_name] = field.to_representation(attribute)
-
-        return ret
 
 class AddressFieldModuleSerializer (BaseFormFieldSerializer):
     class Meta(BaseFormFieldSerializer.Meta):
@@ -989,7 +932,7 @@ class CheckboxFieldModuleSerializer (
 
 
 # Ordered Form Modules (our join table):
-class AbstractFormModuleSerializer (serializers.ModelSerializer):
+class AbstractFormModuleSerializer (OmitNullFieldsFromRepr, serializers.ModelSerializer):
     htmlmodule = HtmlModuleSerializer(required=False)
     skipstagemodule = SkipStageModuleSerializer(required=False)
     radiofield = RadioFieldModuleSerializer(required=False)
@@ -1002,36 +945,8 @@ class AbstractFormModuleSerializer (serializers.ModelSerializer):
     textareafield = TextAreaFieldModuleSerializer(required=False)
     submitbuttonmodule = SubmitButtonModuleSerializer(required=False)
 
-    # removes "null" fields
-    def to_representation(self, instance):
-        """
-        Object instance -> Dict of primitive datatypes.
-        """
-        ret = OrderedDict()
-        fields = self._readable_fields
-
-        for field in fields:
-            try:
-                attribute = field.get_attribute(instance)
-            except SkipField:
-                continue
-
-            # KEY IS HERE:
-            if attribute in [None, '']:
-                continue
-
-            # We skip `to_representation` for `None` values so that fields do
-            # not have to explicitly deal with that case.
-            #
-            # For related fields with `use_pk_only_optimization` we need to
-            # resolve the pk value.
-            check_for_none = attribute.pk if isinstance(attribute, PKOnlyObject) else attribute
-            if check_for_none is None:
-                ret[field.field_name] = None
-            else:
-                ret[field.field_name] = field.to_representation(attribute)
-
-        return ret
+    class Meta:
+        fields_to_omit = ['*']
 
     def create(self, validated_data):
         module_names = [
@@ -1084,7 +999,7 @@ for related_module in models.RELATED_MODULES:
             raise ValidationError("Missing related module serializer:", related_module)
 
 class NestedOrderedModuleSerializer (AbstractFormModuleSerializer):
-    class Meta:
+    class Meta(AbstractFormModuleSerializer.Meta):
         model = models.NestedOrderedModule
         parent_field = 'group'
         exclude = ['group']
@@ -1134,7 +1049,7 @@ class OrderedModuleSerializer (AbstractFormModuleSerializer):
         source="permitted_group",
     )
 
-    class Meta:
+    class Meta(AbstractFormModuleSerializer.Meta):
         model = models.OrderedModule
         parent_field = 'stage'
         exclude = ['stage']
