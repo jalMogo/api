@@ -83,5 +83,5 @@ class Command(BaseCommand):
             if flavor_serializer.is_valid() is not True:
                 raise ValidationError("flavor_serializer is not valid:", flavor_serializer.errors)
 
-            flavor = flavor_serializer.save()
-            print('flavor created!')
+            flavors = flavor_serializer.save()
+            print('flavors created!')

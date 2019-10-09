@@ -16,6 +16,30 @@
       "label": "bellevue-transit"
     },
     {
+      "label": "columbia-county-border"
+    },
+    {
+      "label": "columbia-critical-aquifer"
+    },
+    {
+      "label": "columbia-critical-conservation-areas"
+    },
+    {
+      "label": "columbia-frequently-flooded"
+    },
+    {
+      "label": "columbia-geologic-hazard"
+    },
+    {
+      "label": "columbia-input"
+    },
+    {
+      "label": "columbia-watersheds"
+    },
+    {
+      "label": "columbia-wetlands"
+    },
+    {
       "label": "f4"
     },
     {
@@ -247,6 +271,1350 @@
                 "label": "Suggest it!"
               }
             }
+          ]
+        }
+      ]
+    },
+    {
+      "dataset": "columbia-input",
+      "label": "columbia-input-form",
+      "icon": "/static/css/images/markers/marker-field.png",
+      "stages": [
+        {
+          "order": 1,
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "location_information_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>1. Your property</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
+                "label": "location_why",
+                "content": "<p>At the end of this survey you will be able to hide your contact information and location information or voluntarily choose to make it public for the VSP report.</p>"
+              }
+            },
+            {
+              "order": 3,
+              "htmlmodule": {
+                "label": "drag_map_info",
+                "content": "<div style='display:flex;align-items:center;padding:24px'><span class='fa fa-globe' style='color:#999999;font-size:1.5rem;margin-right:16px;'></span><p style='display:inline;margin:0;padding-left:8px'>Please drag and zoom the map to center the pin on your property.</p></div>"
+              }
+            },
+            {
+              "order": 4,
+              "addressfield": {
+                "key": "address",
+                "private": false,
+                "required": false,
+                "prompt": "Or, search by address:",
+                "placeholder": "Your address will never be shared",
+                "reverse_geocode": true
+              }
+            }
+          ],
+          "visible_layer_groups": [
+            "satellite",
+            "columbia-input",
+            "columbia-county-border"
+          ]
+        },
+        {
+          "order": 2,
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "analysis_units_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>2. Watersheds</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "radiofield": {
+                "key": "analysis_unit",
+                "private": false,
+                "required": true,
+                "prompt": "Of the three watersheds on the map, in which does your land primarily lie?",
+                "options": [
+                  {
+                    "label": "Touchet",
+                    "value": "touchet"
+                  },
+                  {
+                    "label": "Tucannon",
+                    "value": "tucannon"
+                  },
+                  {
+                    "label": "Lower Snake",
+                    "value": "lower-snake"
+                  }
+                ]
+              }
+            }
+          ],
+          "visible_layer_groups": [
+            "satellite",
+            "columbia-watersheds",
+            "columbia-county-border"
+          ]
+        },
+        {
+          "order": 3,
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "land_use_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>3. Your Land Use</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "radiofield": {
+                "key": "acres_owned_leased",
+                "private": false,
+                "required": true,
+                "prompt": "How many acres of land do you own/lease and actively farm or ranch on? (Choose one)",
+                "options": [
+                  {
+                    "label": "0-50 acres",
+                    "value": "0_50_acres"
+                  },
+                  {
+                    "label": "50-100 acres",
+                    "value": "50_100_acres"
+                  },
+                  {
+                    "label": "101-1,000 acres",
+                    "value": "101_1000_acres"
+                  },
+                  {
+                    "label": "1,001+ acres",
+                    "value": "1001_plus_acres"
+                  },
+                  {
+                    "label": "Prefer not to answer",
+                    "value": "no_answer"
+                  }
+                ]
+              }
+            },
+            {
+              "order": 3,
+              "checkboxfield": {
+                "key": "current_crops",
+                "private": false,
+                "required": true,
+                "prompt": "What crops are you currently growing, or have you previously (between 2011\u2014now) grown on your land? Choose all that apply.",
+                "options": [
+                  {
+                    "label": "Barley",
+                    "value": "barley"
+                  },
+                  {
+                    "label": "Spring Peas",
+                    "value": "spring_peas"
+                  },
+                  {
+                    "label": "Lentils",
+                    "value": "lentils"
+                  },
+                  {
+                    "label": "Spring Wheat",
+                    "value": "spring_wheat"
+                  },
+                  {
+                    "label": "Winter Wheat",
+                    "value": "winter_wheat"
+                  },
+                  {
+                    "label": "Alfalfa/Hay",
+                    "value": "alfalfa_hay"
+                  },
+                  {
+                    "label": "Beans",
+                    "value": "beans"
+                  },
+                  {
+                    "label": "Oilseed Crops",
+                    "value": "oilseed_crops"
+                  },
+                  {
+                    "label": "N/A",
+                    "value": "not_applicable"
+                  }
+                ]
+              }
+            },
+            {
+              "order": 4,
+              "textfield": {
+                "key": "other_crops",
+                "private": false,
+                "required": false,
+                "prompt": "Other (please explain)"
+              }
+            }
+          ],
+          "visible_layer_groups": [
+            "satellite",
+            "columbia-watersheds",
+            "columbia-county-border"
+          ]
+        },
+        {
+          "order": 4,
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "wetlands_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>4. Wetland Areas</h2><img style='height:150px;margin-left:16px;margin-top:16px;' src='/static/css/images/wetlands.jpg' alt='Wetlands' /><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px;font-size:0.9em'><p style='margin:0'><strong>Wetland areas</strong> are inundated or saturated by surface water or groundwater.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='font-size:0.9em;text-align:right'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/wetlands-legend.png' /></div></div></div>"
+              }
+            },
+            {
+              "order": 2,
+              "radiofield": {
+                "key": "private-property_on_wetlands",
+                "private": true,
+                "required": true,
+                "prompt": "Does your property lie on any wetlands?",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "label": "No",
+                    "value": "no"
+                  }
+                ]
+              }
+            }
+          ],
+          "visible_layer_groups": [
+            "satellite",
+            "columbia-wetlands",
+            "columbia-county-border"
+          ]
+        },
+        {
+          "order": 5,
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "frequently_flooded_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>5. Frequently Flooded Areas</h2><img style='height:150px;margin-left:16px;margin-top:16px;' src='/static/css/images/frequently-flooded.jpeg' alt='Frequently flooded areas' /><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px'><p style='margin:0;font-size:0.9em'><strong>Frequently flooded areas</strong> are subject to a 1% or greater chance of flooding every year.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em;text-align:right;'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/frequently-flooded-legend.png' /></div></div></div>"
+              }
+            },
+            {
+              "order": 2,
+              "radiofield": {
+                "key": "private-property_on_frequently_flooded",
+                "private": true,
+                "required": true,
+                "prompt": "Does your property lie on any frequently flooded areas?",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "label": "No",
+                    "value": "no"
+                  }
+                ]
+              }
+            }
+          ],
+          "visible_layer_groups": [
+            "satellite",
+            "columbia-frequently-flooded",
+            "columbia-county-border"
+          ]
+        },
+        {
+          "order": 6,
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "geologic_hazard_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>6. Severe Geologic Hazard Areas</h2><img style='height:150px;margin-left:16px;margin-top:16px;' src='/static/css/images/geologic-hazard.jpg' alt='Geologic hazard areas' /><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px'><p style='margin:0;font-size:0.9em'><strong>Severe geologic hazard areas</strong> are susceptible to erosion, sliding, earthquakes, and other events.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em;text-align:right;'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/geologic-hazard-legend.png' /></div></div></div>"
+              }
+            },
+            {
+              "order": 2,
+              "radiofield": {
+                "key": "private-property_on_geologic_hazard",
+                "private": true,
+                "required": true,
+                "prompt": "Does your property lie on any severe geologic hazard areas?",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "label": "No",
+                    "value": "no"
+                  }
+                ]
+              }
+            }
+          ],
+          "visible_layer_groups": [
+            "satellite",
+            "columbia-geologic-hazard",
+            "columbia-county-border"
+          ]
+        },
+        {
+          "order": 7,
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "critical_aquifer_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>7. Critical Aquifer Recharge Areas</h2><img style='height:150px;margin-left:16px;margin-top:16px;' src='/static/css/images/critical-aquifer.jpg' alt='Critical aquifer recharge areas' /><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px'><p style='margin:0;font-size:0.9em'><strong>Critical aquifer recharge areas</strong> have a critical effect on aquifers used for potable water.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='font-size:0.9em;text-align:right;'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/critical-aquifer-legend.png' /></div></div></div>"
+              }
+            },
+            {
+              "order": 2,
+              "radiofield": {
+                "key": "private-property_on_critical_aquifer",
+                "private": true,
+                "required": true,
+                "prompt": "Does your property lie on any critical aquifer recharge areas?",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "label": "No",
+                    "value": "no"
+                  }
+                ]
+              }
+            }
+          ],
+          "visible_layer_groups": [
+            "satellite",
+            "columbia-critical-aquifer",
+            "columbia-county-border"
+          ]
+        },
+        {
+          "order": 8,
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "critical_conservation_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>8. Critical Conservation Areas</h2><img style='height:150px;margin-left:16px;margin-top:16px;' src='/static/css/images/wildlife-conservation.jpeg' alt='Critical conservation areas' /><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px'><p style='margin:0;font-size:0.9em'><strong>Critical conservation areas</strong> are managed to maintain habitats of fish and wildlife.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='font-size:0.9em;text-align:right;'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/wildlife-conservation-legend.png' /></div></div></div>"
+              }
+            },
+            {
+              "order": 2,
+              "radiofield": {
+                "key": "private-property_on_critical_conservation",
+                "private": true,
+                "required": true,
+                "prompt": "Does your property lie on any critical conservation areas?",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "label": "No",
+                    "value": "no"
+                  }
+                ]
+              }
+            }
+          ],
+          "visible_layer_groups": [
+            "satellite",
+            "columbia-critical-conservation-areas",
+            "columbia-county-border"
+          ]
+        },
+        {
+          "order": 9,
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "tillage_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>9. Crop Practices</h2><p style='margin:8px 0 8px 0;font-size:1.2rem;font-style:italic;color:#555;'>Please fill out the form below to report your crop practices. If you do not farm your land, please proceed to the next section.</p>"
+              }
+            },
+            {
+              "order": 2,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "conservation_cover",
+                      "private": false,
+                      "required": false,
+                      "label": "Conservation cover",
+                      "prompt": "Do you participate in any conservation cover practices (establishing and maintaining long-term, permanent vegetative cover)?",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but interested in learning more",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "radiofield": {
+                      "key": "conservation_cover_date",
+                      "private": false,
+                      "required": true,
+                      "prompt": "When did you first implement conservation cover practices?",
+                      "options": [
+                        {
+                          "label": "Before July, 2011",
+                          "value": "pre-july-2011"
+                        },
+                        {
+                          "label": "After July, 2011",
+                          "value": "post-july-2011"
+                        }
+                      ]
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "numberfield": {
+                      "key": "conservation_cover_amount",
+                      "private": false,
+                      "required": false,
+                      "prompt": "On how many acres of cropland have you implemeted conservation cover practices (estimate used for reporting purposes only)?",
+                      "placeholder": "Approximate acreage",
+                      "minimum": 0,
+                      "units": "acres"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 3,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "cropland_pest_management",
+                      "private": false,
+                      "required": false,
+                      "label": "Integrated pest management on cropland",
+                      "prompt": "Do you participate in integrated pest management practices (a site-specific combination of pest prevention, pest avoidance, pest monitoring, and pest suppression strategies) on cropland?",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but interested in learning more",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "radiofield": {
+                      "key": "cropland_pest_management_date",
+                      "private": false,
+                      "required": true,
+                      "prompt": "When did you first implement integrated pest management practices on cropland?",
+                      "options": [
+                        {
+                          "label": "Before July, 2011",
+                          "value": "pre-july-2011"
+                        },
+                        {
+                          "label": "After July, 2011",
+                          "value": "post-july-2011"
+                        }
+                      ]
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "numberfield": {
+                      "key": "cropland_pest_management_amount",
+                      "private": false,
+                      "required": false,
+                      "prompt": "On how many acres of cropland have you implemented pest management practices (estimate used for reporting purposes only)?",
+                      "placeholder": "Approximate acreage",
+                      "minimum": 0,
+                      "units": "acres"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 4,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "cover_crop",
+                      "private": false,
+                      "required": false,
+                      "label": "Cover crop",
+                      "prompt": "Do you participate in any cover crop practices (using grasses, legumes, and leafy ground cover plants for seasonal vegetative cover)?",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but interested in learning more",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "radiofield": {
+                      "key": "cover_crop_date",
+                      "private": false,
+                      "required": true,
+                      "prompt": "When did you first implement cover crop practices?",
+                      "options": [
+                        {
+                          "label": "Before July, 2011",
+                          "value": "pre-july-2011"
+                        },
+                        {
+                          "label": "After July, 2011",
+                          "value": "post-july-2011"
+                        }
+                      ]
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "numberfield": {
+                      "key": "cover_crop_amount",
+                      "private": false,
+                      "required": false,
+                      "prompt": "On how many acres of cropland have you implemented cover crop practices (estimate used for reporting purposes only)?",
+                      "placeholder": "Approximate acreage",
+                      "minimum": 0,
+                      "units": "acres"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 5,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "crop_riparian_forest_buffer",
+                      "private": false,
+                      "required": false,
+                      "label": "Riparian forest buffer on cropland",
+                      "prompt": "Do you participate in having a riparian forest buffer (an area predominantly of suitable trees and/or shrubs planted along a stream, river, lake, or other water body) on cropland?",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but interested in learning more",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "radiofield": {
+                      "key": "crop_riparian_forest_buffer_date",
+                      "private": false,
+                      "required": true,
+                      "prompt": "When did you first implement riparian forest buffer practices on cropland?",
+                      "options": [
+                        {
+                          "label": "Before July, 2011",
+                          "value": "pre-july-2011"
+                        },
+                        {
+                          "label": "After July, 2011",
+                          "value": "post-july-2011"
+                        }
+                      ]
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "numberfield": {
+                      "key": "crop_riparian_forest_buffer_amount",
+                      "private": false,
+                      "required": false,
+                      "prompt": "How many feet of cropland riparian forest buffer have you implemented (estimate used for reporting purposes only)?",
+                      "placeholder": "Approximate footage",
+                      "minimum": 0,
+                      "units": "feet"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 6,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "residue_tillage_management",
+                      "private": false,
+                      "required": false,
+                      "label": "Residue and tillage management",
+                      "prompt": "Do you participate in residue and tillage management/reduced till (managing the amount, orientation, and distribution of crop and other plant residue on the soil surface year-round)?",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but interested in learning more",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "radiofield": {
+                      "key": "residue_tillage_management_date",
+                      "private": false,
+                      "required": true,
+                      "prompt": "When did you first implement residue and tillage management practices?",
+                      "options": [
+                        {
+                          "label": "Before July, 2011",
+                          "value": "pre-july-2011"
+                        },
+                        {
+                          "label": "After July, 2011",
+                          "value": "post-july-2011"
+                        }
+                      ]
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "numberfield": {
+                      "key": "residue_tillage_management_amount",
+                      "private": false,
+                      "required": false,
+                      "prompt": "On how many acres of cropland have you implemented residue and tillage management practices (estimate used for reporting purposes only)?",
+                      "placeholder": "Approximate acreage",
+                      "minimum": 0,
+                      "units": "acres"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 7,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "nutrient_management",
+                      "private": false,
+                      "required": false,
+                      "label": "Residue and tillage management",
+                      "prompt": "Do you participate in nutrient management (managing the amount, source, placement, and timing of plant nutrients and soil amendments)?",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but interested in learning more",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "radiofield": {
+                      "key": "nutrient_management_date",
+                      "private": false,
+                      "required": true,
+                      "prompt": "When did you first implement nutrient management practices?",
+                      "options": [
+                        {
+                          "label": "Before July, 2011",
+                          "value": "pre-july-2011"
+                        },
+                        {
+                          "label": "After July, 2011",
+                          "value": "post-july-2011"
+                        }
+                      ]
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "numberfield": {
+                      "key": "nutrient_management_amount",
+                      "private": false,
+                      "required": false,
+                      "prompt": "On how many acres of cropland have you implemented nutrient management practices (estimate used for reporting purposes only)?",
+                      "placeholder": "Approximate acreage",
+                      "minimum": 0,
+                      "units": "acres"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 8,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "crop_fencing",
+                      "private": false,
+                      "required": false,
+                      "label": "Fencing on cropland",
+                      "prompt": "Do you participate in fencing (a constructed barrier to protect animals or people) on cropland?",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but interested in learning more",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "radiofield": {
+                      "key": "crop_fencing_date",
+                      "private": false,
+                      "required": true,
+                      "prompt": "When did you first implement fencing on cropland?",
+                      "options": [
+                        {
+                          "label": "Before July, 2011",
+                          "value": "pre-july-2011"
+                        },
+                        {
+                          "label": "After July, 2011",
+                          "value": "post-july-2011"
+                        }
+                      ]
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "numberfield": {
+                      "key": "crop_fencing_amount",
+                      "private": false,
+                      "required": false,
+                      "prompt": "How many feet of cropland fencing have you implemented (estimate used for reporting purposes only)?",
+                      "placeholder": "Approximate footage",
+                      "minimum": 0,
+                      "units": "feet"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            }
+          ],
+          "visible_layer_groups": [
+            "satellite",
+            "columbia-input",
+            "columbia-county-border"
+          ]
+        },
+        {
+          "order": 10,
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "livestock_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>10. Livestock Practices</h2><p style='margin:8px 0 8px 0;font-size:1.2rem;font-style:italic;color:#555;'>Please fill out the form below to report your livestock practices. If you do not ranch your land, please proceed to the next section.</p>"
+              }
+            },
+            {
+              "order": 2,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "ranch_riparian_forest_buffer",
+                      "private": false,
+                      "required": false,
+                      "label": "Riparian forest buffer on ranchland",
+                      "prompt": "Do you participate in having a riparian forest buffer (an area predominantly of suitable trees and/or shrubs planted along a stream, river, lake, or other water body) on ranchland?",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but interested in learning more",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "radiofield": {
+                      "key": "ranch_riparian_forest_buffer_date",
+                      "private": false,
+                      "required": true,
+                      "prompt": "When did you first implement riparian forest buffer practices on ranchland?",
+                      "options": [
+                        {
+                          "label": "Before July, 2011",
+                          "value": "pre-july-2011"
+                        },
+                        {
+                          "label": "After July, 2011",
+                          "value": "post-july-2011"
+                        }
+                      ]
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "numberfield": {
+                      "key": "ranch_riparian_forest_buffer_amount",
+                      "private": false,
+                      "required": false,
+                      "prompt": "How many feet of ranchland riparian forest buffer have you implemented (estimate used for reporting purposes only)?",
+                      "placeholder": "Approximate footage",
+                      "minimum": 0,
+                      "units": "feet"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 3,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "ranch_fencing",
+                      "private": false,
+                      "required": false,
+                      "label": "Fencing on ranchland",
+                      "prompt": "Do you participate in fencing (a constructed barrier to protect animals or people) on ranchland?",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but interested in learning more",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "radiofield": {
+                      "key": "ranch_fencing_date",
+                      "private": false,
+                      "required": true,
+                      "prompt": "When did you first implement fencing on ranchland?",
+                      "options": [
+                        {
+                          "label": "Before July, 2011",
+                          "value": "pre-july-2011"
+                        },
+                        {
+                          "label": "After July, 2011",
+                          "value": "post-july-2011"
+                        }
+                      ]
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "numberfield": {
+                      "key": "ranch_fencing_amount",
+                      "private": false,
+                      "required": false,
+                      "prompt": "How many feet of ranchland fencing have you implemented (estimate used for reporting purposes only)?",
+                      "placeholder": "Approximate footage",
+                      "minimum": 0,
+                      "units": "feet"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 4,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "stream_habitat_improvement",
+                      "private": false,
+                      "required": false,
+                      "label": "Stream habitat improvement and management",
+                      "prompt": "Do you participate in stream habitat improvement and management (maintaining, improving, or restoring physical, chemical and biological functions of a stream and its associated riparian zone)?",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but interested in learning more",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "radiofield": {
+                      "key": "stream_habitat_improvement_date",
+                      "private": false,
+                      "required": true,
+                      "prompt": "When did you first implement stream habitat improvement?",
+                      "options": [
+                        {
+                          "label": "Before July, 2011",
+                          "value": "pre-july-2011"
+                        },
+                        {
+                          "label": "After July, 2011",
+                          "value": "post-july-2011"
+                        }
+                      ]
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "numberfield": {
+                      "key": "stream_habitat_improvement_amount",
+                      "private": false,
+                      "required": false,
+                      "prompt": "How many feet of ranchland stream habitat improvement have you implemented (estimate used for reporting purposes only)?",
+                      "placeholder": "Approximate footage",
+                      "minimum": 0,
+                      "units": "feet"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 5,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "livestock_grazing",
+                      "private": false,
+                      "required": false,
+                      "label": "Livestock grazing",
+                      "prompt": "Do you participate in livestock grazing (managing the harvest of vegetation with grazing and/or browsing animals and soil amendments)?",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but interested in learning more",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "radiofield": {
+                      "key": "livestock_grazing_date",
+                      "private": false,
+                      "required": true,
+                      "prompt": "When did you first participate in livestock grazing?",
+                      "options": [
+                        {
+                          "label": "Before July, 2011",
+                          "value": "pre-july-2011"
+                        },
+                        {
+                          "label": "After July, 2011",
+                          "value": "post-july-2011"
+                        }
+                      ]
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "numberfield": {
+                      "key": "livestock_grazing_amount",
+                      "private": false,
+                      "required": false,
+                      "prompt": "On how many acres of ranchland have you implemented livestock grazing practices (estimate used for reporting purposes only)?",
+                      "placeholder": "Approximate acreage",
+                      "minimum": 0,
+                      "units": "acres"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 6,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "watering_facility",
+                      "private": false,
+                      "required": false,
+                      "label": "Watering facility",
+                      "prompt": "Do you participate in having a watering facility? (a means of providing a controlled water source to livestock or wildlife)?",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        },
+                        {
+                          "label": "No, but interested in learning more",
+                          "value": "interested"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "radiofield": {
+                      "key": "watering_facility_date",
+                      "private": false,
+                      "required": true,
+                      "prompt": "When did you first participate in having a watering facility?",
+                      "options": [
+                        {
+                          "label": "Before July, 2011",
+                          "value": "pre-july-2011"
+                        },
+                        {
+                          "label": "After July, 2011",
+                          "value": "post-july-2011"
+                        }
+                      ]
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "numberfield": {
+                      "key": "watering_facility_amount",
+                      "private": false,
+                      "required": false,
+                      "prompt": "How many water facilities have you implemented (estimate used for reporting purposes only)?",
+                      "placeholder": "Approximate number",
+                      "minimum": 0,
+                      "units": "watering facilities"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            }
+          ],
+          "visible_layer_groups": [
+            "satellite",
+            "columbia-input",
+            "columbia-county-border"
+          ]
+        },
+        {
+          "order": 11,
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "other",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>11. Other Conservation Practices</h2><p style='margin:8px 0 8px 0;font-size:1.2rem;font-style:italic;color:#555;'>Are there any additional Conservation Practices you participate in that weren\u2019t listed within the survey? Please list them here, with the year implemented, in the space provided.</p>"
+              }
+            },
+            {
+              "order": 2,
+              "textareafield": {
+                "key": "other_practices_description",
+                "private": false,
+                "required": false,
+                "prompt": "Please describe your other Conservation Practices:",
+                "placeholder": "Description and year implemented"
+              }
+            }
+          ],
+          "visible_layer_groups": [
+            "satellite",
+            "columbia-input",
+            "columbia-county-border"
+          ]
+        },
+        {
+          "order": 12,
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "additional_info_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>12. Almost completed!</h2><p style='font-size:1.2rem'><strong>Thank you for taking the time to voluntarily report your stewardship practices.</strong></p>"
+              }
+            },
+            {
+              "order": 2,
+              "radiofield": {
+                "key": "funding_sources",
+                "private": false,
+                "required": true,
+                "prompt": "For the conservation practices you currently participate in, what are your funding sources?",
+                "options": [
+                  {
+                    "label": "Federal funding sources",
+                    "value": "federal_funding"
+                  },
+                  {
+                    "label": "State funding sources",
+                    "value": "state_funding"
+                  },
+                  {
+                    "label": "Private funding sources",
+                    "value": "private_funding"
+                  },
+                  {
+                    "label": "Mixed funding sources",
+                    "value": "mixed_funding"
+                  }
+                ]
+              }
+            },
+            {
+              "order": 3,
+              "textareafield": {
+                "key": "desired_outcome",
+                "private": false,
+                "required": true,
+                "prompt": "Through this survey, what would you like to gain? Are you interested in learning about funding options, available technical assistance, or other Conservation Practices available to you? Please be as detailed as possible."
+              }
+            },
+            {
+              "order": 4,
+              "filefield": {
+                "key": "my_image",
+                "private": false,
+                "required": false,
+                "label": "Upload photos",
+                "prompt": "Show your conservation practices! Upload photos before, during, or after you implemented your stewardship practices:"
+              }
+            },
+            {
+              "order": 5,
+              "textfield": {
+                "key": "private-landowner_name",
+                "private": true,
+                "required": true,
+                "prompt": "What is your name?",
+                "placeholder": "Your name will only be shared if you are logged in"
+              }
+            },
+            {
+              "order": 6,
+              "radiofield": {
+                "key": "private-use_photos",
+                "private": true,
+                "required": true,
+                "prompt": "Can Columbia County VSP highlight your photos on our website?",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "label": "No",
+                    "value": "no",
+                    "default": true
+                  }
+                ]
+              }
+            },
+            {
+              "order": 7,
+              "textfield": {
+                "key": "private-landowner_email",
+                "private": true,
+                "required": true,
+                "prompt": "What is your email address? (Your email address will be used for reporting purposes only, and will never be made public.)",
+                "placeholder": "Your email address will never be made public",
+                "variant": "EM"
+              }
+            },
+            {
+              "order": 8,
+              "textfield": {
+                "key": "private-landowner_phone",
+                "private": true,
+                "required": true,
+                "prompt": "What is your phone number? (Your phone number will be used for reporting purposes only, and will never be made public.)",
+                "placeholder": "Your phone number will never be made public",
+                "variant": "PH"
+              }
+            },
+            {
+              "order": 9,
+              "radiofield": {
+                "key": "private",
+                "private": false,
+                "required": false,
+                "prompt": "Would you be willing to share your stewardship story with the public? Checking \"yes\" below will place a pin on the map upon submission and your stewardship actions will be visible to the public.",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "no"
+                  },
+                  {
+                    "label": "No",
+                    "value": "yes",
+                    "default": true,
+                    "make_private": true
+                  }
+                ]
+              }
+            },
+            {
+              "order": 10,
+              "submitbuttonmodule": {
+                "label": "Submit!"
+              }
+            }
+          ],
+          "visible_layer_groups": [
+            "satellite",
+            "columbia-input",
+            "columbia-county-border"
           ]
         }
       ]
@@ -7770,6 +9138,114 @@
   ],
   "group_visibility_triggers": [
     {
+      "form": "columbia-input-form",
+      "stage_order": 9,
+      "group_order": 2,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "columbia-input-form",
+      "stage_order": 9,
+      "group_order": 3,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "columbia-input-form",
+      "stage_order": 9,
+      "group_order": 4,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "columbia-input-form",
+      "stage_order": 9,
+      "group_order": 5,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "columbia-input-form",
+      "stage_order": 9,
+      "group_order": 6,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "columbia-input-form",
+      "stage_order": 9,
+      "group_order": 7,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "columbia-input-form",
+      "stage_order": 9,
+      "group_order": 8,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "columbia-input-form",
+      "stage_order": 10,
+      "group_order": 2,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "columbia-input-form",
+      "stage_order": 10,
+      "group_order": 3,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "columbia-input-form",
+      "stage_order": 10,
+      "group_order": 4,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "columbia-input-form",
+      "stage_order": 10,
+      "group_order": 5,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "columbia-input-form",
+      "stage_order": 10,
+      "group_order": 6,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
       "form": "kittitas-firewise-input",
       "stage_order": 9,
       "group_order": 2,
@@ -8644,6 +10120,11 @@
       "display_name": "snohomish-cd",
       "slug": "snohomish-cd",
       "forms": ["snohomish-input-form", "snohomish-featured-form"]
+    },
+    {
+      "display_name": "columbia-vsp",
+      "slug": "columbia-vsp",
+      "forms": ["columbia-input-form"]
     },
     {
       "display_name": "mississippi",
