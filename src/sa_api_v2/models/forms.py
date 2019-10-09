@@ -328,7 +328,7 @@ class FormField(RelatedFormModule):
     )
     prompt = models.CharField(
         blank=True,
-        max_length=255,
+        max_length=512,
         default="",
         help_text="Some helpful text to guide the user on how to fill out this field (eg: \"What is your project idea?\")",
     )
