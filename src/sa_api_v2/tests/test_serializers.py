@@ -581,6 +581,10 @@ class TestFlavorDeserializer (TestCase):
                                               owner_id=cls.owner.id)
         cls.dataset6 = DataSet.objects.create(slug='kittitas-vsp-input',
                                               owner_id=cls.owner.id)
+        DataSet.objects.create(slug='snohomish-featured',
+                                              owner_id=cls.owner.id)
+        DataSet.objects.create(slug='snohomish-input',
+                                              owner_id=cls.owner.id)
         pbdurham_projects = DataSet.objects.create(slug='pbdurham-projects',
                                               owner_id=cls.owner.id)
         Group.objects.create(

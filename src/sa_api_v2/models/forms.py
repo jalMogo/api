@@ -463,6 +463,11 @@ class CheckboxField(FormField):
 
 class TextAreaField(FormField):
     placeholder = models.CharField(**placeholder_kwargs)
+    rich_text = models.BooleanField(
+        default=False,
+        blank=True,
+        help_text="Determines whether the field allows for rich text input.",
+    )
 
     def summary(self):
         return "textarea field with prompt: \"{}\"".format(self.prompt)
@@ -843,7 +848,7 @@ class CheckboxOption(FormFieldOption):
 
 class RadioOption(FormFieldOption):
     label = models.CharField(
-        max_length=127,
+        max_length=255,
         help_text="For display purposes only. This is how the option will be presented on the form, or labelled in a submission summary.",
     )
     value = models.CharField(

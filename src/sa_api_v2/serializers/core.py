@@ -928,7 +928,7 @@ class AddressFieldModuleSerializer (BaseFormFieldSerializer):
 class TextAreaFieldModuleSerializer (BaseFormFieldSerializer):
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.TextAreaField
-        fields = BaseFormFieldSerializer.Meta.fields + ['placeholder']
+        fields = BaseFormFieldSerializer.Meta.fields + ['placeholder', 'rich_text']
 
 
 class TextFieldModuleSerializer (BaseFormFieldSerializer):
