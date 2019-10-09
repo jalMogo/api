@@ -3645,13 +3645,6 @@
                 "placeholder": "Your address will never be shared",
                 "reverse_geocode": true
               }
-            },
-            {
-              "order": 5,
-              "htmlmodule": {
-                "label": "wetlands_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>2. Wetland Areas</h2>"
-              }
             }
           ],
           "visible_layer_groups": [
@@ -3666,12 +3659,19 @@
             {
               "order": 1,
               "htmlmodule": {
+                "label": "wetlands_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>2. Wetland Areas</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
                 "label": "wetlands_information",
                 "content": "<img style='height:150px;margin-left:16px;' src='/static/css/images/wetlands.jpg' alt='Wetlands' /><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px;font-size:0.9em'><p style='margin:0'><strong>Wetland areas</strong> are inundated or saturated by surface water or groundwater.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='font-size:0.9em;text-align:right'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/wetlands-legend.png' /></div></div></div>"
               }
             },
             {
-              "order": 2,
+              "order": 3,
               "radiofield": {
                 "key": "private-property_on_wetlands",
                 "private": true,
@@ -3690,17 +3690,10 @@
               }
             },
             {
-              "order": 3,
+              "order": 4,
               "htmlmodule": {
                 "label": "wetlands_disclaimer",
                 "content": "<p style='font-size:0.9rem;color:#777'><em>The wetlands data is supplied by US Fish & Wildlife Service through their National Wetlands Inventory. Their maps are prepared from the analysis of high altitude imagery. Wetlands are identified based on vegetation, visible hydrology and geography. A margin of error is inherent in the use of imagery. Landowners interested in an on-the-ground assessment to confirm the presence of these mapped wetlands for the purposes of the Voluntary Stewardship Program are encouraged to contact the KCCD.</em></p>"
-              }
-            },
-            {
-              "order": 4,
-              "htmlmodule": {
-                "label": "frequently_flooded_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>3. Frequently Flooded Areas</h2>"
               }
             }
           ],
@@ -3716,12 +3709,19 @@
             {
               "order": 1,
               "htmlmodule": {
+                "label": "frequently_flooded_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>3. Frequently Flooded Areas</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
                 "label": "frequently_flooded_information",
                 "content": "<img style='height:150px;margin-left:16px;' src='/static/css/images/frequently-flooded.jpg' alt='Frequently flooded areas' /><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px'><p style='margin:0;font-size:0.9em'><strong>Frequently flooded areas</strong> are subject to a 1% or greater chance of flooding every year.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em;text-align:right;'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/frequently-flooded-legend.png' /></div></div></div>"
               }
             },
             {
-              "order": 2,
+              "order": 3,
               "radiofield": {
                 "key": "private-property_on_frequently_flooded",
                 "private": true,
@@ -3740,17 +3740,10 @@
               }
             },
             {
-              "order": 3,
+              "order": 4,
               "htmlmodule": {
                 "label": "frequently_flooded_disclaimer",
                 "content": "<p style='font-size:0.9rem;color:#777'><em>Frequently flood areas on this map are a combination of the Federal Emergency Management Agency (FEMA) flood insurance rate map (FIRM) designated 100- year floodplain and floodway.</em></p>"
-              }
-            },
-            {
-              "order": 4,
-              "htmlmodule": {
-                "label": "geologic_hazard_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>4. Severe Geologic Hazard Areas</h2>"
               }
             }
           ],
@@ -3766,12 +3759,19 @@
             {
               "order": 1,
               "htmlmodule": {
+                "label": "geologic_hazard_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>4. Severe Geologic Hazard Areas</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
                 "label": "geologic_hazard_information",
                 "content": "<img style='height:150px;margin-left:16px;' src='/static/css/images/geologic-hazard-area.jpg' alt='Geologic hazard areas' /><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px'><p style='margin:0;font-size:0.9em'><strong>Severe geologic hazard areas</strong> are susceptible to erosion, sliding, earthquakes, and other events.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em;text-align:right;'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/geologic-hazard-legend.png' /></div></div></div>"
               }
             },
             {
-              "order": 2,
+              "order": 3,
               "radiofield": {
                 "key": "private-property_on_geologic_hazard",
                 "private": true,
@@ -3790,17 +3790,10 @@
               }
             },
             {
-              "order": 3,
+              "order": 4,
               "htmlmodule": {
                 "label": "geologic_hazard_disclaimer",
                 "content": "<p style='font-size:0.9rem;color:#777'><em>The data displayed on this map includes soil types with a slope of 25% or greater as an approximation of areas where geologic hazards may exist. For more detailed information on geologic hazards contact the KCCD.</em></p>"
-              }
-            },
-            {
-              "order": 4,
-              "htmlmodule": {
-                "label": "critical_aquifer_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>5. Critical Aquifer Recharge Areas</h2>"
               }
             }
           ],
@@ -3816,12 +3809,19 @@
             {
               "order": 1,
               "htmlmodule": {
+                "label": "critical_aquifer_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>5. Critical Aquifer Recharge Areas</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
                 "label": "critical_aquifer_information",
                 "content": "<img style='height:150px;margin-left:16px;' src='/static/css/images/critical-aquifer-recharge.jpg' alt='Critical aquifer recharge areas' /><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px'><p style='margin:0;font-size:0.9em'><strong>Critical aquifer recharge areas</strong> have a critical effect on aquifers used for potable water.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='font-size:0.9em;text-align:right;'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/critical-aquifer-legend.png' /></div></div></div>"
               }
             },
             {
-              "order": 2,
+              "order": 3,
               "radiofield": {
                 "key": "private-property_on_critical_aquifer",
                 "private": true,
@@ -3840,17 +3840,10 @@
               }
             },
             {
-              "order": 3,
+              "order": 4,
               "htmlmodule": {
                 "label": "critical_aquifer_disclaimer",
                 "content": "<p style='font-size:0.9rem;color:#777'><em>Kittitas County does not currently have a designated critical aquifer recharge area, however wellhead protection for public water systems is an important component of the larger effort to protect aquifers used for potable water. The data shown here are the Group A and Group B wells with a 600 foot to 10,000 foot buffer depending on the number of connections allowed. For additional information on Critical Aquifer Recharge Areas, contact the KCCD.</em></p>"
-              }
-            },
-            {
-              "order": 4,
-              "htmlmodule": {
-                "label": "fish_wildlife_habitat_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>6. Fish & Wildlife Habitat</h2>"
               }
             }
           ],
@@ -3866,12 +3859,19 @@
             {
               "order": 1,
               "htmlmodule": {
+                "label": "fish_wildlife_habitat_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>6. Fish & Wildlife Habitat</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
                 "label": "fish_wildlife_habitat_information",
                 "content": "<img style='height:150px;margin-left:16px;' src='/static/css/images/fish-wildlife-habitat.jpg' alt='Fish and wildlife conservation areas' /><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px;font-size:0.9em;'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em>Description</em></div><div style='flex:6;margin-left:24px'><p style='margin:0;'><strong>Fish & wildlife habitats</strong> are managed to maintain populations of fish and wildlife. Zoom the map to explore which species live in your area.</p></div></div><div style='display:flex;align-items:center;margin-bottom:16px;'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='text-align:right;font-size:0.9em;'>Appearance on map</em></div><div style='flex:1;margin-left:24px'><img style='width:48px' src='/static/css/images/wildlife-conservation-legend.png' /></div><div style='flex:4;'><em style='font-size:0.9em;'>Priority habitats: areas with unique or significant value to many species</em></div></div><div style='display:flex;align-items:center;'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='text-align:right;font-size:0.9em;'> </em></div><div style='flex:1;margin-left:24px'><img style='width:48px' src='/static/css/images/waterways-legend.png' /></div><div style='flex:4;'><em style='font-size:0.9em;'>Fish-bearing waterways: creeks and rivers that are priority habitats for Summer Steelhead, Spring Chinook, Coho, Dolly Varden/Bull Trout, Westslope Cutthroat, Mountain Sucker, or Rainbow Trout</em></div></div></div></div>"
               }
             },
             {
-              "order": 2,
+              "order": 3,
               "radiofield": {
                 "key": "private-property_on_fish_wildlife_habitat",
                 "private": true,
@@ -3890,17 +3890,10 @@
               }
             },
             {
-              "order": 3,
-              "htmlmodule": {
-                "label": "fish_wildlife_habitat_disclaimer",
-                "content": "<p style='font-size:0.9rem;color:#777'><em>The Fish and Wildlife Conservation areas are provided by the Washington State Department of Fish and Wildlife\u2019s Priority Habitats and Species (PHS) Program. For more specific information on habitats or species on or near your property, contact the KCCD.</em></p>"
-              }
-            },
-            {
               "order": 4,
               "htmlmodule": {
-                "label": "water_use_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>7. Water Use Efficiency</h2>"
+                "label": "fish_wildlife_habitat_disclaimer",
+                "content": "<p style='font-size:0.9rem;color:#777'><em>The Fish and Wildlife Conservation areas are provided by the Washington State Department of Fish and Wildlife's Priority Habitats and Species (PHS) Program. For more specific information on habitats or species on or near your property, contact the KCCD.</em></p>"
               }
             }
           ],
@@ -3916,18 +3909,25 @@
             {
               "order": 1,
               "htmlmodule": {
+                "label": "water_use_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>7. Water Use Efficiency</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
                 "label": "water_user_information",
                 "content": "<p style='margin:8px 0 8px 0;font-size:1.2rem;font-style:italic;color:#555;'>Please fill out the form below to report your water use practices.</p>"
               }
             },
             {
-              "order": 2,
+              "order": 3,
               "skipstagemodule": {
                 "label": "This section is not relevant to me. Proceed to next section. \uf061"
               }
             },
             {
-              "order": 3,
+              "order": 4,
               "groupmodule": {
                 "modules": [
                   {
@@ -3984,7 +3984,7 @@
               }
             },
             {
-              "order": 4,
+              "order": 5,
               "groupmodule": {
                 "modules": [
                   {
@@ -4041,7 +4041,7 @@
               }
             },
             {
-              "order": 5,
+              "order": 6,
               "groupmodule": {
                 "modules": [
                   {
@@ -4098,7 +4098,7 @@
               }
             },
             {
-              "order": 6,
+              "order": 7,
               "groupmodule": {
                 "modules": [
                   {
@@ -4155,7 +4155,7 @@
               }
             },
             {
-              "order": 7,
+              "order": 8,
               "groupmodule": {
                 "modules": [
                   {
@@ -4212,7 +4212,7 @@
               }
             },
             {
-              "order": 8,
+              "order": 9,
               "groupmodule": {
                 "modules": [
                   {
@@ -4222,7 +4222,7 @@
                       "private": false,
                       "required": false,
                       "label": "Irrigation scheduling",
-                      "prompt": "Irrigation scheduling \u2013 monitoring soil moisture and adjusting water applications accordingly",
+                      "prompt": "Irrigation scheduling - monitoring soil moisture and adjusting water applications accordingly",
                       "options": [
                         {
                           "label": "Yes",
@@ -4267,13 +4267,6 @@
                   }
                 ]
               }
-            },
-            {
-              "order": 9,
-              "htmlmodule": {
-                "label": "soil_management",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>8. Soil Health & Erosion Management</h2>"
-              }
             }
           ],
           "visible_layer_groups": [
@@ -4288,18 +4281,25 @@
             {
               "order": 1,
               "htmlmodule": {
+                "label": "soil_management",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>8. Soil Health & Erosion Management</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
                 "label": "soil_management_information",
                 "content": "<p style='margin:8px 0 8px 0;font-size:1.2rem;font-style:italic;color:#555;'>Please fill out the form below to report your soil health and erosion management practices.</p>"
               }
             },
             {
-              "order": 2,
+              "order": 3,
               "skipstagemodule": {
                 "label": "This section is not relevant to me. Proceed to next section. \uf061"
               }
             },
             {
-              "order": 3,
+              "order": 4,
               "groupmodule": {
                 "modules": [
                   {
@@ -4356,7 +4356,7 @@
               }
             },
             {
-              "order": 4,
+              "order": 5,
               "groupmodule": {
                 "modules": [
                   {
@@ -4413,7 +4413,7 @@
               }
             },
             {
-              "order": 5,
+              "order": 6,
               "groupmodule": {
                 "modules": [
                   {
@@ -4470,7 +4470,7 @@
               }
             },
             {
-              "order": 6,
+              "order": 7,
               "groupmodule": {
                 "modules": [
                   {
@@ -4527,7 +4527,7 @@
               }
             },
             {
-              "order": 7,
+              "order": 8,
               "groupmodule": {
                 "modules": [
                   {
@@ -4584,17 +4584,10 @@
               }
             },
             {
-              "order": 8,
+              "order": 9,
               "htmlmodule": {
                 "label": "web_soil_survey_info",
                 "content": "<p style='margin-top:40px;'>Would you like to learn more about your soils? Go to USDA's <a target='_blank' href='https://websoilsurvey.sc.egov.usda.gov/App/HomePage.htm'>Web Soil Survey</a> (survey will open in a new tab).</p>"
-              }
-            },
-            {
-              "order": 9,
-              "htmlmodule": {
-                "label": "nutrient_management_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>9. Nutrient Management</h2>"
               }
             }
           ],
@@ -4610,18 +4603,25 @@
             {
               "order": 1,
               "htmlmodule": {
+                "label": "nutrient_management_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>9. Nutrient Management</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
                 "label": "nutrient_management_information",
                 "content": "<p style='margin:8px 0 8px 0;font-size:1.2rem;font-style:italic;color:#555;'>Please fill out the form below to report your nutrient management practices.</p>"
               }
             },
             {
-              "order": 2,
+              "order": 3,
               "skipstagemodule": {
                 "label": "This section is not relevant to me. Proceed to next section. \uf061"
               }
             },
             {
-              "order": 3,
+              "order": 4,
               "groupmodule": {
                 "modules": [
                   {
@@ -4678,7 +4678,7 @@
               }
             },
             {
-              "order": 4,
+              "order": 5,
               "groupmodule": {
                 "modules": [
                   {
@@ -4733,13 +4733,6 @@
                   }
                 ]
               }
-            },
-            {
-              "order": 5,
-              "htmlmodule": {
-                "label": "range_management",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>10. Range Management</h2>"
-              }
             }
           ],
           "visible_layer_groups": [
@@ -4754,18 +4747,25 @@
             {
               "order": 1,
               "htmlmodule": {
+                "label": "range_management",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>10. Range Management</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
                 "label": "range_management_information",
                 "content": "<p style='margin:8px 0 8px 0;font-size:1.2rem;font-style:italic;color:#555;'>Please fill out the form below to report your range management practices.</p>"
               }
             },
             {
-              "order": 2,
+              "order": 3,
               "skipstagemodule": {
                 "label": "This section is not relevant to me. Proceed to next section. \uf061"
               }
             },
             {
-              "order": 3,
+              "order": 4,
               "groupmodule": {
                 "modules": [
                   {
@@ -4822,7 +4822,7 @@
               }
             },
             {
-              "order": 4,
+              "order": 5,
               "groupmodule": {
                 "modules": [
                   {
@@ -4879,7 +4879,7 @@
               }
             },
             {
-              "order": 5,
+              "order": 6,
               "groupmodule": {
                 "modules": [
                   {
@@ -4935,7 +4935,7 @@
               }
             },
             {
-              "order": 6,
+              "order": 7,
               "groupmodule": {
                 "modules": [
                   {
@@ -4991,7 +4991,7 @@
               }
             },
             {
-              "order": 7,
+              "order": 8,
               "groupmodule": {
                 "modules": [
                   {
@@ -5045,13 +5045,6 @@
                   }
                 ]
               }
-            },
-            {
-              "order": 8,
-              "htmlmodule": {
-                "label": "pest_management_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>11. Pest Management</h2>"
-              }
             }
           ],
           "visible_layer_groups": [
@@ -5066,18 +5059,25 @@
             {
               "order": 1,
               "htmlmodule": {
+                "label": "pest_management_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>11. Pest Management</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
                 "label": "pest_management_information",
                 "content": "<p style='margin:8px 0 8px 0;font-size:1.2rem;font-style:italic;color:#555;'>Please fill out the form below to report your pest management practices.</p>"
               }
             },
             {
-              "order": 2,
+              "order": 3,
               "skipstagemodule": {
                 "label": "This section is not relevant to me. Proceed to next section. \uf061"
               }
             },
             {
-              "order": 3,
+              "order": 4,
               "groupmodule": {
                 "modules": [
                   {
@@ -5134,7 +5134,7 @@
               }
             },
             {
-              "order": 4,
+              "order": 5,
               "groupmodule": {
                 "modules": [
                   {
@@ -5189,13 +5189,6 @@
                   }
                 ]
               }
-            },
-            {
-              "order": 5,
-              "htmlmodule": {
-                "label": "fish_wildlife_management",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>12. Fish & Wildlife Management</h2>"
-              }
             }
           ],
           "visible_layer_groups": [
@@ -5210,18 +5203,25 @@
             {
               "order": 1,
               "htmlmodule": {
+                "label": "fish_wildlife_management",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>12. Fish & Wildlife Management</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
                 "label": "fish_wildlife_management_information",
                 "content": "<p style='margin:8px 0 8px 0;font-size:1.2rem;font-style:italic;color:#555;'>Please fill out the form below to report your fish & wildlife management practices.</p>"
               }
             },
             {
-              "order": 2,
+              "order": 3,
               "skipstagemodule": {
                 "label": "This section is not relevant to me. Proceed to next section. \uf061"
               }
             },
             {
-              "order": 3,
+              "order": 4,
               "groupmodule": {
                 "modules": [
                   {
@@ -5278,7 +5278,7 @@
               }
             },
             {
-              "order": 4,
+              "order": 5,
               "groupmodule": {
                 "modules": [
                   {
@@ -5335,7 +5335,7 @@
               }
             },
             {
-              "order": 5,
+              "order": 6,
               "groupmodule": {
                 "modules": [
                   {
@@ -5392,7 +5392,7 @@
               }
             },
             {
-              "order": 6,
+              "order": 7,
               "groupmodule": {
                 "modules": [
                   {
@@ -5449,7 +5449,7 @@
               }
             },
             {
-              "order": 7,
+              "order": 8,
               "groupmodule": {
                 "modules": [
                   {
@@ -5506,7 +5506,7 @@
               }
             },
             {
-              "order": 8,
+              "order": 9,
               "groupmodule": {
                 "modules": [
                   {
@@ -5563,7 +5563,7 @@
               }
             },
             {
-              "order": 9,
+              "order": 10,
               "groupmodule": {
                 "modules": [
                   {
@@ -5620,7 +5620,7 @@
               }
             },
             {
-              "order": 10,
+              "order": 11,
               "groupmodule": {
                 "modules": [
                   {
@@ -5675,13 +5675,6 @@
                   }
                 ]
               }
-            },
-            {
-              "order": 11,
-              "htmlmodule": {
-                "label": "other_practices_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>13. Other VSP Practices</h2>"
-              }
             }
           ],
           "visible_layer_groups": [
@@ -5695,19 +5688,19 @@
           "modules": [
             {
               "order": 1,
+              "htmlmodule": {
+                "label": "other_practices_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>13. Other VSP Practices</h2>"
+              }
+            },
+            {
+              "order": 2,
               "textareafield": {
                 "key": "other_practices",
                 "private": false,
                 "required": false,
                 "prompt": "Use this space to describe any other stewardship practices you have completed. If you can, please include approximate acreage or footage and approximate start date:",
                 "placeholder": "Description, acreage or footage, and approximate start date:"
-              }
-            },
-            {
-              "order": 2,
-              "htmlmodule": {
-                "label": "additional_info_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>14. Almost completed!</h2>"
               }
             }
           ],
@@ -5723,12 +5716,19 @@
             {
               "order": 1,
               "htmlmodule": {
+                "label": "additional_info_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>14. Almost completed!</h2>"
+              }
+            },
+            {
+              "order": 2,
+              "htmlmodule": {
                 "label": "additional_info",
                 "content": "<p><strong>Thank you for taking the time to voluntarily report your stewardship practices.</strong></p><p>This page will determine how your information is shared.  We will report all practices at the watershed scale, but if you are interested in having your project showcased you can give us permission below.  Either way, we will be using your stewardship practice to capture how agriculture is protecting and/or restoring critical areas and maintaining the viability of agriculture.</p>"
               }
             },
             {
-              "order": 2,
+              "order": 3,
               "filefield": {
                 "key": "my_image",
                 "private": false,
@@ -5738,7 +5738,7 @@
               }
             },
             {
-              "order": 3,
+              "order": 4,
               "textareafield": {
                 "key": "practices_description",
                 "private": false,
@@ -5747,7 +5747,7 @@
               }
             },
             {
-              "order": 4,
+              "order": 5,
               "textfield": {
                 "key": "private-landowner_name",
                 "private": true,
@@ -5757,7 +5757,7 @@
               }
             },
             {
-              "order": 5,
+              "order": 6,
               "radiofield": {
                 "key": "private-use_photos",
                 "private": true,
@@ -5777,7 +5777,7 @@
               }
             },
             {
-              "order": 6,
+              "order": 7,
               "radiofield": {
                 "key": "private",
                 "private": false,
@@ -5798,7 +5798,7 @@
               }
             },
             {
-              "order": 7,
+              "order": 8,
               "textfield": {
                 "key": "private-landowner_email",
                 "private": true,
@@ -5807,29 +5807,1962 @@
                 "placeholder": "Your email address will never be shared",
                 "variant": "EM"
               }
-            },
-            {
-              "order": 8,
-              "textfield": {
-                "key": "private-landowner_phone",
-                "private": true,
-                "required": true,
-                "prompt": "What is your phone number?",
-                "placeholder": "Your phone number will never be shared",
-                "variant": "PH"
-              }
-            },
-            {
-              "order": 9,
-              "submitbuttonmodule": {
-                "label": "Submit!"
-              }
             }
           ],
           "visible_layer_groups": [
             "satellite",
             "kittitas-vsp-input",
             "kittitas-county-outline"
+          ]
+        }
+      ]
+    },
+    {
+      "dataset": "snohomish-featured",
+      "label": "snohomish-featured-form",
+      "icon": "/static/css/images/markers/map-pin-star-marker.png",
+      "stages": [
+        {
+          "order": 1,
+          "modules": [
+            {
+              "order": 1,
+              "textfield": {
+                "key": "title",
+                "private": false,
+                "required": true,
+                "prompt": "Title of this featured site:",
+                "placeholder": "Enter title..."
+              }
+            },
+            {
+              "order": 2,
+              "textareafield": {
+                "key": "description",
+                "private": false,
+                "required": true,
+                "prompt": "Description:",
+                "placeholder": " ",
+                "rich_text": true
+              }
+            },
+            {
+              "order": 3,
+              "submitbuttonmodule": {
+                "label": "Submit my project"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "dataset": "snohomish-input",
+      "label": "snohomish-input-form",
+      "icon": "/static/css/images/markers/map-pin-marker.png",
+      "stages": [
+        {
+          "order": 1,
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
+                "label": "location-information",
+                "content": "<h3 class=\"map-drag-header\">You may drag the map to set your location.</h3><h3 class=\"map-drag-header\">Or, you may enter your address:</h3>"
+              }
+            },
+            {
+              "order": 2,
+              "addressfield": {
+                "key": "private-address",
+                "private": true,
+                "required": true,
+                "prompt": " ",
+                "placeholder": "Enter your address",
+                "reverse_geocode": true
+              }
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "modules": [
+            {
+              "order": 1,
+              "skipstagemodule": {
+                "label": "I don't live on a farm -- Proceed to next screen (Page 2 of 6)"
+              }
+            },
+            {
+              "order": 2,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "farm_rotational-grazing",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Practice rotational grazing, never grazing grass below 3' deep",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Practice rotational grazing, never grazing grass below 3' deep",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "farm_rotational-grazing-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 3,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "farm_fencing",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Added streamside fencing to keep livestock out of waterway",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Added streamside fencing to keep livestock out of waterway",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "farm_fencing-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 4,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "farm_off-stream-watering",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Installed an off-stream watering system",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Installed an off-stream watering system",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "farm_off-stream-watering-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 5,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "farm_livestock-heavy-use-areas",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "info_modal": {
+                        "header": "Heavy use area",
+                        "content": "A heavy use area is a small fenced in area with a footing such as gravel or hog fuel. Livestock are kept in this area during winter months to protect pasture soils and grasses."
+                      },
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Installed a heavy use or sacrifice area for livestock",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Installed a heavy use or sacrifice area for livestock",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "farm_livestock-heavy-use-areas-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 6,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "farm_gutters",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Installed gutters or water diversion to keep roof runoff away from heavily used areas",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Installed gutters or water diversion to keep roof runoff away from heavily used areas",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "farm_gutters-diversion-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 7,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "farm_soil-testing",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Tested my soils to ensure proper fertilizer, manure, or lime application rates",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Tested my soils to ensure proper fertilizer, manure, or lime application rates",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "farm_soil-testing-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 8,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "farm_manure-storage",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Installed a covered manure storage or composting bin",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Installed a covered manure storage or composting bin",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "farm_manure-storage-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 9,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "farm_septic",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Maintain septic systems and have them inspected regularly to make sure they are functioning properly.",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Maintain septic systems and have them inspected regularly to make sure they are functioning properly.",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "farm_septic-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 10,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "farm_other",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "OTHER",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "OTHER",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "textfield": {
+                      "key": "farm_other-action",
+                      "private": false,
+                      "required": false,
+                      "label": "What was your action?",
+                      "prompt": "What was your action?"
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "datefield": {
+                      "key": "farm_other-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 11,
+              "textareafield": {
+                "key": "farm_category-comments",
+                "private": false,
+                "required": false,
+                "prompt": "Please comment or elaborate here:",
+                "placeholder": "Enter your comments..."
+              }
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "modules": [
+            {
+              "order": 1,
+              "skipstagemodule": {
+                "label": "I don't own/operate forestland -- Proceed to next screen (Page 3 of 6)"
+              }
+            },
+            {
+              "order": 2,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "forest_protected-buffers",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Protected forest buffers around wetlands, streams, steep slopes, and bald eagle nests to protect water quality and critical wildlife areas",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Protected forest buffers around wetlands, streams, steep slopes, and bald eagle nests to protect water quality and critical wildlife areas",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "forest_protected-buffers-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 3,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "forest_restored-buffers",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Restored forest buffers around wetlands, streams, steep slopes, and bald eagle nests to improve water quality and critical wildlife areas",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Restored forest buffers around wetlands, streams, steep slopes, and bald eagle nests to improve water quality and critical wildlife areas",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "forest_restored-buffers-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 4,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "forest_left-trees-snags-etc",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Left green trees and/or left or created snags, brush piles, downed logs, or other habitat features to improve wildlife habitat",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Left green trees and/or left or created snags, brush piles, downed logs, or other habitat features to improve wildlife habitat",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "forest_left-trees-snags-etc-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 5,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "forest_maintain-roads",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Maintained forest roads and stream crossings to control erosion",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Maintained forest roads and stream crossings to control erosion",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "forest_maintain-roads-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 6,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "forest_reduce-harvest-compaction",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Took steps to reduce compaction during tree harvest",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Took steps to reduce compaction during tree harvest",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "forest_reduce-harvest-compaction-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 7,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "forest_fish-passage",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Replaced fish-passage barrier culverts with larger culverts or bridges",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Replaced fish-passage barrier culverts with larger culverts or bridges",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "forest_fish-passage-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 8,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "forest_logging-slash-etc",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Kept logging slash and other materials and equipment away from streams, wetlands, and slopes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Kept logging slash and other materials and equipment away from streams, wetlands, and slopes",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "forest_logging-slash-etc-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 9,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "forest_stewardship-plan",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Created and implemented a Forest Stewardship Plan",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Created and implemented a Forest Stewardship Plan",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "forest_stewardship-plan-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 10,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "forest_other",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "OTHER",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "OTHER",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "textfield": {
+                      "key": "forest_other-action",
+                      "private": false,
+                      "required": false,
+                      "prompt": "What was your action?"
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "datefield": {
+                      "key": "forest_other-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 11,
+              "textareafield": {
+                "key": "forest_comments",
+                "private": false,
+                "required": false,
+                "prompt": "Please comment or elaborate here:",
+                "placeholder": "Enter your comments..."
+              }
+            }
+          ]
+        },
+        {
+          "order": 4,
+          "modules": [
+            {
+              "order": 1,
+              "skipstagemodule": {
+                "label": "I don't live alongside water -- Proceed to next screen (Page 4 of 6)"
+              }
+            },
+            {
+              "order": 2,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "shoreline_left-slope-vegetation",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Left existing native vegetation on a slope or bank",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Left existing native vegetation on a slope or bank",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "shoreline_left-slope-vegetation-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 3,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "shoreline_slope-native-buffer",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Planted a buffer of native trees and shrubs along slope or streamside",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Planted a buffer of native trees and shrubs along slope or streamside",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "shoreline_slope-native-buffer-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 4,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "shoreline_remove-noxious-weeds",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "info_modal": {
+                        "header": "Noxious Weeds",
+                        "content": "Common noxious weeds that compete with our native vegetation include blackberry, knotweed, ivy, and scotch broom."
+                      },
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Removed noxious weeds to support native plant health",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Removed noxious weeds to support native plant health",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "shoreline_remove-noxious-weeds-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 5,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "shoreline_left-dead-trees",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Left dead 'habitat' trees standing for wildlife",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Left dead 'habitat' trees standing for wildlife",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "shoreline_left-dead-trees-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 6,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "shoreline_impervious-surfaces",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Minimized impervious surfaces (driveways, roofs)",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Minimized impervious surfaces (driveways, roofs)",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "shoreline_impervious-surfaces-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 7,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "shoreline_relocated-slope-structures",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Re-located structures away from slopes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Re-located structures away from slopes",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "shoreline_relocated-slope-structures-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 8,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "shoreline_grass-clippings",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Refrained from dumping grass clippings and yard debris on slopes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Refrained from dumping grass clippings and yard debris on slopes",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "shoreline_grass-clippings-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 9,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "shoreline_removed-armoring",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "info_modal": {
+                        "header": "Shoreline armoring",
+                        "content": "Removing armoring such as rip rap or bulkheads improves fish and wildlife habitat."
+                      },
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Removed shoreline armoring",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Removed shoreline armoring",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "shoreline_removed-armoring-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 10,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "shoreline_pet-waste",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Pick up after my pet",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Pick up after my pet",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "shoreline_pet-waste-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 11,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "shoreline_other",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "OTHER",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "OTHER",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "textfield": {
+                      "key": "shoreline_other-action",
+                      "private": false,
+                      "required": false,
+                      "prompt": "What was your action?"
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "datefield": {
+                      "key": "shoreline_other-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 12,
+              "textareafield": {
+                "key": "shoreline_comments",
+                "private": false,
+                "required": false,
+                "prompt": "Please comment or elaborate here:",
+                "placeholder": "Enter your comments..."
+              }
+            }
+          ]
+        },
+        {
+          "order": 5,
+          "modules": [
+            {
+              "order": 1,
+              "skipstagemodule": {
+                "label": "I don't live in an urban/suburban area -- Proceed to next screen (Page 5 of 6)"
+              }
+            },
+            {
+              "order": 2,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "urban_rain-gardens",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "info_modal": {
+                        "header": "Rain garden",
+                        "content": "A rain garden is an area that is dug out, lined with a special soil mix, and planted with the intent of infiltrating runoff from your house, driveway, or other hardened surfaces."
+                      },
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Installed a rain garden",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Installed a rain garden",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "urban_rain-gardens-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 3,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "urban_rain-barrels",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Installed rain barrels or cisterns",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Installed rain barrels or cisterns",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "urban_rain-barrels-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 4,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "urban_rain-beds",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "info_modal": {
+                        "header": "Rain bed",
+                        "content": "A rain bed combines a rain barrel system with a raised garden bed. A special gutter in the raised bed spreads water from the barrels over the garden for easy watering. Excess water from the barrels infiltrates through the bed and is dispersed over the surrounding yard where it is filtered and infiltrated."
+                      },
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Installed rain beds",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Installed rain beds",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "urban_rain-beds-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 5,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "urban_natural-yard-care",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "info_modal": {
+                        "header": "Natural Yard Care",
+                        "content": "Natural Yard Care can include: building healthy soil, practicing smart watering, using organic products, avoiding chemical use, mulching/composting and supporting pollinators."
+                      },
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Used natural yard care",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Used natural yard care",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "urban_natural-yard-care-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 6,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "general_wildlife-backyard",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Certified my property as a Backyard Wildlife Habitat",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Certified my property as a Backyard Wildlife Habitat",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "general_wildlife-backyard-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 7,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "urban_pollinator-habitat",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Created pollinator habitat by planting flowering native plants",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Created pollinator habitat by planting flowering native plants",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "urban_pollinator-habitat-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 8,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "urban_water-conservation",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Practice water conservation",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Practice water conservation",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "urban_water-conservation-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 9,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "urban_compost-mulch-soil-amendments",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Use compost/mulch/soil amendments",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Use compost/mulch/soil amendments",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "urban_compost-mulch-soil-amendments-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 10,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "urban_food-garden",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Started a food garden",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Started a food garden",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "urban_food-garden-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 11,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "urban_drainage-concerns",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Addressed stormwater and/or drainage concerns",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Addressed stormwater and/or drainage concerns",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "urban_drainage-concerns-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 12,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "urban_pet-waste",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Pick up after my pet",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Pick up after my pet",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "urban_pet-waste-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 13,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "urban_septic",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "Maintain septic systems and have them inspected regularly to make sure they are functioning properly.",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "Maintain septic systems and have them inspected regularly to make sure they are functioning properly.",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "datefield": {
+                      "key": "urban_septic-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 14,
+              "groupmodule": {
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "urban_other",
+                      "private": false,
+                      "required": true,
+                      "prompt": " ",
+                      "variant": "toggle",
+                      "options": [
+                        {
+                          "label": "OTHER",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "OTHER",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "textfield": {
+                      "key": "urban_other-action",
+                      "private": false,
+                      "required": false,
+                      "prompt": "What was your action?"
+                    },
+                    "visible": false
+                  },
+                  {
+                    "order": 3,
+                    "datefield": {
+                      "key": "urban_other-datetime",
+                      "private": false,
+                      "required": true,
+                      "prompt": "Approximately when did you last complete this action?",
+                      "placeholder": "Your best estimate",
+                      "include_ongoing": true,
+                      "form_format": "YYYY-MM",
+                      "label_format": "MMMM YYYY"
+                    },
+                    "visible": false
+                  }
+                ]
+              }
+            },
+            {
+              "order": 15,
+              "textareafield": {
+                "key": "urban_comments",
+                "private": false,
+                "required": false,
+                "prompt": "Please comment or elaborate here:",
+                "placeholder": "Enter your comments..."
+              }
+            }
+          ]
+        },
+        {
+          "order": 6,
+          "modules": [
+            {
+              "order": 1,
+              "textfield": {
+                "key": "title",
+                "private": false,
+                "required": true,
+                "prompt": "Enter a headline that describes your experiences",
+                "placeholder": "Example - Protecting Catherine Creek for fish, Turning my yard into a wildlife haven, etc"
+              }
+            },
+            {
+              "order": 2,
+              "filefield": {
+                "key": "my_image",
+                "private": false,
+                "required": false,
+                "label": "\ud83d\udcf7 Add an Image",
+                "prompt": "Please share an image of your work"
+              }
+            },
+            {
+              "order": 3,
+              "textfield": {
+                "key": "private-submitter_email",
+                "private": true,
+                "required": false,
+                "prompt": "Your Email (important in case we need to follow up)",
+                "placeholder": "Optional. Your email will never be shared"
+              }
+            },
+            {
+              "order": 4,
+              "textareafield": {
+                "key": "other-comments",
+                "private": false,
+                "required": false,
+                "prompt": "Anything else you'd like us to know?",
+                "placeholder": "Enter your comments..."
+              }
+            },
+            {
+              "order": 5,
+              "submitbuttonmodule": {
+                "label": "Submit my project"
+              }
+            }
           ]
         }
       ]
@@ -6028,15 +7961,6 @@
     {
       "form": "kittitas-vsp-input-form",
       "stage_order": 7,
-      "group_order": 3,
-      "field_order": 1,
-      "type": "radiofield",
-      "option_value": "yes",
-      "group_visibility_triggers": [2, 3]
-    },
-    {
-      "form": "kittitas-vsp-input-form",
-      "stage_order": 7,
       "group_order": 4,
       "field_order": 1,
       "type": "radiofield",
@@ -6081,8 +8005,8 @@
     },
     {
       "form": "kittitas-vsp-input-form",
-      "stage_order": 8,
-      "group_order": 3,
+      "stage_order": 7,
+      "group_order": 9,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
@@ -6126,8 +8050,8 @@
     },
     {
       "form": "kittitas-vsp-input-form",
-      "stage_order": 9,
-      "group_order": 3,
+      "stage_order": 8,
+      "group_order": 8,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
@@ -6144,8 +8068,8 @@
     },
     {
       "form": "kittitas-vsp-input-form",
-      "stage_order": 10,
-      "group_order": 3,
+      "stage_order": 9,
+      "group_order": 5,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
@@ -6189,8 +8113,8 @@
     },
     {
       "form": "kittitas-vsp-input-form",
-      "stage_order": 11,
-      "group_order": 3,
+      "stage_order": 10,
+      "group_order": 8,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
@@ -6207,8 +8131,8 @@
     },
     {
       "form": "kittitas-vsp-input-form",
-      "stage_order": 12,
-      "group_order": 3,
+      "stage_order": 11,
+      "group_order": 5,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
@@ -6272,6 +8196,384 @@
       "form": "kittitas-vsp-input-form",
       "stage_order": 12,
       "group_order": 10,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "kittitas-vsp-input-form",
+      "stage_order": 12,
+      "group_order": 11,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 2,
+      "group_order": 2,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 2,
+      "group_order": 3,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 2,
+      "group_order": 4,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 2,
+      "group_order": 5,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 2,
+      "group_order": 6,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 2,
+      "group_order": 7,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 2,
+      "group_order": 8,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 2,
+      "group_order": 9,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 2,
+      "group_order": 10,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 3,
+      "group_order": 2,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 3,
+      "group_order": 3,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 3,
+      "group_order": 4,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 3,
+      "group_order": 5,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 3,
+      "group_order": 6,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 3,
+      "group_order": 7,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 3,
+      "group_order": 8,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 3,
+      "group_order": 9,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 3,
+      "group_order": 10,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [3, 2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 4,
+      "group_order": 2,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 4,
+      "group_order": 3,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 4,
+      "group_order": 4,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 4,
+      "group_order": 5,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 4,
+      "group_order": 6,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 4,
+      "group_order": 7,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 4,
+      "group_order": 8,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 4,
+      "group_order": 9,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 4,
+      "group_order": 10,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 4,
+      "group_order": 11,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 5,
+      "group_order": 2,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 5,
+      "group_order": 3,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 5,
+      "group_order": 4,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 5,
+      "group_order": 5,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 5,
+      "group_order": 6,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 5,
+      "group_order": 7,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 5,
+      "group_order": 8,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 5,
+      "group_order": 9,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 5,
+      "group_order": 10,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 5,
+      "group_order": 11,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 5,
+      "group_order": 12,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 5,
+      "group_order": 13,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    },
+    {
+      "form": "snohomish-input-form",
+      "stage_order": 5,
+      "group_order": 14,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
