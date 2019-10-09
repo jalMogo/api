@@ -589,6 +589,8 @@ class TestFlavorDeserializer (TestCase):
                                               owner_id=cls.owner.id)
         DataSet.objects.create(slug='garfield-input',
                                               owner_id=cls.owner.id)
+        DataSet.objects.create(slug='palouse-input',
+                                              owner_id=cls.owner.id)
         pbdurham_projects = DataSet.objects.create(slug='pbdurham-projects',
                                               owner_id=cls.owner.id)
         Group.objects.create(
