@@ -1674,6 +1674,95 @@
       ]
     },
     {
+      "dataset": "creatingcascadia-input",
+      "label": "creatingcascadia-input-form",
+      "icon": "/static/css/images/markers/sensation.png",
+      "stages": [
+        {
+          "order": 1,
+          "modules": [
+            {
+              "order": 1,
+              "radiofield": {
+                "key": "location_type",
+                "private": false,
+                "required": true,
+                "prompt": "",
+                "options": [
+                  {
+                    "label": "Sensation",
+                    "value": "sensation",
+                    "icon": "/static/css/images/markers/sensation.png"
+                  },
+                  {
+                    "label": "Idea",
+                    "value": "idea",
+                    "icon": "/static/css/images/markers/idea.png"
+                  },
+                  {
+                    "label": "Artwork",
+                    "value": "artwork",
+                    "icon": "/static/css/images/markers/artwork.png"
+                  },
+                  {
+                    "label": "Event",
+                    "value": "event",
+                    "icon": "/static/css/images/markers/event.png"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "modules": [
+            {
+              "order": 1,
+              "textfield": {
+                "key": "title",
+                "private": false,
+                "required": true,
+                "prompt": "How does it feel?",
+                "placeholder": "Title here..."
+              }
+            },
+            {
+              "order": 2,
+              "textareafield": {
+                "key": "description",
+                "private": false,
+                "required": true,
+                "prompt": "What is the aesthetic of this place?",
+                "placeholder": "Describe it... (you can also add links, images, videos)",
+                "rich_text": true
+              }
+            },
+            {
+              "order": 3,
+              "textfield": {
+                "key": "submitter_name",
+                "private": false,
+                "required": false,
+                "prompt": "Name",
+                "placeholder": "Name"
+              }
+            },
+            {
+              "order": 4,
+              "textfield": {
+                "key": "private-submitter_email",
+                "private": true,
+                "required": false,
+                "prompt": "Email",
+                "placeholder": "Receive notices about this comment"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
       "dataset": "garfield-input",
       "label": "garfield-input-form",
       "icon": "/static/css/images/markers/map-pin-marker-red.png",
@@ -14460,6 +14549,11 @@
       "display_name": "palouse-vsp",
       "slug": "palouse-vsp",
       "forms": ["palouse-input-form"]
+    },
+    {
+      "display_name": "creating-cascadia",
+      "slug": "creating-cascadia",
+      "forms": ["creatingcascadia-input-form"]
     },
     {
       "display_name": "mississippi",
