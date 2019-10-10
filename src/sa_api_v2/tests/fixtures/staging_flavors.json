@@ -1723,7 +1723,7 @@
                 "key": "title",
                 "private": false,
                 "required": true,
-                "prompt": "How does it feel?",
+                "prompt": "What's happening here?",
                 "placeholder": "Title here..."
               }
             },
@@ -1733,7 +1733,7 @@
                 "key": "description",
                 "private": false,
                 "required": true,
-                "prompt": "What is the aesthetic of this place?",
+                "prompt": "What is it, and how it can it change things?",
                 "placeholder": "Describe it... (you can also add links, images, videos)",
                 "rich_text": true
               }
