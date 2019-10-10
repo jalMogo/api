@@ -3471,7 +3471,8 @@
                 "key": "practices_description",
                 "private": false,
                 "required": false,
-                "prompt": "Add a description of your stewardship practices!"
+                "prompt": "Add a description of your stewardship practices!",
+                "label": "Description:"
               }
             },
             {
@@ -6777,7 +6778,8 @@
                 "key": "practices_description",
                 "private": false,
                 "required": false,
-                "prompt": "Add a description of your stewardship practices!"
+                "prompt": "Add a description of your stewardship practices!",
+                "label": "Description:"
               }
             },
             {
@@ -8672,7 +8674,8 @@
                 "key": "practices_description",
                 "private": false,
                 "required": false,
-                "prompt": "Add a description of your stewardship practices!"
+                "prompt": "Add a description of your stewardship practices!",
+                "label": "Description:"
               }
             },
             {
@@ -9309,6 +9312,7 @@
                 "private": true,
                 "required": true,
                 "prompt": " ",
+                "label": "Address",
                 "placeholder": "Enter your address",
                 "reverse_geocode": true
               }
