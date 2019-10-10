@@ -6943,6 +6943,339 @@
       ]
     },
     {
+      "dataset": "mississippi-featured",
+      "label": "mississippi-featured-form",
+      "icon": "/static/css/images/markers/0.png",
+      "stages": [
+        {
+          "order": 1,
+          "modules": [
+            {
+              "order": 1,
+              "textfield": {
+                "key": "title",
+                "private": false,
+                "required": true,
+                "prompt": "Title:",
+                "placeholder": "Site Title"
+              }
+            },
+            {
+              "order": 2,
+              "textareafield": {
+                "key": "description",
+                "private": false,
+                "required": true,
+                "prompt": "Content:",
+                "placeholder": "write test. You can add links, photos, and videos.",
+                "rich_text": true
+              }
+            },
+            {
+              "order": 3,
+              "submitbuttonmodule": {
+                "label": "Put it on the map!"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "dataset": "mississippi-input",
+      "label": "mississippi-input-form",
+      "icon": "/static/css/images/markers/1.png",
+      "stages": [
+        {
+          "order": 1,
+          "modules": [
+            {
+              "order": 1,
+              "radiofield": {
+                "key": "location_type",
+                "private": false,
+                "required": true,
+                "prompt": "",
+                "options": [
+                  {
+                    "label": "Aesthetics",
+                    "value": "aesthetics",
+                    "icon": "/static/css/images/markers/1.png"
+                  },
+                  {
+                    "label": "Agriculture",
+                    "value": "agriculture",
+                    "icon": "/static/css/images/markers/2.png"
+                  },
+                  {
+                    "label": "Biodiversity",
+                    "value": "biodiversity",
+                    "icon": "/static/css/images/markers/3.png"
+                  },
+                  {
+                    "label": "Capitalism",
+                    "value": "capitalism",
+                    "icon": "/static/css/images/markers/4.png"
+                  },
+                  {
+                    "label": "Case study",
+                    "value": "case study",
+                    "icon": "/static/css/images/markers/5.png"
+                  },
+                  {
+                    "label": "Climate change",
+                    "value": "climate change",
+                    "icon": "/static/css/images/markers/6.png"
+                  },
+                  {
+                    "label": "Commodities",
+                    "value": "commodities",
+                    "icon": "/static/css/images/markers/7.png"
+                  },
+                  {
+                    "label": "Conversation",
+                    "value": "conversation",
+                    "icon": "/static/css/images/markers/8.png"
+                  },
+                  {
+                    "label": "Cosmologies",
+                    "value": "cosmologies",
+                    "icon": "/static/css/images/markers/9.png"
+                  },
+                  {
+                    "label": "Culture",
+                    "value": "culture",
+                    "icon": "/static/css/images/markers/10.png"
+                  },
+                  {
+                    "label": "Deep time",
+                    "value": "deep time",
+                    "icon": "/static/css/images/markers/11.png"
+                  },
+                  {
+                    "label": "Disaster",
+                    "value": "disaster",
+                    "icon": "/static/css/images/markers/12.png"
+                  },
+                  {
+                    "label": "Ecology",
+                    "value": "ecology",
+                    "icon": "/static/css/images/markers/13.png"
+                  },
+                  {
+                    "label": "Energy",
+                    "value": "energy",
+                    "icon": "/static/css/images/markers/14.png"
+                  },
+                  {
+                    "label": "Engineering",
+                    "value": "engineering",
+                    "icon": "/static/css/images/markers/15.png"
+                  },
+                  {
+                    "label": "Environmental justice",
+                    "value": "environmental justice",
+                    "icon": "/static/css/images/markers/16.png"
+                  },
+                  {
+                    "label": "Experiment",
+                    "value": "experiment",
+                    "icon": "/static/css/images/markers/17.png"
+                  },
+                  {
+                    "label": "Extinction",
+                    "value": "extinction",
+                    "icon": "/static/css/images/markers/18.png"
+                  },
+                  {
+                    "label": "Extraction",
+                    "value": "extraction",
+                    "icon": "/static/css/images/markers/19.png"
+                  },
+                  {
+                    "label": "Flood",
+                    "value": "flood",
+                    "icon": "/static/css/images/markers/20.png"
+                  },
+                  {
+                    "label": "Future",
+                    "value": "future",
+                    "icon": "/static/css/images/markers/21.png"
+                  },
+                  {
+                    "label": "Glaciation",
+                    "value": "glaciation",
+                    "icon": "/static/css/images/markers/22.png"
+                  },
+                  {
+                    "label": "History",
+                    "value": "history",
+                    "icon": "/static/css/images/markers/23.png"
+                  },
+                  {
+                    "label": "Human-animal relations",
+                    "value": "human-animal relations",
+                    "icon": "/static/css/images/markers/24.png"
+                  },
+                  {
+                    "label": "Indigenous rights",
+                    "value": "indigenous rights",
+                    "icon": "/static/css/images/markers/25.png"
+                  },
+                  {
+                    "label": "Inequality",
+                    "value": "inequality",
+                    "icon": "/static/css/images/markers/26.png"
+                  },
+                  {
+                    "label": "Infrastructure",
+                    "value": "infrastructure",
+                    "icon": "/static/css/images/markers/27.png"
+                  },
+                  {
+                    "label": "Local knowledge",
+                    "value": "Local knowledge",
+                    "icon": "/static/css/images/markers/28.png"
+                  },
+                  {
+                    "label": "Migration",
+                    "value": "migration",
+                    "icon": "/static/css/images/markers/29.png"
+                  },
+                  {
+                    "label": "Ocean",
+                    "value": "ocean",
+                    "icon": "/static/css/images/markers/30.png"
+                  },
+                  {
+                    "label": "Perception",
+                    "value": "perception",
+                    "icon": "/static/css/images/markers/31.png"
+                  },
+                  {
+                    "label": "Pollution",
+                    "value": "pollution",
+                    "icon": "/static/css/images/markers/32.png"
+                  },
+                  {
+                    "label": "Race",
+                    "value": "race",
+                    "icon": "/static/css/images/markers/33.png"
+                  },
+                  {
+                    "label": "Radioactivity",
+                    "value": "radioactivity",
+                    "icon": "/static/css/images/markers/34.png"
+                  },
+                  {
+                    "label": "Sedimentation",
+                    "value": "sedimentation",
+                    "icon": "/static/css/images/markers/35.png"
+                  },
+                  {
+                    "label": "Settler colonialism",
+                    "value": "settler colonialism",
+                    "icon": "/static/css/images/markers/36.png"
+                  },
+                  {
+                    "label": "Sharing economy",
+                    "value": "sharing economy",
+                    "icon": "/static/css/images/markers/37.png"
+                  },
+                  {
+                    "label": "Slavery",
+                    "value": "slavery",
+                    "icon": "/static/css/images/markers/38.png"
+                  },
+                  {
+                    "label": "Storytelling",
+                    "value": "storytelling",
+                    "icon": "/static/css/images/markers/39.png"
+                  },
+                  {
+                    "label": "Sustainability",
+                    "value": "sustainability",
+                    "icon": "/static/css/images/markers/40.png"
+                  },
+                  {
+                    "label": "Teaching",
+                    "value": "teaching",
+                    "icon": "/static/css/images/markers/41.png"
+                  },
+                  {
+                    "label": "Violence",
+                    "value": "violence",
+                    "icon": "/static/css/images/markers/42.png"
+                  },
+                  {
+                    "label": "Visions",
+                    "value": "visions",
+                    "icon": "/static/css/images/markers/43.png"
+                  },
+                  {
+                    "label": "Waste",
+                    "value": "waste",
+                    "icon": "/static/css/images/markers/44.png"
+                  },
+                  {
+                    "label": "Water",
+                    "value": "water",
+                    "icon": "/static/css/images/markers/45.png"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "modules": [
+            {
+              "order": 1,
+              "textfield": {
+                "key": "title",
+                "private": false,
+                "required": true,
+                "prompt": "Title of your post",
+                "placeholder": "Title here..."
+              }
+            },
+            {
+              "order": 2,
+              "textareafield": {
+                "key": "description",
+                "private": false,
+                "required": true,
+                "prompt": "What's it all about?",
+                "placeholder": "Add an image or a video (YouTube, Vimeo), followed by a short text.",
+                "rich_text": true
+              }
+            },
+            {
+              "order": 3,
+              "textfield": {
+                "key": "submitter_name",
+                "private": false,
+                "required": false,
+                "prompt": "Name",
+                "placeholder": "Name"
+              }
+            },
+            {
+              "order": 4,
+              "textfield": {
+                "key": "private-submitter_email",
+                "private": true,
+                "required": false,
+                "prompt": "Email",
+                "placeholder": "Receive notices about this comment"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
       "dataset": "palouse-input",
       "label": "palouse-input-form",
       "icon": "/static/css/images/markers/map-pin-marker-red.png",
@@ -14558,7 +14891,7 @@
     {
       "display_name": "mississippi",
       "slug": "mississippi",
-      "forms": []
+      "forms": ["mississippi-featured-form", "mississippi-input-form"]
     }
   ]
 }
