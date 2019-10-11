@@ -9232,7 +9232,7 @@
       ]
     },
     {
-      "label": "pbdurham-input",
+      "label": "pbdurham-form",
       "is_enabled": true,
       "dataset": "pbdurham",
       "stages": [
@@ -9437,7 +9437,7 @@
       ]
     },
     {
-      "label": "pbdurham-projects",
+      "label": "pbdurham-projects-form",
       "is_enabled": true,
       "dataset": "pbdurham-projects",
       "stages": [
@@ -14870,7 +14870,7 @@
     {
       "display_name": "pbdurham",
       "slug": "pbdurham",
-      "forms": ["pbdurham-input", "pbdurham-projects"]
+      "forms": ["pbdurham-form", "pbdurham-projects-form"]
     },
     {
       "display_name": "kittitas-vsp",
