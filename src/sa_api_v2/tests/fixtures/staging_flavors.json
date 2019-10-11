@@ -6952,6 +6952,7 @@
           "modules": [
             {
               "order": 1,
+              "include_on_list": true,
               "textfield": {
                 "key": "title",
                 "private": false,
@@ -6962,6 +6963,7 @@
             },
             {
               "order": 2,
+              "include_on_list": true,
               "textareafield": {
                 "key": "description",
                 "private": false,
@@ -7232,6 +7234,7 @@
           "modules": [
             {
               "order": 1,
+              "include_on_list": true,
               "textfield": {
                 "key": "title",
                 "private": false,
@@ -7242,6 +7245,7 @@
             },
             {
               "order": 2,
+              "include_on_list": true,
               "textareafield": {
                 "key": "description",
                 "private": false,
@@ -9693,6 +9697,7 @@
             },
             {
               "order": 2,
+              "include_on_list": true,
               "textareafield": {
                 "key": "description",
                 "private": false,
@@ -10108,6 +10113,7 @@
                   },
                   {
                     "order": 2,
+                    "include_on_list": true,
                     "textfield": {
                       "key": "farm_other-action",
                       "private": false,
@@ -10136,6 +10142,7 @@
             },
             {
               "order": 11,
+              "include_on_list": true,
               "textareafield": {
                 "key": "farm_category-comments",
                 "private": false,
@@ -10509,6 +10516,7 @@
                   },
                   {
                     "order": 2,
+                    "include_on_list": true,
                     "textfield": {
                       "key": "forest_other-action",
                       "private": false,
@@ -10536,6 +10544,7 @@
             },
             {
               "order": 11,
+              "include_on_list": true,
               "textareafield": {
                 "key": "forest_comments",
                 "private": false,
@@ -10958,6 +10967,7 @@
                   },
                   {
                     "order": 2,
+                    "include_on_list": true,
                     "textfield": {
                       "key": "shoreline_other-action",
                       "private": false,
@@ -10985,6 +10995,7 @@
             },
             {
               "order": 12,
+              "include_on_list": true,
               "textareafield": {
                 "key": "shoreline_comments",
                 "private": false,
@@ -11534,6 +11545,7 @@
                   },
                   {
                     "order": 2,
+                    "include_on_list": true,
                     "textfield": {
                       "key": "urban_other-action",
                       "private": false,
@@ -11561,6 +11573,7 @@
             },
             {
               "order": 15,
+              "include_on_list": true,
               "textareafield": {
                 "key": "urban_comments",
                 "private": false,
@@ -11606,6 +11619,7 @@
             },
             {
               "order": 4,
+              "include_on_list": true,
               "textareafield": {
                 "key": "other-comments",
                 "private": false,
