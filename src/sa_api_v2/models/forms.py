@@ -681,6 +681,11 @@ class OrderedModule(AbstractOrderedModule):
         blank=True,
         null=True,
     )
+    include_on_list = models.BooleanField(
+        default=False,
+        blank=True,
+        help_text="If true, then include this field when rendering list items.",
+    )
 
     def _get_related_modules(self):
         related_modules = super(OrderedModule, self)._get_related_modules()
