@@ -398,8 +398,8 @@ class FormFieldOptionInlineForm(ModelForm):
         # Only add visibility triggers if we are inside of a
         # GroupModule. If so, only allow trigger onto modules that are
         # within the same GroupModule as this Option's FormField
-        group_module_id = self.instance.field.nestedorderedmodule.group.id
-        if group_module_id is not None:
+        if hasattr(self.instance, 'field') and hasattr(self.instance.field, 'nestedorderedmodule'):
+            group_module_id = self.instance.field.nestedorderedmodule.group.id
 
             # limit the selectable group_visibility_triggers to
             # NestedOrderedModules that belong to the same form, and are not
@@ -469,7 +469,8 @@ class AbstractFormModuleAdmin (HiddenModelAdmin, admin.ModelAdmin):
             Model = models.TextAreaField
         elif db_field.name == "checkboxfield":
             Model = models.CheckboxField
-        # NOTE: groupmodule is an exception:
+        # NOTE: groupmodule is an exception - this path only occurs on
+        # OrderedModule:
         elif db_field.name == "groupmodule":
             Model = models.GroupModule
         elif db_field.name == "htmlmodule":
@@ -481,9 +482,9 @@ class AbstractFormModuleAdmin (HiddenModelAdmin, admin.ModelAdmin):
         else:
             raise FieldDoesNotExist("db_field name does not exist: {}".format(db_field.name))
 
-        # Filter our related modules to only those that unattached or
-        # within this flavor:
-        kwargs["queryset"] = self._get_related_queryset(Model.objects)
+        # Filter our related modules to only those that are unattached, or
+        # already attached to our current (Nested)OrderedModule:
+        kwargs["queryset"] = self._get_related_queryset(Model.objects, db_field.name)
 
         return super(AbstractFormModuleAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
@@ -493,20 +494,23 @@ class OrderedModuleAdmin(AbstractFormModuleAdmin):
     readonly_fields = ('formstage', 'order')
     fields = ['formstage'] + AbstractFormModuleAdmin.fields + ["groupmodule"]
 
-    def _get_related_queryset(self, queryset):
-        # include only in the queryset RelatedModules that are within this Flavor, or unattached:
-        return queryset.prefetch_related('orderedmodule').filter(
-            Q(orderedmodule__id=self.orderedmodule) | Q(orderedmodule=None),
-        )
+    def _get_related_queryset(self, queryset, field_name):
+        if field_name == 'groupmodule':
+            return queryset.prefetch_related('orderedmodule').filter(
+                Q(orderedmodule__id=self.orderedmodule_id) | Q(orderedmodule=None),
+            )
+        else:
+            return queryset.prefetch_related('orderedmodule').filter(
+                # filter out the nested related modules, and look up any
+                # unattached modules, or modules already attached to this one.
+                Q(nestedorderedmodule=None) & (Q(orderedmodule__id=self.orderedmodule_id) | Q(orderedmodule=None)),
+            )
 
     def get_form(self, request, obj=None, **kwargs):
         # filter RadioFields that have ALL modules within the same flavor as this module:
         # https://www.agiliq.com/blog/2014/04/django-backward-relationship-lookup/
-        self.orderedmodule = models.OrderedModule.objects.select_related('stage__form__flavor').filter(
-            stage__form__flavor__id=obj.stage.form.flavor.id,
-        )
-        form = super(OrderedModuleAdmin, self).get_form(request, obj, **kwargs)
-        return form
+        self.orderedmodule_id = obj.id
+        return super(OrderedModuleAdmin, self).get_form(request, obj, **kwargs)
 
     def formstage(self, instance):
             return format_html(
@@ -521,22 +525,16 @@ class NestedOrderedModuleAdmin(AbstractFormModuleAdmin):
     readonly_fields = ('parent_group_module', 'order')
     fields = ['parent_group_module'] + AbstractFormModuleAdmin.fields
 
-    def _get_related_queryset(self, queryset):
-        # include only in the queryset RelatedModules that are within
-        # this Flavor, or unattached:
-        # (It's helpful to link multiple FormModule to a RelatedModule when we are cloning/tweaking
-        # forms...)
+    def _get_related_queryset(self, queryset, field_name):
+        # include only in the queryset RelatedModules that are unattached:
         return queryset.prefetch_related('nestedorderedmodule').filter(
-            Q(nestedorderedmodule__id__in=self.nestedorderedmodule_id) | Q(nestedorderedmodule=None),
+            Q(orderedmodule=None) & (Q(nestedorderedmodule__id=self.nestedorderedmodule_id) | Q(nestedorderedmodule=None)),
         )
 
     def get_form(self, request, obj=None, **kwargs):
-        # Get all NestedOrderedModules within this flavor:
-        # First, get the flavor id:
-        flavor_id = obj.group.orderedmodule.stage.form.flavor.id
-        self.nestedorderedmodule_id = models.NestedOrderedModule.objects.prefetch_related('group__orderedmodule__stage__form__flavor').values_list('id', flat=True)
-        form = super(NestedOrderedModuleAdmin, self).get_form(request, obj, **kwargs)
-        return form
+        # Get the id of this object:
+        self.nestedorderedmodule_id = obj.id
+        return super(NestedOrderedModuleAdmin, self).get_form(request, obj, **kwargs)
 
     def parent_group_module(self, instance):
             return format_html(
@@ -626,7 +624,7 @@ class FormStageInline(SortableInlineAdminMixin, admin.StackedInline):
     extra = 0
     form = AlwaysChangedModelForm
 
-    readonly_fields = ['edit_url', 'summary']
+    readonly_fields = ['edit_url']
 
     def edit_url(self, instance):
         if instance.pk is None:
@@ -758,6 +756,7 @@ admin.site.register(models.FileField, HiddenModelAdmin)
 admin.site.register(models.CheckboxField, CheckboxFieldAdmin)
 admin.site.register(models.AddressField, HiddenModelAdmin)
 admin.site.register(models.GroupModule, GroupModuleAdmin)
+admin.site.register(models.Modal, HiddenModelAdmin)
 
 admin.site.site_header = 'Mapseed API Server Administration'
 admin.site.site_title = 'Mapseed API Server'

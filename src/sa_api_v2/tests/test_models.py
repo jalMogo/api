@@ -6,7 +6,6 @@ from django.core.cache import cache
 #                         assert_raises)
 from django.core.exceptions import (
     ValidationError,
-    ObjectDoesNotExist,
 )
 from django.contrib.auth.models import AnonymousUser
 from ..models import (
@@ -24,6 +23,7 @@ from ..models import (
     Group,
     SubmittedThing,
     Action,
+    Modal,
     Place,
     Submission,
     DataSetPermission,
@@ -744,6 +744,35 @@ class TestFormModel (TestCase):
             skipstagemodule=module,
         )
 
+    def test_form_field_info_modal(self):
+        info_modal = Modal.objects.create(
+            header="header",
+            content="content",
+        )
+        radio_field = RadioField.objects.create(
+            key="info modal test",
+            prompt="Which option will you choose?",
+            info_modal=info_modal,
+        )
+        info_modal.delete()
+        # assert that our radiofield still exists:
+        radio_field.refresh_from_db()
+
+        info_modal_2 = Modal.objects.create(
+            header="header",
+            content="content",
+        )
+        radio_field_2 = RadioField.objects.create(
+            key="info modal test 2",
+            prompt="Which option will you choose?",
+            info_modal=info_modal_2,
+        )
+        radio_field_2.delete()
+
+        # assert that our info_modal_2 has been deleted:
+        with self.assertRaises(Modal.DoesNotExist):
+            info_modal_2.refresh_from_db()
+
     def test_module_field_deletion_sets_null(self):
         mut_radio_field = RadioField.objects.create(
             key="option_test",
@@ -834,12 +863,12 @@ class TestFormModel (TestCase):
         self.assertFalse(mut_stages[0].modules.all().exists())
         self.assertFalse(mut_radio_field.options.all().exists())
         # Test that modules left unattached to a form are deleted:
-        with self.assertRaises(ObjectDoesNotExist) as context:
+        with self.assertRaises(RadioField.DoesNotExist) as context:
             mut_radio_field.refresh_from_db()
         self.assertTrue(
             'RadioField matching query does not exist' in context.exception.message
         )
-        with self.assertRaises(ObjectDoesNotExist) as context:
+        with self.assertRaises(HtmlModule.DoesNotExist) as context:
             mut_html_module.refresh_from_db()
         self.assertTrue(
             'HtmlModule matching query does not exist' in context.exception.message

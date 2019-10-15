@@ -50,7 +50,6 @@ RELATED_MODULES = [
     "submitbuttonmodule",
 ]
 
-
 class Form(models.Model):
     label = models.CharField(max_length=127)
     is_enabled = models.BooleanField(default=True)
@@ -214,7 +213,7 @@ class GroupModule(RelatedFormModule):
     )
 
     def summary(self):
-        return "group module, with label: \"{}\"".format(self.label)
+        return "group module, with label: \"{}\"".format(self.label) if self.label else "group module, id: {}".format(self.id)
 
     class Meta:
         db_table = 'ms_api_form_module_group'
@@ -314,6 +313,8 @@ class Modal(models.Model):
         app_label = 'sa_api_v2'
         db_table = 'ms_api_form_field_modal'
 
+    def __unicode__(self):
+        return "header: {}, content: {}".format(self.header[0:20], self.content[0:20])
 
 class FormField(RelatedFormModule):
     key = models.CharField(
@@ -344,12 +345,17 @@ class FormField(RelatedFormModule):
     )
     info_modal = models.OneToOneField(
         Modal,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         blank=True,
         null=True,
     )
     class Meta:
         abstract = True
+
+    def delete(self, *args, **kwargs):
+        if self.info_modal is not None:
+            self.info_modal.delete()
+        super(FormField, self).delete(*args, **kwargs)
 
 
 # Used for CharField:
@@ -710,7 +716,7 @@ class NestedOrderedModule(AbstractOrderedModule):
 
 @receiver(post_delete, sender=OrderedModule)
 @receiver(post_delete, sender=NestedOrderedModule)
-def delete(sender, instance, using, **kwargs):
+def delete_ordered_module(sender, instance, using, **kwargs):
     # Delete any "dangling" RelatedModules that have no
     # OrderedModule or NestedOrderedModule reference.
     for related_module in instance._get_related_modules():
