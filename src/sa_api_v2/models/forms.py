@@ -440,9 +440,9 @@ class AddressField(FormField):
 
 
 class RadioField(FormField):
-    RADIO = "radio"
-    DROPDOWN = "dropdown"
-    TOGGLE = "toggle"
+    RADIO = "RA"
+    DROPDOWN = "DR"
+    TOGGLE = "TO"
     CHOICES = [
         (RADIO, 'a radio selection'),
         (DROPDOWN, 'a dropdown list'),
@@ -485,9 +485,11 @@ class TextAreaField(FormField):
 class TextField(FormField):
     EMAIL = "EM"
     PHONE = "PH"
+    ADDRESS = "AD"
     TEXT_FIELD_VARIANTS = (
         (EMAIL, 'Email'),
         (PHONE, 'Phone'),
+        (ADDRESS, 'Address'),
     )
     variant = models.CharField(
         max_length=127,

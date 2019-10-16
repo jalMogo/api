@@ -5039,8 +5039,44 @@
             {
               "order": 1,
               "htmlmodule": {
+                "label": "vsp_inventory_request_header",
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>7. VSP Inventory Request</h2><p style='margin:8px 0 8px 0;font-size:1.2rem;font-style:italic;color:#555;'>The information you just reviewed is the available data for critical areas in Kittitas County. Because much of the data is completed at a larger scale, it can sometimes not be accurate for a specific property. If you would like to know more about critical areas associated with your property, KCCD staff can complete an in-depth inventory and provide it to you.</p>"
+              }
+            },
+            {
+              "order": 2,
+              "radiofield": {
+                "key": "vsp_inventory_request",
+                "private": false,
+                "required": false,
+                "prompt": "Would you like a VSP Inventory completed for your property?",
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": "yes"
+                  },
+                  {
+                    "label": "No",
+                    "value": "no"
+                  }
+                ]
+              }
+            }
+          ],
+          "visible_layer_groups": [
+            "satellite",
+            "kittitas-vsp-input",
+            "kittitas-county-outline"
+          ]
+        },
+        {
+          "order": 8,
+          "modules": [
+            {
+              "order": 1,
+              "htmlmodule": {
                 "label": "water_use_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>7. Water Use Efficiency</h2>"
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>8. Water Use Efficiency</h2>"
               }
             },
             {
@@ -5406,13 +5442,13 @@
           ]
         },
         {
-          "order": 8,
+          "order": 9,
           "modules": [
             {
               "order": 1,
               "htmlmodule": {
                 "label": "soil_management",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>8. Soil Health & Erosion Management</h2>"
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>9. Soil Health & Erosion Management</h2>"
               }
             },
             {
@@ -5728,13 +5764,13 @@
           ]
         },
         {
-          "order": 9,
+          "order": 10,
           "modules": [
             {
               "order": 1,
               "htmlmodule": {
                 "label": "nutrient_management_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>9. Nutrient Management</h2>"
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>10. Nutrient Management</h2>"
               }
             },
             {
@@ -5872,13 +5908,13 @@
           ]
         },
         {
-          "order": 10,
+          "order": 11,
           "modules": [
             {
               "order": 1,
               "htmlmodule": {
                 "label": "range_management",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>10. Range Management</h2>"
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>11. Range Management</h2>"
               }
             },
             {
@@ -6184,13 +6220,13 @@
           ]
         },
         {
-          "order": 11,
+          "order": 12,
           "modules": [
             {
               "order": 1,
               "htmlmodule": {
                 "label": "pest_management_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>11. Pest Management</h2>"
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>12. Pest Management</h2>"
               }
             },
             {
@@ -6328,13 +6364,13 @@
           ]
         },
         {
-          "order": 12,
+          "order": 13,
           "modules": [
             {
               "order": 1,
               "htmlmodule": {
                 "label": "fish_wildlife_management",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>12. Fish & Wildlife Management</h2>"
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>13. Fish & Wildlife Management</h2>"
               }
             },
             {
@@ -6814,13 +6850,13 @@
           ]
         },
         {
-          "order": 13,
+          "order": 14,
           "modules": [
             {
               "order": 1,
               "htmlmodule": {
                 "label": "other_practices_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>13. Other VSP Practices</h2>"
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>14. Other VSP Practices</h2>"
               }
             },
             {
@@ -6841,13 +6877,13 @@
           ]
         },
         {
-          "order": 14,
+          "order": 15,
           "modules": [
             {
               "order": 1,
               "htmlmodule": {
                 "label": "additional_info_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>14. Almost completed!</h2>"
+                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>15. Almost completed!</h2>"
               }
             },
             {
@@ -6937,6 +6973,23 @@
                 "prompt": "What is your email address?",
                 "placeholder": "Your email address will never be shared",
                 "variant": "EM"
+              }
+            },
+            {
+              "order": 9,
+              "textfield": {
+                "key": "private-landowner_phone",
+                "private": true,
+                "required": true,
+                "prompt": "What is your phone number?",
+                "placeholder": "Your phone number will never be shared",
+                "variant": "PH"
+              }
+            },
+            {
+              "order": 10,
+              "submitbuttonmodule": {
+                "label": "Submit!"
               }
             }
           ],
@@ -9439,7 +9492,7 @@
                 "private": true,
                 "required": false,
                 "prompt": "I'd like to volunteer as a Budget Delegate",
-                "variant": "toggle",
+                "variant": "TO",
                 "options": [
                   {
                     "label": "Yes",
@@ -9818,7 +9871,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Practice rotational grazing, never grazing grass below 3 inches deep",
@@ -9859,7 +9912,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Added streamside fencing to keep livestock out of waterway",
@@ -9900,7 +9953,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Installed an off-stream watering system",
@@ -9945,7 +9998,7 @@
                         "header": "Heavy use area",
                         "content": "A heavy use area is a small fenced in area with a footing such as gravel or hog fuel. Livestock are kept in this area during winter months to protect pasture soils and grasses."
                       },
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Installed a heavy use or sacrifice area for livestock",
@@ -9986,7 +10039,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Installed gutters or water diversion to keep roof runoff away from heavily used areas",
@@ -10027,7 +10080,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Tested my soils to ensure proper fertilizer, manure, or lime application rates",
@@ -10068,7 +10121,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Installed a covered manure storage or composting bin",
@@ -10109,7 +10162,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Maintain septic systems and have them inspected regularly to make sure they are functioning properly.",
@@ -10150,7 +10203,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "OTHER",
@@ -10225,7 +10278,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Protected forest buffers around wetlands, streams, steep slopes, and bald eagle nests to protect water quality and critical wildlife areas",
@@ -10266,7 +10319,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Restored forest buffers around wetlands, streams, steep slopes, and bald eagle nests to improve water quality and critical wildlife areas",
@@ -10307,7 +10360,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Left green trees and/or left or created snags, brush piles, downed logs, or other habitat features to improve wildlife habitat",
@@ -10348,7 +10401,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Maintained forest roads and stream crossings to control erosion",
@@ -10389,7 +10442,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Took steps to reduce compaction during tree harvest",
@@ -10430,7 +10483,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Replaced fish-passage barrier culverts with larger culverts or bridges",
@@ -10471,7 +10524,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Kept logging slash and other materials and equipment away from streams, wetlands, and slopes",
@@ -10512,7 +10565,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Created and implemented a Forest Stewardship Plan",
@@ -10553,7 +10606,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "OTHER",
@@ -10627,7 +10680,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Left existing native vegetation on a slope or bank",
@@ -10668,7 +10721,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Planted a buffer of native trees and shrubs along slope or streamside",
@@ -10713,7 +10766,7 @@
                         "header": "Noxious Weeds",
                         "content": "Common noxious weeds that compete with our native vegetation include blackberry, knotweed, ivy, and scotch broom."
                       },
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Removed noxious weeds to support native plant health",
@@ -10754,7 +10807,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Left dead 'habitat' trees standing for wildlife",
@@ -10795,7 +10848,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Minimized impervious surfaces (driveways, roofs)",
@@ -10836,7 +10889,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Re-located structures away from slopes",
@@ -10877,7 +10930,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Refrained from dumping grass clippings and yard debris on slopes",
@@ -10922,7 +10975,7 @@
                         "header": "Shoreline armoring",
                         "content": "Removing armoring such as rip rap or bulkheads improves fish and wildlife habitat."
                       },
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Removed shoreline armoring",
@@ -10963,7 +11016,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Pick up after my pet",
@@ -11004,7 +11057,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "OTHER",
@@ -11082,7 +11135,7 @@
                         "header": "Rain garden",
                         "content": "A rain garden is an area that is dug out, lined with a special soil mix, and planted with the intent of infiltrating runoff from your house, driveway, or other hardened surfaces."
                       },
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Installed a rain garden",
@@ -11123,7 +11176,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Installed rain barrels or cisterns",
@@ -11168,7 +11221,7 @@
                         "header": "Rain bed",
                         "content": "A rain bed combines a rain barrel system with a raised garden bed. A special gutter in the raised bed spreads water from the barrels over the garden for easy watering. Excess water from the barrels infiltrates through the bed and is dispersed over the surrounding yard where it is filtered and infiltrated."
                       },
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Installed rain beds",
@@ -11213,7 +11266,7 @@
                         "header": "Natural Yard Care",
                         "content": "Natural Yard Care can include: building healthy soil, practicing smart watering, using organic products, avoiding chemical use, mulching/composting and supporting pollinators."
                       },
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Used natural yard care",
@@ -11254,7 +11307,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Certified my property as a Backyard Wildlife Habitat",
@@ -11295,7 +11348,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Created pollinator habitat by planting flowering native plants",
@@ -11336,7 +11389,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Practice water conservation",
@@ -11377,7 +11430,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Use compost/mulch/soil amendments",
@@ -11418,7 +11471,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Started a food garden",
@@ -11459,7 +11512,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Addressed stormwater and/or drainage concerns",
@@ -11500,7 +11553,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Pick up after my pet",
@@ -11541,7 +11594,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "Maintain septic systems and have them inspected regularly to make sure they are functioning properly.",
@@ -11582,7 +11635,7 @@
                       "private": false,
                       "required": true,
                       "prompt": " ",
-                      "variant": "toggle",
+                      "variant": "TO",
                       "options": [
                         {
                           "label": "OTHER",
@@ -11840,7 +11893,7 @@
                     "radiofield": {
                       "key": "no_till_duration",
                       "prompt": "For how long have you been practicing no till?",
-                      "variant": "dropdown",
+                      "variant": "DR",
                       "options": [
                         {
                           "label": "0-5 years",
@@ -11919,7 +11972,7 @@
                     "visible": false,
                     "radiofield": {
                       "key": "conventinal_till_duration",
-                      "variant": "dropdown",
+                      "variant": "DR",
                       "prompt": "For how long have you been using conventional till techniques?",
                       "options": [
                         {
@@ -11998,7 +12051,7 @@
                     "visible": false,
                     "radiofield": {
                       "key": "reduced_till_duration",
-                      "variant": "dropdown",
+                      "variant": "DR",
                       "prompt": "For how long have you been using reduced till techniques?",
                       "options": [
                         {
@@ -12095,7 +12148,7 @@
                     "visible": false,
                     "radiofield": {
                       "key": "soil_tests_duration",
-                      "variant": "dropdown",
+                      "variant": "DR",
                       "prompt": "For how long have you been conducting soil tests?",
                       "options": [
                         {
@@ -12232,7 +12285,7 @@
                     "visible": false,
                     "radiofield": {
                       "key": "synthetic_fertilization_duration",
-                      "variant": "dropdown",
+                      "variant": "DR",
                       "prompt": "For how long have you been fertilizing your fields synthetically?",
                       "options": [
                         {
@@ -12340,7 +12393,7 @@
                     "visible": false,
                     "radiofield": {
                       "key": "organic_fertilization_duration",
-                      "variant": "dropdown",
+                      "variant": "DR",
                       "prompt": "For how long have you been fertilizing your fields organically?",
                       "options": [
                         {
@@ -12467,7 +12520,7 @@
                     "visible": false,
                     "radiofield": {
                       "key": "buffers_duration",
-                      "variant": "dropdown",
+                      "variant": "DR",
                       "prompt": "For how long have you been installing buffers?",
                       "options": [
                         {
@@ -12586,7 +12639,7 @@
                     "visible": false,
                     "radiofield": {
                       "key": "grassed_waterways_duration",
-                      "variant": "dropdown",
+                      "variant": "DR",
                       "prompt": "For how long have you been using grassed waterways?",
                       "options": [
                         {
@@ -12650,7 +12703,7 @@
                     "visible": false,
                     "radiofield": {
                       "key": "commodity_buffer_duration",
-                      "variant": "dropdown",
+                      "variant": "DR",
                       "prompt": "For how long have you been participating in the commodity buffer program?",
                       "options": [
                         {
@@ -12729,7 +12782,7 @@
                     "visible": false,
                     "radiofield": {
                       "key": "riparian_forest_duration",
-                      "variant": "dropdown",
+                      "variant": "DR",
                       "prompt": "For how long have you been enhancing wildlife habitat?",
                       "options": [
                         {
@@ -12869,7 +12922,7 @@
                     "visible": false,
                     "radiofield": {
                       "key": "stream_crossing_duration",
-                      "variant": "dropdown",
+                      "variant": "DR",
                       "prompt": "For how long have you been installing stream crossings?",
                       "options": [
                         {
@@ -12946,7 +12999,7 @@
                     "order": 3,
                     "radiofield": {
                       "key": "fencing_duration",
-                      "variant": "dropdown",
+                      "variant": "DR",
                       "prompt": "For how long have you been installing and maintaining fencing?",
                       "options": [
                         {
@@ -13051,7 +13104,7 @@
                     "visible": false,
                     "radiofield": {
                       "key": "mud_manure_management_duration",
-                      "variant": "dropdown",
+                      "variant": "DR",
                       "prompt": "For how long have you been practicing mud and manure management?",
                       "options": [
                         {
@@ -13119,7 +13172,7 @@
                     "visible": false,
                     "radiofield": {
                       "key": "off_creek_stock_watering_duration",
-                      "variant": "dropdown",
+                      "variant": "DR",
                       "prompt": "For how long have you been maintaining off creek stock watering systems?",
                       "options": [
                         {
@@ -13232,7 +13285,7 @@
                     "visible": false,
                     "radiofield": {
                       "key": "forest_management_duration",
-                      "variant": "dropdown",
+                      "variant": "DR",
                       "prompt": "For how long have you been managing your forest?",
                       "options": [
                         {
@@ -13862,7 +13915,7 @@
     },
     {
       "form": "kittitas-vsp-input-form",
-      "stage_order": 7,
+      "stage_order": 8,
       "group_order": 4,
       "field_order": 1,
       "type": "radiofield",
@@ -13871,7 +13924,7 @@
     },
     {
       "form": "kittitas-vsp-input-form",
-      "stage_order": 7,
+      "stage_order": 8,
       "group_order": 5,
       "field_order": 1,
       "type": "radiofield",
@@ -13880,7 +13933,7 @@
     },
     {
       "form": "kittitas-vsp-input-form",
-      "stage_order": 7,
+      "stage_order": 8,
       "group_order": 6,
       "field_order": 1,
       "type": "radiofield",
@@ -13889,7 +13942,7 @@
     },
     {
       "form": "kittitas-vsp-input-form",
-      "stage_order": 7,
+      "stage_order": 8,
       "group_order": 7,
       "field_order": 1,
       "type": "radiofield",
@@ -13898,7 +13951,7 @@
     },
     {
       "form": "kittitas-vsp-input-form",
-      "stage_order": 7,
+      "stage_order": 8,
       "group_order": 8,
       "field_order": 1,
       "type": "radiofield",
@@ -13907,53 +13960,8 @@
     },
     {
       "form": "kittitas-vsp-input-form",
-      "stage_order": 7,
+      "stage_order": 8,
       "group_order": 9,
-      "field_order": 1,
-      "type": "radiofield",
-      "option_value": "yes",
-      "group_visibility_triggers": [2, 3]
-    },
-    {
-      "form": "kittitas-vsp-input-form",
-      "stage_order": 8,
-      "group_order": 4,
-      "field_order": 1,
-      "type": "radiofield",
-      "option_value": "yes",
-      "group_visibility_triggers": [2, 3]
-    },
-    {
-      "form": "kittitas-vsp-input-form",
-      "stage_order": 8,
-      "group_order": 5,
-      "field_order": 1,
-      "type": "radiofield",
-      "option_value": "yes",
-      "group_visibility_triggers": [2, 3]
-    },
-    {
-      "form": "kittitas-vsp-input-form",
-      "stage_order": 8,
-      "group_order": 6,
-      "field_order": 1,
-      "type": "radiofield",
-      "option_value": "yes",
-      "group_visibility_triggers": [2, 3]
-    },
-    {
-      "form": "kittitas-vsp-input-form",
-      "stage_order": 8,
-      "group_order": 7,
-      "field_order": 1,
-      "type": "radiofield",
-      "option_value": "yes",
-      "group_visibility_triggers": [2, 3]
-    },
-    {
-      "form": "kittitas-vsp-input-form",
-      "stage_order": 8,
-      "group_order": 8,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
@@ -13979,6 +13987,33 @@
     },
     {
       "form": "kittitas-vsp-input-form",
+      "stage_order": 9,
+      "group_order": 6,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "kittitas-vsp-input-form",
+      "stage_order": 9,
+      "group_order": 7,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "kittitas-vsp-input-form",
+      "stage_order": 9,
+      "group_order": 8,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "kittitas-vsp-input-form",
       "stage_order": 10,
       "group_order": 4,
       "field_order": 1,
@@ -13990,33 +14025,6 @@
       "form": "kittitas-vsp-input-form",
       "stage_order": 10,
       "group_order": 5,
-      "field_order": 1,
-      "type": "radiofield",
-      "option_value": "yes",
-      "group_visibility_triggers": [2, 3]
-    },
-    {
-      "form": "kittitas-vsp-input-form",
-      "stage_order": 10,
-      "group_order": 6,
-      "field_order": 1,
-      "type": "radiofield",
-      "option_value": "yes",
-      "group_visibility_triggers": [2, 3]
-    },
-    {
-      "form": "kittitas-vsp-input-form",
-      "stage_order": 10,
-      "group_order": 7,
-      "field_order": 1,
-      "type": "radiofield",
-      "option_value": "yes",
-      "group_visibility_triggers": [2, 3]
-    },
-    {
-      "form": "kittitas-vsp-input-form",
-      "stage_order": 10,
-      "group_order": 8,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
@@ -14042,6 +14050,33 @@
     },
     {
       "form": "kittitas-vsp-input-form",
+      "stage_order": 11,
+      "group_order": 6,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "kittitas-vsp-input-form",
+      "stage_order": 11,
+      "group_order": 7,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "kittitas-vsp-input-form",
+      "stage_order": 11,
+      "group_order": 8,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "kittitas-vsp-input-form",
       "stage_order": 12,
       "group_order": 4,
       "field_order": 1,
@@ -14060,7 +14095,25 @@
     },
     {
       "form": "kittitas-vsp-input-form",
-      "stage_order": 12,
+      "stage_order": 13,
+      "group_order": 4,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "kittitas-vsp-input-form",
+      "stage_order": 13,
+      "group_order": 5,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "kittitas-vsp-input-form",
+      "stage_order": 13,
       "group_order": 6,
       "field_order": 1,
       "type": "radiofield",
@@ -14069,7 +14122,7 @@
     },
     {
       "form": "kittitas-vsp-input-form",
-      "stage_order": 12,
+      "stage_order": 13,
       "group_order": 7,
       "field_order": 1,
       "type": "radiofield",
@@ -14078,7 +14131,7 @@
     },
     {
       "form": "kittitas-vsp-input-form",
-      "stage_order": 12,
+      "stage_order": 13,
       "group_order": 8,
       "field_order": 1,
       "type": "radiofield",
@@ -14087,7 +14140,7 @@
     },
     {
       "form": "kittitas-vsp-input-form",
-      "stage_order": 12,
+      "stage_order": 13,
       "group_order": 9,
       "field_order": 1,
       "type": "radiofield",
@@ -14096,7 +14149,7 @@
     },
     {
       "form": "kittitas-vsp-input-form",
-      "stage_order": 12,
+      "stage_order": 13,
       "group_order": 10,
       "field_order": 1,
       "type": "radiofield",
@@ -14105,7 +14158,7 @@
     },
     {
       "form": "kittitas-vsp-input-form",
-      "stage_order": 12,
+      "stage_order": 13,
       "group_order": 11,
       "field_order": 1,
       "type": "radiofield",
