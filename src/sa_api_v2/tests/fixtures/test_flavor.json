@@ -31,7 +31,7 @@
                 "key": "project",
                 "prompt": "what is your project idea?",
                 "label": "my project idea is:",
-                "variant": "radio",
+                "variant": "RA",
                 "options": [
                   {
                     "label": "Art",
