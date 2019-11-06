@@ -778,11 +778,7 @@ class TestFlavorDeserializer (TestCase):
         FormFieldOption.import_group_triggers(group_triggers)
 
         forms = flavors[1].forms.all()
-        form = forms.get(label='kittitas-firewise-input')
-        self.assertEqual(
-            [module.order for module in form.stages.get(order=9).modules.get(order=2).groupmodule.modules.get(order=1).radiofield.options.first().group_visibility_triggers.all()],
-            [2,3,4,5,6]
-        )
+        form = forms.get(label='kittitas-firewise-input-form')
 
         # create our stage visibility triggers:
         stage_triggers = data['stage_visibility_triggers']
