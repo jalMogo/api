@@ -336,6 +336,11 @@
       "stages": [
         {
           "order": 1,
+          "visible_layer_groups": [
+            "satellite",
+            "columbia-input",
+            "columbia-county-border"
+          ],
           "modules": [
             {
               "order": 1,
@@ -369,25 +374,19 @@
                 "reverse_geocode": true
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "columbia-input",
-            "columbia-county-border"
           ]
         },
         {
           "order": 2,
+          "visible_layer_groups": [
+            "satellite",
+            "columbia-watersheds",
+            "columbia-county-border"
+          ],
+          "header_text": "Watersheds",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "analysis_units_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>2. Watersheds</h2>"
-              }
-            },
-            {
-              "order": 2,
               "radiofield": {
                 "key": "analysis_unit",
                 "private": false,
@@ -409,25 +408,19 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "columbia-watersheds",
-            "columbia-county-border"
           ]
         },
         {
           "order": 3,
+          "visible_layer_groups": [
+            "satellite",
+            "columbia-watersheds",
+            "columbia-county-border"
+          ],
+          "header_text": "Your Land Use",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "land_use_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>3. Your Land Use</h2>"
-              }
-            },
-            {
-              "order": 2,
               "radiofield": {
                 "key": "acres_owned_leased",
                 "private": false,
@@ -458,7 +451,7 @@
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "checkboxfield": {
                 "key": "current_crops",
                 "private": false,
@@ -505,7 +498,7 @@
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "textfield": {
                 "key": "other_crops",
                 "private": false,
@@ -513,25 +506,19 @@
                 "prompt": "Other (please explain)"
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "columbia-watersheds",
-            "columbia-county-border"
           ]
         },
         {
           "order": 4,
+          "visible_layer_groups": [
+            "satellite",
+            "columbia-wetlands",
+            "columbia-county-border"
+          ],
+          "header_text": "Wetland Areas",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "wetlands_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>4. Wetland Areas</h2><img style='height:150px;margin-left:16px;margin-top:16px;' src='/static/css/images/wetlands.jpg' alt='Wetlands' /><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px;font-size:0.9em'><p style='margin:0'><strong>Wetland areas</strong> are inundated or saturated by surface water or groundwater.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='font-size:0.9em;text-align:right'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/wetlands-legend.png' /></div></div></div>"
-              }
-            },
-            {
-              "order": 2,
               "radiofield": {
                 "key": "private-property_on_wetlands",
                 "private": true,
@@ -549,25 +536,19 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "columbia-wetlands",
-            "columbia-county-border"
           ]
         },
         {
           "order": 5,
+          "visible_layer_groups": [
+            "satellite",
+            "columbia-frequently-flooded",
+            "columbia-county-border"
+          ],
+          "header_text": "Frequently Flooded Areas",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "frequently_flooded_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>5. Frequently Flooded Areas</h2><img style='height:150px;margin-left:16px;margin-top:16px;' src='/static/css/images/frequently-flooded.jpeg' alt='Frequently flooded areas' /><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px'><p style='margin:0;font-size:0.9em'><strong>Frequently flooded areas</strong> are subject to a 1% or greater chance of flooding every year.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em;text-align:right;'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/frequently-flooded-legend.png' /></div></div></div>"
-              }
-            },
-            {
-              "order": 2,
               "radiofield": {
                 "key": "private-property_on_frequently_flooded",
                 "private": true,
@@ -585,25 +566,19 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "columbia-frequently-flooded",
-            "columbia-county-border"
           ]
         },
         {
           "order": 6,
+          "visible_layer_groups": [
+            "satellite",
+            "columbia-geologic-hazard",
+            "columbia-county-border"
+          ],
+          "header_text": "Severe Geologic Hazard Areas",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "geologic_hazard_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>6. Severe Geologic Hazard Areas</h2><img style='height:150px;margin-left:16px;margin-top:16px;' src='/static/css/images/geologic-hazard.jpg' alt='Geologic hazard areas' /><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px'><p style='margin:0;font-size:0.9em'><strong>Severe geologic hazard areas</strong> are susceptible to erosion, sliding, earthquakes, and other events.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em;text-align:right;'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/geologic-hazard-legend.png' /></div></div></div>"
-              }
-            },
-            {
-              "order": 2,
               "radiofield": {
                 "key": "private-property_on_geologic_hazard",
                 "private": true,
@@ -621,25 +596,19 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "columbia-geologic-hazard",
-            "columbia-county-border"
           ]
         },
         {
           "order": 7,
+          "visible_layer_groups": [
+            "satellite",
+            "columbia-critical-aquifer",
+            "columbia-county-border"
+          ],
+          "header_text": "Critical Aquifer Recharge Areas",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "critical_aquifer_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>7. Critical Aquifer Recharge Areas</h2><img style='height:150px;margin-left:16px;margin-top:16px;' src='/static/css/images/critical-aquifer.jpg' alt='Critical aquifer recharge areas' /><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px'><p style='margin:0;font-size:0.9em'><strong>Critical aquifer recharge areas</strong> have a critical effect on aquifers used for potable water.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='font-size:0.9em;text-align:right;'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/critical-aquifer-legend.png' /></div></div></div>"
-              }
-            },
-            {
-              "order": 2,
               "radiofield": {
                 "key": "private-property_on_critical_aquifer",
                 "private": true,
@@ -657,25 +626,19 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "columbia-critical-aquifer",
-            "columbia-county-border"
           ]
         },
         {
           "order": 8,
+          "visible_layer_groups": [
+            "satellite",
+            "columbia-critical-conservation-areas",
+            "columbia-county-border"
+          ],
+          "header_text": "Critical Conservation Areas",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "critical_conservation_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>8. Critical Conservation Areas</h2><img style='height:150px;margin-left:16px;margin-top:16px;' src='/static/css/images/wildlife-conservation.jpeg' alt='Critical conservation areas' /><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px'><p style='margin:0;font-size:0.9em'><strong>Critical conservation areas</strong> are managed to maintain habitats of fish and wildlife.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='font-size:0.9em;text-align:right;'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/wildlife-conservation-legend.png' /></div></div></div>"
-              }
-            },
-            {
-              "order": 2,
               "radiofield": {
                 "key": "private-property_on_critical_conservation",
                 "private": true,
@@ -693,25 +656,19 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "columbia-critical-conservation-areas",
-            "columbia-county-border"
           ]
         },
         {
           "order": 9,
+          "visible_layer_groups": [
+            "satellite",
+            "columbia-input",
+            "columbia-county-border"
+          ],
+          "header_text": "Crop Practices",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "tillage_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>9. Crop Practices</h2><p style='margin:8px 0 8px 0;font-size:1.2rem;font-style:italic;color:#555;'>Please fill out the form below to report your crop practices. If you do not farm your land, please proceed to the next section.</p>"
-              }
-            },
-            {
-              "order": 2,
               "groupmodule": {
                 "modules": [
                   {
@@ -775,7 +732,7 @@
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "groupmodule": {
                 "modules": [
                   {
@@ -839,7 +796,7 @@
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "groupmodule": {
                 "modules": [
                   {
@@ -903,7 +860,7 @@
               }
             },
             {
-              "order": 5,
+              "order": 4,
               "groupmodule": {
                 "modules": [
                   {
@@ -967,7 +924,7 @@
               }
             },
             {
-              "order": 6,
+              "order": 5,
               "groupmodule": {
                 "modules": [
                   {
@@ -1031,7 +988,7 @@
               }
             },
             {
-              "order": 7,
+              "order": 6,
               "groupmodule": {
                 "modules": [
                   {
@@ -1095,7 +1052,7 @@
               }
             },
             {
-              "order": 8,
+              "order": 7,
               "groupmodule": {
                 "modules": [
                   {
@@ -1158,25 +1115,19 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "columbia-input",
-            "columbia-county-border"
           ]
         },
         {
           "order": 10,
+          "visible_layer_groups": [
+            "satellite",
+            "columbia-input",
+            "columbia-county-border"
+          ],
+          "header_text": "Livestock Practices",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "livestock_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>10. Livestock Practices</h2><p style='margin:8px 0 8px 0;font-size:1.2rem;font-style:italic;color:#555;'>Please fill out the form below to report your livestock practices. If you do not ranch your land, please proceed to the next section.</p>"
-              }
-            },
-            {
-              "order": 2,
               "groupmodule": {
                 "modules": [
                   {
@@ -1240,7 +1191,7 @@
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "groupmodule": {
                 "modules": [
                   {
@@ -1304,7 +1255,7 @@
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "groupmodule": {
                 "modules": [
                   {
@@ -1368,7 +1319,7 @@
               }
             },
             {
-              "order": 5,
+              "order": 4,
               "groupmodule": {
                 "modules": [
                   {
@@ -1432,7 +1383,7 @@
               }
             },
             {
-              "order": 6,
+              "order": 5,
               "groupmodule": {
                 "modules": [
                   {
@@ -1495,25 +1446,19 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "columbia-input",
-            "columbia-county-border"
           ]
         },
         {
           "order": 11,
+          "visible_layer_groups": [
+            "satellite",
+            "columbia-input",
+            "columbia-county-border"
+          ],
+          "header_text": "Other Conservation Practices",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "other",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>11. Other Conservation Practices</h2><p style='margin:8px 0 8px 0;font-size:1.2rem;font-style:italic;color:#555;'>Are there any additional Conservation Practices you participate in that weren't listed within the survey? Please list them here, with the year implemented, in the space provided.</p>"
-              }
-            },
-            {
-              "order": 2,
               "textareafield": {
                 "key": "other_practices_description",
                 "private": false,
@@ -1522,25 +1467,19 @@
                 "placeholder": "Description and year implemented"
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "columbia-input",
-            "columbia-county-border"
           ]
         },
         {
           "order": 12,
+          "visible_layer_groups": [
+            "satellite",
+            "columbia-input",
+            "columbia-county-border"
+          ],
+          "header_text": "Almost Completed!",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "additional_info_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>12. Almost completed!</h2><p style='font-size:1.2rem'><strong>Thank you for taking the time to voluntarily report your stewardship practices.</strong></p>"
-              }
-            },
-            {
-              "order": 2,
               "radiofield": {
                 "key": "funding_sources",
                 "private": false,
@@ -1567,7 +1506,7 @@
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "textareafield": {
                 "key": "desired_outcome",
                 "private": false,
@@ -1576,7 +1515,7 @@
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "filefield": {
                 "key": "my_image",
                 "private": false,
@@ -1586,7 +1525,7 @@
               }
             },
             {
-              "order": 5,
+              "order": 4,
               "textfield": {
                 "key": "private-landowner_name",
                 "private": true,
@@ -1596,7 +1535,7 @@
               }
             },
             {
-              "order": 6,
+              "order": 5,
               "radiofield": {
                 "key": "private-use_photos",
                 "private": true,
@@ -1616,7 +1555,7 @@
               }
             },
             {
-              "order": 7,
+              "order": 6,
               "textfield": {
                 "key": "private-landowner_email",
                 "private": true,
@@ -1627,7 +1566,7 @@
               }
             },
             {
-              "order": 8,
+              "order": 7,
               "textfield": {
                 "key": "private-landowner_phone",
                 "private": true,
@@ -1638,7 +1577,7 @@
               }
             },
             {
-              "order": 9,
+              "order": 8,
               "radiofield": {
                 "key": "private",
                 "private": false,
@@ -1659,16 +1598,11 @@
               }
             },
             {
-              "order": 10,
+              "order": 9,
               "submitbuttonmodule": {
                 "label": "Submit!"
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "columbia-input",
-            "columbia-county-border"
           ]
         }
       ]
@@ -1775,6 +1709,12 @@
       "stages": [
         {
           "order": 1,
+          "header_text": "Garfield County",
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-input",
+            "garfield-county-outline"
+          ],
           "modules": [
             {
               "order": 1,
@@ -1808,25 +1748,19 @@
                 "reverse_geocode": true
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "garfield-input",
-            "garfield-county-outline"
           ]
         },
         {
           "order": 2,
+          "header_text": "Watershed Analysis Unit",
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-county-outline",
+            "garfield-watersheds"
+          ],
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "analysis_units_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>2. Watershed analysis unit</h2>"
-              }
-            },
-            {
-              "order": 2,
               "radiofield": {
                 "key": "analysis_unit",
                 "private": false,
@@ -1868,32 +1802,26 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "garfield-county-outline",
-            "garfield-watersheds"
           ]
         },
         {
           "order": 3,
+          "header_text": "Wetland Areas",
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-wetlands",
+            "garfield-county-outline"
+          ],
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "wetlands_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>3. Wetland Areas</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "wetlands_information",
                 "content": "<div style='display:flex;justify-content:center'><img style='height:150px' src='/static/css/images/wetlands.jpg' alt='Wetlands' /></div><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px;font-size:0.9em'><p style='margin:0'><strong>Wetland areas</strong> are inundated or saturated by surface water or groundwater.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/wetlands-legend.png' /></div></div></div>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "radiofield": {
                 "key": "private-property_on_wetlands",
                 "private": true,
@@ -1911,32 +1839,26 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "garfield-wetlands",
-            "garfield-county-outline"
           ]
         },
         {
           "order": 4,
+          "header_text": "Salmon & Steelhead Habitat",
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-salmon-steelhead-habitat",
+            "garfield-county-outline"
+          ],
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "salmon_steelhead_habitat_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>4. Salmon & Steelhead Habitat</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "salmon_steelhead_habitat_information",
                 "content": "<div style='display:flex;justify-content:center'><img style='height:150px' src='/static/css/images/fish-habitat.jpg' alt='Fish habitat' /></div><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px;font-size:0.9em'><p style='margin:0'><strong>Salmon & Steelhead Habitat</strong> are managed to maintain populations of salmon and steelhead.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/fish-habitat-legend.png' /></div></div></div>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "radiofield": {
                 "key": "private-property_on_salmon_steelhead_habitat",
                 "private": true,
@@ -1954,32 +1876,26 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "garfield-salmon-steelhead-habitat",
-            "garfield-county-outline"
           ]
         },
         {
           "order": 5,
+          "header_text": "Fish & Wildlife Habitat",
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-wildlife",
+            "garfield-county-outline"
+          ],
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "fish_wildlife_habitat_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>5. Fish & Wildlife Habitat (PHS)</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "fish_wildlife_habitat_information",
                 "content": "<div style='display:flex;justify-content:center'><img style='height:150px' src='/static/css/images/fish-wildlife-habitat.jpg' alt='Fish and wildife conservation areas' /></div><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px'><p style='margin:0;font-size:0.9em'><strong>Fish & wildlife habitats</strong> are managed to maintain populations of fish and wildlife.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/wildlife-conservation-legend.png' /></div></div></div>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "radiofield": {
                 "key": "private-property_on_fish_wildlife_habitat",
                 "private": true,
@@ -1997,32 +1913,26 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "garfield-wildlife",
-            "garfield-county-outline"
           ]
         },
         {
           "order": 6,
+          "header_text": "Critical Aquifer Recharge Areas",
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-critical-aquifer",
+            "garfield-county-outline"
+          ],
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "critical_aquifer_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>6. Critical Aquifer Recharge Areas</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "critical_aquifer_information",
                 "content": "<div style='display:flex;justify-content:center'><img style='height:150px' src='/static/css/images/critical-aquifer-recharge.jpg' alt='Critical aquifer recharge areas' /></div><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px'><p style='margin:0;font-size:0.9em'><strong>Critical aquifer recharge areas</strong> have a critical effect on aquifers used for potable water.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/critical-aquifer-legend.png' /></div></div></div>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "radiofield": {
                 "key": "private-property_on_critical_aquifer",
                 "private": true,
@@ -2040,32 +1950,26 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "garfield-critical-aquifer",
-            "garfield-county-outline"
           ]
         },
         {
           "order": 7,
+          "header_text": "Severe Geologic Hazard Areas",
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-geologic-hazard",
+            "garfield-county-outline"
+          ],
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "geologic_hazard_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>7. Severe Geologic Hazard Areas</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "geologic_hazard_information",
                 "content": "<div style='display:flex;justify-content:center'><img style='height:150px' src='/static/css/images/geologic-hazard-area.jpg' alt='Geologic hazard areas' /></div><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px'><p style='margin:0;font-size:0.9em'><strong>Severe geologic hazard areas</strong> are susceptible to erosion, sliding, earthquakes, and other events.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/geologic-hazard-legend.png' /></div></div></div>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "radiofield": {
                 "key": "private-property_on_geologic_hazard",
                 "private": true,
@@ -2083,32 +1987,26 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "garfield-geologic-hazard",
-            "garfield-county-outline"
           ]
         },
         {
           "order": 8,
+          "header_text": "Frequently Flooded Areas",
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-frequently-flooded",
+            "garfield-county-outline"
+          ],
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "frequently_flooded_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>8. Frequently Flooded Areas</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "frequently_flooded_information",
                 "content": "<div style='display:flex;justify-content:center'><img style='height:150px' src='/static/css/images/frequently-flooded.jpg' alt='Frequently flooded areas' /></div><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px'><p style='margin:0;font-size:0.9em'><strong>Frequently flooded areas</strong> are subject to a 1% or greater chance of flooding every year.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/frequently-flooded-legend.png' /></div></div></div>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "radiofield": {
                 "key": "private-property_on_frequently_flooded",
                 "private": true,
@@ -2126,38 +2024,32 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "garfield-frequently-flooded",
-            "garfield-county-outline"
           ]
         },
         {
           "order": 9,
+          "header_text": "Residue and Tillage Management",
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-input",
+            "garfield-county-outline"
+          ],
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "residue_tillage_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>9. Residue and Tillage Management</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "residue_tillage_information",
                 "content": "<p style='margin: 0 0 24px 0;font-size:1.15rem;'>Please fill out the form below to report your residue and tillage management practices.</p>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "skipstagemodule": {
                 "label": "This section is not relevant to me. Proceed to next section. \uf061"
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "groupmodule": {
                 "modules": [
                   {
@@ -2210,7 +2102,7 @@
               }
             },
             {
-              "order": 5,
+              "order": 4,
               "groupmodule": {
                 "modules": [
                   {
@@ -2266,38 +2158,32 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "garfield-input",
-            "garfield-county-outline"
           ]
         },
         {
           "order": 10,
+          "header_text": "Pest Management",
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-input",
+            "garfield-county-outline"
+          ],
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "pest_management_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>10. Pest Management</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "pest_management_information",
                 "content": "<p style='margin: 0 0 24px 0;font-size:1.15rem;'>Please fill out the form below to report your pest management practices.</p>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "skipstagemodule": {
                 "label": "This section is not relevant to me. Proceed to next section. \uf061"
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "groupmodule": {
                 "modules": [
                   {
@@ -2353,38 +2239,32 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "garfield-input",
-            "garfield-county-outline"
           ]
         },
         {
           "order": 11,
+          "header_text": "Nutrient Management",
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-input",
+            "garfield-county-outline"
+          ],
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "nutrient_management_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>11. Nutrient Management</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "nutrient_management_information",
                 "content": "<p style='margin: 0 0 24px 0;font-size:1.15rem;'>Please fill out the form below to report your nutrient management practices.</p>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "skipstagemodule": {
                 "label": "This section is not relevant to me. Proceed to next section. \uf061"
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "groupmodule": {
                 "modules": [
                   {
@@ -2440,38 +2320,32 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "garfield-input",
-            "garfield-county-outline"
           ]
         },
         {
           "order": 12,
+          "header_text": "Water Management",
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-input",
+            "garfield-county-outline"
+          ],
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "water_management_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>12. Water Management</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "water_management_information",
                 "content": "<p style='margin: 0 0 24px 0;font-size:1.15rem;'>Please fill out the form below to report your water management practices.</p>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "skipstagemodule": {
                 "label": "This section is not relevant to me. Proceed to next section. \uf061"
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "groupmodule": {
                 "modules": [
                   {
@@ -2527,38 +2401,32 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "garfield-input",
-            "garfield-county-outline"
           ]
         },
         {
           "order": 13,
+          "header_text": "Livestock Management",
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-input",
+            "garfield-county-outline"
+          ],
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "livestock_management",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>13. Livestock Management</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "livestock_management_information",
                 "content": "<p style='margin: 0 0 24px 0;font-size:1.15rem;'>Please fill out the form below to report your livestock management practices.</p>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "skipstagemodule": {
                 "label": "This section is not relevant to me. Proceed to next section. \uf061"
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "groupmodule": {
                 "modules": [
                   {
@@ -2615,7 +2483,7 @@
               }
             },
             {
-              "order": 5,
+              "order": 4,
               "groupmodule": {
                 "modules": [
                   {
@@ -2671,7 +2539,7 @@
               }
             },
             {
-              "order": 6,
+              "order": 5,
               "groupmodule": {
                 "modules": [
                   {
@@ -2727,7 +2595,7 @@
               }
             },
             {
-              "order": 7,
+              "order": 6,
               "groupmodule": {
                 "modules": [
                   {
@@ -2783,7 +2651,7 @@
               }
             },
             {
-              "order": 8,
+              "order": 7,
               "groupmodule": {
                 "modules": [
                   {
@@ -2839,38 +2707,32 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "garfield-input",
-            "garfield-county-outline"
           ]
         },
         {
           "order": 14,
+          "header_text": "Soil & Erosion Management",
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-input",
+            "garfield-county-outline"
+          ],
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "soil_management",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>14. Soil & Erosion Management</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "soil_management_information",
                 "content": "<p style='margin: 0 0 24px 0;font-size:1.15rem;'>Please fill out the form below to report your soil management practices.</p>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "skipstagemodule": {
                 "label": "This section is not relevant to me. Proceed to next section. \uf061"
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "groupmodule": {
                 "modules": [
                   {
@@ -2927,7 +2789,7 @@
               }
             },
             {
-              "order": 5,
+              "order": 4,
               "groupmodule": {
                 "modules": [
                   {
@@ -2983,38 +2845,32 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "garfield-input",
-            "garfield-county-outline"
           ]
         },
         {
           "order": 15,
+          "header_text": "Fish & Wildlife Management",
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-input",
+            "garfield-county-outline"
+          ],
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "fish_wildlife_management",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>15. Fish & Wildlife Management</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "fish_wildlife_management_information",
                 "content": "<p style='margin: 0 0 24px 0;font-size:1.15rem;'>Please fill out the form below to report your fish & wildlife management practices.</p>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "skipstagemodule": {
                 "label": "This section is not relevant to me. Proceed to next section. \uf061"
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "groupmodule": {
                 "modules": [
                   {
@@ -3071,7 +2927,7 @@
               }
             },
             {
-              "order": 5,
+              "order": 4,
               "groupmodule": {
                 "modules": [
                   {
@@ -3128,7 +2984,7 @@
               }
             },
             {
-              "order": 6,
+              "order": 5,
               "groupmodule": {
                 "modules": [
                   {
@@ -3185,7 +3041,7 @@
               }
             },
             {
-              "order": 7,
+              "order": 6,
               "groupmodule": {
                 "modules": [
                   {
@@ -3242,7 +3098,7 @@
               }
             },
             {
-              "order": 8,
+              "order": 7,
               "groupmodule": {
                 "modules": [
                   {
@@ -3299,7 +3155,7 @@
               }
             },
             {
-              "order": 9,
+              "order": 8,
               "groupmodule": {
                 "modules": [
                   {
@@ -3356,7 +3212,7 @@
               }
             },
             {
-              "order": 10,
+              "order": 9,
               "groupmodule": {
                 "modules": [
                   {
@@ -3413,7 +3269,7 @@
               }
             },
             {
-              "order": 11,
+              "order": 10,
               "groupmodule": {
                 "modules": [
                   {
@@ -3470,7 +3326,7 @@
               }
             },
             {
-              "order": 12,
+              "order": 11,
               "groupmodule": {
                 "modules": [
                   {
@@ -3526,32 +3382,26 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "garfield-input",
-            "garfield-county-outline"
           ]
         },
         {
           "order": 16,
+          "header_text": "Almost Completed!",
+          "visible_layer_groups": [
+            "satellite",
+            "garfield-input",
+            "garfield-county-outline"
+          ],
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "additional_info_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>17. Almost completed!</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "additional_info",
                 "content": "<p><strong>Thank you for taking the time to voluntarily report your stewardship practices.</strong></p><p>This page will determine how your information is shared.  We will report all practices at the watershed scale, but if you are interested in having your project showcased you can give us permission below.  Either way, we will be using your stewardship practice to capture how agriculture is protecting and/or restoring critical areas and maintaining the viability of agriculture.</p>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "filefield": {
                 "key": "my_image",
                 "private": false,
@@ -3561,7 +3411,7 @@
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "textareafield": {
                 "key": "practices_description",
                 "private": false,
@@ -3571,7 +3421,7 @@
               }
             },
             {
-              "order": 5,
+              "order": 4,
               "textfield": {
                 "key": "private-landowner_name",
                 "private": true,
@@ -3581,7 +3431,7 @@
               }
             },
             {
-              "order": 6,
+              "order": 5,
               "radiofield": {
                 "key": "private-use_photos",
                 "private": true,
@@ -3601,7 +3451,7 @@
               }
             },
             {
-              "order": 7,
+              "order": 6,
               "radiofield": {
                 "key": "private",
                 "private": false,
@@ -3622,7 +3472,7 @@
               }
             },
             {
-              "order": 8,
+              "order": 7,
               "textfield": {
                 "key": "private-landowner_email",
                 "private": true,
@@ -3633,7 +3483,7 @@
               }
             },
             {
-              "order": 9,
+              "order": 8,
               "textfield": {
                 "key": "private-landowner_phone",
                 "private": true,
@@ -3644,7 +3494,7 @@
               }
             },
             {
-              "order": 10,
+              "order": 9,
               "checkboxfield": {
                 "key": "learned_about_vsp_map",
                 "private": false,
@@ -3675,16 +3525,11 @@
               }
             },
             {
-              "order": 11,
+              "order": 10,
               "submitbuttonmodule": {
                 "label": "Submit!"
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "garfield-input",
-            "garfield-county-outline"
           ]
         }
       ]
@@ -4743,30 +4588,29 @@
       "stages": [
         {
           "order": 1,
+          "visible_layer_groups": [
+            "satellite",
+            "kittitas-vsp-input",
+            "kittitas-county-outline"
+          ],
+          "header_text": "Your property",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "location_information_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>1. Your property</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "location_why",
                 "content": "<p>At the end of this survey you will be able to hide your contact information and location information or voluntarily choose to make it public for the VSP report.</p>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "htmlmodule": {
                 "label": "drag_map_info",
                 "content": "<div style='display:flex;align-items:center;padding:24px'><span class='fa fa-globe' style='color:#ef5f46;font-size:1.5rem'></span><p style='display:inline;margin:0;padding-left:8px'>Please drag and zoom the map to center the pin on your property.</p></div>"
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "addressfield": {
                 "key": "address",
                 "private": false,
@@ -4776,32 +4620,26 @@
                 "reverse_geocode": true
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "kittitas-vsp-input",
-            "kittitas-county-outline"
           ]
         },
         {
           "order": 2,
+          "visible_layer_groups": [
+            "satellite",
+            "kittitas-wetlands",
+            "kittitas-county-outline"
+          ],
+          "header_text": "Wetland Areas",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "wetlands_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>2. Wetland Areas</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "wetlands_information",
                 "content": "<img style='height:150px;margin-left:16px;' src='/static/css/images/wetlands.jpg' alt='Wetlands' /><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px;font-size:0.9em'><p style='margin:0'><strong>Wetland areas</strong> are inundated or saturated by surface water or groundwater.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='font-size:0.9em;text-align:right'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/wetlands-legend.png' /></div></div></div>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "radiofield": {
                 "key": "private-property_on_wetlands",
                 "private": true,
@@ -4820,38 +4658,32 @@
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "htmlmodule": {
                 "label": "wetlands_disclaimer",
                 "content": "<p style='font-size:0.9rem;color:#777'><em>The wetlands data is supplied by US Fish & Wildlife Service through their National Wetlands Inventory. Their maps are prepared from the analysis of high altitude imagery. Wetlands are identified based on vegetation, visible hydrology and geography. A margin of error is inherent in the use of imagery. Landowners interested in an on-the-ground assessment to confirm the presence of these mapped wetlands for the purposes of the Voluntary Stewardship Program are encouraged to contact the KCCD.</em></p>"
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "kittitas-wetlands",
-            "kittitas-county-outline"
           ]
         },
         {
           "order": 3,
+          "visible_layer_groups": [
+            "satellite",
+            "kittitas-frequently-flooded",
+            "kittitas-county-outline"
+          ],
+          "header_text": "Frequently Flooded Areas",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "frequently_flooded_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>3. Frequently Flooded Areas</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "frequently_flooded_information",
                 "content": "<img style='height:150px;margin-left:16px;' src='/static/css/images/frequently-flooded.jpg' alt='Frequently flooded areas' /><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px'><p style='margin:0;font-size:0.9em'><strong>Frequently flooded areas</strong> are subject to a 1% or greater chance of flooding every year.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em;text-align:right;'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/frequently-flooded-legend.png' /></div></div></div>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "radiofield": {
                 "key": "private-property_on_frequently_flooded",
                 "private": true,
@@ -4870,38 +4702,32 @@
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "htmlmodule": {
                 "label": "frequently_flooded_disclaimer",
                 "content": "<p style='font-size:0.9rem;color:#777'><em>Frequently flood areas on this map are a combination of the Federal Emergency Management Agency (FEMA) flood insurance rate map (FIRM) designated 100- year floodplain and floodway.</em></p>"
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "kittitas-frequently-flooded",
-            "kittitas-county-outline"
           ]
         },
         {
           "order": 4,
+          "visible_layer_groups": [
+            "satellite",
+            "kittitas-geologic-hazard",
+            "kittitas-county-outline"
+          ],
+          "header_text": "Severe Geologic Hazard Areas",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "geologic_hazard_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>4. Severe Geologic Hazard Areas</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "geologic_hazard_information",
                 "content": "<img style='height:150px;margin-left:16px;' src='/static/css/images/geologic-hazard-area.jpg' alt='Geologic hazard areas' /><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px'><p style='margin:0;font-size:0.9em'><strong>Severe geologic hazard areas</strong> are susceptible to erosion, sliding, earthquakes, and other events.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em;text-align:right;'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/geologic-hazard-legend.png' /></div></div></div>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "radiofield": {
                 "key": "private-property_on_geologic_hazard",
                 "private": true,
@@ -4920,38 +4746,32 @@
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "htmlmodule": {
                 "label": "geologic_hazard_disclaimer",
                 "content": "<p style='font-size:0.9rem;color:#777'><em>The data displayed on this map includes soil types with a slope of 25% or greater as an approximation of areas where geologic hazards may exist. For more detailed information on geologic hazards contact the KCCD.</em></p>"
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "kittitas-geologic-hazard",
-            "kittitas-county-outline"
           ]
         },
         {
           "order": 5,
+          "visible_layer_groups": [
+            "satellite",
+            "kittitas-critical-aquifer",
+            "kittitas-county-outline"
+          ],
+          "header_text": "Critical Aquifer Recharge Areas",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "critical_aquifer_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>5. Critical Aquifer Recharge Areas</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "critical_aquifer_information",
                 "content": "<img style='height:150px;margin-left:16px;' src='/static/css/images/critical-aquifer-recharge.jpg' alt='Critical aquifer recharge areas' /><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px'><p style='margin:0;font-size:0.9em'><strong>Critical aquifer recharge areas</strong> have a critical effect on aquifers used for potable water.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='font-size:0.9em;text-align:right;'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/critical-aquifer-legend.png' /></div></div></div>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "radiofield": {
                 "key": "private-property_on_critical_aquifer",
                 "private": true,
@@ -4970,38 +4790,32 @@
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "htmlmodule": {
                 "label": "critical_aquifer_disclaimer",
                 "content": "<p style='font-size:0.9rem;color:#777'><em>Kittitas County does not currently have a designated critical aquifer recharge area, however wellhead protection for public water systems is an important component of the larger effort to protect aquifers used for potable water. The data shown here are the Group A and Group B wells with a 600 foot to 10,000 foot buffer depending on the number of connections allowed. For additional information on Critical Aquifer Recharge Areas, contact the KCCD.</em></p>"
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "kittitas-critical-aquifer",
-            "kittitas-county-outline"
           ]
         },
         {
           "order": 6,
+          "visible_layer_groups": [
+            "satellite",
+            "kittitas-conservation-areas",
+            "kittitas-county-outline"
+          ],
+          "header_text": "Fish & Widlife Habitat",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "fish_wildlife_habitat_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>6. Fish & Wildlife Habitat</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "fish_wildlife_habitat_information",
                 "content": "<img style='height:150px;margin-left:16px;' src='/static/css/images/fish-wildlife-habitat.jpg' alt='Fish and wildlife conservation areas' /><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px;font-size:0.9em;'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em>Description</em></div><div style='flex:6;margin-left:24px'><p style='margin:0;'><strong>Fish & wildlife habitats</strong> are managed to maintain populations of fish and wildlife. Zoom the map to explore which species live in your area.</p></div></div><div style='display:flex;align-items:center;margin-bottom:16px;'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='text-align:right;font-size:0.9em;'>Appearance on map</em></div><div style='flex:1;margin-left:24px'><img style='width:48px' src='/static/css/images/wildlife-conservation-legend.png' /></div><div style='flex:4;'><em style='font-size:0.9em;'>Priority habitats: areas with unique or significant value to many species</em></div></div><div style='display:flex;align-items:center;'><div style='flex:1;flex-basis:15%;display:flex;align-items:center;justify-content:flex-end;'><em style='text-align:right;font-size:0.9em;'> </em></div><div style='flex:1;margin-left:24px'><img style='width:48px' src='/static/css/images/waterways-legend.png' /></div><div style='flex:4;'><em style='font-size:0.9em;'>Fish-bearing waterways: creeks and rivers that are priority habitats for Summer Steelhead, Spring Chinook, Coho, Dolly Varden/Bull Trout, Westslope Cutthroat, Mountain Sucker, or Rainbow Trout</em></div></div></div></div>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "radiofield": {
                 "key": "private-property_on_fish_wildlife_habitat",
                 "private": true,
@@ -5020,31 +4834,25 @@
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "htmlmodule": {
                 "label": "fish_wildlife_habitat_disclaimer",
                 "content": "<p style='font-size:0.9rem;color:#777'><em>The Fish and Wildlife Conservation areas are provided by the Washington State Department of Fish and Wildlife's Priority Habitats and Species (PHS) Program. For more specific information on habitats or species on or near your property, contact the KCCD.</em></p>"
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "kittitas-conservation-areas",
-            "kittitas-county-outline"
           ]
         },
         {
           "order": 7,
+          "visible_layer_groups": [
+            "satellite",
+            "kittitas-vsp-input",
+            "kittitas-county-outline"
+          ],
+          "header_text": "VSP Inventory Request",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "vsp_inventory_request_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>7. VSP Inventory Request</h2><p style='margin:8px 0 8px 0;font-size:1.2rem;font-style:italic;color:#555;'>The information you just reviewed is the available data for critical areas in Kittitas County. Because much of the data is completed at a larger scale, it can sometimes not be accurate for a specific property. If you would like to know more about critical areas associated with your property, KCCD staff can complete an in-depth inventory and provide it to you.</p>"
-              }
-            },
-            {
-              "order": 2,
               "radiofield": {
                 "key": "vsp_inventory_request",
                 "private": false,
@@ -5062,38 +4870,32 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "kittitas-vsp-input",
-            "kittitas-county-outline"
           ]
         },
         {
           "order": 8,
+          "visible_layer_groups": [
+            "satellite",
+            "kittitas-vsp-input",
+            "kittitas-county-outline"
+          ],
+          "header_text": "Water Use Efficiency",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "water_use_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>8. Water Use Efficiency</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "water_user_information",
                 "content": "<p style='margin:8px 0 8px 0;font-size:1.2rem;font-style:italic;color:#555;'>Please fill out the form below to report your water use practices.</p>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "skipstagemodule": {
                 "label": "This section is not relevant to me. Proceed to next section. \uf061"
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "groupmodule": {
                 "modules": [
                   {
@@ -5150,7 +4952,7 @@
               }
             },
             {
-              "order": 5,
+              "order": 4,
               "groupmodule": {
                 "modules": [
                   {
@@ -5207,7 +5009,7 @@
               }
             },
             {
-              "order": 6,
+              "order": 5,
               "groupmodule": {
                 "modules": [
                   {
@@ -5264,7 +5066,7 @@
               }
             },
             {
-              "order": 7,
+              "order": 6,
               "groupmodule": {
                 "modules": [
                   {
@@ -5321,7 +5123,7 @@
               }
             },
             {
-              "order": 8,
+              "order": 7,
               "groupmodule": {
                 "modules": [
                   {
@@ -5378,7 +5180,7 @@
               }
             },
             {
-              "order": 9,
+              "order": 8,
               "groupmodule": {
                 "modules": [
                   {
@@ -5434,38 +5236,32 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "kittitas-vsp-input",
-            "kittitas-county-outline"
           ]
         },
         {
           "order": 9,
+          "visible_layer_groups": [
+            "satellite",
+            "kittitas-vsp-input",
+            "kittitas-county-outline"
+          ],
+          "header_text": "Soil Health & Erosion Management",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "soil_management",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>9. Soil Health & Erosion Management</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "soil_management_information",
                 "content": "<p style='margin:8px 0 8px 0;font-size:1.2rem;font-style:italic;color:#555;'>Please fill out the form below to report your soil health and erosion management practices.</p>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "skipstagemodule": {
                 "label": "This section is not relevant to me. Proceed to next section. \uf061"
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "groupmodule": {
                 "modules": [
                   {
@@ -5522,7 +5318,7 @@
               }
             },
             {
-              "order": 5,
+              "order": 4,
               "groupmodule": {
                 "modules": [
                   {
@@ -5579,7 +5375,7 @@
               }
             },
             {
-              "order": 6,
+              "order": 5,
               "groupmodule": {
                 "modules": [
                   {
@@ -5636,7 +5432,7 @@
               }
             },
             {
-              "order": 7,
+              "order": 6,
               "groupmodule": {
                 "modules": [
                   {
@@ -5693,7 +5489,7 @@
               }
             },
             {
-              "order": 8,
+              "order": 7,
               "groupmodule": {
                 "modules": [
                   {
@@ -5750,44 +5546,38 @@
               }
             },
             {
-              "order": 9,
+              "order": 8,
               "htmlmodule": {
                 "label": "web_soil_survey_info",
                 "content": "<p style='margin-top:40px;'>Would you like to learn more about your soils? Go to USDA's <a target='_blank' href='https://websoilsurvey.sc.egov.usda.gov/App/HomePage.htm'>Web Soil Survey</a> (survey will open in a new tab).</p>"
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "kittitas-vsp-input",
-            "kittitas-county-outline"
           ]
         },
         {
           "order": 10,
+          "visible_layer_groups": [
+            "satellite",
+            "kittitas-vsp-input",
+            "kittitas-county-outline"
+          ],
+          "header_text": "Nutrient Management",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "nutrient_management_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>10. Nutrient Management</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "nutrient_management_information",
                 "content": "<p style='margin:8px 0 8px 0;font-size:1.2rem;font-style:italic;color:#555;'>Please fill out the form below to report your nutrient management practices.</p>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "skipstagemodule": {
                 "label": "This section is not relevant to me. Proceed to next section. \uf061"
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "groupmodule": {
                 "modules": [
                   {
@@ -5844,7 +5634,7 @@
               }
             },
             {
-              "order": 5,
+              "order": 4,
               "groupmodule": {
                 "modules": [
                   {
@@ -5900,38 +5690,32 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "kittitas-vsp-input",
-            "kittitas-county-outline"
           ]
         },
         {
           "order": 11,
+          "visible_layer_groups": [
+            "satellite",
+            "kittitas-vsp-input",
+            "kittitas-county-outline"
+          ],
+          "header_text": "Range Management",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "range_management",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>11. Range Management</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "range_management_information",
                 "content": "<p style='margin:8px 0 8px 0;font-size:1.2rem;font-style:italic;color:#555;'>Please fill out the form below to report your range management practices.</p>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "skipstagemodule": {
                 "label": "This section is not relevant to me. Proceed to next section. \uf061"
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "groupmodule": {
                 "modules": [
                   {
@@ -5988,7 +5772,7 @@
               }
             },
             {
-              "order": 5,
+              "order": 4,
               "groupmodule": {
                 "modules": [
                   {
@@ -6045,7 +5829,7 @@
               }
             },
             {
-              "order": 6,
+              "order": 5,
               "groupmodule": {
                 "modules": [
                   {
@@ -6101,7 +5885,7 @@
               }
             },
             {
-              "order": 7,
+              "order": 6,
               "groupmodule": {
                 "modules": [
                   {
@@ -6157,7 +5941,7 @@
               }
             },
             {
-              "order": 8,
+              "order": 7,
               "groupmodule": {
                 "modules": [
                   {
@@ -6212,38 +5996,32 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "kittitas-vsp-input",
-            "kittitas-county-outline"
           ]
         },
         {
           "order": 12,
+          "visible_layer_groups": [
+            "satellite",
+            "kittitas-vsp-input",
+            "kittitas-county-outline"
+          ],
+          "header_text": "Pest Management",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "pest_management_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>12. Pest Management</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "pest_management_information",
                 "content": "<p style='margin:8px 0 8px 0;font-size:1.2rem;font-style:italic;color:#555;'>Please fill out the form below to report your pest management practices.</p>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "skipstagemodule": {
                 "label": "This section is not relevant to me. Proceed to next section. \uf061"
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "groupmodule": {
                 "modules": [
                   {
@@ -6300,7 +6078,7 @@
               }
             },
             {
-              "order": 5,
+              "order": 4,
               "groupmodule": {
                 "modules": [
                   {
@@ -6356,38 +6134,32 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "kittitas-vsp-input",
-            "kittitas-county-outline"
           ]
         },
         {
           "order": 13,
+          "visible_layer_groups": [
+            "satellite",
+            "kittitas-vsp-input",
+            "kittitas-county-outline"
+          ],
+          "header_text": "Fish & Wildlife Management",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "fish_wildlife_management",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>13. Fish & Wildlife Management</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "fish_wildlife_management_information",
                 "content": "<p style='margin:8px 0 8px 0;font-size:1.2rem;font-style:italic;color:#555;'>Please fill out the form below to report your fish & wildlife management practices.</p>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "skipstagemodule": {
                 "label": "This section is not relevant to me. Proceed to next section. \uf061"
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "groupmodule": {
                 "modules": [
                   {
@@ -6444,7 +6216,7 @@
               }
             },
             {
-              "order": 5,
+              "order": 4,
               "groupmodule": {
                 "modules": [
                   {
@@ -6501,7 +6273,7 @@
               }
             },
             {
-              "order": 6,
+              "order": 5,
               "groupmodule": {
                 "modules": [
                   {
@@ -6558,7 +6330,7 @@
               }
             },
             {
-              "order": 7,
+              "order": 6,
               "groupmodule": {
                 "modules": [
                   {
@@ -6615,7 +6387,7 @@
               }
             },
             {
-              "order": 8,
+              "order": 7,
               "groupmodule": {
                 "modules": [
                   {
@@ -6672,7 +6444,7 @@
               }
             },
             {
-              "order": 9,
+              "order": 8,
               "groupmodule": {
                 "modules": [
                   {
@@ -6729,7 +6501,7 @@
               }
             },
             {
-              "order": 10,
+              "order": 9,
               "groupmodule": {
                 "modules": [
                   {
@@ -6786,7 +6558,7 @@
               }
             },
             {
-              "order": 11,
+              "order": 10,
               "groupmodule": {
                 "modules": [
                   {
@@ -6842,25 +6614,19 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "kittitas-vsp-input",
-            "kittitas-county-outline"
           ]
         },
         {
           "order": 14,
+          "visible_layer_groups": [
+            "satellite",
+            "kittitas-vsp-input",
+            "kittitas-county-outline"
+          ],
+          "header_text": "Other VSP Practices",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "other_practices_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>14. Other VSP Practices</h2>"
-              }
-            },
-            {
-              "order": 2,
               "textareafield": {
                 "key": "other_practices",
                 "private": false,
@@ -6869,32 +6635,26 @@
                 "placeholder": "Description, acreage or footage, and approximate start date:"
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "kittitas-vsp-input",
-            "kittitas-county-outline"
           ]
         },
         {
           "order": 15,
+          "visible_layer_groups": [
+            "satellite",
+            "kittitas-vsp-input",
+            "kittitas-county-outline"
+          ],
+          "header_text": "Almost Completed!",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "additional_info_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>15. Almost completed!</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "additional_info",
                 "content": "<p><strong>Thank you for taking the time to voluntarily report your stewardship practices.</strong></p><p>This page will determine how your information is shared.  We will report all practices at the watershed scale, but if you are interested in having your project showcased you can give us permission below.  Either way, we will be using your stewardship practice to capture how agriculture is protecting and/or restoring critical areas and maintaining the viability of agriculture.</p>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "filefield": {
                 "key": "my_image",
                 "private": false,
@@ -6904,7 +6664,7 @@
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "textareafield": {
                 "key": "practices_description",
                 "private": false,
@@ -6914,7 +6674,7 @@
               }
             },
             {
-              "order": 5,
+              "order": 4,
               "textfield": {
                 "key": "private-landowner_name",
                 "private": true,
@@ -6924,7 +6684,7 @@
               }
             },
             {
-              "order": 6,
+              "order": 5,
               "radiofield": {
                 "key": "private-use_photos",
                 "private": true,
@@ -6944,7 +6704,7 @@
               }
             },
             {
-              "order": 7,
+              "order": 6,
               "radiofield": {
                 "key": "private",
                 "private": false,
@@ -6965,7 +6725,7 @@
               }
             },
             {
-              "order": 8,
+              "order": 7,
               "textfield": {
                 "key": "private-landowner_email",
                 "private": true,
@@ -6976,7 +6736,7 @@
               }
             },
             {
-              "order": 9,
+              "order": 8,
               "textfield": {
                 "key": "private-landowner_phone",
                 "private": true,
@@ -6987,16 +6747,11 @@
               }
             },
             {
-              "order": 10,
+              "order": 9,
               "submitbuttonmodule": {
                 "label": "Submit!"
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "kittitas-vsp-input",
-            "kittitas-county-outline"
           ]
         }
       ]
@@ -7351,6 +7106,12 @@
       "stages": [
         {
           "order": 1,
+          "visible_layer_groups": [
+            "satellite",
+            "palouse-analysis-units",
+            "palouse-input",
+            "whitman-county-outline"
+          ],
           "modules": [
             {
               "order": 1,
@@ -7384,26 +7145,20 @@
                 "reverse_geocode": true
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "palouse-analysis-units",
-            "palouse-input",
-            "whitman-county-outline"
           ]
         },
         {
           "order": 2,
+          "visible_layer_groups": [
+            "satellite",
+            "palouse-analysis-units",
+            "palouse-basin-streams",
+            "whitman-county-outline"
+          ],
+          "header_text": "Watershed Analysis Unit",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "analysis_units_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>2. Watershed analysis unit</h2>"
-              }
-            },
-            {
-              "order": 2,
               "radiofield": {
                 "key": "analysis_unit",
                 "private": false,
@@ -7425,33 +7180,26 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "palouse-analysis-units",
-            "palouse-basin-streams",
-            "whitman-county-outline"
           ]
         },
         {
           "order": 3,
+          "visible_layer_groups": [
+            "satellite",
+            "palouse-wetlands",
+            "whitman-county-outline"
+          ],
+          "header_text": "Wetland Areas",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "wetlands_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>3. Wetland areas</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "wetlands_information",
                 "content": "<div style='display:flex;justify-content:center'><img style='height:150px' src='/static/css/images/wetlands-alt-cropped.jpg' alt='Wetlands' /></div><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px;font-size:0.9em'><p style='margin:0'><strong>Wetland areas</strong> are inundated or saturated by surface water or groundwater.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/wetlands-legend.png' /></div></div></div>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "radiofield": {
                 "key": "private-property_on_wetlands",
                 "private": true,
@@ -7469,32 +7217,26 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "palouse-wetlands",
-            "whitman-county-outline"
           ]
         },
         {
           "order": 4,
+          "visible_layer_groups": [
+            "satellite",
+            "palouse-frequently-flooded",
+            "whitman-county-outline"
+          ],
+          "header_text": "Frequently Flooded Areas",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "frequently_flooded_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>4. Frequently flooded areas</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "frequently_flooded_information",
                 "content": "<div style='display:flex;justify-content:center'><img style='height:150px' src='/static/css/images/frequently-flooded-cropped.jpg' alt='Frequently flooded areas' /></div><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px'><p style='margin:0;font-size:0.9em'><strong>Frequently flooded areas</strong> are subject to a 1% or greater chance of flooding every year.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/frequently-flooded-legend.png' /></div></div></div>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "radiofield": {
                 "key": "private-property_on_frequently_flooded",
                 "private": true,
@@ -7512,32 +7254,26 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "palouse-frequently-flooded",
-            "whitman-county-outline"
           ]
         },
         {
           "order": 5,
+          "visible_layer_groups": [
+            "satellite",
+            "palouse-geologic-hazard",
+            "whitman-county-outline"
+          ],
+          "header_text": "Severe Geologic Hazard Areas",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "geologic_hazard_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>5. Severe geologic hazard areas</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "geologic_hazard_information",
                 "content": "<div style='display:flex;justify-content:center'><img style='height:150px' src='/static/css/images/geologic-hazard-cropped.jpg' alt='Geologic hazard areas' /></div><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px'><p style='margin:0;font-size:0.9em'><strong>Severe geologic hazard areas</strong> are susceptible to erosion, sliding, earthquakes, and other events.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/geologic-hazard-legend.png' /></div></div></div>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "radiofield": {
                 "key": "private-property_on_geologic_hazard",
                 "private": true,
@@ -7555,32 +7291,26 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "palouse-geologic-hazard",
-            "whitman-county-outline"
           ]
         },
         {
           "order": 6,
+          "visible_layer_groups": [
+            "satellite",
+            "palouse-critical-aquifer",
+            "whitman-county-outline"
+          ],
+          "header_text": "Critical Aquifer Recharge Areas",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "critical_aquifer_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>6. Critical aquifer recharge areas</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "critical_aquifer_information",
                 "content": "<div style='display:flex;justify-content:center'><img style='height:150px' src='/static/css/images/aquifer-recharge-cropped.jpg' alt='Critical aquifer recharge areas' /></div><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px'><p style='margin:0;font-size:0.9em'><strong>Critical aquifer recharge areas</strong> have a critical effect on aquifers used for potable water.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/critical-aquifer-legend.png' /></div></div></div>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "radiofield": {
                 "key": "private-property_on_critical_aquifer",
                 "private": true,
@@ -7598,32 +7328,26 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "palouse-critical-aquifer",
-            "whitman-county-outline"
           ]
         },
         {
           "order": 7,
+          "visible_layer_groups": [
+            "satellite",
+            "palouse-critical-conservation-areas",
+            "whitman-county-outline"
+          ],
+          "header_text": "Fish & Wildlife Conservation Areas",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "wildlife_conservation_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>7. Fish & wildlife conservation areas</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "wildlife_conservation_information",
                 "content": "<div style='display:flex;justify-content:center'><img style='height:150px' src='/static/css/images/wildlife-habitat-cropped.jpg' alt='Fish and wildife conservation areas' /></div><div style='padding:0 16px 0 16px;font-size:1.15em;margin-top:15px'><div style='display:flex;margin-bottom:16px'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Description</em></div><div style='flex:6;margin-left:24px'><p style='margin:0;font-size:0.9em'><strong>Fish & wildlife conservation areas</strong> are managed to maintain populations of fish and wildlife.</p></div></div><div style='display:flex'><div style='flex:1;flex-basis:15%;display:flex;align-items:center'><em style='font-size:0.9em'>Appearance on map</em></div><div style='flex:6;margin-left:24px'><img style='width:48px' src='/static/css/images/wildlife-conservation-legend.png' /></div></div></div>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "radiofield": {
                 "key": "private-property_on_wildlife_conservation",
                 "private": true,
@@ -7641,38 +7365,32 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "palouse-critical-conservation-areas",
-            "whitman-county-outline"
           ]
         },
         {
           "order": 8,
+          "visible_layer_groups": [
+            "satellite",
+            "palouse-input",
+            "whitman-county-outline"
+          ],
+          "header_text": "Residue and Tillage Management",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "residue_tillage_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>8. Residue and Tillage Management</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "residue_tillage_information",
                 "content": "<p style='margin:0 0 24px 0;font-size:1.15rem;'>Please fill out the form below to report your residue and tillage management practices.</p>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "skipstagemodule": {
                 "label": "This section is not relevant to me. Proceed to next section. \uf061"
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "groupmodule": {
                 "modules": [
                   {
@@ -7725,7 +7443,7 @@
               }
             },
             {
-              "order": 5,
+              "order": 4,
               "groupmodule": {
                 "modules": [
                   {
@@ -7781,38 +7499,32 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "palouse-input",
-            "whitman-county-outline"
           ]
         },
         {
           "order": 9,
+          "visible_layer_groups": [
+            "satellite",
+            "palouse-input",
+            "whitman-county-outline"
+          ],
+          "header_text": "Pest Management",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "pest_management_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>9. Pest Management</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "pest_management_information",
                 "content": "<p style='margin:0 0 24px 0;font-size:1.15rem;'>Please fill out the form below to report your pest management practices.</p>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "skipstagemodule": {
                 "label": "This section is not relevant to me. Proceed to next section. \uf061"
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "groupmodule": {
                 "modules": [
                   {
@@ -7868,38 +7580,32 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "palouse-input",
-            "whitman-county-outline"
           ]
         },
         {
           "order": 10,
+          "visible_layer_groups": [
+            "satellite",
+            "palouse-input",
+            "whitman-county-outline"
+          ],
+          "header_text": "Nutrient Management",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "nutrient_management_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>10. Nutrient Management</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "nutrient_management_information",
                 "content": "<p style='margin:0 0 24px 0;font-size:1.15rem;'>Please fill out the form below to report your nutrient management practices.</p>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "skipstagemodule": {
                 "label": "This section is not relevant to me. Proceed to next section. \uf061"
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "groupmodule": {
                 "modules": [
                   {
@@ -7955,38 +7661,32 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "palouse-input",
-            "whitman-county-outline"
           ]
         },
         {
           "order": 11,
+          "visible_layer_groups": [
+            "satellite",
+            "palouse-input",
+            "whitman-county-outline"
+          ],
+          "header_text": "Range Management",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "range_management",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>11. Range Management</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "range_management_information",
                 "content": "<p style='margin:0 0 24px 0;font-size:1.15rem;'>Please fill out the form below to report your range management practices.</p>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "skipstagemodule": {
                 "label": "This section is not relevant to me. Proceed to next section. \uf061"
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "groupmodule": {
                 "modules": [
                   {
@@ -8043,7 +7743,7 @@
               }
             },
             {
-              "order": 5,
+              "order": 4,
               "groupmodule": {
                 "modules": [
                   {
@@ -8099,7 +7799,7 @@
               }
             },
             {
-              "order": 6,
+              "order": 5,
               "groupmodule": {
                 "modules": [
                   {
@@ -8155,7 +7855,7 @@
               }
             },
             {
-              "order": 7,
+              "order": 6,
               "groupmodule": {
                 "modules": [
                   {
@@ -8210,38 +7910,32 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "palouse-input",
-            "whitman-county-outline"
           ]
         },
         {
           "order": 12,
+          "visible_layer_groups": [
+            "satellite",
+            "palouse-input",
+            "whitman-county-outline"
+          ],
+          "header_text": "Soil & Erosion Management",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "soil_management",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>12. Soil & Erosion Management</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "soil_management_information",
                 "content": "<p style='margin:0 0 24px 0;font-size:1.15rem;'>Please fill out the form below to report your soil management practices.</p>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "skipstagemodule": {
                 "label": "This section is not relevant to me. Proceed to next section. \uf061"
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "groupmodule": {
                 "modules": [
                   {
@@ -8298,7 +7992,7 @@
               }
             },
             {
-              "order": 5,
+              "order": 4,
               "groupmodule": {
                 "modules": [
                   {
@@ -8355,7 +8049,7 @@
               }
             },
             {
-              "order": 6,
+              "order": 5,
               "groupmodule": {
                 "modules": [
                   {
@@ -8411,38 +8105,32 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "palouse-input",
-            "whitman-county-outline"
           ]
         },
         {
           "order": 13,
+          "visible_layer_groups": [
+            "satellite",
+            "palouse-input",
+            "whitman-county-outline"
+          ],
+          "header_text": "Fish & Wildife Management",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "fish_wildlife_management",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>13. Fish & Wildlife Management</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "fish_wildlife_management_information",
                 "content": "<p style='margin:0 0 24px 0;font-size:1.15rem;'>Please fill out the form below to report your fish & wildlife management practices.</p>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "skipstagemodule": {
                 "label": "This section is not relevant to me. Proceed to next section. \uf061"
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "groupmodule": {
                 "modules": [
                   {
@@ -8499,7 +8187,7 @@
               }
             },
             {
-              "order": 5,
+              "order": 4,
               "groupmodule": {
                 "modules": [
                   {
@@ -8556,7 +8244,7 @@
               }
             },
             {
-              "order": 6,
+              "order": 5,
               "groupmodule": {
                 "modules": [
                   {
@@ -8613,7 +8301,7 @@
               }
             },
             {
-              "order": 7,
+              "order": 6,
               "groupmodule": {
                 "modules": [
                   {
@@ -8670,7 +8358,7 @@
               }
             },
             {
-              "order": 8,
+              "order": 7,
               "groupmodule": {
                 "modules": [
                   {
@@ -8727,7 +8415,7 @@
               }
             },
             {
-              "order": 9,
+              "order": 8,
               "groupmodule": {
                 "modules": [
                   {
@@ -8784,7 +8472,7 @@
               }
             },
             {
-              "order": 10,
+              "order": 9,
               "groupmodule": {
                 "modules": [
                   {
@@ -8841,7 +8529,7 @@
               }
             },
             {
-              "order": 11,
+              "order": 10,
               "groupmodule": {
                 "modules": [
                   {
@@ -8898,7 +8586,7 @@
               }
             },
             {
-              "order": 12,
+              "order": 11,
               "groupmodule": {
                 "modules": [
                   {
@@ -8955,7 +8643,7 @@
               }
             },
             {
-              "order": 13,
+              "order": 12,
               "groupmodule": {
                 "modules": [
                   {
@@ -9012,7 +8700,7 @@
               }
             },
             {
-              "order": 14,
+              "order": 13,
               "groupmodule": {
                 "modules": [
                   {
@@ -9069,7 +8757,7 @@
               }
             },
             {
-              "order": 15,
+              "order": 14,
               "groupmodule": {
                 "modules": [
                   {
@@ -9125,32 +8813,26 @@
                 ]
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "palouse-input",
-            "whitman-county-outline"
           ]
         },
         {
           "order": 14,
+          "visible_layer_groups": [
+            "satellite",
+            "palouse-input",
+            "whitman-county-outline"
+          ],
+          "header_text": "Almost Completed!",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "additional_info_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>14. Almost completed!</h2>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "additional_info",
                 "content": "<p><strong>Thank you for taking the time to voluntarily report your stewardship practices.</strong></p><p>This page will determine how your information is shared.  We will report all practices at the watershed analysis unit scale, but if you are interested in having your project showcased you can give us permission below.  Either way, we will be using your stewardship practice to capture how agriculture is protecting and/or restoring critical areas and maintaining the viability of agriculture.</p>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "filefield": {
                 "key": "my_image",
                 "private": false,
@@ -9160,7 +8842,7 @@
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "textareafield": {
                 "key": "practices_description",
                 "private": false,
@@ -9170,7 +8852,7 @@
               }
             },
             {
-              "order": 5,
+              "order": 4,
               "textfield": {
                 "key": "private-landowner_name",
                 "private": true,
@@ -9180,7 +8862,7 @@
               }
             },
             {
-              "order": 6,
+              "order": 5,
               "radiofield": {
                 "key": "private-use_photos",
                 "private": true,
@@ -9200,7 +8882,7 @@
               }
             },
             {
-              "order": 7,
+              "order": 6,
               "radiofield": {
                 "key": "private",
                 "private": false,
@@ -9221,7 +8903,7 @@
               }
             },
             {
-              "order": 8,
+              "order": 7,
               "textfield": {
                 "key": "private-landowner_email",
                 "private": true,
@@ -9232,7 +8914,7 @@
               }
             },
             {
-              "order": 9,
+              "order": 8,
               "textfield": {
                 "key": "private-landowner_phone",
                 "private": true,
@@ -9243,7 +8925,7 @@
               }
             },
             {
-              "order": 10,
+              "order": 9,
               "checkboxfield": {
                 "key": "learned_about_vsp_map",
                 "private": false,
@@ -9282,16 +8964,11 @@
               }
             },
             {
-              "order": 11,
+              "order": 10,
               "submitbuttonmodule": {
                 "label": "Submit!"
               }
             }
-          ],
-          "visible_layer_groups": [
-            "satellite",
-            "palouse-input",
-            "whitman-county-outline"
           ]
         }
       ]
@@ -9829,6 +9506,7 @@
       "stages": [
         {
           "order": 1,
+          "header_text": "Please set your location",
           "modules": [
             {
               "order": 1,
@@ -9853,6 +9531,7 @@
         },
         {
           "order": 2,
+          "header_text": "Farm Conservation",
           "modules": [
             {
               "order": 1,
@@ -10260,6 +9939,7 @@
         },
         {
           "order": 3,
+          "header_text": "Forest Conservation",
           "modules": [
             {
               "order": 1,
@@ -10662,6 +10342,7 @@
         },
         {
           "order": 4,
+          "header_text": "Shoreline or Streamside Conservation",
           "modules": [
             {
               "order": 1,
@@ -11113,6 +10794,7 @@
         },
         {
           "order": 5,
+          "header_text": "Urban / Suburban Conservation",
           "modules": [
             {
               "order": 1,
@@ -11691,6 +11373,7 @@
         },
         {
           "order": 6,
+          "header_text": "Almost Done!",
           "modules": [
             {
               "order": 1,
@@ -13610,6 +13293,15 @@
     {
       "form": "columbia-input-form",
       "stage_order": 9,
+      "group_order": 1,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "columbia-input-form",
+      "stage_order": 9,
       "group_order": 2,
       "field_order": 1,
       "type": "radiofield",
@@ -13663,8 +13355,8 @@
     },
     {
       "form": "columbia-input-form",
-      "stage_order": 9,
-      "group_order": 8,
+      "stage_order": 10,
+      "group_order": 1,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
@@ -13707,9 +13399,9 @@
       "group_visibility_triggers": [2, 3]
     },
     {
-      "form": "columbia-input-form",
-      "stage_order": 10,
-      "group_order": 6,
+      "form": "garfield-input-form",
+      "stage_order": 9,
+      "group_order": 3,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
@@ -13726,17 +13418,8 @@
     },
     {
       "form": "garfield-input-form",
-      "stage_order": 9,
-      "group_order": 5,
-      "field_order": 1,
-      "type": "radiofield",
-      "option_value": "yes",
-      "group_visibility_triggers": [2, 3]
-    },
-    {
-      "form": "garfield-input-form",
       "stage_order": 10,
-      "group_order": 4,
+      "group_order": 3,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
@@ -13745,7 +13428,7 @@
     {
       "form": "garfield-input-form",
       "stage_order": 11,
-      "group_order": 4,
+      "group_order": 3,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
@@ -13754,7 +13437,16 @@
     {
       "form": "garfield-input-form",
       "stage_order": 12,
-      "group_order": 4,
+      "group_order": 3,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "garfield-input-form",
+      "stage_order": 13,
+      "group_order": 3,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
@@ -13798,8 +13490,8 @@
     },
     {
       "form": "garfield-input-form",
-      "stage_order": 13,
-      "group_order": 8,
+      "stage_order": 14,
+      "group_order": 3,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
@@ -13816,8 +13508,8 @@
     },
     {
       "form": "garfield-input-form",
-      "stage_order": 14,
-      "group_order": 5,
+      "stage_order": 15,
+      "group_order": 3,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
@@ -13890,15 +13582,6 @@
       "form": "garfield-input-form",
       "stage_order": 15,
       "group_order": 11,
-      "field_order": 1,
-      "type": "radiofield",
-      "option_value": "yes",
-      "group_visibility_triggers": [2, 3]
-    },
-    {
-      "form": "garfield-input-form",
-      "stage_order": 15,
-      "group_order": 12,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
@@ -13916,6 +13599,15 @@
     {
       "form": "kittitas-vsp-input-form",
       "stage_order": 8,
+      "group_order": 3,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "kittitas-vsp-input-form",
+      "stage_order": 8,
       "group_order": 4,
       "field_order": 1,
       "type": "radiofield",
@@ -13960,8 +13652,8 @@
     },
     {
       "form": "kittitas-vsp-input-form",
-      "stage_order": 8,
-      "group_order": 9,
+      "stage_order": 9,
+      "group_order": 3,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
@@ -14005,8 +13697,8 @@
     },
     {
       "form": "kittitas-vsp-input-form",
-      "stage_order": 9,
-      "group_order": 8,
+      "stage_order": 10,
+      "group_order": 3,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
@@ -14023,8 +13715,8 @@
     },
     {
       "form": "kittitas-vsp-input-form",
-      "stage_order": 10,
-      "group_order": 5,
+      "stage_order": 11,
+      "group_order": 3,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
@@ -14068,8 +13760,8 @@
     },
     {
       "form": "kittitas-vsp-input-form",
-      "stage_order": 11,
-      "group_order": 8,
+      "stage_order": 12,
+      "group_order": 3,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
@@ -14086,8 +13778,8 @@
     },
     {
       "form": "kittitas-vsp-input-form",
-      "stage_order": 12,
-      "group_order": 5,
+      "stage_order": 13,
+      "group_order": 3,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
@@ -14157,9 +13849,9 @@
       "group_visibility_triggers": [2, 3]
     },
     {
-      "form": "kittitas-vsp-input-form",
-      "stage_order": 13,
-      "group_order": 11,
+      "form": "palouse-input-form",
+      "stage_order": 8,
+      "group_order": 3,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
@@ -14169,15 +13861,6 @@
       "form": "palouse-input-form",
       "stage_order": 8,
       "group_order": 4,
-      "field_order": 1,
-      "type": "radiofield",
-      "option_value": "yes",
-      "group_visibility_triggers": [2, 3]
-    },
-    {
-      "form": "palouse-input-form",
-      "stage_order": 8,
-      "group_order": 5,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
@@ -14186,7 +13869,7 @@
     {
       "form": "palouse-input-form",
       "stage_order": 9,
-      "group_order": 4,
+      "group_order": 3,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
@@ -14195,7 +13878,16 @@
     {
       "form": "palouse-input-form",
       "stage_order": 10,
-      "group_order": 4,
+      "group_order": 3,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2, 3]
+    },
+    {
+      "form": "palouse-input-form",
+      "stage_order": 11,
+      "group_order": 3,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
@@ -14230,8 +13922,8 @@
     },
     {
       "form": "palouse-input-form",
-      "stage_order": 11,
-      "group_order": 7,
+      "stage_order": 12,
+      "group_order": 3,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
@@ -14257,8 +13949,8 @@
     },
     {
       "form": "palouse-input-form",
-      "stage_order": 12,
-      "group_order": 6,
+      "stage_order": 13,
+      "group_order": 3,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
@@ -14358,15 +14050,6 @@
       "form": "palouse-input-form",
       "stage_order": 13,
       "group_order": 14,
-      "field_order": 1,
-      "type": "radiofield",
-      "option_value": "yes",
-      "group_visibility_triggers": [2, 3]
-    },
-    {
-      "form": "palouse-input-form",
-      "stage_order": 13,
-      "group_order": 15,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
