@@ -1186,7 +1186,8 @@ class FormFixtureSerializer (serializers.ModelSerializer):
         fields = [
             'label',
             'is_enabled',
-            'icon',
+            'engagement_text',
+            'image',
             'dataset',
             'stages',
         ]

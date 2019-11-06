@@ -332,7 +332,7 @@
     {
       "dataset": "columbia-input",
       "label": "columbia-input-form",
-      "icon": "/static/css/images/markers/marker-field.png",
+      "image": "/static/css/images/markers/marker-field.png",
       "stages": [
         {
           "order": 1,
@@ -1676,7 +1676,7 @@
     {
       "dataset": "creatingcascadia-input",
       "label": "creatingcascadia-input-form",
-      "icon": "/static/css/images/markers/sensation.png",
+      "image": "/static/css/images/markers/sensation.png",
       "stages": [
         {
           "order": 1,
@@ -1771,7 +1771,7 @@
     {
       "dataset": "garfield-input",
       "label": "garfield-input-form",
-      "icon": "/static/css/images/markers/map-pin-marker-red.png",
+      "image": "/static/css/images/markers/map-pin-marker-red.png",
       "stages": [
         {
           "order": 1,
@@ -4739,7 +4739,7 @@
     {
       "dataset": "kittitas-vsp-input",
       "label": "kittitas-vsp-input-form",
-      "icon": "/static/css/images/markers/marker-field.png",
+      "image": "/static/css/images/markers/marker-field.png",
       "stages": [
         {
           "order": 1,
@@ -7004,7 +7004,7 @@
     {
       "dataset": "mississippi-featured",
       "label": "mississippi-featured-form",
-      "icon": "/static/css/images/markers/0.png",
+      "image": "/static/css/images/markers/0.png",
       "stages": [
         {
           "order": 1,
@@ -7045,7 +7045,7 @@
     {
       "dataset": "mississippi-input",
       "label": "mississippi-input-form",
-      "icon": "/static/css/images/markers/1.png",
+      "image": "/static/css/images/markers/1.png",
       "stages": [
         {
           "order": 1,
@@ -7347,7 +7347,7 @@
     {
       "dataset": "palouse-input",
       "label": "palouse-input-form",
-      "icon": "/static/css/images/markers/map-pin-marker-red.png",
+      "image": "/static/css/images/markers/map-pin-marker-red.png",
       "stages": [
         {
           "order": 1,
@@ -9299,7 +9299,7 @@
     {
       "dataset": "pbdurham",
       "label": "pbdurham-form",
-      "icon": "/static/css/images/markers/fountain.png",
+      "image": "/static/css/images/markers/fountain.png",
       "stages": [
         {
           "order": 1,
@@ -9518,7 +9518,7 @@
     {
       "dataset": "pbdurham-projects",
       "label": "pbdurham-projects-form",
-      "icon": "/static/css/images/markers/money.png",
+      "image": "/static/css/images/markers/money.png",
       "stages": [
         {
           "order": 1,
@@ -9785,7 +9785,7 @@
     {
       "dataset": "snohomish-featured",
       "label": "snohomish-featured-form",
-      "icon": "/static/css/images/markers/map-pin-star-marker.png",
+      "image": "/static/css/images/markers/map-pin-star-marker.png",
       "stages": [
         {
           "order": 1,
@@ -9825,7 +9825,7 @@
     {
       "dataset": "snohomish-input",
       "label": "snohomish-input-form",
-      "icon": "/static/css/images/markers/map-pin-marker.png",
+      "image": "/static/css/images/markers/map-pin-marker.png",
       "stages": [
         {
           "order": 1,
