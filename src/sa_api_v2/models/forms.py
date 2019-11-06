@@ -377,15 +377,15 @@ units_kwargs = {
 
 class DateField(FormField):
     placeholder = models.CharField(**placeholder_kwargs)
-    include_ongoing = models.BooleanField(default=True)
+    include_ongoing = models.BooleanField(default=False)
     # TODO: enforce only date-related regexes for model save:
     label_format = models.CharField(
         default="",
         blank=True,
         help_text="Formatting of the date that will be used on the label",
         max_length=24,
-
     )
+
     form_format = models.CharField(
         default="",
         blank=True,
