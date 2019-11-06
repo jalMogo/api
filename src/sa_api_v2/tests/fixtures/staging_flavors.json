@@ -9506,13 +9506,12 @@
       "stages": [
         {
           "order": 1,
-          "header_text": "Please set your location",
           "modules": [
             {
               "order": 1,
               "htmlmodule": {
                 "label": "location-information",
-                "content": "<h3 class=\"map-drag-header\">You may drag the map to set your location.</h3><h3 class=\"map-drag-header\">Or, you may enter your address:</h3>"
+                "content": "<h1>Please set your location</h1><p>Setting your location will help us list streams as safe. Your address will not be shared on the map.</p><h3 class=\"map-drag-header\">You may drag the map to set your location.</h3><h3 class=\"map-drag-header\">Or, you may enter your address:</h3>"
               }
             },
             {
