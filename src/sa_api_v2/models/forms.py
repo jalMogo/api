@@ -118,6 +118,12 @@ class FormStage(models.Model):
         related_name='+',
     )
 
+    header_text = models.CharField(
+        blank=True,
+        max_length=512,
+        help_text="Use this when adding a header to the Form Stage. Usually used to summarize this section of the form.",
+    )
+
     label = models.CharField(
         blank=True,
         max_length=255,
