@@ -446,11 +446,13 @@ class AddressField(FormField):
 class RadioField(FormField):
     RADIO = "RA"
     DROPDOWN = "DR"
+    AUTOCOMPLETE_DROPDOWN = "AD"
     TOGGLE = "TO"
     CHOICES = [
         (RADIO, 'a radio selection'),
         (DROPDOWN, 'a dropdown list'),
         (TOGGLE, 'a toggle switch, choosing one of 2 choices'),
+        (AUTOCOMPLETE_DROPDOWN, 'a dropdown list that allows fuzzy searching through the items'),
     ]
 
     variant = models.CharField(max_length=127, choices=CHOICES, default=RADIO)
