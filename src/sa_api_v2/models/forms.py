@@ -51,14 +51,21 @@ RELATED_MODULES = [
 ]
 
 class Form(models.Model):
-    label = models.CharField(max_length=127)
+    label = models.CharField(
+        max_length=127
+    )
     is_enabled = models.BooleanField(default=True)
 
-    icon = models.CharField(
-        default='',
+    engagement_text = models.CharField(
+        max_length=255, 
+        blank=True,
+        help_text="When multiple forms are available to select, this text will help describe this form.",
+    )
+
+    image = models.CharField(
         max_length=127,
         blank=True,
-        help_text="An URL for the location of this forms's icon. Useful when selecting one of multiple forms on a flavor. This field is optional.",
+        help_text="An URL for the location of this forms's image. Useful when selecting one of multiple forms on a flavor. This field is optional.",
     )
 
     dataset = models.OneToOneField(
@@ -112,7 +119,6 @@ class FormStage(models.Model):
     )
 
     label = models.CharField(
-        default="",
         blank=True,
         max_length=255,
         help_text="An option label that can be used to describe the form stage. Currently it is only used internally.",
@@ -209,7 +215,6 @@ class GroupModule(RelatedFormModule):
         help_text="For naming purposes only - this won't be displayed to end users. Use this label to more easily identify this module whle building the form.",
         max_length=127,
         blank=True,
-        default='',
     )
 
     def summary(self):
@@ -224,7 +229,6 @@ class HtmlModule(RelatedFormModule):
         help_text="For naming purposes only - this won't be displayed to end users. Use this label to more easily identify this module whle building the form.",
         max_length=127,
         blank=True,
-        default='',
     )
     content = models.TextField(
         help_text="Add HTML here that will be displayed on the form. Make sure that the html is valid and sanitized!",
@@ -324,13 +328,11 @@ class FormField(RelatedFormModule):
     label = models.CharField(
         blank=True,
         max_length=127,
-        default="",
         help_text="This label will be used when displaying the submitted form field (eg: \"My project idea is:\")",
     )
     prompt = models.CharField(
         blank=True,
         max_length=512,
-        default="",
         help_text="Some helpful text to guide the user on how to fill out this field (eg: \"What is your project idea?\")",
     )
     private = models.BooleanField(
@@ -361,7 +363,6 @@ class FormField(RelatedFormModule):
 # Used for CharField:
 placeholder_kwargs = {
     "max_length": 255,
-    "default": "",
     "blank": True,
     "help_text": "Used to help guide users on what to type into the form's input box (eg: \"Enter your email here\", \"joe@example.com\")",
 }
@@ -369,7 +370,6 @@ placeholder_kwargs = {
 # Used for CharField:
 units_kwargs = {
     "max_length": 127,
-    "default": "",
     "blank": True,
     "help_text": "Units are used for labelling numerical submissions (eg: \"13 acres\")",
 }
@@ -380,14 +380,12 @@ class DateField(FormField):
     include_ongoing = models.BooleanField(default=False)
     # TODO: enforce only date-related regexes for model save:
     label_format = models.CharField(
-        default="",
         blank=True,
         help_text="Formatting of the date that will be used on the label",
         max_length=24,
     )
 
     form_format = models.CharField(
-        default="",
         blank=True,
         help_text="Formatting of the date that will be required for the input form",
         max_length=24,
@@ -758,7 +756,6 @@ class FormFieldOption(models.Model):
     )
 
     icon = models.CharField(
-        default='',
         max_length=127,
         blank=True,
         help_text="An URL for the location of this option's icon. This field is optional.",
