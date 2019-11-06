@@ -1088,6 +1088,7 @@ class FormStageSerializer (serializers.ModelSerializer):
             'modules',
             'order',
             'visible',
+            'header_text',
             'validate_geometry',
         ]
 
@@ -1101,7 +1102,8 @@ class FormSerializer (serializers.ModelSerializer):
         fields = [
             'id',
             'label',
-            'icon',
+            'engagement_text',
+            'image',
             'is_enabled',
             'dataset',
             'stages'
