@@ -368,7 +368,7 @@ class FormField(RelatedFormModule):
 
 # Used for CharField:
 placeholder_kwargs = {
-    "max_length": 255,
+    "max_length": 512,
     "blank": True,
     "help_text": "Used to help guide users on what to type into the form's input box (eg: \"Enter your email here\", \"joe@example.com\")",
 }
