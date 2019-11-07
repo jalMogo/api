@@ -597,6 +597,12 @@ class TestFlavorDeserializer (TestCase):
                                               owner_id=cls.owner.id)
         DataSet.objects.create(slug='mississippi-featured',
                                               owner_id=cls.owner.id)
+        DataSet.objects.create(slug='mw',
+                                              owner_id=cls.owner.id)
+        DataSet.objects.create(slug='mw-featured-projects',
+                                              owner_id=cls.owner.id)
+        DataSet.objects.create(slug='mwfeatured',
+                                              owner_id=cls.owner.id)
         pbdurham_projects = DataSet.objects.create(slug='pbdurham-projects',
                                               owner_id=cls.owner.id)
         Group.objects.create(
@@ -784,6 +790,23 @@ class TestFlavorDeserializer (TestCase):
         stage_triggers = data['stage_visibility_triggers']
         FormFieldOption.import_stage_triggers(stage_triggers)
 
+        # create our skip staging modules:
+        skip_stage_modules = data['skip_stage_modules']
+        SkipStageModule.import_skip_stage_modules(skip_stage_modules)
+
+        # Test that group visibility triggers have been created:
+        forms = next(flavor for flavor in flavors if flavor.slug == 'my-water').forms.all()
+        form = forms.get(label='mw-form')
+        self.assertEqual(
+            [trigger.order for trigger in form.stages.get(order=1).modules.get(order=3).groupmodule.modules.get(order=1).radiofield.options.first().group_visibility_triggers.all()],
+            [2]
+        )
+        self.assertEqual(
+            [trigger.order for trigger in form.stages.get(order=1).modules.get(order=3).groupmodule.modules.get(order=1).radiofield.options.get(order=2).group_visibility_triggers.all()],
+            [3]
+        )
+
+        # Test that stage visibility triggers have been created:
         forms = next(flavor for flavor in flavors if flavor.slug == 'spokane-vsp').forms.all()
         form = forms.get(label='spokane-input')
         self.assertEqual(
@@ -791,10 +814,7 @@ class TestFlavorDeserializer (TestCase):
             [3]
         )
 
-        # create our skip staging modules:
-        skip_stage_modules = data['skip_stage_modules']
-        SkipStageModule.import_skip_stage_modules(skip_stage_modules)
-
+        # Test that skip stage triggers have been created:
         bellevue_form = next(flavor for flavor in flavors if flavor.slug == 'bellevue-bike-share').forms.first()
         self.assertEqual(
             bellevue_form.stages.first().modules.first().skipstagemodule.stage,
