@@ -805,6 +805,10 @@ class TestFlavorDeserializer (TestCase):
             [trigger.order for trigger in form.stages.get(order=1).modules.get(order=3).groupmodule.modules.get(order=1).radiofield.options.get(order=2).group_visibility_triggers.all()],
             [3]
         )
+        self.assertEqual(
+            [trigger.order for trigger in form.stages.get(order=1).modules.get(order=3).groupmodule.modules.get(order=1).radiofield.options.get(order=8).group_visibility_triggers.all()],
+            [9]
+        )
 
         # Test that stage visibility triggers have been created:
         forms = next(flavor for flavor in flavors if flavor.slug == 'spokane-vsp').forms.all()
