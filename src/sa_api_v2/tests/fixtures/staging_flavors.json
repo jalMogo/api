@@ -16043,7 +16043,7 @@
       ]
     },
     {
-      "label": "spokane-input",
+      "label": "spokane-input-form",
       "is_enabled": true,
       "dataset": "spokane-input",
       "stages": [
@@ -16055,30 +16055,24 @@
             "spokane-county-outline"
           ],
           "validate_geometry": true,
+          "header_text": "Your Property",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "location_information_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>1. Your property</h2><figure style='margin:8px 0 0 0;'><img style='width:100%;' src='/static/css/images/header-your-property.jpg' alt='Your property section'/></figure>"
-              }
-            },
-            {
-              "order": 2,
               "htmlmodule": {
                 "label": "location_why",
                 "content": "<p>At the end of this survey you will be able to hide your contact information and location information or voluntarily choose to make it public for the VSP report.</p>"
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "htmlmodule": {
                 "label": "drag_map_info",
                 "content": "<div style='display:flex;align-items:center;padding:24px'><span class='fa fa-globe' style='color:#999999;font-size:1.5rem;margin-right:16px;'></span><p style='display:inline;margin:0;padding-left:8px'>Please drag and zoom the map to center the pin on your property.</p></div>"
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "addressfield": {
                 "key": "private-address",
                 "private": true,
@@ -16096,16 +16090,10 @@
             "spokane-input",
             "spokane-county-outline"
           ],
+          "header_text": "Land Use",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "practice_types_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>2. Land Use</h2><figure style='margin:8px 0 0 0;'><img style='width:100%;' src='/static/css/images/header-land-use.jpg' alt='Practice types section'/></figure>"
-              }
-            },
-            {
-              "order": 2,
               "checkboxfield": {
                 "key": "practice_types",
                 "prompt": "Which of the following uses apply to your land? (Check all that apply)",
@@ -16127,7 +16115,7 @@
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "htmlmodule": {
                 "label": "practice_types_questions",
                 "content": "<p style='font-size: 0.9rem; color: #444;'>Questions? Call Doug Phelps at 509-535-7274 x240</p>"
@@ -16144,6 +16132,7 @@
             "spokane-input",
             "spokane-county-outline"
           ],
+          "header_text": "Agriculture",
           "modules": [
             {
               "order": 1,
@@ -17141,16 +17130,10 @@
             "spokane-input",
             "spokane-county-outline"
           ],
+          "header_text": "Livestock",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "livestock_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>4. Livestock</h2><figure style='margin:8px 0 0 0;'><img style='width:100%;' src='/static/css/images/header-livestock.jpg' alt='Livestock section'/></figure>"
-              }
-            },
-            {
-              "order": 2,
               "groupmodule": {
                 "modules": [
                   {
@@ -17255,7 +17238,7 @@
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "groupmodule": {
                 "modules": [
                   {
@@ -17332,7 +17315,7 @@
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "groupmodule": {
                 "modules": [
                   {
@@ -17437,7 +17420,7 @@
               }
             },
             {
-              "order": 5,
+              "order": 4,
               "groupmodule": {
                 "modules": [
                   {
@@ -17522,16 +17505,10 @@
             "spokane-input",
             "spokane-county-outline"
           ],
+          "header_text": "Forestry",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "forest_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>5. Forestry</h2><figure style='margin:8px 0 0 0;'><img style='width:100%;' src='/static/css/images/header-forestry.jpg' alt='Forestry section'/></figure>"
-              }
-            },
-            {
-              "order": 2,
               "groupmodule": {
                 "modules": [
                   {
@@ -17654,7 +17631,7 @@
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "htmlmodule": {
                 "label": "forest_questions",
                 "content": "<p style='font-size: 0.9rem; color: #444;'>Questions? Call Doug Phelps at 509-535-7274 x240</p>"
@@ -17669,16 +17646,10 @@
             "spokane-input",
             "spokane-county-outline"
           ],
+          "header_text": "Almost Completed",
           "modules": [
             {
               "order": 1,
-              "htmlmodule": {
-                "label": "additional_info_header",
-                "content": "<h2 style='padding-bottom:8px;border-bottom:1px solid #ccc;margin:0;color:rgba(0,0,0,0.7)'>6. Almost completed</h2><figure style='margin:8px 0 0 0;'><img style='width:100%;' src='/static/css/images/header-almost-completed.jpg' alt='Additional info section'/></figure>"
-              }
-            },
-            {
-              "order": 2,
               "textareafield": {
                 "key": "practices_description",
                 "prompt": "Add a description of your stewardship practices",
@@ -17686,14 +17657,14 @@
               }
             },
             {
-              "order": 3,
+              "order": 2,
               "textareafield": {
                 "key": "stewardship_difficulties",
                 "prompt": "What challenges or difficulties have you experienced as a voluntary steward?"
               }
             },
             {
-              "order": 4,
+              "order": 3,
               "textfield": {
                 "key": "private-landowner_name",
                 "placeholder": "Your name will only be shared if you are logged in",
@@ -17702,7 +17673,7 @@
               }
             },
             {
-              "order": 5,
+              "order": 4,
               "groupmodule": {
                 "modules": [
                   {
@@ -17762,7 +17733,7 @@
               }
             },
             {
-              "order": 6,
+              "order": 5,
               "groupmodule": {
                 "modules": [
                   {
@@ -17806,7 +17777,7 @@
               }
             },
             {
-              "order": 7,
+              "order": 6,
               "radiofield": {
                 "key": "easements",
                 "prompt": "Do you have a conservation easement?",
@@ -17823,7 +17794,7 @@
               }
             },
             {
-              "order": 8,
+              "order": 7,
               "radiofield": {
                 "key": "farm_plan",
                 "prompt": "Do you have a Farm Plan or Stewardship Plan in place, or would you like to initiate one?",
@@ -17844,7 +17815,7 @@
               }
             },
             {
-              "order": 9,
+              "order": 8,
               "checkboxfield": {
                 "key": "land_ownership",
                 "prompt": "Who owns the land that you work? Please check all that apply:",
@@ -19104,7 +19075,7 @@
       "group_visibility_triggers": [2, 3]
     },
     {
-      "form": "spokane-input",
+      "form": "spokane-input-form",
       "stage_order": 3,
       "group_order": 1,
       "field_order": 1,
@@ -19113,7 +19084,7 @@
       "group_visibility_triggers": [2, 3]
     },
     {
-      "form": "spokane-input",
+      "form": "spokane-input-form",
       "stage_order": 3,
       "group_order": 2,
       "field_order": 1,
@@ -19122,7 +19093,7 @@
       "group_visibility_triggers": [2, 3]
     },
     {
-      "form": "spokane-input",
+      "form": "spokane-input-form",
       "stage_order": 3,
       "group_order": 3,
       "field_order": 1,
@@ -19131,7 +19102,7 @@
       "group_visibility_triggers": [2, 3]
     },
     {
-      "form": "spokane-input",
+      "form": "spokane-input-form",
       "stage_order": 3,
       "group_order": 4,
       "field_order": 1,
@@ -19140,7 +19111,7 @@
       "group_visibility_triggers": [2, 3, 4]
     },
     {
-      "form": "spokane-input",
+      "form": "spokane-input-form",
       "stage_order": 3,
       "group_order": 5,
       "field_order": 1,
@@ -19149,7 +19120,7 @@
       "group_visibility_triggers": [2, 3, 4, 5, 6]
     },
     {
-      "form": "spokane-input",
+      "form": "spokane-input-form",
       "stage_order": 3,
       "group_order": 5,
       "field_order": 1,
@@ -19158,7 +19129,7 @@
       "group_visibility_triggers": [7, 8, 9, 10, 11]
     },
     {
-      "form": "spokane-input",
+      "form": "spokane-input-form",
       "stage_order": 3,
       "group_order": 6,
       "field_order": 1,
@@ -19167,7 +19138,7 @@
       "group_visibility_triggers": [2, 3, 5, 6, 7]
     },
     {
-      "form": "spokane-input",
+      "form": "spokane-input-form",
       "stage_order": 3,
       "group_order": 6,
       "field_order": 3,
@@ -19176,7 +19147,7 @@
       "group_visibility_triggers": [4]
     },
     {
-      "form": "spokane-input",
+      "form": "spokane-input-form",
       "stage_order": 3,
       "group_order": 6,
       "field_order": 7,
@@ -19185,7 +19156,7 @@
       "group_visibility_triggers": [8]
     },
     {
-      "form": "spokane-input",
+      "form": "spokane-input-form",
       "stage_order": 3,
       "group_order": 7,
       "field_order": 1,
@@ -19194,7 +19165,7 @@
       "group_visibility_triggers": [2, 3]
     },
     {
-      "form": "spokane-input",
+      "form": "spokane-input-form",
       "stage_order": 3,
       "group_order": 8,
       "field_order": 1,
@@ -19203,7 +19174,7 @@
       "group_visibility_triggers": [2]
     },
     {
-      "form": "spokane-input",
+      "form": "spokane-input-form",
       "stage_order": 3,
       "group_order": 9,
       "field_order": 1,
@@ -19212,72 +19183,72 @@
       "group_visibility_triggers": [2, 3, 4, 5]
     },
     {
-      "form": "spokane-input",
+      "form": "spokane-input-form",
       "stage_order": 4,
-      "group_order": 2,
+      "group_order": 1,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
       "group_visibility_triggers": [2, 3, 4]
     },
     {
-      "form": "spokane-input",
+      "form": "spokane-input-form",
       "stage_order": 4,
-      "group_order": 3,
+      "group_order": 2,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
       "group_visibility_triggers": [2, 3]
     },
     {
-      "form": "spokane-input",
+      "form": "spokane-input-form",
       "stage_order": 4,
-      "group_order": 4,
+      "group_order": 3,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
       "group_visibility_triggers": [2, 3, 4]
     },
     {
-      "form": "spokane-input",
+      "form": "spokane-input-form",
       "stage_order": 4,
-      "group_order": 5,
+      "group_order": 4,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
       "group_visibility_triggers": [2]
     },
     {
-      "form": "spokane-input",
+      "form": "spokane-input-form",
       "stage_order": 5,
-      "group_order": 2,
+      "group_order": 1,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes",
       "group_visibility_triggers": [2, 3, 4, 5]
     },
     {
-      "form": "spokane-input",
+      "form": "spokane-input-form",
       "stage_order": 5,
-      "group_order": 2,
+      "group_order": 1,
       "field_order": 5,
       "type": "radiofield",
       "option_value": "forest-management-plan",
       "group_visibility_triggers": [6]
     },
     {
-      "form": "spokane-input",
+      "form": "spokane-input-form",
       "stage_order": 6,
-      "group_order": 5,
+      "group_order": 4,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "yes-share",
       "group_visibility_triggers": [2, 3, 4]
     },
     {
-      "form": "spokane-input",
+      "form": "spokane-input-form",
       "stage_order": 6,
-      "group_order": 6,
+      "group_order": 5,
       "field_order": 1,
       "type": "radiofield",
       "option_value": "allow-followup",
@@ -19286,25 +19257,25 @@
   ],
   "stage_visibility_triggers": [
     {
-      "form": "spokane-input",
+      "form": "spokane-input-form",
       "stage_order": 2,
-      "field_order": 2,
+      "field_order": 1,
       "type": "checkboxfield",
       "option_value": "agriculture",
       "stage_visibility_triggers": [3]
     },
     {
-      "form": "spokane-input",
+      "form": "spokane-input-form",
       "stage_order": 2,
-      "field_order": 2,
+      "field_order": 1,
       "type": "checkboxfield",
       "option_value": "livestock",
       "stage_visibility_triggers": [4]
     },
     {
-      "form": "spokane-input",
+      "form": "spokane-input-form",
       "stage_order": 2,
-      "field_order": 2,
+      "field_order": 1,
       "type": "checkboxfield",
       "option_value": "forestry",
       "stage_visibility_triggers": [5]
@@ -19332,7 +19303,7 @@
     {
       "display_name": "spokane-vsp",
       "slug": "spokane-vsp",
-      "forms": ["spokane-input"]
+      "forms": ["spokane-input-form"]
     },
     {
       "display_name": "pbdurham",

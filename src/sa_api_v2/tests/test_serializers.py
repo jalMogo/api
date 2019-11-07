@@ -812,9 +812,9 @@ class TestFlavorDeserializer (TestCase):
 
         # Test that stage visibility triggers have been created:
         forms = next(flavor for flavor in flavors if flavor.slug == 'spokane-vsp').forms.all()
-        form = forms.get(label='spokane-input')
+        form = forms.get(label='spokane-input-form')
         self.assertEqual(
-            [stage.order for stage in form.stages.get(order=2).modules.get(order=2).checkboxfield.options.first().stage_visibility_triggers.all()],
+            [stage.order for stage in form.stages.get(order=2).modules.get(order=1).checkboxfield.options.first().stage_visibility_triggers.all()],
             [3]
         )
 
