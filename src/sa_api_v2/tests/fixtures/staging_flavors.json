@@ -287,7 +287,6 @@
             "bellevue-grid",
             "bellevue-bike-share"
           ],
-          "validate_geometry": true,
           "modules": [
             {
               "order": 1,
@@ -16054,7 +16053,6 @@
             "spokane-input",
             "spokane-county-outline"
           ],
-          "validate_geometry": true,
           "header_text": "Your Property",
           "modules": [
             {

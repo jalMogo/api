@@ -136,12 +136,6 @@ class FormStage(models.Model):
         help_text="Determines whether the stage is visible by default.",
     )
 
-    validate_geometry = models.BooleanField(
-        default=False,
-        blank=True,
-        help_text="Determines whether we should validate whether a correct lng/lat has been entered at this stage.",
-    )
-
     def __unicode__(self):
         return 'order: {}, containing {} modules, on form: \"{}\"'.format(
             self.order,

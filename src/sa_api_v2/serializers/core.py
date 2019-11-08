@@ -1089,7 +1089,6 @@ class FormStageSerializer (serializers.ModelSerializer):
             'order',
             'visible',
             'header_text',
-            'validate_geometry',
         ]
 
 
