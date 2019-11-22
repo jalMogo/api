@@ -1,24 +1,45 @@
 import json
 from django.test import TestCase
-# from django.test.client import Client
-from django.test.client import RequestFactory
-# from django.contrib.auth.models import User
 from django.core.cache import cache
-from django.core.urlresolvers import reverse
-from django.contrib.auth.models import AnonymousUser
 # from mock import patch
 # from nose.tools import (istest, assert_equal, assert_not_equal, assert_in,
 #                         assert_raises)
-from ..models import (DataSet, User, Group, SubmittedThing, Action, Place, Submission,
-    DataSetPermission, check_data_permission, DataIndex, IndexedValue)
+from django.core.exceptions import (
+    ValidationError,
+)
+from django.contrib.auth.models import AnonymousUser
+from ..models import (
+    Form,
+    FormStage,
+    OrderedModule,
+    GroupModule,
+    SkipStageModule,
+    NestedOrderedModule,
+    HtmlModule,
+    RadioField,
+    RadioOption,
+    DataSet,
+    User,
+    Group,
+    SubmittedThing,
+    Action,
+    Modal,
+    Place,
+    Submission,
+    DataSetPermission,
+    check_data_permission,
+    DataIndex,
+    IndexedValue
+)
 from ..apikey.models import ApiKey
 # from ..views import SubmissionCollectionView
 # from ..views import raise_error_if_not_authenticated
 # from ..views import ApiKeyCollectionView
 # from ..views import OwnerPasswordView
 # import json
-import mock
 from mock import patch
+
+# ./src/manage.py test -s sa_api_v2.tests.test_models:TestFormModel.test_fails_with_multiple_relations_on_form_module
 
 
 class TestSubmittedThing (TestCase):
@@ -69,9 +90,6 @@ class TestDataIndexes (TestCase):
         self.owner = User.objects.create(username='myuser')
         self.dataset = DataSet.objects.create(slug='data',
                                               owner_id=self.owner.id)
-
-    def tearDown(self):
-        User.objects.all().delete()  # Everything should cascade from owner
 
     def test_indexed_values_are_indexed_when_thing_is_saved(self):
         self.dataset.indexes.add(DataIndex(attr_name='index1'), bulk=False)
@@ -201,9 +219,6 @@ class CloningTests (TestCase):
     def clear_objects(self):
         # This should cascade to everything else.
         User.objects.all().delete()
-
-    def tearDown(self):
-        self.clear_objects()
 
     def setUp(self):
         self.clear_objects()
@@ -394,9 +409,6 @@ class DataPermissionTests (TestCase):
     def setUp(self):
         self.clear_objects()
 
-    def tearDown(self):
-        self.clear_objects()
-
     def test_default_dataset_permissions_allow_reading(self):
         owner = User.objects.create(username='myowner')
         user = User.objects.create(username='myuser')
@@ -578,3 +590,348 @@ class DataPermissionTests (TestCase):
 # - Specific client permission allows/restricts reading and writing
 # - General group permission allows reading and restricts writing
 # - Specific group permission allows/restricts reading and writing
+
+class TestFormModel (TestCase):
+    # ./src/manage.py test -s sa_api_v2.tests.test_models:TestFormModel
+    @classmethod
+    def setUpTestData(cls):
+        cls.form = Form.objects.create(label="form 1")
+
+        cls.stages = [
+            FormStage.objects.create(order=0, form=cls.form),
+        ]
+
+        html_module = HtmlModule.objects.create(
+            content="<p>Html test module model</p>",
+        )
+
+        cls.radio_field = RadioField.objects.create(
+            key="ward",
+            prompt="where is your ward?",
+        )
+        RadioOption.objects.create(
+            label="Ward 1",
+            value="ward_1",
+            field=cls.radio_field,
+        )
+        RadioOption.objects.create(
+            label="Ward 2",
+            value="ward_2",
+            field=cls.radio_field,
+        )
+
+        html_grouped_module = HtmlModule.objects.create(
+            content="<p>html within a group!</p>",
+        )
+
+        html_grouped_module_2 = HtmlModule.objects.create(
+            content="<p>html within a group!</p>",
+        )
+
+        related_group_module = GroupModule.objects.create(
+            label="This is a group",
+        )
+
+        cls.nested_ordered_modules = [
+            NestedOrderedModule.objects.create(
+                order=1,
+                group=related_group_module,
+                htmlmodule=html_grouped_module,
+            ),
+            NestedOrderedModule.objects.create(
+                order=2,
+                group=related_group_module,
+                htmlmodule=html_grouped_module_2,
+            ),
+        ]
+
+        cls.ordered_modules = [
+            OrderedModule.objects.create(
+                order=1,
+                stage=cls.stages[0],
+                htmlmodule=html_module,
+            ),
+            OrderedModule.objects.create(
+                order=2,
+                stage=cls.stages[0],
+                radiofield=cls.radio_field,
+            ),
+            OrderedModule.objects.create(
+                order=3,
+                stage=cls.stages[0],
+                groupmodule=related_group_module,
+            ),
+        ]
+
+    def tearDown(self):
+        Form.objects.all().delete()
+        DataSet.objects.all().delete()
+        User.objects.all().delete()
+
+    def test_error_with_multiple_relations_on_form_module(self):
+        with self.assertRaises(ValidationError) as context:
+            radio_field = RadioField.objects.create(
+                key="ward",
+                prompt="where is your ward?",
+            )
+            html_module = HtmlModule.objects.create(
+                content="<p>Html test module model</p>",
+            )
+
+            OrderedModule.objects.create(
+                order=2,
+                stage=self.stages[0],
+                htmlmodule=html_module,
+                radiofield=radio_field,
+            ),
+        self.assertTrue(
+            '[FormModuleModel] Instance has more than one related model' in context.exception.message
+        )
+
+    def test_error_on_multiple_ordered_modules_for_related_module(self):
+        # This radio field should not be deleted on cascade, because
+        # it is attached to a form that won't be deleted:
+        radio_field = RadioField.objects.create(
+            key="option_test",
+            prompt="test",
+        )
+
+        group_module = GroupModule.objects.create(
+            label="this GroupModule won't be deleted."
+        )
+
+        NestedOrderedModule.objects.create(
+            order=0,
+            group=group_module,
+            radiofield=radio_field,
+        )
+
+        with self.assertRaises(ValidationError) as context:
+            OrderedModule.objects.create(
+                order=3,
+                stage=self.stages[0],
+                radiofield=radio_field,
+            )
+        self.assertTrue(
+            '[FormModuleModel] RelatedModule cannot have more than one (Nested)OrderedModules pointing to it' in context.exception.message
+        )
+
+
+    def test_error_with_stage_skip_module_in_different_form(self):
+        other_form = Form.objects.create(label="form 2")
+
+        other_stages = [
+            FormStage.objects.create(order=0, form=other_form),
+            FormStage.objects.create(order=1, form=other_form),
+        ]
+
+        module = SkipStageModule.objects.create(
+            stage=other_stages[0],
+        )
+
+        with self.assertRaises(ValidationError) as context:
+            OrderedModule.objects.create(
+                order=4,
+                stage=self.stages[0],
+                skipstagemodule=module,
+            )
+        self.assertTrue(
+            '[SkipStageModule] self.stage has a different Form than this module:' in context.exception.message
+        )
+        OrderedModule.objects.create(
+            order=4,
+            stage=other_stages[1],
+            skipstagemodule=module,
+        )
+
+    def test_form_field_info_modal(self):
+        info_modal = Modal.objects.create(
+            header="header",
+            content="content",
+        )
+        radio_field = RadioField.objects.create(
+            key="info modal test",
+            prompt="Which option will you choose?",
+            info_modal=info_modal,
+        )
+        info_modal.delete()
+        # assert that our radiofield still exists:
+        radio_field.refresh_from_db()
+
+        info_modal_2 = Modal.objects.create(
+            header="header",
+            content="content",
+        )
+        radio_field_2 = RadioField.objects.create(
+            key="info modal test 2",
+            prompt="Which option will you choose?",
+            info_modal=info_modal_2,
+        )
+        radio_field_2.delete()
+
+        # assert that our info_modal_2 has been deleted:
+        with self.assertRaises(Modal.DoesNotExist):
+            info_modal_2.refresh_from_db()
+
+    def test_module_field_deletion_sets_null(self):
+        mut_radio_field = RadioField.objects.create(
+            key="option_test",
+            prompt="Which option will you choose?",
+        )
+
+        OrderedModule.objects.create(
+            order=2,
+            stage=self.stages[0],
+            radiofield=mut_radio_field,
+        )
+        new_module = self.stages[0].modules.all()[2]
+        self.assertTrue(self.stages[0].modules.all().exists())
+        self.assertIsNotNone(new_module.get_related_module())
+        mut_radio_field.delete()
+        self.assertTrue(self.stages[0].modules.all().exists())
+        new_module.refresh_from_db()
+        self.assertIsNone(new_module.get_related_module())
+
+    def test_delete_cascades_modules_fields_and_options(self):
+        mut_form = Form.objects.create(label="this form will be deleted")
+        mut_stages = [
+            FormStage.objects.create(order=0, form=mut_form),
+        ]
+
+        mut_html_module = HtmlModule.objects.create(
+            content="<p>this will be deleted!</p>",
+        )
+
+        mut_radio_field = RadioField.objects.create(
+            key="option_test",
+            prompt="Which option will you choose?",
+        )
+
+        RadioOption.objects.create(
+            label="Option 1",
+            value="option_1",
+            field=mut_radio_field,
+        )
+        RadioOption.objects.create(
+            label="Option 2",
+            value="option_2",
+            field=mut_radio_field,
+        )
+
+        OrderedModule.objects.create(
+            order=1,
+            stage=mut_stages[0],
+            htmlmodule=mut_html_module,
+        )
+        OrderedModule.objects.create(
+            order=2,
+            stage=mut_stages[0],
+            radiofield=mut_radio_field,
+        )
+
+        # This radio field should not be deleted on cascade, because
+        # it is attached to a form that won't be deleted:
+        radio_field = RadioField.objects.create(
+            key="option_test",
+            prompt="test",
+        )
+
+        group_module = GroupModule.objects.create(
+            label="this GroupModule won't be deleted."
+        )
+
+        NestedOrderedModule.objects.create(
+            order=0,
+            group=group_module,
+            radiofield=radio_field,
+        )
+
+        # Create another form that will have the radio_field attached:
+        form = Form.objects.create(label="this form won't be deleted")
+        form_stage = FormStage.objects.create(order=0, form=form)
+        OrderedModule.objects.create(
+            order=1,
+            stage=form_stage,
+            groupmodule=group_module,
+        )
+
+        self.assertTrue(mut_form.stages.all().exists())
+        self.assertTrue(mut_stages[0].modules.all().exists())
+        self.assertTrue(mut_radio_field.options.all().exists())
+        mut_form.delete()
+        self.assertFalse(mut_form.stages.all().exists())
+        self.assertFalse(mut_stages[0].modules.all().exists())
+        self.assertFalse(mut_radio_field.options.all().exists())
+        # Test that modules left unattached to a form are deleted:
+        with self.assertRaises(RadioField.DoesNotExist) as context:
+            mut_radio_field.refresh_from_db()
+        self.assertTrue(
+            'RadioField matching query does not exist' in context.exception.message
+        )
+        with self.assertRaises(HtmlModule.DoesNotExist) as context:
+            mut_html_module.refresh_from_db()
+        self.assertTrue(
+            'HtmlModule matching query does not exist' in context.exception.message
+        )
+
+        # Test that attached modules still exists:
+        radio_field.refresh_from_db()
+
+    def test_module_field_permitted_group(self):
+        # Create a Group / Dataset which are not associated with our Form:
+        self.owner = User.objects.create(username='myuser')
+        outside_dataset = DataSet.objects.create(slug='other-dataset',
+                                              owner_id=self.owner.id)
+        outside_group = Group.objects.create(dataset=outside_dataset, name='admins')
+
+        # Create a Group on our Forms dataset:
+        self.dataset = DataSet.objects.create(slug='data',
+                                              owner_id=self.owner.id)
+        admin_group = Group.objects.create(dataset=self.dataset, name='admins')
+
+        # create a field that will only be accessible to admins:
+        admin_radio_field = RadioField.objects.create(
+            key="rating",
+            prompt="what is this project's rating?",
+        )
+
+        RadioOption.objects.create(
+            label="Good",
+            value="good",
+            field=admin_radio_field,
+        )
+        RadioOption.objects.create(
+            label="Bad",
+            value="bad",
+            field=admin_radio_field,
+        )
+
+        # try attaching a Group to a FormField before the FromField is
+        # associated with a Stage/Form/Dataset
+        with self.assertRaises(ValidationError) as context:
+            OrderedModule.objects.create(
+                order=2,
+                stage=self.stages[0],
+                radiofield=admin_radio_field,
+                permitted_group=admin_group,
+            )
+        self.assertTrue(
+            '[FormModuleModel] Dataset must be assigned before adding Restrcted Group to module' in context.exception.message
+        )
+
+        # set the form's dataset, and it should work now:
+        self.form.dataset = self.dataset
+        ordered_module = OrderedModule.objects.create(
+            order=2,
+            stage=self.stages[0],
+            radiofield=admin_radio_field,
+            permitted_group=admin_group,
+        )
+
+        # try resetting the Restricted Group to an outside group:
+        with self.assertRaises(ValidationError) as context:
+            ordered_module.permitted_group = outside_group
+            ordered_module.save()
+        self.assertTrue(
+            "[FormModuleModel] permitted_group is not within this form's dataset" in context.exception.message
+        )

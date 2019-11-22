@@ -1,0 +1,213 @@
+{
+  "layer_groups": [
+    {
+      "label": "layer1"
+    },
+    {
+      "label": "layer2"
+    }
+  ],
+  "forms": [
+    {
+      "label": "form1",
+      "is_enabled": true,
+      "dataset": "test-dataset",
+      "stages": [
+        {
+          "order": 1,
+          "visible_layer_groups": ["layer1", "layer2"],
+          "modules": [
+          {
+            "order": 1,
+            "skipstagemodule": {
+                "label": "make this skip to last stage"
+            }
+
+          },
+            {
+              "order": 2,
+              "visible": true,
+              "radiofield": {
+                "key": "project",
+                "prompt": "what is your project idea?",
+                "label": "my project idea is:",
+                "variant": "RA",
+                "options": [
+                  {
+                    "label": "Art",
+                    "value": "art"
+                  },
+                  {
+                    "label": "Show me form stage 2!",
+                    "value": "show-stage-2"
+                  }
+                ],
+                "info_modal": {
+                  "header": "test modal",
+                  "content": "<div style='width:300px;'><img style='width:100%;' src='/static/css/images/practice-no-till.jpg' alt='No till' /><p><strong>NRCS code:</strong> 329</p><p>No till consists of one pass seed and fertilizer placement.</p></div>"
+                }
+              }
+            },
+            {
+              "order": 3,
+              "visible": true,
+              "checkboxfield": {
+                "key": "project",
+                "prompt": "what is your ethnicity?",
+                "label": "my ethnicity is:",
+                "required": true,
+                "private": true,
+                "options": [
+                  {
+                    "label": "White",
+                    "value": "white"
+                  },
+                  {
+                    "label": "Black",
+                    "value": "black"
+                  }
+                ]
+              }
+            },
+            {
+              "order": 4,
+              "visible": true,
+              "permitted_group_id": 9999,
+              "numberfield": {
+                "key": "water-lines",
+                "prompt": "how many meters of waterlines are on your property?",
+                "label": "waterlines (in meters):",
+                "required": true,
+                "private": true,
+                "placeholder": "enter meters of waterlines here (eg: 32)",
+                "minimum": 5,
+                "units": "miles"
+              }
+            },
+            {
+              "order": 5,
+              "visible": true,
+              "groupmodule": {
+                "label": "a group module",
+                "modules": [
+                  {
+                    "order": 1,
+                    "radiofield": {
+                      "key": "question-1",
+                      "label": "question 1:",
+                      "prompt": "Do you want a park?",
+                      "options": [
+                        {
+                          "label": "Yes",
+                          "value": "yes"
+                        },
+                        {
+                          "label": "No",
+                          "value": "no"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 2,
+                    "visible": false,
+                    "radiofield": {
+                      "key": "question-2",
+                      "prompt": "Why did you choose 'yes' to the previous question?",
+                      "label": "Reason why:",
+                      "options": [
+                        {
+                          "label": "Because I want a park",
+                          "value": "park"
+                        },
+                        {
+                          "label": "Because it was the easiest choice",
+                          "value": "easy"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "order": 3,
+                    "visible": true,
+                    "htmlmodule": {
+                      "label": "end of survey",
+                      "content": "<p>thanks for taking the survey</p>"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "order": 6,
+              "visible": true,
+              "htmlmodule": {
+                "label": "html module",
+                "content": "<div>hi</div>"
+              }
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "visible": false,
+          "map_viewport": {
+            "zoom": 12,
+            "latitude": 44.4,
+            "longitude": -120.4,
+            "bearing": 24,
+            "pitch": 20
+          },
+          "modules": []
+        },
+        {
+          "order": 3,
+          "map_viewport": {
+            "zoom": 12,
+            "latitude": 44.4,
+            "longitude": -120.4,
+            "bearing": 24,
+            "pitch": 20
+          },
+          "modules": []
+        }
+      ]
+    }
+  ],
+  "group_visibility_triggers": [
+    {
+      "form": "form1",
+      "stage_order": 1,
+      "group_order": 5,
+      "field_order": 1,
+      "type": "radiofield",
+      "option_value": "yes",
+      "group_visibility_triggers": [2]
+    }
+  ],
+  "stage_visibility_triggers": [
+    {
+      "form": "form1",
+      "stage_order": 1,
+      "field_order": 2,
+      "type": "radiofield",
+      "option_value": "show-stage-2",
+      "stage_visibility_triggers": [2]
+    }
+  ],
+  "skip_stage_modules": [
+    {
+      "form": "form1",
+      "stage_order": 1,
+      "module_order": 1,
+      "destination_stage_order": 3
+    }
+  ],
+  "flavors": [
+    {
+      "display_name": "test-flavor",
+      "slug": "test-flavor",
+      "forms": ["form1"]
+    }
+  ]
+}

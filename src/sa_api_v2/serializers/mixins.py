@@ -1,6 +1,8 @@
 import ujson as json
 from rest_framework import serializers, fields
 from collections import OrderedDict
+from rest_framework.relations import PKOnlyObject
+from rest_framework.fields import SkipField
 from ..params import (
     INCLUDE_PRIVATE_FIELDS_PARAM,
 )
@@ -120,4 +122,68 @@ class AttachmentSerializerMixin (EmptyModelSerializer, serializers.ModelSerializ
         # add an 'id', which is the primary key
         ret = super(AttachmentSerializerMixin, self).to_representation(instance)
         ret['id'] = instance.pk
+        return ret
+
+
+class FormFieldOptionsCreator (object):
+    def create(self, validated_data):
+        options_data = validated_data.pop('options', None)
+        field = super(FormFieldOptionsCreator, self).create(validated_data)
+        # ensure that no order has been supplied, because we auto-generate it
+        # upon creation:
+        order = 1
+
+        for option_data in options_data:
+            if 'order' in option_data.keys():
+                raise serializers.ValidationError("Order should not be supplied when creating a FormField option")
+
+            option_data['order'] = order
+            order += 1
+            # read from our custom attrs:
+            self.Meta.options_model.objects.create(
+                field=field,
+                **option_data
+            )
+        return field
+
+class FormModulesValidator (object):
+    def validate(self, data):
+        if hasattr(self, 'initial_data'):
+            unknown_keys = set(self.initial_data.keys()) - set(data.keys())
+            if unknown_keys:
+                raise serializers.ValidationError("Got unknown fields: {}".format(list(unknown_keys)))
+        return data
+
+class OmitNullFieldsFromRepr (object):
+    # removes "null" fields, based on our configured fields in
+    # 'self.Meta.fields_to_omit`:
+    def to_representation(self, instance):
+        """
+        Object instance -> Dict of primitive datatypes.
+        """
+        ret = OrderedDict()
+        fields = self._readable_fields
+
+        for field in fields:
+            try:
+                attribute = field.get_attribute(instance)
+            except SkipField:
+                continue
+
+            # We skip `to_representation` for `None` values so that fields do
+            # not have to explicitly deal with that case.
+            #
+            # For related fields with `use_pk_only_optimization` we need to
+            # resolve the pk value.
+            attribute_or_pk = attribute.pk if isinstance(attribute, PKOnlyObject) else attribute
+
+            # Skip the fields here, if needed:
+            if not attribute_or_pk and ('*' in self.Meta.fields_to_omit or field.field_name in  self.Meta.fields_to_omit):
+                continue
+
+            if attribute_or_pk is None:
+                ret[field.field_name] = None
+            else:
+                ret[field.field_name] = field.to_representation(attribute)
+
         return ret

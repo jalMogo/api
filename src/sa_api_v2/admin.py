@@ -11,16 +11,38 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import UserChangeForm as BaseUserChangeForm
 from django.contrib.gis import admin
 from django.contrib import messages
+from django.core.exceptions import FieldDoesNotExist
 from django.core.urlresolvers import reverse
-from django.forms import ValidationError
+from django.forms import (
+    ValidationError,
+    ModelForm,
+    CheckboxSelectMultiple,
+    ModelMultipleChoiceField,
+)
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.utils.html import escape
 from django_ace import AceWidget
 from django_object_actions import DjangoObjectActions
+from django.utils.html import format_html
+
 from .apikey.models import ApiKey
 from .cors.models import Origin
 from .cors.admin import OriginAdmin
+
+from adminsortable2.admin import SortableInlineAdminMixin
 from .tasks import clone_related_dataset_data
+import nested_admin
+
+__all__ = []
+
+
+class HiddenModelAdmin (admin.ModelAdmin):
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
 
 
 class SubmissionSetFilter (SimpleListFilter):
@@ -362,6 +384,280 @@ class SubmissionAdmin(SubmittedThingAdmin):
     api_path.allow_tags = True
 
 
+class FormFieldOptionInlineForm(ModelForm):
+    group_visibility_triggers = ModelMultipleChoiceField(
+        widget=CheckboxSelectMultiple,
+        queryset=models.NestedOrderedModule.objects.none(),
+        help_text=unicode(models.FormFieldOption._meta.get_field('group_visibility_triggers').help_text),
+        required=False,
+    )
+    fields = ('group_visibility_triggers',)
+
+    def __init__(self, *args, **kwargs):
+        super(FormFieldOptionInlineForm, self).__init__(*args, **kwargs)
+        # Only add visibility triggers if we are inside of a
+        # GroupModule. If so, only allow trigger onto modules that are
+        # within the same GroupModule as this Option's FormField
+        if hasattr(self.instance, 'field') and hasattr(self.instance.field, 'nestedorderedmodule'):
+            group_module_id = self.instance.field.nestedorderedmodule.group.id
+
+            # limit the selectable group_visibility_triggers to
+            # NestedOrderedModules that belong to the same form, and are not
+            # visible by default
+            nested_ordered_module_id = self.instance.field.nestedorderedmodule.id
+            self.fields['group_visibility_triggers'].queryset = models.\
+                NestedOrderedModule.objects.select_related('group').\
+                filter(
+                    # filter out this option's OrderedModule, because we
+                    # don't want to trigger our own field:
+                    ~Q(id=nested_ordered_module_id),
+                    # Only select NestedOrderedModules under the same
+                    # GroupModule as this instance's field:
+                    group_id=group_module_id,
+                    visible=False,
+                )
+
+
+class CheckboxOptionInline(nested_admin.NestedTabularInline):
+    model = models.CheckboxOption
+    form = FormFieldOptionInlineForm
+
+    fields = ('label', 'value') + FormFieldOptionInlineForm.fields
+
+
+class CheckboxFieldAdmin(HiddenModelAdmin, nested_admin.NestedModelAdmin):
+    model = models.CheckboxField
+    inlines = [
+        CheckboxOptionInline
+    ]
+
+
+class RadioOptionInline(nested_admin.NestedTabularInline):
+    model = models.RadioOption
+    form = FormFieldOptionInlineForm
+
+    fields = ('label', 'value') + FormFieldOptionInlineForm.fields
+
+
+class RadioFieldAdmin(HiddenModelAdmin, nested_admin.NestedModelAdmin):
+    model = models.RadioField
+    inlines = [
+        RadioOptionInline
+    ]
+
+
+class AbstractFormModuleAdmin (HiddenModelAdmin, admin.ModelAdmin):
+    model = models.GroupModule
+    fields = ['visible'] + models.RELATED_MODULES
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        Model = None
+        # TODO: update models.RELATED_MODULES and make this read from it:
+        if db_field.name == "radiofield":
+            Model = models.RadioField
+        elif db_field.name == "filefield":
+            Model = models.FileField
+        elif db_field.name == "numberfield":
+            Model = models.NumberField
+        elif db_field.name == "datefield":
+            Model = models.DateField
+        elif db_field.name == "addressfield":
+            Model = models.AddressField
+        elif db_field.name == "textfield":
+            Model = models.TextField
+        elif db_field.name == "textareafield":
+            Model = models.TextAreaField
+        elif db_field.name == "checkboxfield":
+            Model = models.CheckboxField
+        # NOTE: groupmodule is an exception - this path only occurs on
+        # OrderedModule:
+        elif db_field.name == "groupmodule":
+            Model = models.GroupModule
+        elif db_field.name == "htmlmodule":
+            Model = models.HtmlModule
+        elif db_field.name == "skipstagemodule":
+            Model = models.SkipStageModule
+        elif db_field.name == "submitbuttonmodule":
+            Model = models.SubmitButtonModule
+        else:
+            raise FieldDoesNotExist("db_field name does not exist: {}".format(db_field.name))
+
+        # Filter our related modules to only those that are unattached, or
+        # already attached to our current (Nested)OrderedModule:
+        kwargs["queryset"] = self._get_related_queryset(Model.objects, db_field.name)
+
+        return super(AbstractFormModuleAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
+
+class OrderedModuleAdmin(AbstractFormModuleAdmin):
+    model = models.OrderedModule
+    readonly_fields = ('formstage', 'order')
+    fields = ['formstage'] + AbstractFormModuleAdmin.fields + ["groupmodule"]
+
+    def _get_related_queryset(self, queryset, field_name):
+        if field_name == 'groupmodule':
+            return queryset.prefetch_related('orderedmodule').filter(
+                Q(orderedmodule__id=self.orderedmodule_id) | Q(orderedmodule=None),
+            )
+        else:
+            return queryset.prefetch_related('orderedmodule').filter(
+                # filter out the nested related modules, and look up any
+                # unattached modules, or modules already attached to this one.
+                Q(nestedorderedmodule=None) & (Q(orderedmodule__id=self.orderedmodule_id) | Q(orderedmodule=None)),
+            )
+
+    def get_form(self, request, obj=None, **kwargs):
+        # filter RadioFields that have ALL modules within the same flavor as this module:
+        # https://www.agiliq.com/blog/2014/04/django-backward-relationship-lookup/
+        self.orderedmodule_id = obj.id
+        return super(OrderedModuleAdmin, self).get_form(request, obj, **kwargs)
+
+    def formstage(self, instance):
+            return format_html(
+                '<a href="{}"><strong>{}</strong></a>',
+                reverse('admin:sa_api_v2_formstage_change', args=[instance.stage.pk]),
+                instance.stage,
+            )
+
+
+class NestedOrderedModuleAdmin(AbstractFormModuleAdmin):
+    model = models.NestedOrderedModule
+    readonly_fields = ('parent_group_module', 'order')
+    fields = ['parent_group_module'] + AbstractFormModuleAdmin.fields
+
+    def _get_related_queryset(self, queryset, field_name):
+        # include only in the queryset RelatedModules that are unattached:
+        return queryset.prefetch_related('nestedorderedmodule').filter(
+            Q(orderedmodule=None) & (Q(nestedorderedmodule__id=self.nestedorderedmodule_id) | Q(nestedorderedmodule=None)),
+        )
+
+    def get_form(self, request, obj=None, **kwargs):
+        # Get the id of this object:
+        self.nestedorderedmodule_id = obj.id
+        return super(NestedOrderedModuleAdmin, self).get_form(request, obj, **kwargs)
+
+    def parent_group_module(self, instance):
+            return format_html(
+                '<a href="{}"><strong>{}</strong></a>',
+                reverse('admin:sa_api_v2_groupmodule_change', args=[instance.group.pk]),
+                instance.group,
+            )
+
+
+# Allows us to save FormStage and FormModules that have been created
+# inline.
+class AlwaysChangedModelForm(ModelForm):
+    def has_changed(self, *args, **kwargs):
+        if self.instance.pk is None:
+            return True
+        return super(AlwaysChangedModelForm, self).has_changed(*args, **kwargs)
+
+
+class OrderedModuleInline(SortableInlineAdminMixin, admin.StackedInline):
+    model = models.OrderedModule
+    extra = 0
+    form = AlwaysChangedModelForm
+    fields = ['visible', 'edit_url']
+
+    readonly_fields = ['edit_url']
+
+    def edit_url(self, instance):
+        if instance.pk is None:
+            return '(You must save your form before you can edit this form module.)'
+        else:
+            return format_html(
+                '<a href="{}"><strong>Edit Ordered Module</strong></a>',
+                reverse('admin:sa_api_v2_orderedmodule_change', args=[instance.pk])
+            )
+
+
+class NestedOrderedModuleInline(SortableInlineAdminMixin, admin.StackedInline):
+    model = models.NestedOrderedModule
+    extra = 0
+    form = AlwaysChangedModelForm
+    fields = ['visible', 'edit_url']
+
+    readonly_fields = ['edit_url']
+
+    def edit_url(self, instance):
+        if instance.pk is None:
+            return '(You must save your form before you can edit this form module.)'
+        else:
+            return format_html(
+                '<a href="{}"><strong>Edit Nested Ordered Module</strong></a>',
+                reverse('admin:sa_api_v2_nestedorderedmodule_change', args=[instance.pk])
+            )
+
+
+class MapViewportInline(nested_admin.NestedStackedInline):
+    model = models.MapViewport
+    extra = 0
+
+
+class GroupModuleAdmin(HiddenModelAdmin, nested_admin.NestedModelAdmin):
+    model = models.GroupModule
+    inlines = [
+        NestedOrderedModuleInline,
+    ]
+
+
+class FormStageAdmin(HiddenModelAdmin, nested_admin.NestedModelAdmin):
+    model = models.FormStage
+    readonly_fields = ('link_to_form', 'order')
+    fields = ('link_to_form', 'order', 'visible_layer_groups')
+    exclude = ("form",)
+    inlines = [
+        MapViewportInline,
+        OrderedModuleInline,
+    ]
+
+    def link_to_form(self, instance):
+        return format_html(
+            '<a href="{}"><strong>{}</strong></a>',
+            reverse('admin:sa_api_v2_form_change', args=[instance.form.pk]),
+            instance.form,
+        )
+
+
+class FormStageInline(SortableInlineAdminMixin, admin.StackedInline):
+    model = models.FormStage
+    extra = 0
+    form = AlwaysChangedModelForm
+
+    readonly_fields = ['edit_url']
+
+    def edit_url(self, instance):
+        if instance.pk is None:
+            return '(You must save your form before you can edit this form stage.)'
+        else:
+            return format_html(
+                '<a href="{}"><strong>Edit Form Stage</strong></a>',
+                reverse('admin:sa_api_v2_formstage_change', args=[instance.pk])
+            )
+
+    def summary(self, instance):
+        related_module = instance.get_related_module()
+        if related_module is None:
+            return "module id: {}".format(instance.id)
+        else:
+            return "module id: {}, {}".format(
+                instance.id,
+                related_module,
+            )
+
+
+class FormAdmin(admin.ModelAdmin):
+    model = models.Form
+    inlines = [
+        FormStageInline
+    ]
+
+
+class FlavorAdmin(admin.ModelAdmin):
+    model = models.Flavor
+    prepopulated_fields = {'slug': ['display_name']}
+
+
 class ActionAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_datetime'
     list_display = ('id', 'created_datetime', 'action', 'type_of_thing', 'submitter_name', 'source')
@@ -441,6 +737,26 @@ admin.site.register(models.Action, ActionAdmin)
 admin.site.register(models.Group, GroupAdmin)
 admin.site.register(models.Webhook, WebhookAdmin)
 admin.site.register(models.PlaceEmailTemplate, PlaceEmailTemplateAdmin)
+admin.site.register(models.Flavor, FlavorAdmin)
+admin.site.register(models.Form, FormAdmin)
+admin.site.register(models.FormStage, FormStageAdmin)
+admin.site.register(models.OrderedModule, OrderedModuleAdmin)
+admin.site.register(models.NestedOrderedModule, NestedOrderedModuleAdmin)
+admin.site.register(models.LayerGroup, admin.ModelAdmin)
+admin.site.register(models.MapViewport, HiddenModelAdmin)
+admin.site.register(models.RadioField, RadioFieldAdmin)
+admin.site.register(models.HtmlModule, HiddenModelAdmin)
+admin.site.register(models.SkipStageModule, HiddenModelAdmin)
+admin.site.register(models.SubmitButtonModule, HiddenModelAdmin)
+admin.site.register(models.TextField, HiddenModelAdmin)
+admin.site.register(models.TextAreaField, HiddenModelAdmin)
+admin.site.register(models.DateField, HiddenModelAdmin)
+admin.site.register(models.NumberField, HiddenModelAdmin)
+admin.site.register(models.FileField, HiddenModelAdmin)
+admin.site.register(models.CheckboxField, CheckboxFieldAdmin)
+admin.site.register(models.AddressField, HiddenModelAdmin)
+admin.site.register(models.GroupModule, GroupModuleAdmin)
+admin.site.register(models.Modal, HiddenModelAdmin)
 
 admin.site.site_header = 'Mapseed API Server Administration'
 admin.site.site_title = 'Mapseed API Server'

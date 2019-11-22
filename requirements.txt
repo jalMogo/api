@@ -41,6 +41,8 @@ boto==2.39.0
 django-storages==1.6.6
 
 # hierarchy support for our dataset labels:
+# TODO: move over to django-mptt in Python 3.5+:
+# https://github.com/django-mptt/django-mptt
 django-closuretree==1.2.0
 
 
@@ -82,6 +84,8 @@ bleach==1.4.3
 # The Django admin interface
 # TODO: upgrade to 1.0.4 for django 1.11:
 django-ace==1.0.4
+django-nested-admin==3.2.3
+django-admin-sortable2==0.7
 
 # The manager interface
 requests>=2.9.1
