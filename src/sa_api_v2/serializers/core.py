@@ -4,19 +4,23 @@ DjangoRestFramework resources for the Shareabouts REST API.
 from django.utils import six
 from collections import defaultdict
 from django.core.exceptions import ValidationError
-from rest_framework import pagination, serializers
-from rest_framework.response import Response
+from rest_framework import serializers
+from collections import OrderedDict
 
 from .mixins import (
     ActivityGenerator,
     EmptyModelSerializer,
     DataBlobProcessor,
     AttachmentSerializerMixin,
+    FormModulesValidator,
+    FormFieldOptionsCreator,
+    OmitNullFieldsFromRepr,
 )
 
 from .fields import (
     GeometryField,
     DataSetRelatedField,
+    DataSetHyperlinkedField,
     UserRelatedField,
     PlaceRelatedField,
     SubmissionSetRelatedField,
@@ -145,7 +149,7 @@ class GroupSerializer (BaseGroupSerializer):
                                        .to_representation(obj.dataset))
         ret['name'] = obj.name
         ret['dataset_slug'] = obj.dataset.slug
-        ret['permissions'] = [] 
+        ret['permissions'] = []
 
         for permission in obj.permissions.all():
             ret['permissions'].append({
@@ -720,40 +724,504 @@ class ActionSerializer (EmptyModelSerializer, serializers.ModelSerializer):
 
         return serializer.data
 
+#################################################################################
+# Form Serializers
+#################################################################################
 
-###############################################################################
-#
-# Pagination Serializers
-# ----------------------
-#
+class BaseFormFieldOptionSerializer (
+    OmitNullFieldsFromRepr, 
+    serializers.ModelSerializer,
+    ):
+    stage_visibility_triggers = serializers.SlugRelatedField(
+        many=True,
+        slug_field="id",
+        queryset=models.FormStage.objects.all(),
+        required=False,
+    )
 
-class MetadataPagination(pagination.PageNumberPagination):
-    page_size_query_param = 'page_size'
-    page_size = 50
+    group_visibility_triggers = serializers.SlugRelatedField(
+        many=True,
+        slug_field="id",
+        queryset=models.OrderedModule.objects.all(),
+        required=False,
+    )
 
-    def get_paginated_response(self, data):
-        return Response({
-            'metadata': {
-                'length': self.page.paginator.count,
-                'page': self.page.number,
-                'next': self.get_next_link(),
-                'previous': self.get_previous_link()
-            },
-            'results': data
-        })
+    class Meta:
+        abstract = True
+        fields = [
+            'default',
+            'make_private', 
+            'icon', 
+            'group_visibility_triggers', 
+            'stage_visibility_triggers',
+            'order'
+        ]
+        fields_to_omit = [
+            'group_visibility_triggers',
+            'stage_visibility_triggers',
+            'make_private',
+            'default',
+            'icon',
+        ]
 
-class FeatureCollectionPagination(pagination.PageNumberPagination):
-    page_size_query_param = 'page_size'
-    page_size = 50
 
-    def get_paginated_response(self, data):
-        return Response({
-            'metadata': {
-                'length': self.page.paginator.count,
-                'page': self.page.number,
-                'next': self.get_next_link(),
-                'previous': self.get_previous_link()
-            },
-            'type': 'FeatureCollection',
-            'features': data
-        })
+# Form Field Options
+
+class CheckboxOptionSerializer (BaseFormFieldOptionSerializer):
+
+    class Meta(BaseFormFieldOptionSerializer.Meta):
+        model = models.CheckboxOption
+        fields = BaseFormFieldOptionSerializer.Meta.fields + ['label', 'value']
+
+
+class RadioOptionSerializer (BaseFormFieldOptionSerializer):
+
+    class Meta(BaseFormFieldOptionSerializer.Meta):
+        model = models.RadioOption
+        fields = BaseFormFieldOptionSerializer.Meta.fields + ['label', 'value']
+
+# Form Modules
+
+class SkipStageModuleSerializer (
+    FormModulesValidator,
+    serializers.ModelSerializer
+):
+    stage_id = serializers.PrimaryKeyRelatedField(
+        read_only=True,
+        required=False,
+        source='stage',
+    )
+    class Meta:
+        model = models.SkipStageModule
+        fields = ['label', 'stage_id']
+
+
+class HtmlModuleSerializer (
+    FormModulesValidator,
+    serializers.ModelSerializer
+):
+    class Meta:
+        model = models.HtmlModule
+        fields = ['content', 'label']
+
+
+class SubmitButtonModuleSerializer (
+    FormModulesValidator,
+    serializers.ModelSerializer
+):
+    class Meta:
+        model = models.SubmitButtonModule
+        fields = ['label']
+
+
+# Form Fields
+class ModalSerializer(
+    FormModulesValidator,
+    serializers.ModelSerializer
+):
+    class Meta:
+        model = models.Modal
+        fields = ['header', 'content']
+
+
+class BaseFormFieldSerializer (
+    OmitNullFieldsFromRepr,
+    FormModulesValidator,
+    serializers.ModelSerializer
+):
+    info_modal = ModalSerializer(required=False)
+    class Meta:
+        abstract = True
+        fields = [
+            'key',
+            'prompt',
+            'label',
+            'private',
+            'required',
+            'info_modal',
+        ]
+        fields_to_omit = ['info_modal']
+
+    def create(self, validated_data):
+        if 'info_modal' in validated_data.keys():
+            info_modal_data = validated_data.pop('info_modal')
+            # create our Modal instance, and add it to our FormField:
+            serializer = ModalSerializer(
+                    data=info_modal_data
+            )
+            if not serializer.is_valid():
+                raise serializers.ValidationError(
+                    "ModalSerializer failed to validate: {}".format(serializer.errors)
+                )
+            modal = serializer.save()
+            form_field = self.Meta.model.objects.create(**validated_data)
+            form_field.info_modal = modal
+        else:
+            form_field = self.Meta.model.objects.create(**validated_data)
+        form_field.save()
+        return form_field
+
+
+class AddressFieldModuleSerializer (BaseFormFieldSerializer):
+    class Meta(BaseFormFieldSerializer.Meta):
+        model = models.AddressField
+        fields = BaseFormFieldSerializer.Meta.fields + ['placeholder', 'reverse_geocode']
+
+
+class TextAreaFieldModuleSerializer (BaseFormFieldSerializer):
+    class Meta(BaseFormFieldSerializer.Meta):
+        model = models.TextAreaField
+        fields = BaseFormFieldSerializer.Meta.fields + ['placeholder', 'rich_text']
+
+
+class TextFieldModuleSerializer (BaseFormFieldSerializer):
+    class Meta(BaseFormFieldSerializer.Meta):
+        model = models.TextField
+        fields = BaseFormFieldSerializer.Meta.fields + ['placeholder', 'variant']
+
+
+class DateFieldModuleSerializer (BaseFormFieldSerializer):
+    class Meta(BaseFormFieldSerializer.Meta):
+        model = models.DateField
+        fields = BaseFormFieldSerializer.Meta.fields + [
+            'placeholder',
+            'include_ongoing',
+            'label_format',
+            'form_format',
+        ]
+
+
+class NumberFieldModuleSerializer (BaseFormFieldSerializer):
+
+    class Meta(BaseFormFieldSerializer.Meta):
+        model = models.NumberField
+        fields = BaseFormFieldSerializer.Meta.fields + ['placeholder', 'minimum', 'units']
+
+
+class FileFieldModuleSerializer (BaseFormFieldSerializer):
+
+    class Meta(BaseFormFieldSerializer.Meta):
+        model = models.FileField
+        fields = BaseFormFieldSerializer.Meta.fields
+
+
+class RadioFieldModuleSerializer (
+    FormFieldOptionsCreator,
+    BaseFormFieldSerializer
+):
+    options = RadioOptionSerializer(many=True, required=False)
+
+    class Meta(BaseFormFieldSerializer.Meta):
+        model = models.RadioField
+        fields = BaseFormFieldSerializer.Meta.fields + ['variant', 'dropdown_placeholder', 'options']
+        # custom attrs:
+        options_model = models.RadioOption
+
+
+class CheckboxFieldModuleSerializer (
+    FormFieldOptionsCreator,
+    BaseFormFieldSerializer
+):
+    options = CheckboxOptionSerializer(many=True)
+
+    class Meta(BaseFormFieldSerializer.Meta):
+        model = models.CheckboxField
+        fields = BaseFormFieldSerializer.Meta.fields + ['options']
+        # custom attrs:
+        options_model = models.CheckboxOption
+
+
+# Ordered Form Modules (our join table):
+class AbstractFormModuleSerializer (OmitNullFieldsFromRepr, serializers.ModelSerializer):
+    htmlmodule = HtmlModuleSerializer(required=False)
+    skipstagemodule = SkipStageModuleSerializer(required=False)
+    radiofield = RadioFieldModuleSerializer(required=False)
+    numberfield = NumberFieldModuleSerializer(required=False)
+    filefield = FileFieldModuleSerializer(required=False)
+    datefield = DateFieldModuleSerializer(required=False)
+    checkboxfield = CheckboxFieldModuleSerializer(required=False)
+    textfield = TextFieldModuleSerializer(required=False)
+    addressfield = AddressFieldModuleSerializer(required=False)
+    textareafield = TextAreaFieldModuleSerializer(required=False)
+    submitbuttonmodule = SubmitButtonModuleSerializer(required=False)
+
+    class Meta:
+        fields_to_omit = ['*']
+
+    def create(self, validated_data):
+        module_names = [
+            fieldname for fieldname in self.Meta.available_modules.keys() if validated_data.has_key(fieldname)
+        ]
+        if len(module_names) == 0 or len(module_names) > 1:
+            raise serializers.ValidationError("invalid form module added for stage: {}".format(self))
+        related_module_name = module_names[0]
+        field_data = validated_data.pop(related_module_name)
+
+        parent = self.context.get(self.Meta.parent_field)
+        validated_data[self.Meta.parent_field] = parent
+
+        if field_data is None:
+            raise serializers.ValidationError("no data found for fieldname: {}".format(related_module_name))
+
+        related_module_serializer = self.Meta.available_modules[related_module_name](
+            data=self.initial_data.get(related_module_name)
+        )
+        if not related_module_serializer.is_valid():
+            raise serializers.ValidationError(
+                "(Nested)OrderedModuleSerializer related module name: '{}' failed to validate: {}".format(
+                    related_module_name,
+                    related_module_serializer.errors
+                )
+            )
+        related_module = related_module_serializer.save()
+        validated_data[related_module_name] = related_module
+        module = self.Meta.model.objects.create(**validated_data)
+
+        return module
+
+
+MODULES = {
+    "htmlmodule": HtmlModuleSerializer,
+    "skipstagemodule": SkipStageModuleSerializer,
+    "radiofield": RadioFieldModuleSerializer,
+    "numberfield": NumberFieldModuleSerializer,
+    "filefield": FileFieldModuleSerializer,
+    "datefield": DateFieldModuleSerializer,
+    "checkboxfield": CheckboxFieldModuleSerializer,
+    "textfield": TextFieldModuleSerializer,
+    "addressfield": AddressFieldModuleSerializer,
+    "textareafield": TextAreaFieldModuleSerializer,
+    "submitbuttonmodule": SubmitButtonModuleSerializer,
+}
+# sanity check that to ensure we have accounted for newly added modules:
+for related_module in models.RELATED_MODULES:
+    if MODULES.get(related_module) is None:
+            raise ValidationError("Missing related module serializer:", related_module)
+
+class NestedOrderedModuleSerializer (AbstractFormModuleSerializer):
+    class Meta(AbstractFormModuleSerializer.Meta):
+        model = models.NestedOrderedModule
+        parent_field = 'group'
+        exclude = ['group']
+        available_modules = MODULES
+
+
+class GroupModuleSerializer (serializers.ModelSerializer):
+    modules = NestedOrderedModuleSerializer(many=True)
+
+    class Meta:
+        model = models.GroupModule
+        fields = ['label', 'modules']
+
+    def create(self, validated_data):
+        modules_data = validated_data.pop('modules')
+        # form = self.context.get('form')
+        group = models.GroupModule.objects.create(
+            **validated_data
+        )
+        # use self.initial data instead of modules_data, so that we can validate
+        # it within our module serializer:
+        for module_data in  self.initial_data.get('modules'):
+            serializer = NestedOrderedModuleSerializer(
+                data=module_data,
+                context={"group": group},
+            )
+            if not serializer.is_valid():
+                raise serializers.ValidationError(
+                    "NestedOrderedModuleSerializer failed to validate: {}".format(serializer.errors)
+                )
+            serializer.save()
+        return group
+
+
+MODULES_WITH_GROUP_MODULE = MODULES.copy()
+MODULES_WITH_GROUP_MODULE.update({"groupmodule": GroupModuleSerializer})
+
+
+class OrderedModuleSerializer (AbstractFormModuleSerializer):
+    groupmodule = GroupModuleSerializer(required=False)
+
+    # Groups don't have url's, so we are using the id instead:
+    permitted_group_id = serializers.PrimaryKeyRelatedField(
+        write_only=True,
+        required=False,
+        queryset=models.Group.objects.all(),
+        source="permitted_group",
+    )
+
+    class Meta(AbstractFormModuleSerializer.Meta):
+        model = models.OrderedModule
+        parent_field = 'stage'
+        exclude = ['stage']
+        available_modules = MODULES_WITH_GROUP_MODULE
+
+# Form Stage and related:
+
+class LayerGroupSerializer (serializers.ModelSerializer):
+    class Meta:
+        model = models.LayerGroup
+        fields = '__all__'
+
+
+class MapViewportSerializer (serializers.ModelSerializer):
+    class Meta:
+        model = models.MapViewport
+        fields = '__all__'
+
+
+class FormStageSerializer (serializers.ModelSerializer):
+    modules = OrderedModuleSerializer(many=True)
+    visible_layer_groups = serializers.SlugRelatedField(
+        many=True,
+        slug_field="label",
+        queryset=models.LayerGroup.objects.all(),
+        required=False,
+    )
+    map_viewport = MapViewportSerializer()
+
+    class Meta:
+        model = models.FormStage
+        fields = [
+            'id',
+            'visible_layer_groups',
+            'map_viewport',
+            'modules',
+            'order',
+            'visible',
+            'header_text',
+        ]
+
+
+class FormSerializer (serializers.ModelSerializer):
+    dataset = DataSetHyperlinkedField()
+    stages = FormStageSerializer(many=True)
+
+    class Meta:
+        model = models.Form
+        fields = [
+            'id',
+            'label',
+            'engagement_text',
+            'image',
+            'is_enabled',
+            'dataset',
+            'stages'
+        ]
+
+
+class FlavorSerializer (serializers.ModelSerializer):
+    forms = FormSerializer(many=True)
+
+    class Meta:
+        model = models.Flavor
+        fields = [
+            'id',
+            'display_name',
+            'slug',
+            'forms',
+        ]
+
+
+################################################################################
+# Form Fixture serializers
+################################################################################
+
+class FormStageFixtureSerializer (serializers.ModelSerializer):
+    modules = OrderedModuleSerializer(
+        many=True,
+    )
+    visible_layer_groups = serializers.SlugRelatedField(
+        many=True,
+        slug_field="label",
+        queryset=models.LayerGroup.objects.all(),
+        required=False,
+    )
+
+    map_viewport = MapViewportSerializer(required=False)
+
+    class Meta:
+        model = models.FormStage
+        fields = ['visible_layer_groups', 'map_viewport', 'order', 'modules']
+
+    def create(self, validated_data):
+        viewport_data = validated_data.pop('map_viewport', None)
+        modules_data = validated_data.pop('modules')
+        layer_groups = validated_data.pop('visible_layer_groups', [])
+        form = self.context.get('form')
+        stage = models.FormStage.objects.create(
+            form=form,
+            **validated_data
+        )
+        # Since LayerGroups are many-to-many, we need to create the FormStage before adding the LayerGroups to it:
+        map(
+            lambda layer_group, stage=stage: stage.visible_layer_groups.add(layer_group), layer_groups
+        )
+        if viewport_data is not None:
+            models.MapViewport.objects.create(stage=stage, **viewport_data)
+        # use self.initial data instead of modules_data, so that we can validate
+        # it within our module serializer:
+        for module_data in  self.initial_data.get('modules'):
+            serializer = OrderedModuleSerializer(
+                data=module_data,
+                context={"stage": stage},
+            )
+            if not serializer.is_valid():
+                raise serializers.ValidationError(
+                    "FormStage failed to validate: {}".format(serializer.errors)
+                )
+            serializer.save()
+        return stage
+
+
+class FormFixtureSerializer (serializers.ModelSerializer):
+    stages = FormStageFixtureSerializer(many=True)
+    dataset = serializers.SlugRelatedField(
+        slug_field='slug',
+        queryset=models.DataSet.objects.all(),
+    )
+
+    class Meta:
+        model = models.Form
+        fields = [
+            'label',
+            'is_enabled',
+            'engagement_text',
+            'image',
+            'dataset',
+            'stages',
+        ]
+
+    def create(self, validated_data):
+        stages_data = validated_data.pop('stages')
+        form = models.Form.objects.create(**validated_data)
+        # use self.initial data instead of stages_data, so that we can validate
+        # it within our module serializer:
+        form_data = next(
+            form_data for form_data in self.initial_data if form_data['label'] == form.label
+        )
+        for stage_data in form_data.get('stages'):
+            serializer = FormStageFixtureSerializer(
+                data=stage_data,
+                context={"form": form}
+            )
+            if not serializer.is_valid():
+                raise serializers.ValidationError(
+                    "FormStage failed to validate: {}".format(serializer.errors)
+                )
+            serializer.save()
+        return form
+
+class FlavorFixtureSerializer (serializers.ModelSerializer):
+    forms = serializers.SlugRelatedField(
+        many=True,
+        slug_field='label',
+        queryset=models.Form.objects.all(),
+    )
+
+    class Meta:
+        model = models.Flavor
+        fields = [
+            'display_name',
+            'slug',
+            'forms',
+        ]

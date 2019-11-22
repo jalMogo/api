@@ -36,6 +36,11 @@ urlpatterns = [
         views.DataSnapshotInstanceView.as_view(),
         name='dataset-snapshot-instance'),
 
+    # flavors
+    url(r'^flavors/(?P<flavor_slug>[^/]+)$',
+        views.FlavorInstanceView.as_view(),
+        name='flavor-detail'),
+
     # place tags
     url(r'^(?P<owner_username>[^/]+)/datasets/(?P<dataset_slug>[^/]+)/places/(?P<place_id>\d+)/tags/(?P<place_tag_id>\d+)$',
         views.PlaceTagInstanceView.as_view(),
@@ -71,6 +76,7 @@ urlpatterns = [
     url(r'^~/datasets$',
         views.AdminDataSetListView.as_view(),
         name='admin-dataset-list'),
+    url(r'^nested_admin/', include('nested_admin.urls')),
 
     url(r'^(?P<owner_username>[^/]+)/datasets/(?P<dataset_slug>[^/]+)/keys$',
         views.ApiKeyListView.as_view(),
