@@ -31,55 +31,55 @@ from ..params import (
 
 class TestPlaceListView (APITestMixin, TestCase):
     @classmethod
-    def setUpTestData(self):
+    def setUpTestData(cls):
         cache_buffer.reset()
         django_cache.clear()
 
-        self.owner = User.objects.create_user(username='aaron', password='123', email='abc@example.com')
-        self.submitter = User.objects.create_user(username='mjumbe', password='456', email='123@example.com')
-        self.dataset = DataSet.objects.create(slug='ds', owner=self.owner)
-        self.place = Place.objects.create(
-          dataset=self.dataset,
+        cls.owner = User.objects.create_user(username='aaron', password='123', email='abc@example.com')
+        cls.submitter = User.objects.create_user(username='mjumbe', password='456', email='123@example.com')
+        cls.dataset = DataSet.objects.create(slug='ds', owner=cls.owner)
+        cls.place = Place.objects.create(
+          dataset=cls.dataset,
           geometry='POINT(2 3)',
-          submitter=self.submitter,
+          submitter=cls.submitter,
           data=json.dumps({
             'type': 'ATM',
             'name': 'K-Mart',
             'private-secrets': 42
           }),
         )
-        self.invisible_place = Place.objects.create(
-          dataset=self.dataset,
+        cls.invisible_place = Place.objects.create(
+          dataset=cls.dataset,
           geometry='POINT(3 4)',
-          submitter=self.submitter,
+          submitter=cls.submitter,
           visible=False,
           data=json.dumps({
             'type': 'ATM',
             'name': 'Walmart',
           }),
         )
-        self.submissions = [
-          Submission.objects.create(place_model=self.place, set_name='comments', dataset=self.dataset, data='{}'),
-          Submission.objects.create(place_model=self.place, set_name='comments', dataset=self.dataset, data='{}'),
-          Submission.objects.create(place_model=self.place, set_name='likes', dataset=self.dataset, data='{}'),
-          Submission.objects.create(place_model=self.place, set_name='likes', dataset=self.dataset, data='{}'),
-          Submission.objects.create(place_model=self.place, set_name='likes', dataset=self.dataset, data='{}'),
+        cls.submissions = [
+          Submission.objects.create(place_model=cls.place, set_name='comments', dataset=cls.dataset, data='{}'),
+          Submission.objects.create(place_model=cls.place, set_name='comments', dataset=cls.dataset, data='{}'),
+          Submission.objects.create(place_model=cls.place, set_name='likes', dataset=cls.dataset, data='{}'),
+          Submission.objects.create(place_model=cls.place, set_name='likes', dataset=cls.dataset, data='{}'),
+          Submission.objects.create(place_model=cls.place, set_name='likes', dataset=cls.dataset, data='{}'),
         ]
 
-        self.ds_origin = Origin.objects.create(pattern='http://openplans.github.com', dataset=self.dataset)
+        cls.ds_origin = Origin.objects.create(pattern='http://openplans.github.com', dataset=cls.dataset)
 
-        self.private_place = Place.objects.create(
-            dataset=self.dataset,
+        cls.private_place = Place.objects.create(
+            dataset=cls.dataset,
             geometry='POINT(7 8)',
             private=True,
         )
 
-        self.request_kwargs = {
-          'owner_username': self.owner.username,
-          'dataset_slug': self.dataset.slug
+        cls.request_kwargs = {
+          'owner_username': cls.owner.username,
+          'dataset_slug': cls.dataset.slug
         }
 
-        self.path = reverse('place-list', kwargs=self.request_kwargs)
+        cls.path = reverse('place-list', kwargs=cls.request_kwargs)
 
     def setUp(self):
         self.factory = RequestFactory()

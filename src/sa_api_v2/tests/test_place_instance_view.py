@@ -36,14 +36,14 @@ from ..params import (
 
 class TestPlaceInstanceView (APITestMixin, TestCase):
     @classmethod
-    def setUpTestData(self):
-        self.owner = User.objects.create_user(username='aaron', password='123', email='abc@example.com')
-        self.submitter = User.objects.create_user(username='mjumbe', password='456', email='123@example.com')
-        self.dataset = DataSet.objects.create(slug='ds', owner=self.owner)
-        self.place = Place.objects.create(
-          dataset=self.dataset,
+    def setUpTestData(cls):
+        cls.owner = User.objects.create_user(username='aaron', password='123', email='abc@example.com')
+        cls.submitter = User.objects.create_user(username='mjumbe', password='456', email='123@example.com')
+        cls.dataset = DataSet.objects.create(slug='ds', owner=cls.owner)
+        cls.place = Place.objects.create(
+          dataset=cls.dataset,
           geometry='POINT(2 3)',
-          submitter=self.submitter,
+          submitter=cls.submitter,
           data=json.dumps({
             'type': 'ATM',
             'name': 'K-Mart',
@@ -53,58 +53,58 @@ class TestPlaceInstanceView (APITestMixin, TestCase):
         f = StringIO('This is test content in a "file"')
         f.name = 'myfile.txt'
         f.size = 20
-        self.attachments = Attachment.objects.create(
-            file=File(f, 'myfile.txt'), name='my_file_name', thing=self.place)
-        self.submissions = [
+        cls.attachments = Attachment.objects.create(
+            file=File(f, 'myfile.txt'), name='my_file_name', thing=cls.place)
+        cls.submissions = [
             Submission.objects.create(
-                place_model=self.place,
+                place_model=cls.place,
                 set_name='comments',
-                dataset=self.dataset, data='{"foo": 3}',
+                dataset=cls.dataset, data='{"foo": 3}',
             ),
             Submission.objects.create(
-                place_model=self.place,
+                place_model=cls.place,
                 set_name='comments',
-                dataset=self.dataset,
+                dataset=cls.dataset,
                 data='{"foo": 3}',
             ),
             Submission.objects.create(
-                place_model=self.place,
+                place_model=cls.place,
                 set_name='comments',
-                dataset=self.dataset,
+                dataset=cls.dataset,
                 data='{"foo": 3}',
                 visible=False,
             ),
             Submission.objects.create(
-                place_model=self.place,
+                place_model=cls.place,
                 set_name='likes',
-                dataset=self.dataset,
+                dataset=cls.dataset,
                 data='{"bar": 3}',
             ),
             Submission.objects.create(
-                place_model=self.place,
+                place_model=cls.place,
                 set_name='likes',
-                dataset=self.dataset,
+                dataset=cls.dataset,
                 data='{"bar": 3}',
             ),
             Submission.objects.create(
-                place_model=self.place,
+                place_model=cls.place,
                 set_name='likes',
-                dataset=self.dataset,
+                dataset=cls.dataset,
                 data='{"bar": 3}',
             ),
             Submission.objects.create(
-                place_model=self.place,
+                place_model=cls.place,
                 set_name='likes',
-                dataset=self.dataset,
+                dataset=cls.dataset,
                 data='{"bar": 3}',
                 visible=False,
             ),
         ]
 
-        self.invisible_place = Place.objects.create(
-          dataset=self.dataset,
+        cls.invisible_place = Place.objects.create(
+          dataset=cls.dataset,
           geometry='POINT(3 4)',
-          submitter=self.submitter,
+          submitter=cls.submitter,
           visible=False,
           data=json.dumps({
             'type': 'ATM',
@@ -112,23 +112,23 @@ class TestPlaceInstanceView (APITestMixin, TestCase):
           }),
         )
 
-        self.apikey = ApiKey.objects.create(key='abc', dataset=self.dataset)
-        self.ds_origin = Origin.objects.create(pattern='http://openplans.github.com', dataset=self.dataset)
+        cls.apikey = ApiKey.objects.create(key='abc', dataset=cls.dataset)
+        cls.ds_origin = Origin.objects.create(pattern='http://openplans.github.com', dataset=cls.dataset)
 
-        self.request_kwargs = {
-          'owner_username': self.owner.username,
-          'dataset_slug': self.dataset.slug,
-          'place_id': str(self.place.id)
+        cls.request_kwargs = {
+          'owner_username': cls.owner.username,
+          'dataset_slug': cls.dataset.slug,
+          'place_id': cls.place.id
         }
 
-        self.invisible_request_kwargs = {
-          'owner_username': self.owner.username,
-          'dataset_slug': self.dataset.slug,
-          'place_id': str(self.invisible_place.id)
+        cls.invisible_request_kwargs = {
+          'owner_username': cls.owner.username,
+          'dataset_slug': cls.dataset.slug,
+          'place_id': cls.invisible_place.id
         }
 
-        self.path = reverse('place-detail', kwargs=self.request_kwargs)
-        self.invisible_path = reverse('place-detail', kwargs=self.invisible_request_kwargs)
+        cls.path = reverse('place-detail', kwargs=cls.request_kwargs)
+        cls.invisible_path = reverse('place-detail', kwargs=cls.invisible_request_kwargs)
 
     def setUp(self):
         self.factory = RequestFactory()
@@ -146,51 +146,42 @@ class TestPlaceInstanceView (APITestMixin, TestCase):
         cache_buffer.reset()
         django_cache.clear()
 
-    def test_GET_response_with_JWT_token(self):
-        # --------------------------------------------------
-
-        #
-        # View should 401 when a GET request is made with a valid JWT whose
-        # payload does not match the requested Place.
-        #
-        valid_jwt_public_incorrect_payload = jwt.encode({ 'place_id': 99999999 }, settings.JWT_SECRET, algorithm='HS256')
-        request = self.factory.get(self.path + '?' + INCLUDE_PRIVATE_FIELDS_PARAM + \
-                '&' + INCLUDE_PRIVATE_PLACES_PARAM + \
-                '&' + JWT_PARAM + '=' + valid_jwt_public_incorrect_payload \
-            )
+    def test_GET_response_with_invalid_JWT_payload(self):
+        """
+        View should 401 when a GET request is made with a valid JWT whose
+        payload does not match the requested Place.
+        """
+        valid_jwt_public_incorrect_payload = jwt.encode({ 'place_id': 99999999 }, settings.JWT_SECRET, algorithm='HS256').decode()
+        request = self.factory.get(
+            f"{self.path}?{INCLUDE_PRIVATE_FIELDS_PARAM}&{INCLUDE_PRIVATE_PLACES_PARAM}&{JWT_PARAM}={valid_jwt_public_incorrect_payload}"
+        )
         response = self.view(request, **self.request_kwargs)
         data = json.loads(response.rendered_content)
 
         # Check that the request was restricted
         self.assertStatusCode(response, 401)
 
-        # --------------------------------------------------
-
-        #
-        # View should 401 when a GET request is made with an invalid JWT,
-        # signed with the wrong secret.
-        #
-        invalid_jwt_public = jwt.encode({ 'place_id': self.place.id }, 'invalid-secret-oh-no', algorithm='HS256')
-        request = self.factory.get(self.path + '?' + INCLUDE_PRIVATE_FIELDS_PARAM + \
-                '&' + INCLUDE_PRIVATE_PLACES_PARAM + \
-                '&' + JWT_PARAM + '=' + invalid_jwt_public \
-            )
+    def test_GET_response_with_invalid_JWT_secret(self):
+        """
+        View should 401 when a GET request is made with an invalid JWT, signed with the wrong secret.
+        """
+        invalid_jwt_public = jwt.encode({ 'place_id': self.place.id }, 'invalid-secret-oh-no', algorithm='HS256').decode()
+        request = self.factory.get(
+            f"{self.path}?{INCLUDE_PRIVATE_FIELDS_PARAM}&{INCLUDE_PRIVATE_PLACES_PARAM}&{JWT_PARAM}={ invalid_jwt_public}"
+        )
         response = self.view(request, **self.request_kwargs)
         data = json.loads(response.rendered_content)
 
         # Check that the request was restricted
         self.assertStatusCode(response, 401)
 
-        # --------------------------------------------------
-
-        #
-        # View should return private data when a GET request is made with a
-        # valid JWT.
-        #
-        valid_jwt_public_correct_payload = self.place.make_jwt()
-        request = self.factory.get(self.path + '?' + INCLUDE_PRIVATE_FIELDS_PARAM + \
-                '&' + INCLUDE_PRIVATE_PLACES_PARAM + \
-                '&' + JWT_PARAM + '=' + valid_jwt_public_correct_payload \
+    def test_GET_response_with_valid_JWT(self):
+        """
+        # View should return private data when a GET request is made with a valid JWT.
+        """
+        valid_jwt_public_correct_payload = self.place.make_jwt().decode()
+        request = self.factory.get(
+            f"{self.path}?{INCLUDE_PRIVATE_FIELDS_PARAM}&{INCLUDE_PRIVATE_PLACES_PARAM}&{JWT_PARAM}={valid_jwt_public_correct_payload}" 
             )
         response = self.view(request, **self.request_kwargs)
         data = json.loads(response.rendered_content)
@@ -347,7 +338,7 @@ class TestPlaceInstanceView (APITestMixin, TestCase):
         self.assertEqual(data['properties']['attachments'][0]['name'], 'my_file_name')
 
         a = self.place.attachments.all()[0]
-        self.assertEqual(a.file.read(), 'This is test content in a "file"')
+        self.assertEqual(a.file.read(), b'This is test content in a "file"')
 
     def test_new_attachment_clears_GET_cache(self):
         request = self.factory.get(self.path)
@@ -464,7 +455,7 @@ class TestPlaceInstanceView (APITestMixin, TestCase):
         # View should return private data when owner is logged in (Basic Auth)
         #
         request = self.factory.get(self.path + '?' + INCLUDE_PRIVATE_FIELDS_PARAM)
-        request.META['HTTP_AUTHORIZATION'] = 'Basic ' + base64.b64encode(':'.join([self.owner.username, '123']))
+        request.META['HTTP_AUTHORIZATION'] = b'Basic ' + base64.b64encode(b':'.join([self.owner.username.encode('utf-8'), b'123']))
         response = self.view(request, **self.request_kwargs)
         data = json.loads(response.rendered_content)
 
@@ -555,7 +546,7 @@ class TestPlaceInstanceView (APITestMixin, TestCase):
         # View should return private data when owner is logged in (Basic Auth)
         #
         request = self.factory.get(self.invisible_path + '?include_invisible')
-        request.META['HTTP_AUTHORIZATION'] = 'Basic ' + base64.b64encode(':'.join([self.owner.username, '123']))
+        request.META['HTTP_AUTHORIZATION'] = b'Basic ' + base64.b64encode(b':'.join([self.owner.username.encode('utf-8'), b'123']))
         response = self.view(request, **self.invisible_request_kwargs)
         data = json.loads(response.rendered_content)
 
@@ -1003,7 +994,7 @@ class TestPlaceInstanceView (APITestMixin, TestCase):
             data=place_data,
             content_type='application/json',
         )
-        request.META['HTTP_AUTHORIZATION'] = 'Basic ' + base64.b64encode(':'.join([self.owner.username, '123']))
+        request.META['HTTP_AUTHORIZATION'] = b'Basic ' + base64.b64encode(b':'.join([self.owner.username.encode('utf-8'), b'123']))
         response = self.view(request, **self.invisible_request_kwargs)
 
         data = json.loads(response.rendered_content)

@@ -416,7 +416,7 @@ class BasePlaceSerializer (SubmittedThingSerializer,
             data['private'] = obj.private
 
         if self.context.get('include_jwt'):
-            data['jwt_public'] = obj.make_jwt()
+            data['jwt_public'] = obj.make_jwt().decode()
 
         # For use in PlaceSerializer:
         if 'url' in fields:

@@ -350,7 +350,7 @@ class PlaceAdmin(SubmittedThingAdmin):
     readonly_fields = ('jwt_public_token', 'api_path')
 
     def jwt_public_token(self, instance):
-        return instance.make_jwt()
+        return instance.make_jwt().decode()
 
     def api_path(self, instance):
         path = reverse('place-detail', args=[instance.dataset.owner, instance.dataset.slug, instance.id])
