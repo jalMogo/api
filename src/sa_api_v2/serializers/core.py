@@ -253,7 +253,7 @@ class DataSetSubmissionSetSummarySerializer (serializers.HyperlinkedModelSeriali
         submission_sets_map = self.get_submission_sets(obj)
         sets = submission_sets_map.get(obj.id, {})
         summaries = {}
-        for set_name, submission_set in sets.iteritems():
+        for set_name, submission_set in sets.items():
             # Ensure the user has read permission on the submission set.
             user = getattr(request, 'user', None)
             client = getattr(request, 'client', None)
@@ -309,7 +309,7 @@ class BasePlaceSerializer (SubmittedThingSerializer,
 
         submission_sets = self.get_submission_sets(place)
         summaries = {}
-        for set_name, submissions in submission_sets.iteritems():
+        for set_name, submissions in submission_sets.items():
             # Ensure the user has read permission on the submission set.
             user = getattr(request, 'user', None)
             client = getattr(request, 'client', None)
@@ -363,7 +363,7 @@ class BasePlaceSerializer (SubmittedThingSerializer,
 
         submission_sets = self.get_submission_sets(place)
         details = {}
-        for set_name, submissions in submission_sets.iteritems():
+        for set_name, submissions in submission_sets.items():
             # Ensure the user has read permission on the submission set.
             user = getattr(request, 'user', None)
             client = getattr(request, 'client', None)
@@ -691,7 +691,7 @@ class DataSetSerializer (BaseDataSetSerializer, serializers.HyperlinkedModelSeri
         if data and 'load_from_url' in data:
             self.load_url = data.pop('load_from_url')
             if self.load_url and isinstance(self.load_url, list):
-                self.load_url = unicode(self.load_url[0])
+                self.load_url = str(self.load_url[0])
         return super(DataSetSerializer, self).to_internal_value(data)
 
 
@@ -707,7 +707,7 @@ class ActionSerializer (EmptyModelSerializer, serializers.ModelSerializer):
     def get_target_type(self, obj):
         try:
             if obj.thing.place is not None:
-                return u'place'
+                return 'place'
         except models.Place.DoesNotExist:
             pass
 
@@ -843,7 +843,7 @@ class BaseFormFieldSerializer (
         fields_to_omit = ['info_modal']
 
     def create(self, validated_data):
-        if 'info_modal' in validated_data.keys():
+        if 'info_modal' in list(validated_data.keys()):
             info_modal_data = validated_data.pop('info_modal')
             # create our Modal instance, and add it to our FormField:
             serializer = ModalSerializer(
@@ -950,7 +950,7 @@ class AbstractFormModuleSerializer (OmitNullFieldsFromRepr, serializers.ModelSer
 
     def create(self, validated_data):
         module_names = [
-            fieldname for fieldname in self.Meta.available_modules.keys() if validated_data.has_key(fieldname)
+            fieldname for fieldname in list(self.Meta.available_modules.keys()) if fieldname in validated_data
         ]
         if len(module_names) == 0 or len(module_names) > 1:
             raise serializers.ValidationError("invalid form module added for stage: {}".format(self))
@@ -1153,9 +1153,9 @@ class FormStageFixtureSerializer (serializers.ModelSerializer):
             **validated_data
         )
         # Since LayerGroups are many-to-many, we need to create the FormStage before adding the LayerGroups to it:
-        map(
+        list(map(
             lambda layer_group, stage=stage: stage.visible_layer_groups.add(layer_group), layer_groups
-        )
+        ))
         if viewport_data is not None:
             models.MapViewport.objects.create(stage=stage, **viewport_data)
         # use self.initial data instead of modules_data, so that we can validate

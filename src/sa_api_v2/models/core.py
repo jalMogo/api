@@ -131,7 +131,7 @@ class DataSet (CloneableModelMixin, CacheClearingModel, models.Model):
     """
     owner = models.ForeignKey(User, related_name='datasets')
     display_name = models.CharField(max_length=128)
-    slug = models.SlugField(max_length=128, default=u'')
+    slug = models.SlugField(max_length=128, default='')
     auth_required = models.BooleanField(
         help_text='If True, then users must authenticate before they can post to this dataset',
         default=False,
@@ -324,7 +324,7 @@ class Place (SubmittedThing):
             InvalidKeyError,
             InvalidAlgorithmError,
             MissingRequiredClaimError
-        ), e:
+        ) as e:
             # If the JWT decoding fails for any reason (invalid payload,
             # invalid signature), an exception is thrown.
             return False

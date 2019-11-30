@@ -3,7 +3,8 @@ import time
 from django.contrib.gis.geos import GEOSGeometry, Point
 from django.contrib.gis.measure import D
 from functools import wraps
-from urlparse import urlparse, urljoin
+from urllib.parse import urlparse, urljoin
+
 
 def isiterable(obj):
     try:

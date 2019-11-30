@@ -52,7 +52,7 @@ from ..params import (
 from functools import wraps
 from itertools import groupby, count
 from collections import defaultdict
-from urllib import urlencode
+from urllib.parse import urlencode
 import re
 import requests
 import ujson as json
@@ -234,7 +234,7 @@ class FilteredResourceMixin (object):
             queryset = queryset.filter(data__icontains=textsearch_filter)
 
         # Then filter by attributes
-        for key, values in self.request.GET.iterlists():
+        for key, values in list(self.request.GET.items()):
             if key not in special_filters:
                 # Filter quickly for indexed values
                 if self.get_dataset().indexes.filter(attr_name=key).exists():
@@ -397,13 +397,13 @@ class OwnedResourceMixin (ClientAuthenticationMixin, CorsEnabledMixin):
     def is_verified_object(self, obj, ObjType=None):
         # Get the instance parameters from the cache
         ObjType = ObjType or self.model
-        params = ObjType.cache.get_cached_instance_params(obj.pk, lambda: obj)
+        params = ObjType.cache.get_cached_instance_params(obj.pk, lambda x=obj: x)
 
         # Make sure that the instance parameters match what we got in the URL.
         # We do not want to risk assuming a user owns a place, for example, just
         # because their username is in the URL.
         for attr in self.kwargs:
-            if attr in params and unicode(self.kwargs[attr]) != unicode(params[attr]):
+            if attr in params and self.kwargs[attr] != params[attr]:
                 return False
 
         return True
@@ -526,7 +526,7 @@ class CachedResourceMixin (object):
     def cache_response(self, key, response):
         data = response.data
         status = response.status_code
-        headers = response.items()
+        headers = list(response.items())
 
         # Cache enough info to recreate the response.
         django_cache.cache.set(key, (data, status, headers), settings.API_CACHE_TIMEOUT)
@@ -565,7 +565,7 @@ class Sanitizer(object):
             'color', 'background-color', 'background-image'
         ]
 
-        for field_name, value in obj.iteritems():
+        for field_name, value in obj.items():
             if field_name in field_whitelist or value is None:
                 continue
             if type(value) is list:
@@ -579,7 +579,7 @@ class Sanitizer(object):
                     )
                 obj[field_name] = value
             elif type(value) is dict:
-                for k, v in value.iteritems():
+                for k, v in value.items():
                     value[k] = bleach.clean(
                         v,
                         strip=True,
@@ -1381,7 +1381,7 @@ class DataSetListMixin (object):
         for summary in summaries:
             sets[summary['dataset']].append(summary)
 
-        return dict(sets.items())
+        return dict(list(sets.items()))
 
 
 class DataSetListView (DataSetListMixin, ProtectedOwnedResourceMixin, generics.ListCreateAPIView):
@@ -1465,7 +1465,7 @@ class DataSetListView (DataSetListMixin, ProtectedOwnedResourceMixin, generics.L
                 pass
 
             # Try to parse it as a full URL
-            from urlparse import urlparse
+            from urllib.parse import urlparse
             url = urlparse(clone_header)
             if url.scheme and url.netloc and url.path:
                 match = re.match(r'^/api/v2/(?P<owner_username>[^/]+)/datasets/(?P<dataset_slug>[^/]+)$', url.path)

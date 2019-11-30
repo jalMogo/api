@@ -68,7 +68,7 @@ class GoogleUserDataStrategy (object):
             return user_info['image']['url']
 
     def extract_full_name(self, user_info):
-        if isinstance(user_info['name'], (unicode, str)):
+        if isinstance(user_info['name'], str):
             # This is the googleOauth2 new schema:
             return user_info.get('name', None)
         else:
@@ -140,7 +140,7 @@ class BaseUserSerializer (serializers.ModelSerializer):
         user_data, strategy = self.get_strategy(obj)
         # return the user's name, if it exists in our model. If not, return the
         # user's name provided by the strategy:
-        name = " ".join(filter(lambda name: name, [obj.first_name, obj.last_name]))
+        name = " ".join([name for name in [obj.first_name, obj.last_name] if name])
         return name or strategy.extract_full_name(user_data)
 
     def get_avatar_url(self, obj):

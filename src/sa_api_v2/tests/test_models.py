@@ -866,12 +866,12 @@ class TestFormModel (TestCase):
         with self.assertRaises(RadioField.DoesNotExist) as context:
             mut_radio_field.refresh_from_db()
         self.assertTrue(
-            'RadioField matching query does not exist' in context.exception.message
+            'RadioField matching query does not exist' in str(context.exception)
         )
         with self.assertRaises(HtmlModule.DoesNotExist) as context:
             mut_html_module.refresh_from_db()
         self.assertTrue(
-            'HtmlModule matching query does not exist' in context.exception.message
+            'HtmlModule matching query does not exist' in str(context.exception)
         )
 
         # Test that attached modules still exists:
@@ -916,7 +916,7 @@ class TestFormModel (TestCase):
                 permitted_group=admin_group,
             )
         self.assertTrue(
-            '[FormModuleModel] Dataset must be assigned before adding Restrcted Group to module' in context.exception.message
+            '[FormModuleModel] Dataset must be assigned before adding Restrcted Group to module' in str(context.exception)
         )
 
         # set the form's dataset, and it should work now:
@@ -933,5 +933,5 @@ class TestFormModel (TestCase):
             ordered_module.permitted_group = outside_group
             ordered_module.save()
         self.assertTrue(
-            "[FormModuleModel] permitted_group is not within this form's dataset" in context.exception.message
+            "[FormModuleModel] permitted_group is not within this form's dataset" in str(context.exception)
         )

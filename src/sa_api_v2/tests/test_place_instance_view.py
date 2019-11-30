@@ -8,7 +8,7 @@ from django.conf import settings
 import base64
 import json
 import jwt
-from StringIO import StringIO
+from io import StringIO
 from ..cors.models import Origin
 from ..cache import cache_buffer
 from ..models import (
@@ -257,9 +257,9 @@ class TestPlaceInstanceView (APITestMixin, TestCase):
 
         # Check that the submission sets look right
         self.assertEqual(len(data['properties']['submission_sets']), 2)
-        self.assertIn('comments', data['properties']['submission_sets'].keys())
-        self.assertIn('likes', data['properties']['submission_sets'].keys())
-        self.assertNotIn('applause', data['properties']['submission_sets'].keys())
+        self.assertIn('comments', list(data['properties']['submission_sets'].keys()))
+        self.assertIn('likes', list(data['properties']['submission_sets'].keys()))
+        self.assertNotIn('applause', list(data['properties']['submission_sets'].keys()))
 
         # Check that the submitter looks right
         self.assertIsNotNone(data['properties']['submitter'])
@@ -287,7 +287,7 @@ class TestPlaceInstanceView (APITestMixin, TestCase):
         self.assertIsInstance(comments_set, list)
         self.assertEqual(len(comments_set), 2)
         self.assertIn('foo', comments_set[0])
-        self.assert_(all([comment['visible'] for comment in comments_set]))
+        self.assertTrue(all([comment['visible'] for comment in comments_set]))
 
         # --------------------------------------------------
 
@@ -332,7 +332,7 @@ class TestPlaceInstanceView (APITestMixin, TestCase):
         # Check that the invisible submissions are included
         comments_set = data['properties']['submission_sets'].get('comments')
         self.assertEqual(len(comments_set), 3)
-        self.assert_(not all([comment['visible'] for comment in comments_set]))
+        self.assertTrue(not all([comment['visible'] for comment in comments_set]))
 
     def test_GET_response_with_attachment(self):
         request = self.factory.get(self.path)

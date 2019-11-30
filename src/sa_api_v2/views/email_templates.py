@@ -62,11 +62,8 @@ class EmailTemplateMixin(object):
                            if cors.models.Origin.match(origin.pattern, request_origin) and
                            origin.place_email_template is not None]
 
-        filtered_email_templates = filter(
-            lambda template: template.submission_set in [submission_set_name, ''] and
-            template.event == 'add',
-            email_templates
-        )
+        filtered_email_templates = [template for template in email_templates if template.submission_set in [submission_set_name, ''] and
+            template.event == 'add']
 
         for email_template in filtered_email_templates:
             logger.info('[EMAIL] Starting email send')

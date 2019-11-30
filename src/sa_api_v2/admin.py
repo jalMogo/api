@@ -5,7 +5,6 @@ via django.contrib.admin.
 
 import itertools
 import json
-import models
 from django.contrib.admin import SimpleListFilter
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import UserChangeForm as BaseUserChangeForm
@@ -26,6 +25,7 @@ from django_ace import AceWidget
 from django_object_actions import DjangoObjectActions
 from django.utils.html import format_html
 
+from . import models
 from .apikey.models import ApiKey
 from .cors.models import Origin
 from .cors.admin import OriginAdmin
@@ -388,7 +388,7 @@ class FormFieldOptionInlineForm(ModelForm):
     group_visibility_triggers = ModelMultipleChoiceField(
         widget=CheckboxSelectMultiple,
         queryset=models.NestedOrderedModule.objects.none(),
-        help_text=unicode(models.FormFieldOption._meta.get_field('group_visibility_triggers').help_text),
+        help_text=str(models.FormFieldOption._meta.get_field('group_visibility_triggers').help_text),
         required=False,
     )
     fields = ('group_visibility_triggers',)

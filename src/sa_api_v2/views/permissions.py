@@ -26,7 +26,7 @@ def is_apikey_auth(auth):
 
 
 def is_origin_auth(auth):
-    return isinstance(auth, basestring) and auth.startswith('origin')
+    return isinstance(auth, str) and auth.startswith('origin')
 
 
 def is_really_logged_in(user, request):

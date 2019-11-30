@@ -717,7 +717,7 @@ class TestFlavorDeserializer (TestCase):
 
         options = form.stages.first().modules.get(order=3).checkboxfield.options.all()
         self.assertEqual(
-            map(lambda option: option.label, options),
+            [option.label for option in options],
             ['White', 'Black']
         )
 

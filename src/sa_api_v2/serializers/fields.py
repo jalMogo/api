@@ -33,7 +33,7 @@ class GeometryField(serializers.Field):
             raise ValueError('Cannot output as %s' % self.format)
 
     def to_internal_value(self, data):
-        if not isinstance(data, basestring):
+        if not isinstance(data, str):
             data = json.dumps(data)
 
         try:
@@ -109,7 +109,7 @@ def api_reverse(view_name, kwargs={}, request=None, format=None):
         raise ValueError('No API route named {} formatted.'.format(view_name))
 
     url_params = dict([(key, urlquote_plus(val))
-                       for key, val in kwargs.iteritems()])
+                       for key, val in kwargs.items()])
     url += route_template_string.format(**url_params)
 
     if format is not None:

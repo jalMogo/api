@@ -61,7 +61,7 @@ class DataBlobProcessor (EmptyModelSerializer):
 
         # Also ignore the following field names (treat them like reserved
         # words).
-        known_fields.update(self.fields.keys())
+        known_fields.update(list(self.fields.keys()))
 
         # And allow an arbitrary value field named 'data' (don't let the
         # data blob get in the way).
@@ -79,7 +79,7 @@ class DataBlobProcessor (EmptyModelSerializer):
         data_copy['data'] = json.dumps(blob)
 
         if not self.partial:
-            for field_name, field in self.fields.items():
+            for field_name, field in list(self.fields.items()):
                 if (not field.read_only and field_name not in data_copy and field.default is not fields.empty):
                     data_copy[field_name] = field.default
 
@@ -102,7 +102,7 @@ class DataBlobProcessor (EmptyModelSerializer):
 
         # Did the user not ask for private data? Remove it!
         if not self.is_flag_on(INCLUDE_PRIVATE_FIELDS_PARAM):
-            for key in blob_data.keys():
+            for key in list(blob_data.keys()):
                 if key.startswith('private'):
                     del blob_data[key]
 
@@ -134,7 +134,7 @@ class FormFieldOptionsCreator (object):
         order = 1
 
         for option_data in options_data:
-            if 'order' in option_data.keys():
+            if 'order' in list(option_data.keys()):
                 raise serializers.ValidationError("Order should not be supplied when creating a FormField option")
 
             option_data['order'] = order

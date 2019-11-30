@@ -4,7 +4,7 @@ from django.contrib.gis.db import models
 class Flavor(models.Model):
     display_name = models.CharField(max_length=128)
 
-    slug = models.SlugField(max_length=128, default=u'', unique=True)
+    slug = models.SlugField(max_length=128, default='', unique=True)
 
     # TODO: add datasets to the flavor. The client needs to know which
     # dataset endpoints to download and display on the map, and their

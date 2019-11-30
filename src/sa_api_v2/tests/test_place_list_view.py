@@ -6,7 +6,7 @@ import base64
 import json
 import mock
 import csv
-from StringIO import StringIO
+from io import StringIO
 from ..cors.models import Origin
 from ..cache import cache_buffer
 from ..models import (
@@ -219,7 +219,7 @@ class TestPlaceListView (APITestMixin, TestCase):
 
         # Check that there are ATM features
         self.assertStatusCode(response, 200)
-        self.assert_(all([feature['properties'].get('foo') == 'bar' for feature in data['features']]))
+        self.assertTrue(all([feature['properties'].get('foo') == 'bar' for feature in data['features']]))
         self.assertEqual(len(data['features']), 2)
 
         request = self.factory.get(self.path + '?search=ba')
@@ -228,7 +228,7 @@ class TestPlaceListView (APITestMixin, TestCase):
 
         # Check that the request was successful
         self.assertStatusCode(response, 200)
-        self.assert_(all([feature['properties'].get('foo') in ('bar', 'baz') for feature in data['features']]))
+        self.assertTrue(all([feature['properties'].get('foo') in ('bar', 'baz') for feature in data['features']]))
         self.assertEqual(len(data['features']), 3)
 
         request = self.factory.get(self.path + '?search=bad')
@@ -262,7 +262,7 @@ class TestPlaceListView (APITestMixin, TestCase):
 
         # Check that there are ATM features
         self.assertStatusCode(response, 200)
-        self.assert_(all([feature['properties'].get('foo') == 'bar' for feature in data['features']]))
+        self.assertTrue(all([feature['properties'].get('foo') == 'bar' for feature in data['features']]))
         self.assertEqual(len(data['features']), 2)
 
         request = self.factory.get(self.path + '?foo=qux')
@@ -571,7 +571,7 @@ class TestPlaceListView (APITestMixin, TestCase):
         self.assertIsNone(data['properties']['submitter'])
 
         # visible should be true by default
-        self.assert_(data['properties'].get('visible'))
+        self.assertTrue(data['properties'].get('visible'))
 
         # Check that geometry exists
         self.assertIn('geometry', data)
@@ -609,7 +609,7 @@ class TestPlaceListView (APITestMixin, TestCase):
 
         # Check that the private data is not in the properties
         # self.assertNotIn('private-secrets', data['features'][0]['properties'])
-        self.assertEquals(data['features'][0]['id'], self.place.id)
+        self.assertEqual(data['features'][0]['id'], self.place.id)
 
         #
         # View should return private places when user is owner (Session Auth)
@@ -748,7 +748,7 @@ class TestPlaceListView (APITestMixin, TestCase):
         self.assertIsNone(data['properties']['submitter'])
 
         # visible should be true by default
-        self.assert_(data['properties'].get('visible'))
+        self.assertTrue(data['properties'].get('visible'))
 
         # Check that geometry exists
         self.assertIn('geometry', data)
@@ -808,7 +808,7 @@ class TestPlaceListView (APITestMixin, TestCase):
         self.assertEqual(data['properties']['submitter']['id'], self.submitter.id)
 
         # visible should be true by default
-        self.assert_(data['properties'].get('visible'))
+        self.assertTrue(data['properties'].get('visible'))
 
         # Check that geometry exists
         self.assertIn('geometry', data)
@@ -946,7 +946,7 @@ class TestPlaceListView (APITestMixin, TestCase):
 
         # Check that the private place doesn't generate an action:
         place = Place.objects.get(id=data.get('id'))
-        self.assertEquals(place.actions.count(), 0)
+        self.assertEqual(place.actions.count(), 0)
 
     def test_POST_response_like_XDomainRequest(self):
         place_data = json.dumps({

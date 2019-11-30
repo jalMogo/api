@@ -28,14 +28,12 @@ def generate_unique_api_key():
     import base64
     import hashlib
     import random
-    api_key = ''
+    api_key = b''
     while len(api_key) < KEY_SIZE:
-        more_key = str(random.getrandbits(256))
-        more_key = hashlib.sha256(more_key).hexdigest()
-        more_key = base64.b64encode(
-            more_key,
-            random.choice(['rA', 'aZ', 'gQ', 'hH', 'hG', 'aR', 'DD']))
-        more_key = more_key.rstrip('=')
+        more_key = str(random.getrandbits(256)).encode('utf-8')
+        more_key = hashlib.sha256(more_key).hexdigest().encode('utf-8')
+        more_key = base64.b64encode(more_key, random.choice([b'rA', b'aZ', b'gQ', b'hH', b'hG', b'aR', b'DD']))
+        more_key = more_key.rstrip(b'=')
         api_key += more_key
     api_key = api_key[:KEY_SIZE]
     return api_key
