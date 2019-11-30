@@ -20,11 +20,11 @@ def get_authed_user(request):
 
     # Decode the base64-encoded header data
     encoded_auth_data = auth_header[1]
-    auth_data = base64.decodestring(encoded_auth_data)
+    auth_data = base64.decodestring(encoded_auth_data).decode()
 
     # Parse out the client and user information
     try:
-        client_id, client_secret, username, email = auth_data.split(b';')
+        client_id, client_secret, username, email = auth_data.split(';')
     except ValueError:
         return None
 
@@ -49,7 +49,7 @@ def get_authed_user(request):
     except User.DoesNotExist:
         if not client.permissions.allow_remote_signup:
             return None
-        user = User.objects.create_user(username=username.decode(), email=email.decode())
+        user = User.objects.create_user(username=username, email=email)
     return user
 
 
