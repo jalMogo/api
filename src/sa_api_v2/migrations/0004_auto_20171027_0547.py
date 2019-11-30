@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from django.db import models, migrations
 import django.utils.timezone
@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
                 ('created_datetime', models.DateTimeField(default=django.utils.timezone.now, db_index=True, blank=True)),
                 ('updated_datetime', models.DateTimeField(auto_now=True, db_index=True)),
                 ('submission_set', models.CharField(max_length=128)),
-                ('event', models.CharField(default=b'add', max_length=128, choices=[(b'add', b'On add')])),
+                ('event', models.CharField(default='add', max_length=128, choices=[('add', 'On add')])),
                 ('recipient_email_field', models.CharField(max_length=128)),
                 ('from_email', models.EmailField(max_length=75)),
                 ('bcc_email', models.EmailField(default=None, max_length=75, blank=True)),

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from django.db import models, migrations
 
@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='attachment',
             name='type',
-            field=models.CharField(default=b'CO', max_length=2, choices=[(b'CO', b'Cover'), (b'RT', b'Rich Text')]),
+            field=models.CharField(default='CO', max_length=2, choices=[('CO', 'Cover'), ('RT', 'Rich Text')]),
             preserve_default=True,
         ),
     ]
