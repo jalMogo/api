@@ -193,7 +193,7 @@ class TestPlaceListView (APITestMixin, TestCase):
         request = self.factory.get(self.path + '?format=csv')
         response = self.view(request, **self.request_kwargs)
 
-        rows = list(csv.reader(StringIO(response.rendered_content)))
+        rows = list(csv.reader(StringIO(response.rendered_content.decode())))
         headers = rows[0]
 
         # Check that the request was successful
@@ -281,23 +281,6 @@ class TestPlaceListView (APITestMixin, TestCase):
         self.assertStatusCode(response, 200)
         self.assertEqual(len(data['features']), 0)
 
-    def test_GET_indexed_response(self):
-        Place.objects.create(dataset=self.dataset, geometry='POINT(0 0)', data=json.dumps({'foo': 'bar', 'name': 1})),
-        Place.objects.create(dataset=self.dataset, geometry='POINT(1 0)', data=json.dumps({'foo': 'bar', 'name': 2})),
-        Place.objects.create(dataset=self.dataset, geometry='POINT(2 0)', data=json.dumps({'foo': 'baz', 'name': 3})),
-        Place.objects.create(dataset=self.dataset, geometry='POINT(3 0)', data=json.dumps({'name': 4})),
-
-        self.dataset.indexes.add(DataIndex(attr_name='foo'), bulk=False)
-
-        from sa_api_v2.models.core import GeoSubmittedThingQuerySet
-        from django.core import cache
-        with mock.patch.object(GeoSubmittedThingQuerySet, 'filter_by_index') as patched_filter:
-            # We patch django's caching here because otherwise we attempt to save
-            # the filter mock to the cache, which requires pickleability.
-            with mock.patch.object(cache, 'cache'):
-                request = self.factory.get(self.path + '?foo=bar')
-                self.view(request, **self.request_kwargs)
-                self.assertEqual(patched_filter.call_count, 1)
 
     def test_GET_unindexed_response(self):
         Place.objects.create(dataset=self.dataset, geometry='POINT(0 0)', data=json.dumps({'foo': 'bar', 'name': 1})),
@@ -497,7 +480,7 @@ class TestPlaceListView (APITestMixin, TestCase):
         # View should return private data when owner is logged in (Basic Auth)
         #
         request = self.factory.get(self.path + '?' + INCLUDE_PRIVATE_FIELDS_PARAM)
-        request.META['HTTP_AUTHORIZATION'] = 'Basic ' + base64.b64encode(':'.join([self.owner.username, '123']))
+        request.META['HTTP_AUTHORIZATION'] = b'Basic ' + base64.b64encode(b':'.join([self.owner.username.encode('utf-8'), b'123']))
         response = self.view(request, **self.request_kwargs)
         data = json.loads(response.rendered_content)
 
@@ -559,7 +542,7 @@ class TestPlaceListView (APITestMixin, TestCase):
         # The 201 response should contain a valid JWT token 
         #
         self.assertIn('jwt_public', data['properties'])
-        self.assertEqual(data['properties']['jwt_public'], Place.objects.latest('id').make_jwt())
+        self.assertEqual(data['properties']['jwt_public'], Place.objects.latest('id').make_jwt().decode())
         
 
         # Check that the data attributes have been incorporated into the
@@ -911,7 +894,7 @@ class TestPlaceListView (APITestMixin, TestCase):
         # View should return private data when owner is logged in (Basic Auth)
         #
         request = self.factory.get(self.path + '?include_invisible')
-        request.META['HTTP_AUTHORIZATION'] = 'Basic ' + base64.b64encode(':'.join([self.owner.username, '123']))
+        request.META['HTTP_AUTHORIZATION'] = b'Basic ' + base64.b64encode(b':'.join([self.owner.username.encode('utf-8'), b'123']))
         response = self.view(request, **self.request_kwargs)
         data = json.loads(response.rendered_content)
 

@@ -234,7 +234,8 @@ class FilteredResourceMixin (object):
             queryset = queryset.filter(data__icontains=textsearch_filter)
 
         # Then filter by attributes
-        for key, values in list(self.request.GET.items()):
+        values = list(self.request.GET.values())
+        for key in self.request.GET.keys():
             if key not in special_filters:
                 # Filter quickly for indexed values
                 if self.get_dataset().indexes.filter(attr_name=key).exists():
@@ -641,7 +642,14 @@ class MapseedAPIRootView (views.APIView):
         return Response(response_data)
 
 
-class PlaceInstanceView (Sanitizer, CachedResourceMixin, LocatedResourceMixin, OwnedResourceMixin, FilteredResourceMixin, generics.RetrieveUpdateDestroyAPIView):
+class PlaceInstanceView (
+    Sanitizer,
+     CachedResourceMixin,
+     LocatedResourceMixin,
+     OwnedResourceMixin,
+     FilteredResourceMixin,
+     generics.RetrieveUpdateDestroyAPIView,
+    ):
     """
     GET
     ---
@@ -834,10 +842,11 @@ class PlaceListView (
         comma-separated list of 4 numeric values: western longitude, northern
         latitude, eastern longitude, southern latitude.
 
-      * `<attr>=<value>`
+    # No longer supporting this functionality...
+    #   * `<attr>=<value>`
 
-        Filter the place list to only return the places where the attribute is
-        equal to the given value. *The attribute should be indexed.*
+    #     Filter the place list to only return the places where the attribute is
+    #     equal to the given value. *The attribute should be indexed.*
 
     POST
     ----
@@ -1051,7 +1060,13 @@ class SubmissionInstanceView (CachedResourceMixin, OwnedResourceMixin, generics.
         return obj
 
 
-class SubmissionListView (CachedResourceMixin, OwnedResourceMixin, FilteredResourceMixin, EmailTemplateMixin, bulk_generics.ListCreateBulkUpdateAPIView):
+class SubmissionListView (
+    CachedResourceMixin,
+    OwnedResourceMixin,
+    FilteredResourceMixin,
+    EmailTemplateMixin,
+    bulk_generics.ListCreateBulkUpdateAPIView
+):
     """
 
     GET
@@ -1155,7 +1170,12 @@ class SubmissionListView (CachedResourceMixin, OwnedResourceMixin, FilteredResou
         return result
 
 
-class DataSetSubmissionListView (CachedResourceMixin, ProtectedOwnedResourceMixin, FilteredResourceMixin, generics.ListAPIView):
+class DataSetSubmissionListView (
+    CachedResourceMixin, 
+    ProtectedOwnedResourceMixin, 
+    FilteredResourceMixin, 
+    generics.ListAPIView
+):
     """
 
     GET
@@ -1598,7 +1618,11 @@ class AttachmentInstanceView (ProtectedOwnedResourceMixin, generics.RetrieveUpda
         return obj
 
 
-class AttachmentListView (OwnedResourceMixin, FilteredResourceMixin, generics.ListCreateAPIView):
+class AttachmentListView (
+    OwnedResourceMixin, 
+    FilteredResourceMixin, 
+    generics.ListCreateAPIView
+):
     """
 
     GET

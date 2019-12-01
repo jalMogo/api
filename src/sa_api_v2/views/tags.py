@@ -130,8 +130,12 @@ class PlaceTagInstanceView (CachedResourceMixin, OwnedResourceMixin, generics.Re
         return obj
 
 
-class PlaceTagListView (CachedResourceMixin, OwnedResourceMixin,
-                        FilteredResourceMixin, generics.ListCreateAPIView):
+class PlaceTagListView (
+    CachedResourceMixin, 
+    OwnedResourceMixin,
+    FilteredResourceMixin, 
+    generics.ListCreateAPIView
+):
     """
 
     GET
