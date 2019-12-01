@@ -28,7 +28,7 @@ RUN cd api && git checkout jalmogo/add-forms
 ############################################################
 
 # Set the base image to Debian
-FROM python:2.7.15-stretch
+FROM python:3.8.0-buster
 
 # File Author / Maintainer
 MAINTAINER Luke Swart <luke@mapseed.org>
