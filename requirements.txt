@@ -1,7 +1,7 @@
 # ==============================
 # Web server
 # ==============================
-Django==1.11.22
+Django==1.11.26
 
 # Consider updating these for python 3 support:
 gunicorn==19.5
