@@ -90,7 +90,7 @@ class TestSubmissionInstanceView (APITestMixin, TestCase):
           'dataset_slug': self.dataset.slug,
           'place_id': self.place.id,
           'submission_set_name': 'comments',
-          'submission_id': self.submission.id
+          'submission_id': str(self.submission.id)
         }
 
         self.factory = RequestFactory()
@@ -247,7 +247,7 @@ class TestSubmissionInstanceView (APITestMixin, TestCase):
           'dataset_slug': self.dataset.slug,
           'place_id': self.place.id,
           'submission_set_name': 'comments',
-          'submission_id': self.submission.id
+          'submission_id': str(self.submission.id)
         }
 
         path = reverse('submission-detail', kwargs=request_kwargs)
@@ -423,7 +423,7 @@ class TestSubmissionListView (APITestMixin, TestCase):
         self.request_kwargs = {
           'owner_username': self.owner.username,
           'dataset_slug': self.dataset.slug,
-          'place_id': self.place.id,
+          'place_id': str(self.place.id),
           'submission_set_name': self.submission.set_name
         }
 
@@ -2236,13 +2236,13 @@ class TestPlaceAttachmentListView (APITestMixin, TransactionTestCase):
         self.request_kwargs = {
           'owner_username': self.owner.username,
           'dataset_slug': self.dataset.slug,
-          'thing_id': self.place.id
+          'thing_id': str(self.place.id)
         }
 
         self.invisible_request_kwargs = {
           'owner_username': self.owner.username,
           'dataset_slug': self.dataset.slug,
-          'thing_id': self.invisible_place.id
+          'thing_id': str(self.invisible_place.id)
         }
 
         self.factory = RequestFactory()
@@ -2546,7 +2546,7 @@ class TestSubmissionAttachmentListView (APITestMixin, TransactionTestCase):
           'dataset_slug': self.dataset.slug,
           'place_id': self.place.id,
           'submission_set_name': 'comments',
-          'thing_id': self.submissions[0].id
+          'thing_id': str(self.submissions[0].id)
         }
 
         self.invisible_request_kwargs = {
@@ -2554,7 +2554,7 @@ class TestSubmissionAttachmentListView (APITestMixin, TransactionTestCase):
           'dataset_slug': self.dataset.slug,
           'place_id': self.place.id,
           'submission_set_name': 'comments',
-          'thing_id': self.submissions[1].id
+          'thing_id': str(self.submissions[1].id)
         }
 
         self.factory = RequestFactory()

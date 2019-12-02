@@ -404,7 +404,7 @@ class OwnedResourceMixin (ClientAuthenticationMixin, CorsEnabledMixin):
         # We do not want to risk assuming a user owns a place, for example, just
         # because their username is in the URL.
         for attr in self.kwargs:
-            if attr in params and self.kwargs[attr] != params[attr]:
+            if attr in params and str(self.kwargs[attr]) != str(params[attr]):
                 return False
 
         return True

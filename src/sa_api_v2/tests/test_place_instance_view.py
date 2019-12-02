@@ -118,13 +118,13 @@ class TestPlaceInstanceView (APITestMixin, TestCase):
         cls.request_kwargs = {
           'owner_username': cls.owner.username,
           'dataset_slug': cls.dataset.slug,
-          'place_id': cls.place.id
+          'place_id': str(cls.place.id)
         }
 
         cls.invisible_request_kwargs = {
           'owner_username': cls.owner.username,
           'dataset_slug': cls.dataset.slug,
-          'place_id': cls.invisible_place.id
+          'place_id': str(cls.invisible_place.id)
         }
 
         cls.path = reverse('place-detail', kwargs=cls.request_kwargs)
