@@ -842,11 +842,11 @@ class PlaceListView (
         comma-separated list of 4 numeric values: western longitude, northern
         latitude, eastern longitude, southern latitude.
 
-    # No longer supporting this functionality...
-    #   * `<attr>=<value>`
+      * `<attr>=<value>`
+ 
+        Filter the place list to only return the places where the attribute is
+        equal to the given value. *The attribute should be indexed.*
 
-    #     Filter the place list to only return the places where the attribute is
-    #     equal to the given value. *The attribute should be indexed.*
 
     POST
     ----

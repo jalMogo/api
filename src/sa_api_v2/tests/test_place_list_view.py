@@ -1,10 +1,11 @@
 from django.test import TestCase
+
 from django.test.client import RequestFactory
 from django.core.urlresolvers import reverse
 from django.core.cache import cache as django_cache
 import base64
 import json
-import mock
+from unittest.mock import patch
 import csv
 from io import StringIO
 from ..cors.models import Origin
@@ -281,6 +282,33 @@ class TestPlaceListView (APITestMixin, TestCase):
         self.assertStatusCode(response, 200)
         self.assertEqual(len(data['features']), 0)
 
+    def test_GET_indexed_response(self):
+        Place.objects.create(dataset=self.dataset, geometry='POINT(0 0)', data=json.dumps({'foo': 'bar', 'name': 1})),
+        Place.objects.create(dataset=self.dataset, geometry='POINT(1 0)', data=json.dumps({'foo': 'bar', 'name': 2})),
+        Place.objects.create(dataset=self.dataset, geometry='POINT(2 0)', data=json.dumps({'foo': 'baz', 'name': 3})),
+        Place.objects.create(dataset=self.dataset, geometry='POINT(3 0)', data=json.dumps({'name': 4})),
+
+        self.dataset.indexes.add(DataIndex(attr_name='foo'), bulk=False)
+
+        """
+        # TODO: ideally we should mock our calls to
+        # `GeoSubmittedThingQuerySet.filter_by_index` to ensure it only gets
+        # called once. The following code is a basic implement about how we can do this:
+
+        with patch(GeoSubmittedThingQuerySet.filter_by_index) as patched_filter:
+
+        # We patch django's caching here because otherwise we attempt to save
+        # the filter mock to the cache, which requires pickleability.
+
+        with patch.object(cache, 'cache'):
+        """
+
+
+        request = self.factory.get(self.path + '?foo=bar')
+        response = self.view(request, **self.request_kwargs)
+        data = json.loads(response.rendered_content)
+        self.assertEqual(len(data['features']), 2)
+
 
     def test_GET_unindexed_response(self):
         Place.objects.create(dataset=self.dataset, geometry='POINT(0 0)', data=json.dumps({'foo': 'bar', 'name': 1})),
@@ -291,9 +319,11 @@ class TestPlaceListView (APITestMixin, TestCase):
         self.dataset.indexes.add(DataIndex(attr_name='foo'), bulk=False)
 
         from sa_api_v2.models.core import GeoSubmittedThingQuerySet
-        with mock.patch.object(GeoSubmittedThingQuerySet, 'filter_by_index') as patched_filter:
+        with patch.object(GeoSubmittedThingQuerySet, 'filter_by_index') as patched_filter:
             request = self.factory.get(self.path + '?name=1')
-            self.view(request, **self.request_kwargs)
+            response = self.view(request, **self.request_kwargs)
+            data = json.loads(response.rendered_content)
+            self.assertEqual(len(data['features']), 0)
             self.assertEqual(patched_filter.call_count, 0)
 
     def test_GET_paginated_response(self):
