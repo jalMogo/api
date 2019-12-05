@@ -14,18 +14,20 @@ def isiterable(obj):
     else:
         return True
 
+
 def to_distance(string):
     try:
         number = float(string)
-        units = 'm'
+        units = "m"
     except ValueError:
-        match = re.match(r'([+-]?\d*\.?\d+)\s*([A-Za-z_]+)', string)
+        match = re.match(r"([+-]?\d*\.?\d+)\s*([A-Za-z_]+)", string)
         if not match:
-            raise ValueError('%r is not a valid distance.')
+            raise ValueError("%r is not a valid distance.")
         number = float(match.group(1))
         units = match.group(2)
 
     return D(**{units: number})
+
 
 def to_geom(string):
     """
@@ -35,16 +37,19 @@ def to_geom(string):
         geom = GEOSGeometry(string)
     except ValueError:
         try:
-            lat, lng = [float(coord.strip()) for coord in string.split(',')]
+            lat, lng = [float(coord.strip()) for coord in string.split(",")]
         except ValueError:
             raise ValueError(
-                ('Argument must be a comma-separated pair of numbers or a '
-                 'string that the GEOSGeometry constructor can handle: %r')
+                (
+                    "Argument must be a comma-separated pair of numbers or a "
+                    "string that the GEOSGeometry constructor can handle: %r"
+                )
                 % string
             )
         else:
             geom = Point(lng, lat)
     return geom
+
 
 def memo(f):
     """
@@ -59,6 +64,7 @@ def memo(f):
             ...
 
     """
+
     @wraps(f)
     def get(self, *args, **kwargs):
         key = (f.__name__, args, tuple(kwargs.items()))
@@ -94,7 +100,7 @@ def to_base(num, base):
         num, remainder = divmod(num, base)
         digits.insert(0, alphabet[remainder])
 
-    return ''.join(digits)
+    return "".join(digits)
 
 
 def build_relative_url(original_url, relative_path):
@@ -106,21 +112,21 @@ def build_relative_url(original_url, relative_path):
     ('http://ex.co/', 'https://google.com/') --> 'https://google.com/'
     """
     # If we actually have a full URL, just return it.
-    if (re.match('^[A-Za-z][A-Za-z0-9+-.]*://', relative_path)):
+    if re.match("^[A-Za-z][A-Za-z0-9+-.]*://", relative_path):
         return relative_path
 
     parsed_url = urlparse(original_url)
 
-    if relative_path.startswith('/'):
-        path_prefix = ''
-    elif parsed_url.path.endswith('/') or relative_path == '':
+    if relative_path.startswith("/"):
+        path_prefix = ""
+    elif parsed_url.path.endswith("/") or relative_path == "":
         path_prefix = parsed_url.path
     else:
-        path_prefix = parsed_url.path.rsplit('/', 1)[0] + '/'
+        path_prefix = parsed_url.path.rsplit("/", 1)[0] + "/"
 
     if path_prefix:
         full_path = path_prefix + relative_path
     else:
         full_path = relative_path
 
-    return urljoin(parsed_url.scheme + '://' + parsed_url.netloc, full_path)
+    return urljoin(parsed_url.scheme + "://" + parsed_url.netloc, full_path)

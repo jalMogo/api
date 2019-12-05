@@ -1,4 +1,5 @@
-from rest_framework import (authentication)
+from rest_framework import authentication
+
 ###############################################################################
 #
 # Authentication (that doesn't require an extra model)
@@ -22,7 +23,7 @@ class ShareaboutsSessionAuth(authentication.BaseAuthentication):
 
         # Get the underlying HttpRequest object
         http_request = request._request
-        user = getattr(http_request, 'user', None)
+        user = getattr(http_request, "user", None)
 
         # Unauthenticated, CSRF validation not required
         if not user or not user.is_active:

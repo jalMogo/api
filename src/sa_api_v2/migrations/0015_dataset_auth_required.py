@@ -8,13 +8,16 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('sa_api_v2', '0014_auto_20190406_0412'),
+        ("sa_api_v2", "0014_auto_20190406_0412"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='dataset',
-            name='auth_required',
-            field=models.BooleanField(default=False, help_text='If True, then users must authenticate before they can post to this dataset'),
+            model_name="dataset",
+            name="auth_required",
+            field=models.BooleanField(
+                default=False,
+                help_text="If True, then users must authenticate before they can post to this dataset",
+            ),
         ),
     ]

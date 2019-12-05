@@ -3,28 +3,28 @@ import uuid
 from django.contrib.gis.db import models
 
 
-class DataSnapshotRequest (models.Model):
+class DataSnapshotRequest(models.Model):
     # Describe the data requested
-    dataset = models.ForeignKey('DataSet')
+    dataset = models.ForeignKey("DataSet")
     submission_set = models.CharField(max_length=128)
     include_private_fields = models.BooleanField(default=False)
     include_private_places = models.BooleanField(default=False)
     include_invisible = models.BooleanField(default=False)
     include_submissions = models.BooleanField(default=False)
     # Describe the requester
-    requester = models.ForeignKey('User', null=True)
+    requester = models.ForeignKey("User", null=True)
     requested_at = models.DateTimeField(auto_now_add=True)
     # Describe the fulfillment status
-    status = models.TextField(default='', blank=True)
+    status = models.TextField(default="", blank=True)
     fulfilled_at = models.DateTimeField(null=True)
-    guid = models.TextField(unique=True, default='', blank=True)
+    guid = models.TextField(unique=True, default="", blank=True)
 
     class Meta:
-        app_label = 'sa_api_v2'
-        db_table = 'sa_api_datasnapshotrequest'
+        app_label = "sa_api_v2"
+        db_table = "sa_api_datasnapshotrequest"
 
     def __unicode__(self):
-        return 'Bulk request for %s %s' % (self.dataset, self.submission_set)
+        return "Bulk request for %s %s" % (self.dataset, self.submission_set)
 
     @staticmethod
     def get_current_time_bucket():
@@ -32,8 +32,8 @@ class DataSnapshotRequest (models.Model):
         return timestamp - (timestamp % 60)  # Each minute
 
 
-class DataSnapshot (models.Model):
-    request = models.OneToOneField('DataSnapshotRequest', related_name='fulfillment')
+class DataSnapshot(models.Model):
+    request = models.OneToOneField("DataSnapshotRequest", related_name="fulfillment")
     json = models.TextField()
     csv = models.TextField()
 
@@ -46,5 +46,5 @@ class DataSnapshot (models.Model):
         self.json = value
 
     class Meta:
-        app_label = 'sa_api_v2'
-        db_table = 'sa_api_datasnapshot'
+        app_label = "sa_api_v2"
+        db_table = "sa_api_datasnapshot"

@@ -54,6 +54,7 @@ from ..params import (
 )
 
 import logging
+
 logger = logging.getLogger(__name__)
 
 ###############################################################################
@@ -73,121 +74,131 @@ logger = logging.getLogger(__name__)
 #
 
 
-class AttachmentListSerializer (AttachmentSerializerMixin):
+class AttachmentListSerializer(AttachmentSerializerMixin):
     url = AttachmentIdentityField()
 
     class Meta:
         model = models.Attachment
-        exclude = ('thing', 'id')
+        exclude = ("thing", "id")
 
 
-class AttachmentInstanceSerializer (AttachmentSerializerMixin):
+class AttachmentInstanceSerializer(AttachmentSerializerMixin):
     url = AttachmentIdentityField()
 
     class Meta:
         model = models.Attachment
-        exclude = ('thing', 'id')
+        exclude = ("thing", "id")
 
-class DataSetPermissionSerializer (serializers.ModelSerializer):
+
+class DataSetPermissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.DataSetPermission
-        exclude = ('id', 'dataset')
+        exclude = ("id", "dataset")
 
-class GroupPermissionSerializer (serializers.ModelSerializer):
+
+class GroupPermissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.GroupPermission
-        exclude = ('id', 'group')
+        exclude = ("id", "group")
 
-class KeyPermissionSerializer (serializers.ModelSerializer):
+
+class KeyPermissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.KeyPermission
-        exclude = ('id', 'key')
+        exclude = ("id", "key")
 
-class OriginPermissionSerializer (serializers.ModelSerializer):
+
+class OriginPermissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.OriginPermission
-        exclude = ('id', 'origin')
+        exclude = ("id", "origin")
 
-class ApiKeySerializer (serializers.ModelSerializer):
+
+class ApiKeySerializer(serializers.ModelSerializer):
     permissions = KeyPermissionSerializer(many=True)
 
     class Meta:
         model = apikey.models.ApiKey
-        exclude = ('id', 'dataset', 'logged_ip', 'last_used')
+        exclude = ("id", "dataset", "logged_ip", "last_used")
 
-class OriginSerializer (serializers.ModelSerializer):
+
+class OriginSerializer(serializers.ModelSerializer):
     permissions = OriginPermissionSerializer(many=True)
 
     class Meta:
         model = cors.models.Origin
-        exclude = ('id', 'dataset', 'logged_ip', 'last_used')
+        exclude = ("id", "dataset", "logged_ip", "last_used")
 
 
 # Group serializers
-class BaseGroupSerializer (serializers.ModelSerializer):
+class BaseGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Group
-        exclude = ('submitters', 'id')
+        exclude = ("submitters", "id")
 
 
-class SimpleGroupSerializer (BaseGroupSerializer):
+class SimpleGroupSerializer(BaseGroupSerializer):
     permissions = GroupPermissionSerializer(many=True)
 
-    class Meta (BaseGroupSerializer.Meta):
-        exclude = ('id', 'dataset', 'submitters')
+    class Meta(BaseGroupSerializer.Meta):
+        exclude = ("id", "dataset", "submitters")
 
 
-class GroupSerializer (BaseGroupSerializer):
+class GroupSerializer(BaseGroupSerializer):
     dataset = DataSetRelatedField(queryset=models.DataSet.objects.all())
 
-    class Meta (BaseGroupSerializer.Meta):
+    class Meta(BaseGroupSerializer.Meta):
         pass
 
     def to_representation(self, obj):
         ret = {}
-        ret['dataset'] = six.text_type(self.fields['dataset']
-                                       .to_representation(obj.dataset))
-        ret['name'] = obj.name
-        ret['dataset_slug'] = obj.dataset.slug
-        ret['permissions'] = []
+        ret["dataset"] = six.text_type(
+            self.fields["dataset"].to_representation(obj.dataset)
+        )
+        ret["name"] = obj.name
+        ret["dataset_slug"] = obj.dataset.slug
+        ret["permissions"] = []
 
         for permission in obj.permissions.all():
-            ret['permissions'].append({
-                'abilities': permission.get_abilities(),
-                'submission_set': permission.submission_set
-            })
+            ret["permissions"].append(
+                {
+                    "abilities": permission.get_abilities(),
+                    "submission_set": permission.submission_set,
+                }
+            )
 
         return ret
 
 
-class FullUserSerializer (BaseUserSerializer):
+class FullUserSerializer(BaseUserSerializer):
     """
     Generates a representation of the current user. Since it's only for the
     current user, it should have all the user's information on it (all that
     the user would need).
     """
-    groups = GroupSerializer(many=True, source='_groups', read_only=True)
 
-    class Meta (BaseUserSerializer.Meta):
+    groups = GroupSerializer(many=True, source="_groups", read_only=True)
+
+    class Meta(BaseUserSerializer.Meta):
         pass
 
     def to_representation(self, obj):
         data = super(FullUserSerializer, self).to_representation(obj)
         if obj:
-            group_serializer = self.fields['groups']
+            group_serializer = self.fields["groups"]
             groups_field = obj.get_groups()
-            data['groups'] = group_serializer.to_representation(groups_field)
+            data["groups"] = group_serializer.to_representation(groups_field)
         return data
 
 
 # DataSet place set serializer
-class DataSetPlaceSetSummarySerializer (serializers.HyperlinkedModelSerializer):
-    length = serializers.IntegerField(source='places_length')
+class DataSetPlaceSetSummarySerializer(serializers.HyperlinkedModelSerializer):
+    length = serializers.IntegerField(source="places_length")
     url = DataSetPlaceSetIdentityField()
 
     class Meta:
         model = models.DataSet
-        fields = ('length', 'url')
+        fields = ("length", "url")
 
     def get_place_counts(self, obj):
         """
@@ -212,7 +223,7 @@ class DataSetPlaceSetSummarySerializer (serializers.HyperlinkedModelSerializer):
         #     return dict([(place['dataset'], place['length']) for place in places])
 
         # else:
-        include_invisible = INCLUDE_INVISIBLE_PARAM in self.context['request'].GET
+        include_invisible = INCLUDE_INVISIBLE_PARAM in self.context["request"].GET
         places = obj.places
         if not include_invisible:
             places = places.filter(visible=True)
@@ -226,18 +237,18 @@ class DataSetPlaceSetSummarySerializer (serializers.HyperlinkedModelSerializer):
 
 
 # DataSet submission set serializer
-class DataSetSubmissionSetSummarySerializer (serializers.HyperlinkedModelSerializer):
-    length = serializers.IntegerField(source='submission_set_length')
+class DataSetSubmissionSetSummarySerializer(serializers.HyperlinkedModelSerializer):
+    length = serializers.IntegerField(source="submission_set_length")
     url = DataSetSubmissionSetIdentityField()
 
     class Meta:
         model = models.DataSet
-        fields = ('length', 'url')
+        fields = ("length", "url")
 
     def is_flag_on(self, flagname):
-        request = self.context['request']
-        param = request.GET.get(flagname, 'false')
-        return param.lower() not in ('false', 'no', 'off')
+        request = self.context["request"]
+        param = request.GET.get(flagname, "false")
+        return param.lower() not in ("false", "no", "off")
 
     def get_submission_sets(self, dataset):
         include_invisible = self.is_flag_on(INCLUDE_INVISIBLE_PARAM)
@@ -249,35 +260,38 @@ class DataSetSubmissionSetSummarySerializer (serializers.HyperlinkedModelSeriali
         return {dataset.id: submission_sets}
 
     def to_representation(self, obj):
-        request = self.context['request']
+        request = self.context["request"]
         submission_sets_map = self.get_submission_sets(obj)
         sets = submission_sets_map.get(obj.id, {})
         summaries = {}
         for set_name, submission_set in sets.items():
             # Ensure the user has read permission on the submission set.
-            user = getattr(request, 'user', None)
-            client = getattr(request, 'client', None)
+            user = getattr(request, "user", None)
+            client = getattr(request, "client", None)
             dataset = obj
-            if not check_data_permission(user, client, None, 'retrieve', dataset, set_name):
+            if not check_data_permission(
+                user, client, None, "retrieve", dataset, set_name
+            ):
                 continue
 
             obj.submission_set_name = set_name
             obj.submission_set_length = len(submission_set)
-            summaries[set_name] = super(DataSetSubmissionSetSummarySerializer, self).to_representation(obj)
+            summaries[set_name] = super(
+                DataSetSubmissionSetSummarySerializer, self
+            ).to_representation(obj)
         return summaries
 
 
-class SubmittedThingSerializer (ActivityGenerator, DataBlobProcessor):
+class SubmittedThingSerializer(ActivityGenerator, DataBlobProcessor):
     def is_flag_on(self, flagname):
-        request = self.context['request']
-        param = request.GET.get(flagname, 'false')
-        return param.lower() not in ('false', 'no', 'off')
+        request = self.context["request"]
+        param = request.GET.get(flagname, "false")
+        return param.lower() not in ("false", "no", "off")
 
 
 # Place serializers
-class BasePlaceSerializer (SubmittedThingSerializer,
-                           serializers.ModelSerializer):
-    geometry = GeometryField(format='wkt')
+class BasePlaceSerializer(SubmittedThingSerializer, serializers.ModelSerializer):
+    geometry = GeometryField(format="wkt")
     attachments = AttachmentListSerializer(read_only=True, many=True)
     submitter = SimpleUserSerializer(required=False, allow_null=True)
     private = serializers.BooleanField(required=False, default=False)
@@ -295,27 +309,26 @@ class BasePlaceSerializer (SubmittedThingSerializer,
         return submission_sets
 
     def summary_to_native(self, set_name, submissions):
-        return {
-            'name': set_name,
-            'length': len(submissions)
-        }
+        return {"name": set_name, "length": len(submissions)}
 
     def get_submission_set_summaries(self, place):
         """
         Get a mapping from place id to a submission set summary dictionary.
         Get this for the entire dataset at once.
         """
-        request = self.context['request']
+        request = self.context["request"]
 
         submission_sets = self.get_submission_sets(place)
         summaries = {}
         for set_name, submissions in submission_sets.items():
             # Ensure the user has read permission on the submission set.
-            user = getattr(request, 'user', None)
-            client = getattr(request, 'client', None)
-            dataset = getattr(request, 'get_dataset', lambda: None)()
+            user = getattr(request, "user", None)
+            client = getattr(request, "client", None)
+            dataset = getattr(request, "get_dataset", lambda: None)()
 
-            if not check_data_permission(user, client, None, 'retrieve', dataset, set_name):
+            if not check_data_permission(
+                user, client, None, "retrieve", dataset, set_name
+            ):
                 continue
 
             summaries[set_name] = self.summary_to_native(set_name, submissions)
@@ -330,28 +343,29 @@ class BasePlaceSerializer (SubmittedThingSerializer,
         url_field = PlaceTagListIdentityField()
         url = url_field.to_representation(
             place,
-            request=self.context.get('request', None),
-            format=self.context.get('format', None)
+            request=self.context.get("request", None),
+            format=self.context.get("format", None),
         )
-        return {
-            'url': url,
-            'length': place.tags.count()
-        }
+        return {"url": url, "length": place.tags.count()}
 
     def get_detailed_tags(self, place):
         """
         Get a mapping from place id to an array of place tag details.
         TODO: Get this for the entire dataset at once.
         """
-        request = self.context['request']
+        request = self.context["request"]
 
         tags = place.tags.all()
 
-        return [PlaceTagSerializer(context={'request': request})
-                .to_representation(tag) for tag in tags]
+        return [
+            PlaceTagSerializer(context={"request": request}).to_representation(tag)
+            for tag in tags
+        ]
 
     def set_to_native(self, set_name, submissions):
-        serializer = SimpleSubmissionSerializer(submissions, many=True, context=self.context)
+        serializer = SimpleSubmissionSerializer(
+            submissions, many=True, context=self.context
+        )
         return serializer.data
 
     def get_detailed_submission_sets(self, place):
@@ -359,17 +373,19 @@ class BasePlaceSerializer (SubmittedThingSerializer,
         Get a mapping from place id to a detiled submission set dictionary.
         Get this for the entire dataset at once.
         """
-        request = self.context['request']
+        request = self.context["request"]
 
         submission_sets = self.get_submission_sets(place)
         details = {}
         for set_name, submissions in submission_sets.items():
             # Ensure the user has read permission on the submission set.
-            user = getattr(request, 'user', None)
-            client = getattr(request, 'client', None)
-            dataset = getattr(request, 'get_dataset', lambda: None)()
+            user = getattr(request, "user", None)
+            client = getattr(request, "client", None)
+            dataset = getattr(request, "get_dataset", lambda: None)()
 
-            if not check_data_permission(user, client, None, 'retrieve', dataset, set_name):
+            if not check_data_permission(
+                user, client, None, "retrieve", dataset, set_name
+            ):
                 continue
 
             # We know that the submission datasets will be the same as the
@@ -382,7 +398,10 @@ class BasePlaceSerializer (SubmittedThingSerializer,
         return details
 
     def attachments_to_native(self, obj):
-        return [AttachmentListSerializer(a, context=self.context).data for a in obj.attachments.filter(visible=True)]
+        return [
+            AttachmentListSerializer(a, context=self.context).data
+            for a in obj.attachments.filter(visible=True)
+        ]
 
     def submitter_to_native(self, obj):
         return SimpleUserSerializer(obj.submitter).data if obj.submitter else None
@@ -391,40 +410,43 @@ class BasePlaceSerializer (SubmittedThingSerializer,
         obj = self.ensure_obj(obj)
         fields = self.get_fields()
 
-        request = self.context.get('request', None)
+        request = self.context.get("request", None)
 
-        dataset_field = fields['dataset']
+        dataset_field = fields["dataset"]
         data = {
-            'id': obj.pk,  # = serializers.PrimaryKeyRelatedField(read_only=True)
-            'geometry': str(obj.geometry or 'POINT(0 0)'),  # = GeometryField(format='wkt')
-            'dataset': dataset_field.get_url(
-                obj.dataset,
-                request,
-            ),
-            'attachments': self.attachments_to_native(obj),  # = AttachmentSerializer(read_only=True)
-            'submitter': self.submitter_to_native(obj),
-            'data': obj.data,
-            'visible': obj.visible,
-            'created_datetime': obj.created_datetime.isoformat() if obj.created_datetime else None,
-            'updated_datetime': obj.updated_datetime.isoformat() if obj.updated_datetime else None,
+            "id": obj.pk,  # = serializers.PrimaryKeyRelatedField(read_only=True)
+            "geometry": str(
+                obj.geometry or "POINT(0 0)"
+            ),  # = GeometryField(format='wkt')
+            "dataset": dataset_field.get_url(obj.dataset, request,),
+            "attachments": self.attachments_to_native(
+                obj
+            ),  # = AttachmentSerializer(read_only=True)
+            "submitter": self.submitter_to_native(obj),
+            "data": obj.data,
+            "visible": obj.visible,
+            "created_datetime": obj.created_datetime.isoformat()
+            if obj.created_datetime
+            else None,
+            "updated_datetime": obj.updated_datetime.isoformat()
+            if obj.updated_datetime
+            else None,
         }
 
         # If the place is public, don't inlude the 'private' attribute
         # in the serialized representation. This minimizes the JSON
         # payload:
         if obj.private:
-            data['private'] = obj.private
+            data["private"] = obj.private
 
-        if self.context.get('include_jwt'):
-            data['jwt_public'] = obj.make_jwt().decode()
+        if self.context.get("include_jwt"):
+            data["jwt_public"] = obj.make_jwt().decode()
 
         # For use in PlaceSerializer:
-        if 'url' in fields:
-            field = fields['url']
-            data['url'] = field.to_representation(
-                obj,
-                request=request,
-                format=self.context.get('format', None)
+        if "url" in fields:
+            field = fields["url"]
+            data["url"] = field.to_representation(
+                obj, request=request, format=self.context.get("format", None)
             )
 
         data = self.explode_data_blob(data)
@@ -443,19 +465,19 @@ class BasePlaceSerializer (SubmittedThingSerializer,
         else:
             tags_getter = self.get_detailed_tags
 
-        data['submission_sets'] = submission_sets_getter(obj)
-        data['tags'] = tags_getter(obj)
+        data["submission_sets"] = submission_sets_getter(obj)
+        data["tags"] = tags_getter(obj)
 
-        if hasattr(obj, 'distance'):
-            data['distance'] = str(obj.distance)
+        if hasattr(obj, "distance"):
+            data["distance"] = str(obj.distance)
 
         return data
 
 
-class SimplePlaceSerializer (BasePlaceSerializer):
-    class Meta (BasePlaceSerializer.Meta):
-        read_only_fields = ('dataset',)
-        fields = '__all__'
+class SimplePlaceSerializer(BasePlaceSerializer):
+    class Meta(BasePlaceSerializer.Meta):
+        read_only_fields = ("dataset",)
+        fields = "__all__"
 
 
 class PlaceListSerializer(serializers.ListSerializer):
@@ -464,14 +486,14 @@ class PlaceListSerializer(serializers.ListSerializer):
 
         ret = []
         for item in validated_data:
-            place_id = item['id'] if 'id' in item else None
+            place_id = item["id"] if "id" in item else None
             place = None
             if place_id is not None:
                 place = place_mapping.get(place_id, None)
             update_or_create_data = item.copy()
-            url_kwargs = self.context['view'].kwargs
-            dataset = models.DataSet.objects.get(slug=url_kwargs['dataset_slug'])
-            update_or_create_data['dataset_id'] = dataset.id
+            url_kwargs = self.context["view"].kwargs
+            dataset = models.DataSet.objects.get(slug=url_kwargs["dataset_slug"])
+            update_or_create_data["dataset_id"] = dataset.id
             if place is None:
                 ret.append(self.child.create(update_or_create_data))
             else:
@@ -480,29 +502,28 @@ class PlaceListSerializer(serializers.ListSerializer):
         return ret
 
 
-class PlaceSerializer (BasePlaceSerializer,
-                       serializers.HyperlinkedModelSerializer):
+class PlaceSerializer(BasePlaceSerializer, serializers.HyperlinkedModelSerializer):
     id = serializers.IntegerField(required=False)
     url = PlaceIdentityField()
     dataset = DataSetRelatedField(queryset=models.DataSet.objects.all(), required=False)
     submitter = UserSerializer(required=False, allow_null=True)
 
-    class Meta (BasePlaceSerializer.Meta):
+    class Meta(BasePlaceSerializer.Meta):
         list_serializer_class = PlaceListSerializer
-        fields = '__all__'
+        fields = "__all__"
 
     def summary_to_native(self, set_name, submissions):
         url_field = SubmissionSetIdentityField()
         set_url = url_field.to_representation(
             submissions[0],
-            request=self.context.get('request', None),
-            format=self.context.get('format', None)
+            request=self.context.get("request", None),
+            format=self.context.get("format", None),
         )
 
         return {
-            'name': set_name,
-            'length': len(submissions),
-            'url': set_url,
+            "name": set_name,
+            "length": len(submissions),
+            "url": set_url,
         }
 
     def set_to_native(self, set_name, submissions):
@@ -510,25 +531,34 @@ class PlaceSerializer (BasePlaceSerializer,
         return serializer.data
 
     def submitter_to_native(self, obj):
-        return UserSerializer(obj.submitter, context={
-            INCLUDE_PRIVATE_FIELDS_PARAM: self.is_flag_on(INCLUDE_PRIVATE_FIELDS_PARAM)
-        }).data if obj.submitter else None
+        return (
+            UserSerializer(
+                obj.submitter,
+                context={
+                    INCLUDE_PRIVATE_FIELDS_PARAM: self.is_flag_on(
+                        INCLUDE_PRIVATE_FIELDS_PARAM
+                    )
+                },
+            ).data
+            if obj.submitter
+            else None
+        )
 
 
 # Submission serializers
-class BaseSubmissionSerializer (SubmittedThingSerializer, serializers.ModelSerializer):
+class BaseSubmissionSerializer(SubmittedThingSerializer, serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     attachments = AttachmentListSerializer(read_only=True, many=True)
     submitter = SimpleUserSerializer(required=False, allow_null=True)
 
     class Meta:
         model = models.Submission
-        exclude = ('set_name',)
+        exclude = ("set_name",)
 
 
-class SimpleSubmissionSerializer (BaseSubmissionSerializer):
-    class Meta (BaseSubmissionSerializer.Meta):
-        read_only_fields = ('dataset', 'place_model')
+class SimpleSubmissionSerializer(BaseSubmissionSerializer):
+    class Meta(BaseSubmissionSerializer.Meta):
+        read_only_fields = ("dataset", "place_model")
 
 
 class SubmissionListSerializer(serializers.ListSerializer):
@@ -537,16 +567,16 @@ class SubmissionListSerializer(serializers.ListSerializer):
 
         ret = []
         for item in validated_data:
-            submission_id = item['id'] if 'id' in item else None
+            submission_id = item["id"] if "id" in item else None
             submission = None
             if submission_id is not None:
                 submission = submission_mapping.get(submission_id, None)
             update_or_create_data = item.copy()
-            url_kwargs = self.context['view'].kwargs
-            dataset = models.DataSet.objects.get(slug=url_kwargs['dataset_slug'])
-            update_or_create_data['dataset_id'] = dataset.id
-            update_or_create_data['place_model_id'] = url_kwargs['place_id']
-            update_or_create_data['set_name'] = url_kwargs['submission_set_name']
+            url_kwargs = self.context["view"].kwargs
+            dataset = models.DataSet.objects.get(slug=url_kwargs["dataset_slug"])
+            update_or_create_data["dataset_id"] = dataset.id
+            update_or_create_data["place_model_id"] = url_kwargs["place_id"]
+            update_or_create_data["set_name"] = url_kwargs["submission_set_name"]
             if submission is None:
                 ret.append(self.child.create(update_or_create_data))
             else:
@@ -555,30 +585,31 @@ class SubmissionListSerializer(serializers.ListSerializer):
         return ret
 
 
-class SubmissionSerializer (BaseSubmissionSerializer,
-                            serializers.HyperlinkedModelSerializer):
+class SubmissionSerializer(
+    BaseSubmissionSerializer, serializers.HyperlinkedModelSerializer
+):
     id = serializers.IntegerField(required=False)
     url = SubmissionIdentityField()
     dataset = DataSetRelatedField(queryset=models.DataSet.objects.all(), required=False)
-    set = SubmissionSetRelatedField(source='*', required=False, read_only=True)
-    place = PlaceRelatedField(required=False, source='place_model')
+    set = SubmissionSetRelatedField(source="*", required=False, read_only=True)
+    place = PlaceRelatedField(required=False, source="place_model")
     submitter = UserSerializer(required=False, allow_null=True)
 
-    class Meta (BaseSubmissionSerializer.Meta):
+    class Meta(BaseSubmissionSerializer.Meta):
         model = models.Submission
         list_serializer_class = SubmissionListSerializer
-        exclude = BaseSubmissionSerializer.Meta.exclude + ('place_model',)
+        exclude = BaseSubmissionSerializer.Meta.exclude + ("place_model",)
 
 
-class TagSerializer (serializers.ModelSerializer):
+class TagSerializer(serializers.ModelSerializer):
     url = TagIdentityField()
 
     class Meta:
         model = models.Tag
-        fields = ['id', 'url', 'name', 'parent', 'color', 'is_enabled', 'children']
+        fields = ["id", "url", "name", "parent", "color", "is_enabled", "children"]
 
 
-class PlaceTagSerializer (serializers.ModelSerializer):
+class PlaceTagSerializer(serializers.ModelSerializer):
     url = PlaceTagIdentityField()
     id = serializers.IntegerField(read_only=True, required=False)
     place = PlaceRelatedField()
@@ -590,12 +621,20 @@ class PlaceTagSerializer (serializers.ModelSerializer):
 
     class Meta:
         model = models.PlaceTag
-        fields = ('url', 'id', 'place', 'submitter', 'note', 'tag', 'created_datetime', 'updated_datetime')
+        fields = (
+            "url",
+            "id",
+            "place",
+            "submitter",
+            "note",
+            "tag",
+            "created_datetime",
+            "updated_datetime",
+        )
 
 
 # DataSet serializers
-class BaseDataSetSerializer (EmptyModelSerializer,
-                             serializers.ModelSerializer):
+class BaseDataSetSerializer(EmptyModelSerializer, serializers.ModelSerializer):
     class Meta:
         model = models.DataSet
 
@@ -637,29 +676,30 @@ class BaseDataSetSerializer (EmptyModelSerializer,
     #         ret.fields[field_name] = self.augment_field(field, field_name, field_name, value)
     #     return ret
 
-class SimpleDataSetSerializer (BaseDataSetSerializer, serializers.ModelSerializer):
+
+class SimpleDataSetSerializer(BaseDataSetSerializer, serializers.ModelSerializer):
     keys = ApiKeySerializer(many=True, read_only=False)
     origins = OriginSerializer(many=True, read_only=False)
     groups = SimpleGroupSerializer(many=True, read_only=False)
     permissions = DataSetPermissionSerializer(many=True, read_only=False)
 
-    class Meta (BaseDataSetSerializer.Meta):
+    class Meta(BaseDataSetSerializer.Meta):
         pass
 
 
-class DataSetSerializer (BaseDataSetSerializer, serializers.HyperlinkedModelSerializer):
+class DataSetSerializer(BaseDataSetSerializer, serializers.HyperlinkedModelSerializer):
     url = DataSetIdentityField()
     owner = UserRelatedField(read_only=True)
 
-    places = DataSetPlaceSetSummarySerializer(source='*', read_only=True)
+    places = DataSetPlaceSetSummarySerializer(source="*", read_only=True)
     tags = TagSerializer(many=True, read_only=True)
-    submission_sets = DataSetSubmissionSetSummarySerializer(source='*', read_only=True)
+    submission_sets = DataSetSubmissionSetSummarySerializer(source="*", read_only=True)
 
     load_from_url = serializers.URLField(write_only=True, required=False)
 
-    class Meta (BaseDataSetSerializer.Meta):
+    class Meta(BaseDataSetSerializer.Meta):
         validators = []
-        fields = '__all__'
+        fields = "__all__"
         pass
 
     def validate_load_from_url(self, attrs, source):
@@ -667,9 +707,13 @@ class DataSetSerializer (BaseDataSetSerializer, serializers.HyperlinkedModelSeri
         if url:
             # Verify that at least a head request on the given URL is valid.
             import requests
+
             head_response = requests.head(url)
             if head_response.status_code != 200:
-                raise ValidationError('There was an error reading from the URL: %s' % head_response.content)
+                raise ValidationError(
+                    "There was an error reading from the URL: %s"
+                    % head_response.content
+                )
         return attrs
 
     # NOTE: as part of the DRF3 upgrade we're commenting this method out pending
@@ -688,26 +732,26 @@ class DataSetSerializer (BaseDataSetSerializer, serializers.HyperlinkedModelSeri
     #         load_dataset_archive.apply_async(args=(obj.id, self.load_url,))
 
     def to_internal_value(self, data):
-        if data and 'load_from_url' in data:
-            self.load_url = data.pop('load_from_url')
+        if data and "load_from_url" in data:
+            self.load_url = data.pop("load_from_url")
             if self.load_url and isinstance(self.load_url, list):
                 self.load_url = str(self.load_url[0])
         return super(DataSetSerializer, self).to_internal_value(data)
 
 
 # Action serializer
-class ActionSerializer (EmptyModelSerializer, serializers.ModelSerializer):
+class ActionSerializer(EmptyModelSerializer, serializers.ModelSerializer):
     target_type = serializers.SerializerMethodField()
     target = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Action
-        exclude = ('thing', 'source')
+        exclude = ("thing", "source")
 
     def get_target_type(self, obj):
         try:
             if obj.thing.place is not None:
-                return 'place'
+                return "place"
         except models.Place.DoesNotExist:
             pass
 
@@ -718,20 +762,25 @@ class ActionSerializer (EmptyModelSerializer, serializers.ModelSerializer):
             if obj.thing.place is not None:
                 serializer = PlaceSerializer(obj.thing.place, context=self.context)
             else:
-                serializer = SubmissionSerializer(obj.thing.submission, context=self.context)
+                serializer = SubmissionSerializer(
+                    obj.thing.submission, context=self.context
+                )
         except models.Place.DoesNotExist:
-            serializer = SubmissionSerializer(obj.thing.submission, context=self.context)
+            serializer = SubmissionSerializer(
+                obj.thing.submission, context=self.context
+            )
 
         return serializer.data
+
 
 #################################################################################
 # Form Serializers
 #################################################################################
 
-class BaseFormFieldOptionSerializer (
-    OmitNullFieldsFromRepr, 
-    serializers.ModelSerializer,
-    ):
+
+class BaseFormFieldOptionSerializer(
+    OmitNullFieldsFromRepr, serializers.ModelSerializer,
+):
     stage_visibility_triggers = serializers.SlugRelatedField(
         many=True,
         slug_field="id",
@@ -749,106 +798,91 @@ class BaseFormFieldOptionSerializer (
     class Meta:
         abstract = True
         fields = [
-            'default',
-            'make_private', 
-            'icon', 
-            'group_visibility_triggers', 
-            'stage_visibility_triggers',
-            'order'
+            "default",
+            "make_private",
+            "icon",
+            "group_visibility_triggers",
+            "stage_visibility_triggers",
+            "order",
         ]
         fields_to_omit = [
-            'group_visibility_triggers',
-            'stage_visibility_triggers',
-            'make_private',
-            'default',
-            'icon',
+            "group_visibility_triggers",
+            "stage_visibility_triggers",
+            "make_private",
+            "default",
+            "icon",
         ]
 
 
 # Form Field Options
 
-class CheckboxOptionSerializer (BaseFormFieldOptionSerializer):
 
+class CheckboxOptionSerializer(BaseFormFieldOptionSerializer):
     class Meta(BaseFormFieldOptionSerializer.Meta):
         model = models.CheckboxOption
-        fields = BaseFormFieldOptionSerializer.Meta.fields + ['label', 'value']
+        fields = BaseFormFieldOptionSerializer.Meta.fields + ["label", "value"]
 
 
-class RadioOptionSerializer (BaseFormFieldOptionSerializer):
-
+class RadioOptionSerializer(BaseFormFieldOptionSerializer):
     class Meta(BaseFormFieldOptionSerializer.Meta):
         model = models.RadioOption
-        fields = BaseFormFieldOptionSerializer.Meta.fields + ['label', 'value']
+        fields = BaseFormFieldOptionSerializer.Meta.fields + ["label", "value"]
+
 
 # Form Modules
 
-class SkipStageModuleSerializer (
-    FormModulesValidator,
-    serializers.ModelSerializer
-):
+
+class SkipStageModuleSerializer(FormModulesValidator, serializers.ModelSerializer):
     stage_id = serializers.PrimaryKeyRelatedField(
-        read_only=True,
-        required=False,
-        source='stage',
+        read_only=True, required=False, source="stage",
     )
+
     class Meta:
         model = models.SkipStageModule
-        fields = ['label', 'stage_id']
+        fields = ["label", "stage_id"]
 
 
-class HtmlModuleSerializer (
-    FormModulesValidator,
-    serializers.ModelSerializer
-):
+class HtmlModuleSerializer(FormModulesValidator, serializers.ModelSerializer):
     class Meta:
         model = models.HtmlModule
-        fields = ['content', 'label']
+        fields = ["content", "label"]
 
 
-class SubmitButtonModuleSerializer (
-    FormModulesValidator,
-    serializers.ModelSerializer
-):
+class SubmitButtonModuleSerializer(FormModulesValidator, serializers.ModelSerializer):
     class Meta:
         model = models.SubmitButtonModule
-        fields = ['label']
+        fields = ["label"]
 
 
 # Form Fields
-class ModalSerializer(
-    FormModulesValidator,
-    serializers.ModelSerializer
-):
+class ModalSerializer(FormModulesValidator, serializers.ModelSerializer):
     class Meta:
         model = models.Modal
-        fields = ['header', 'content']
+        fields = ["header", "content"]
 
 
-class BaseFormFieldSerializer (
-    OmitNullFieldsFromRepr,
-    FormModulesValidator,
-    serializers.ModelSerializer
+class BaseFormFieldSerializer(
+    OmitNullFieldsFromRepr, FormModulesValidator, serializers.ModelSerializer
 ):
     info_modal = ModalSerializer(required=False)
+
     class Meta:
         abstract = True
         fields = [
-            'key',
-            'prompt',
-            'label',
-            'private',
-            'required',
-            'info_modal',
+            "key",
+            "prompt",
+            "label",
+            "private",
+            "required",
+            "info_modal",
         ]
-        fields_to_omit = ['info_modal']
+        fields_to_omit = ["info_modal"]
 
     def create(self, validated_data):
-        if 'info_modal' in list(validated_data.keys()):
-            info_modal_data = validated_data.pop('info_modal')
+        if "info_modal" in list(validated_data.keys()):
+            info_modal_data = validated_data.pop("info_modal")
             # create our Modal instance, and add it to our FormField:
-            serializer = ModalSerializer(
-                    data=info_modal_data
-            )
+            serializer = ModalSerializer(data=info_modal_data)
             if not serializer.is_valid():
                 raise serializers.ValidationError(
                     "ModalSerializer failed to validate: {}".format(serializer.errors)
@@ -862,77 +896,80 @@ class BaseFormFieldSerializer (
         return form_field
 
 
-class AddressFieldModuleSerializer (BaseFormFieldSerializer):
+class AddressFieldModuleSerializer(BaseFormFieldSerializer):
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.AddressField
-        fields = BaseFormFieldSerializer.Meta.fields + ['placeholder', 'reverse_geocode']
-
-
-class TextAreaFieldModuleSerializer (BaseFormFieldSerializer):
-    class Meta(BaseFormFieldSerializer.Meta):
-        model = models.TextAreaField
-        fields = BaseFormFieldSerializer.Meta.fields + ['placeholder', 'rich_text']
-
-
-class TextFieldModuleSerializer (BaseFormFieldSerializer):
-    class Meta(BaseFormFieldSerializer.Meta):
-        model = models.TextField
-        fields = BaseFormFieldSerializer.Meta.fields + ['placeholder', 'variant']
-
-
-class DateFieldModuleSerializer (BaseFormFieldSerializer):
-    class Meta(BaseFormFieldSerializer.Meta):
-        model = models.DateField
         fields = BaseFormFieldSerializer.Meta.fields + [
-            'placeholder',
-            'include_ongoing',
-            'label_format',
-            'form_format',
+            "placeholder",
+            "reverse_geocode",
         ]
 
 
-class NumberFieldModuleSerializer (BaseFormFieldSerializer):
+class TextAreaFieldModuleSerializer(BaseFormFieldSerializer):
+    class Meta(BaseFormFieldSerializer.Meta):
+        model = models.TextAreaField
+        fields = BaseFormFieldSerializer.Meta.fields + ["placeholder", "rich_text"]
 
+
+class TextFieldModuleSerializer(BaseFormFieldSerializer):
+    class Meta(BaseFormFieldSerializer.Meta):
+        model = models.TextField
+        fields = BaseFormFieldSerializer.Meta.fields + ["placeholder", "variant"]
+
+
+class DateFieldModuleSerializer(BaseFormFieldSerializer):
+    class Meta(BaseFormFieldSerializer.Meta):
+        model = models.DateField
+        fields = BaseFormFieldSerializer.Meta.fields + [
+            "placeholder",
+            "include_ongoing",
+            "label_format",
+            "form_format",
+        ]
+
+
+class NumberFieldModuleSerializer(BaseFormFieldSerializer):
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.NumberField
-        fields = BaseFormFieldSerializer.Meta.fields + ['placeholder', 'minimum', 'units']
+        fields = BaseFormFieldSerializer.Meta.fields + [
+            "placeholder",
+            "minimum",
+            "units",
+        ]
 
 
-class FileFieldModuleSerializer (BaseFormFieldSerializer):
-
+class FileFieldModuleSerializer(BaseFormFieldSerializer):
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.FileField
         fields = BaseFormFieldSerializer.Meta.fields
 
 
-class RadioFieldModuleSerializer (
-    FormFieldOptionsCreator,
-    BaseFormFieldSerializer
-):
+class RadioFieldModuleSerializer(FormFieldOptionsCreator, BaseFormFieldSerializer):
     options = RadioOptionSerializer(many=True, required=False)
 
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.RadioField
-        fields = BaseFormFieldSerializer.Meta.fields + ['variant', 'dropdown_placeholder', 'options']
+        fields = BaseFormFieldSerializer.Meta.fields + [
+            "variant",
+            "dropdown_placeholder",
+            "options",
+        ]
         # custom attrs:
         options_model = models.RadioOption
 
 
-class CheckboxFieldModuleSerializer (
-    FormFieldOptionsCreator,
-    BaseFormFieldSerializer
-):
+class CheckboxFieldModuleSerializer(FormFieldOptionsCreator, BaseFormFieldSerializer):
     options = CheckboxOptionSerializer(many=True)
 
     class Meta(BaseFormFieldSerializer.Meta):
         model = models.CheckboxField
-        fields = BaseFormFieldSerializer.Meta.fields + ['options']
+        fields = BaseFormFieldSerializer.Meta.fields + ["options"]
         # custom attrs:
         options_model = models.CheckboxOption
 
 
 # Ordered Form Modules (our join table):
-class AbstractFormModuleSerializer (OmitNullFieldsFromRepr, serializers.ModelSerializer):
+class AbstractFormModuleSerializer(OmitNullFieldsFromRepr, serializers.ModelSerializer):
     htmlmodule = HtmlModuleSerializer(required=False)
     skipstagemodule = SkipStageModuleSerializer(required=False)
     radiofield = RadioFieldModuleSerializer(required=False)
@@ -946,14 +983,18 @@ class AbstractFormModuleSerializer (OmitNullFieldsFromRepr, serializers.ModelSer
     submitbuttonmodule = SubmitButtonModuleSerializer(required=False)
 
     class Meta:
-        fields_to_omit = ['*']
+        fields_to_omit = ["*"]
 
     def create(self, validated_data):
         module_names = [
-            fieldname for fieldname in list(self.Meta.available_modules.keys()) if fieldname in validated_data
+            fieldname
+            for fieldname in list(self.Meta.available_modules.keys())
+            if fieldname in validated_data
         ]
         if len(module_names) == 0 or len(module_names) > 1:
-            raise serializers.ValidationError("invalid form module added for stage: {}".format(self))
+            raise serializers.ValidationError(
+                "invalid form module added for stage: {}".format(self)
+            )
         related_module_name = module_names[0]
         field_data = validated_data.pop(related_module_name)
 
@@ -961,7 +1002,9 @@ class AbstractFormModuleSerializer (OmitNullFieldsFromRepr, serializers.ModelSer
         validated_data[self.Meta.parent_field] = parent
 
         if field_data is None:
-            raise serializers.ValidationError("no data found for fieldname: {}".format(related_module_name))
+            raise serializers.ValidationError(
+                "no data found for fieldname: {}".format(related_module_name)
+            )
 
         related_module_serializer = self.Meta.available_modules[related_module_name](
             data=self.initial_data.get(related_module_name)
@@ -969,8 +1012,7 @@ class AbstractFormModuleSerializer (OmitNullFieldsFromRepr, serializers.ModelSer
         if not related_module_serializer.is_valid():
             raise serializers.ValidationError(
                 "(Nested)OrderedModuleSerializer related module name: '{}' failed to validate: {}".format(
-                    related_module_name,
-                    related_module_serializer.errors
+                    related_module_name, related_module_serializer.errors
                 )
             )
         related_module = related_module_serializer.save()
@@ -996,39 +1038,39 @@ MODULES = {
 # sanity check that to ensure we have accounted for newly added modules:
 for related_module in models.RELATED_MODULES:
     if MODULES.get(related_module) is None:
-            raise ValidationError("Missing related module serializer:", related_module)
+        raise ValidationError("Missing related module serializer:", related_module)
 
-class NestedOrderedModuleSerializer (AbstractFormModuleSerializer):
+
+class NestedOrderedModuleSerializer(AbstractFormModuleSerializer):
     class Meta(AbstractFormModuleSerializer.Meta):
         model = models.NestedOrderedModule
-        parent_field = 'group'
-        exclude = ['group']
+        parent_field = "group"
+        exclude = ["group"]
         available_modules = MODULES
 
 
-class GroupModuleSerializer (serializers.ModelSerializer):
+class GroupModuleSerializer(serializers.ModelSerializer):
     modules = NestedOrderedModuleSerializer(many=True)
 
     class Meta:
         model = models.GroupModule
-        fields = ['label', 'modules']
+        fields = ["label", "modules"]
 
     def create(self, validated_data):
-        modules_data = validated_data.pop('modules')
+        modules_data = validated_data.pop("modules")
         # form = self.context.get('form')
-        group = models.GroupModule.objects.create(
-            **validated_data
-        )
+        group = models.GroupModule.objects.create(**validated_data)
         # use self.initial data instead of modules_data, so that we can validate
         # it within our module serializer:
-        for module_data in  self.initial_data.get('modules'):
+        for module_data in self.initial_data.get("modules"):
             serializer = NestedOrderedModuleSerializer(
-                data=module_data,
-                context={"group": group},
+                data=module_data, context={"group": group},
             )
             if not serializer.is_valid():
                 raise serializers.ValidationError(
-                    "NestedOrderedModuleSerializer failed to validate: {}".format(serializer.errors)
+                    "NestedOrderedModuleSerializer failed to validate: {}".format(
+                        serializer.errors
+                    )
                 )
             serializer.save()
         return group
@@ -1038,7 +1080,7 @@ MODULES_WITH_GROUP_MODULE = MODULES.copy()
 MODULES_WITH_GROUP_MODULE.update({"groupmodule": GroupModuleSerializer})
 
 
-class OrderedModuleSerializer (AbstractFormModuleSerializer):
+class OrderedModuleSerializer(AbstractFormModuleSerializer):
     groupmodule = GroupModuleSerializer(required=False)
 
     # Groups don't have url's, so we are using the id instead:
@@ -1051,25 +1093,27 @@ class OrderedModuleSerializer (AbstractFormModuleSerializer):
 
     class Meta(AbstractFormModuleSerializer.Meta):
         model = models.OrderedModule
-        parent_field = 'stage'
-        exclude = ['stage']
+        parent_field = "stage"
+        exclude = ["stage"]
         available_modules = MODULES_WITH_GROUP_MODULE
+
 
 # Form Stage and related:
 
-class LayerGroupSerializer (serializers.ModelSerializer):
+
+class LayerGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.LayerGroup
-        fields = '__all__'
+        fields = "__all__"
 
 
-class MapViewportSerializer (serializers.ModelSerializer):
+class MapViewportSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.MapViewport
-        fields = '__all__'
+        fields = "__all__"
 
 
-class FormStageSerializer (serializers.ModelSerializer):
+class FormStageSerializer(serializers.ModelSerializer):
     modules = OrderedModuleSerializer(many=True)
     visible_layer_groups = serializers.SlugRelatedField(
         many=True,
@@ -1082,43 +1126,43 @@ class FormStageSerializer (serializers.ModelSerializer):
     class Meta:
         model = models.FormStage
         fields = [
-            'id',
-            'visible_layer_groups',
-            'map_viewport',
-            'modules',
-            'order',
-            'visible',
-            'header_text',
+            "id",
+            "visible_layer_groups",
+            "map_viewport",
+            "modules",
+            "order",
+            "visible",
+            "header_text",
         ]
 
 
-class FormSerializer (serializers.ModelSerializer):
+class FormSerializer(serializers.ModelSerializer):
     dataset = DataSetHyperlinkedField()
     stages = FormStageSerializer(many=True)
 
     class Meta:
         model = models.Form
         fields = [
-            'id',
-            'label',
-            'engagement_text',
-            'image',
-            'is_enabled',
-            'dataset',
-            'stages'
+            "id",
+            "label",
+            "engagement_text",
+            "image",
+            "is_enabled",
+            "dataset",
+            "stages",
         ]
 
 
-class FlavorSerializer (serializers.ModelSerializer):
+class FlavorSerializer(serializers.ModelSerializer):
     forms = FormSerializer(many=True)
 
     class Meta:
         model = models.Flavor
         fields = [
-            'id',
-            'display_name',
-            'slug',
-            'forms',
+            "id",
+            "display_name",
+            "slug",
+            "forms",
         ]
 
 
@@ -1126,10 +1170,9 @@ class FlavorSerializer (serializers.ModelSerializer):
 # Form Fixture serializers
 ################################################################################
 
-class FormStageFixtureSerializer (serializers.ModelSerializer):
-    modules = OrderedModuleSerializer(
-        many=True,
-    )
+
+class FormStageFixtureSerializer(serializers.ModelSerializer):
+    modules = OrderedModuleSerializer(many=True,)
     visible_layer_groups = serializers.SlugRelatedField(
         many=True,
         slug_field="label",
@@ -1141,29 +1184,30 @@ class FormStageFixtureSerializer (serializers.ModelSerializer):
 
     class Meta:
         model = models.FormStage
-        fields = ['visible_layer_groups', 'map_viewport', 'order', 'modules']
+        fields = ["visible_layer_groups", "map_viewport", "order", "modules"]
 
     def create(self, validated_data):
-        viewport_data = validated_data.pop('map_viewport', None)
-        modules_data = validated_data.pop('modules')
-        layer_groups = validated_data.pop('visible_layer_groups', [])
-        form = self.context.get('form')
-        stage = models.FormStage.objects.create(
-            form=form,
-            **validated_data
-        )
+        viewport_data = validated_data.pop("map_viewport", None)
+        modules_data = validated_data.pop("modules")
+        layer_groups = validated_data.pop("visible_layer_groups", [])
+        form = self.context.get("form")
+        stage = models.FormStage.objects.create(form=form, **validated_data)
         # Since LayerGroups are many-to-many, we need to create the FormStage before adding the LayerGroups to it:
-        list(map(
-            lambda layer_group, stage=stage: stage.visible_layer_groups.add(layer_group), layer_groups
-        ))
+        list(
+            map(
+                lambda layer_group, stage=stage: stage.visible_layer_groups.add(
+                    layer_group
+                ),
+                layer_groups,
+            )
+        )
         if viewport_data is not None:
             models.MapViewport.objects.create(stage=stage, **viewport_data)
         # use self.initial data instead of modules_data, so that we can validate
         # it within our module serializer:
-        for module_data in  self.initial_data.get('modules'):
+        for module_data in self.initial_data.get("modules"):
             serializer = OrderedModuleSerializer(
-                data=module_data,
-                context={"stage": stage},
+                data=module_data, context={"stage": stage},
             )
             if not serializer.is_valid():
                 raise serializers.ValidationError(
@@ -1173,36 +1217,36 @@ class FormStageFixtureSerializer (serializers.ModelSerializer):
         return stage
 
 
-class FormFixtureSerializer (serializers.ModelSerializer):
+class FormFixtureSerializer(serializers.ModelSerializer):
     stages = FormStageFixtureSerializer(many=True)
     dataset = serializers.SlugRelatedField(
-        slug_field='slug',
-        queryset=models.DataSet.objects.all(),
+        slug_field="slug", queryset=models.DataSet.objects.all(),
     )
 
     class Meta:
         model = models.Form
         fields = [
-            'label',
-            'is_enabled',
-            'engagement_text',
-            'image',
-            'dataset',
-            'stages',
+            "label",
+            "is_enabled",
+            "engagement_text",
+            "image",
+            "dataset",
+            "stages",
         ]
 
     def create(self, validated_data):
-        stages_data = validated_data.pop('stages')
+        stages_data = validated_data.pop("stages")
         form = models.Form.objects.create(**validated_data)
         # use self.initial data instead of stages_data, so that we can validate
         # it within our module serializer:
         form_data = next(
-            form_data for form_data in self.initial_data if form_data['label'] == form.label
+            form_data
+            for form_data in self.initial_data
+            if form_data["label"] == form.label
         )
-        for stage_data in form_data.get('stages'):
+        for stage_data in form_data.get("stages"):
             serializer = FormStageFixtureSerializer(
-                data=stage_data,
-                context={"form": form}
+                data=stage_data, context={"form": form}
             )
             if not serializer.is_valid():
                 raise serializers.ValidationError(
@@ -1211,17 +1255,16 @@ class FormFixtureSerializer (serializers.ModelSerializer):
             serializer.save()
         return form
 
-class FlavorFixtureSerializer (serializers.ModelSerializer):
+
+class FlavorFixtureSerializer(serializers.ModelSerializer):
     forms = serializers.SlugRelatedField(
-        many=True,
-        slug_field='label',
-        queryset=models.Form.objects.all(),
+        many=True, slug_field="label", queryset=models.Form.objects.all(),
     )
 
     class Meta:
         model = models.Flavor
         fields = [
-            'display_name',
-            'slug',
-            'forms',
+            "display_name",
+            "slug",
+            "forms",
         ]

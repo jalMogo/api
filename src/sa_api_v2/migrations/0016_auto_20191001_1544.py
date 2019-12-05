@@ -8,48 +8,53 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('sa_api_v2', '0015_dataset_auth_required'),
+        ("sa_api_v2", "0015_dataset_auth_required"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='placeemailtemplate',
-            name='default_recipient_email',
-            field=models.EmailField(blank=True, default='', help_text='A "Default recipient email" will take precedence over a Submission\'s "Recipient email field".', max_length=254),
+            model_name="placeemailtemplate",
+            name="default_recipient_email",
+            field=models.EmailField(
+                blank=True,
+                default="",
+                help_text='A "Default recipient email" will take precedence over a Submission\'s "Recipient email field".',
+                max_length=254,
+            ),
         ),
         migrations.AlterField(
-            model_name='placeemailtemplate',
-            name='bcc_email_1',
-            field=models.EmailField(blank=True, default='', max_length=254),
+            model_name="placeemailtemplate",
+            name="bcc_email_1",
+            field=models.EmailField(blank=True, default="", max_length=254),
         ),
         migrations.AlterField(
-            model_name='placeemailtemplate',
-            name='bcc_email_2',
-            field=models.EmailField(blank=True, default='', max_length=254),
+            model_name="placeemailtemplate",
+            name="bcc_email_2",
+            field=models.EmailField(blank=True, default="", max_length=254),
         ),
         migrations.AlterField(
-            model_name='placeemailtemplate',
-            name='bcc_email_3',
-            field=models.EmailField(blank=True, default='', max_length=254),
+            model_name="placeemailtemplate",
+            name="bcc_email_3",
+            field=models.EmailField(blank=True, default="", max_length=254),
         ),
         migrations.AlterField(
-            model_name='placeemailtemplate',
-            name='bcc_email_4',
-            field=models.EmailField(blank=True, default='', max_length=254),
+            model_name="placeemailtemplate",
+            name="bcc_email_4",
+            field=models.EmailField(blank=True, default="", max_length=254),
         ),
         migrations.AlterField(
-            model_name='placeemailtemplate',
-            name='bcc_email_5',
-            field=models.EmailField(blank=True, default='', max_length=254),
+            model_name="placeemailtemplate",
+            name="bcc_email_5",
+            field=models.EmailField(blank=True, default="", max_length=254),
         ),
         migrations.AlterField(
-            model_name='placeemailtemplate',
-            name='body_html',
-            field=models.TextField(blank=True, default=''),
+            model_name="placeemailtemplate",
+            name="body_html",
+            field=models.TextField(blank=True, default=""),
         ),
         migrations.AlterField(
-            model_name='placeemailtemplate',
-            name='recipient_email_field',
-            field=models.CharField(blank=True, default='', max_length=128),
+            model_name="placeemailtemplate",
+            name="recipient_email_field",
+            field=models.CharField(blank=True, default="", max_length=128),
         ),
     ]

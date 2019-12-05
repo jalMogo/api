@@ -5,17 +5,22 @@ from .mixins import CloneableModelMixin
 from functools import reduce
 
 
-class DataIndex (CloneableModelMixin, models.Model):
-    ATTR_TYPE_CHOICES = (
-        ('string', 'String'),
+class DataIndex(CloneableModelMixin, models.Model):
+    ATTR_TYPE_CHOICES = (("string", "String"),)
+
+    dataset = models.ForeignKey("DataSet", related_name="indexes")
+    attr_name = models.CharField(
+        max_length=100, db_index=True, verbose_name="Attribute name"
+    )
+    attr_type = models.CharField(
+        max_length=10,
+        choices=ATTR_TYPE_CHOICES,
+        default="string",
+        verbose_name="Attribute type",
     )
 
-    dataset = models.ForeignKey('DataSet', related_name='indexes')
-    attr_name = models.CharField(max_length=100, db_index=True, verbose_name='Attribute name')
-    attr_type = models.CharField(max_length=10, choices=ATTR_TYPE_CHOICES, default='string', verbose_name='Attribute type')
-
     class Meta:
-        app_label = 'sa_api_v2'
+        app_label = "sa_api_v2"
 
     def __unicode__(self):
         return self.attr_name
@@ -26,7 +31,7 @@ class DataIndex (CloneableModelMixin, models.Model):
             IndexedValue.objects.sync(thing, self)
 
     def get_clone_save_kwargs(self):
-        return {'reindex': False}
+        return {"reindex": False}
 
     def save(self, reindex=True, *args, **kwargs):
         ret = super(DataIndex, self).save(*args, **kwargs)
@@ -35,7 +40,7 @@ class DataIndex (CloneableModelMixin, models.Model):
         return ret
 
 
-class IndexedValueManager (models.Manager):
+class IndexedValueManager(models.Manager):
     def sync(self, thing, index, data=None):
         if data is None:
             data = json.loads(thing.data)
@@ -57,9 +62,9 @@ class IndexedValueManager (models.Manager):
             self.filter(thing_id=thing.id, index_id=index.id).delete()
 
 
-class IndexedValue (models.Model):
-    index = models.ForeignKey('DataIndex', related_name='values')
-    thing = models.ForeignKey('SubmittedThing', related_name='indexed_values')
+class IndexedValue(models.Model):
+    index = models.ForeignKey("DataIndex", related_name="values")
+    thing = models.ForeignKey("SubmittedThing", related_name="indexed_values")
 
     value = models.CharField(max_length=100, null=True, db_index=True)
     # TODO: This might be better as:
@@ -75,26 +80,28 @@ class IndexedValue (models.Model):
     objects = IndexedValueManager()
 
     class Meta:
-        app_label = 'sa_api_v2'
+        app_label = "sa_api_v2"
 
     def get(self):
         data = json.loads(self.thing.data)
         try:
             return data[self.index.attr_name]
         except KeyError:
-            raise KeyError('The thing %s has no data attribute %s' % (self.thing, self.index.attr_name))
+            raise KeyError(
+                "The thing %s has no data attribute %s"
+                % (self.thing, self.index.attr_name)
+            )
 
 
-class FilterByIndexMixin (object):
+class FilterByIndexMixin(object):
     """
     Mixin for model managers of indexed models.
     """
+
     def filter_by_index(self, key, *values):
         matches_any_values_clause = reduce(
-            operator.or_,
-            [models.Q(indexed_values__value=value) for value in values])
-        return self\
-            .filter(indexed_values__index__attr_name=key)\
-            .filter(matches_any_values_clause)
-
-
+            operator.or_, [models.Q(indexed_values__value=value) for value in values]
+        )
+        return self.filter(indexed_values__index__attr_name=key).filter(
+            matches_any_values_clause
+        )

@@ -16,356 +16,753 @@ import django.core.validators
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auth', '0001_initial'),
+        ("auth", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='User',
+            name="User",
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('password', models.CharField(max_length=128, verbose_name='password')),
-                ('last_login', models.DateTimeField(default=django.utils.timezone.now, verbose_name='last login')),
-                ('is_superuser', models.BooleanField(default=False, help_text='Designates that this user has all permissions without explicitly assigning them.', verbose_name='superuser status')),
-                ('username', models.CharField(help_text='Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only.', unique=True, max_length=30, verbose_name='username', validators=[django.core.validators.RegexValidator('^[\\w.@+-]+$', 'Enter a valid username.', 'invalid')])),
-                ('first_name', models.CharField(max_length=30, verbose_name='first name', blank=True)),
-                ('last_name', models.CharField(max_length=30, verbose_name='last name', blank=True)),
-                ('email', models.EmailField(max_length=75, verbose_name='email address', blank=True)),
-                ('is_staff', models.BooleanField(default=False, help_text='Designates whether the user can log into this admin site.', verbose_name='staff status')),
-                ('is_active', models.BooleanField(default=True, help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='active')),
-                ('date_joined', models.DateTimeField(default=django.utils.timezone.now, verbose_name='date joined')),
+                (
+                    "id",
+                    models.AutoField(
+                        verbose_name="ID",
+                        serialize=False,
+                        auto_created=True,
+                        primary_key=True,
+                    ),
+                ),
+                ("password", models.CharField(max_length=128, verbose_name="password")),
+                (
+                    "last_login",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, verbose_name="last login"
+                    ),
+                ),
+                (
+                    "is_superuser",
+                    models.BooleanField(
+                        default=False,
+                        help_text="Designates that this user has all permissions without explicitly assigning them.",
+                        verbose_name="superuser status",
+                    ),
+                ),
+                (
+                    "username",
+                    models.CharField(
+                        help_text="Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only.",
+                        unique=True,
+                        max_length=30,
+                        verbose_name="username",
+                        validators=[
+                            django.core.validators.RegexValidator(
+                                "^[\\w.@+-]+$", "Enter a valid username.", "invalid"
+                            )
+                        ],
+                    ),
+                ),
+                (
+                    "first_name",
+                    models.CharField(
+                        max_length=30, verbose_name="first name", blank=True
+                    ),
+                ),
+                (
+                    "last_name",
+                    models.CharField(
+                        max_length=30, verbose_name="last name", blank=True
+                    ),
+                ),
+                (
+                    "email",
+                    models.EmailField(
+                        max_length=75, verbose_name="email address", blank=True
+                    ),
+                ),
+                (
+                    "is_staff",
+                    models.BooleanField(
+                        default=False,
+                        help_text="Designates whether the user can log into this admin site.",
+                        verbose_name="staff status",
+                    ),
+                ),
+                (
+                    "is_active",
+                    models.BooleanField(
+                        default=True,
+                        help_text="Designates whether this user should be treated as active. Unselect this instead of deleting accounts.",
+                        verbose_name="active",
+                    ),
+                ),
+                (
+                    "date_joined",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, verbose_name="date joined"
+                    ),
+                ),
             ],
-            options={
-                'db_table': 'auth_user',
-            },
+            options={"db_table": "auth_user",},
             bases=(sa_api_v2.models.caching.CacheClearingModel, models.Model),
         ),
         migrations.CreateModel(
-            name='Action',
+            name="Action",
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('created_datetime', models.DateTimeField(default=django.utils.timezone.now, db_index=True, blank=True)),
-                ('updated_datetime', models.DateTimeField(auto_now=True, db_index=True)),
-                ('action', models.CharField(default='create', max_length=16)),
-                ('source', models.TextField(null=True, blank=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        verbose_name="ID",
+                        serialize=False,
+                        auto_created=True,
+                        primary_key=True,
+                    ),
+                ),
+                (
+                    "created_datetime",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, db_index=True, blank=True
+                    ),
+                ),
+                (
+                    "updated_datetime",
+                    models.DateTimeField(auto_now=True, db_index=True),
+                ),
+                ("action", models.CharField(default="create", max_length=16)),
+                ("source", models.TextField(null=True, blank=True)),
             ],
-            options={
-                'ordering': ['-created_datetime'],
-                'db_table': 'sa_api_activity',
-            },
+            options={"ordering": ["-created_datetime"], "db_table": "sa_api_activity",},
             bases=(sa_api_v2.models.caching.CacheClearingModel, models.Model),
         ),
         migrations.CreateModel(
-            name='ApiKey',
+            name="ApiKey",
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('key', models.CharField(default=sa_api_v2.apikey.models.generate_unique_api_key, unique=True, max_length=32)),
-                ('logged_ip', models.IPAddressField(null=True, blank=True)),
-                ('last_used', models.DateTimeField(default=django.utils.timezone.now, blank=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        verbose_name="ID",
+                        serialize=False,
+                        auto_created=True,
+                        primary_key=True,
+                    ),
+                ),
+                (
+                    "key",
+                    models.CharField(
+                        default=sa_api_v2.apikey.models.generate_unique_api_key,
+                        unique=True,
+                        max_length=32,
+                    ),
+                ),
+                ("logged_ip", models.IPAddressField(null=True, blank=True)),
+                (
+                    "last_used",
+                    models.DateTimeField(default=django.utils.timezone.now, blank=True),
+                ),
             ],
-            options={
-                'db_table': 'apikey_apikey',
-            },
+            options={"db_table": "apikey_apikey",},
             bases=(sa_api_v2.models.mixins.CloneableModelMixin, models.Model),
         ),
         migrations.CreateModel(
-            name='Attachment',
+            name="Attachment",
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('created_datetime', models.DateTimeField(default=django.utils.timezone.now, db_index=True, blank=True)),
-                ('updated_datetime', models.DateTimeField(auto_now=True, db_index=True)),
-                ('file', models.FileField(storage=django.core.files.storage.FileSystemStorage(), upload_to=sa_api_v2.models.core.timestamp_filename)),
-                ('name', models.CharField(max_length=128, null=True, blank=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        verbose_name="ID",
+                        serialize=False,
+                        auto_created=True,
+                        primary_key=True,
+                    ),
+                ),
+                (
+                    "created_datetime",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, db_index=True, blank=True
+                    ),
+                ),
+                (
+                    "updated_datetime",
+                    models.DateTimeField(auto_now=True, db_index=True),
+                ),
+                (
+                    "file",
+                    models.FileField(
+                        storage=django.core.files.storage.FileSystemStorage(),
+                        upload_to=sa_api_v2.models.core.timestamp_filename,
+                    ),
+                ),
+                ("name", models.CharField(max_length=128, null=True, blank=True)),
             ],
-            options={
-                'db_table': 'sa_api_attachment',
-            },
+            options={"db_table": "sa_api_attachment",},
             bases=(sa_api_v2.models.caching.CacheClearingModel, models.Model),
         ),
         migrations.CreateModel(
-            name='DataIndex',
+            name="DataIndex",
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('attr_name', models.CharField(max_length=100, verbose_name='Attribute name', db_index=True)),
-                ('attr_type', models.CharField(default='string', max_length=10, verbose_name='Attribute type', choices=[('string', 'String')])),
+                (
+                    "id",
+                    models.AutoField(
+                        verbose_name="ID",
+                        serialize=False,
+                        auto_created=True,
+                        primary_key=True,
+                    ),
+                ),
+                (
+                    "attr_name",
+                    models.CharField(
+                        max_length=100, verbose_name="Attribute name", db_index=True
+                    ),
+                ),
+                (
+                    "attr_type",
+                    models.CharField(
+                        default="string",
+                        max_length=10,
+                        verbose_name="Attribute type",
+                        choices=[("string", "String")],
+                    ),
+                ),
             ],
-            options={
-            },
+            options={},
             bases=(sa_api_v2.models.mixins.CloneableModelMixin, models.Model),
         ),
         migrations.CreateModel(
-            name='DataSet',
+            name="DataSet",
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('display_name', models.CharField(max_length=128)),
-                ('slug', models.SlugField(default='', max_length=128)),
-                ('owner', models.ForeignKey(related_name='datasets', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        verbose_name="ID",
+                        serialize=False,
+                        auto_created=True,
+                        primary_key=True,
+                    ),
+                ),
+                ("display_name", models.CharField(max_length=128)),
+                ("slug", models.SlugField(default="", max_length=128)),
+                (
+                    "owner",
+                    models.ForeignKey(
+                        related_name="datasets", to=settings.AUTH_USER_MODEL
+                    ),
+                ),
             ],
-            options={
-                'db_table': 'sa_api_dataset',
-            },
-            bases=(sa_api_v2.models.mixins.CloneableModelMixin, sa_api_v2.models.caching.CacheClearingModel, models.Model),
+            options={"db_table": "sa_api_dataset",},
+            bases=(
+                sa_api_v2.models.mixins.CloneableModelMixin,
+                sa_api_v2.models.caching.CacheClearingModel,
+                models.Model,
+            ),
         ),
         migrations.CreateModel(
-            name='DataSetPermission',
+            name="DataSetPermission",
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('submission_set', models.CharField(help_text='Either the name of a submission set (e.g., "comments"), or "places". Leave blank to refer to all things.', max_length=128, blank=True)),
-                ('can_retrieve', models.BooleanField(default=True)),
-                ('can_create', models.BooleanField(default=False)),
-                ('can_update', models.BooleanField(default=False)),
-                ('can_destroy', models.BooleanField(default=False)),
-                ('priority', models.PositiveIntegerField(blank=True)),
-                ('dataset', models.ForeignKey(related_name='permissions', to='sa_api_v2.DataSet')),
+                (
+                    "id",
+                    models.AutoField(
+                        verbose_name="ID",
+                        serialize=False,
+                        auto_created=True,
+                        primary_key=True,
+                    ),
+                ),
+                (
+                    "submission_set",
+                    models.CharField(
+                        help_text='Either the name of a submission set (e.g., "comments"), or "places". Leave blank to refer to all things.',
+                        max_length=128,
+                        blank=True,
+                    ),
+                ),
+                ("can_retrieve", models.BooleanField(default=True)),
+                ("can_create", models.BooleanField(default=False)),
+                ("can_update", models.BooleanField(default=False)),
+                ("can_destroy", models.BooleanField(default=False)),
+                ("priority", models.PositiveIntegerField(blank=True)),
+                (
+                    "dataset",
+                    models.ForeignKey(
+                        related_name="permissions", to="sa_api_v2.DataSet"
+                    ),
+                ),
             ],
-            options={
-            },
-            bases=(sa_api_v2.models.mixins.CloneableModelMixin, sa_api_v2.models.caching.CacheClearingModel, models.Model),
+            options={},
+            bases=(
+                sa_api_v2.models.mixins.CloneableModelMixin,
+                sa_api_v2.models.caching.CacheClearingModel,
+                models.Model,
+            ),
         ),
         migrations.CreateModel(
-            name='DataSnapshot',
+            name="DataSnapshot",
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('json', models.TextField()),
-                ('csv', models.TextField()),
+                (
+                    "id",
+                    models.AutoField(
+                        verbose_name="ID",
+                        serialize=False,
+                        auto_created=True,
+                        primary_key=True,
+                    ),
+                ),
+                ("json", models.TextField()),
+                ("csv", models.TextField()),
             ],
-            options={
-                'db_table': 'sa_api_datasnapshot',
-            },
+            options={"db_table": "sa_api_datasnapshot",},
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name='DataSnapshotRequest',
+            name="DataSnapshotRequest",
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('submission_set', models.CharField(max_length=128)),
-                ('include_private', models.BooleanField(default=False)),
-                ('include_invisible', models.BooleanField(default=False)),
-                ('include_submissions', models.BooleanField(default=False)),
-                ('requested_at', models.DateTimeField(auto_now_add=True)),
-                ('status', models.TextField(default='', blank=True)),
-                ('fulfilled_at', models.DateTimeField(null=True)),
-                ('guid', models.TextField(default='', unique=True, blank=True)),
-                ('dataset', models.ForeignKey(to='sa_api_v2.DataSet')),
-                ('requester', models.ForeignKey(to=settings.AUTH_USER_MODEL, null=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        verbose_name="ID",
+                        serialize=False,
+                        auto_created=True,
+                        primary_key=True,
+                    ),
+                ),
+                ("submission_set", models.CharField(max_length=128)),
+                ("include_private", models.BooleanField(default=False)),
+                ("include_invisible", models.BooleanField(default=False)),
+                ("include_submissions", models.BooleanField(default=False)),
+                ("requested_at", models.DateTimeField(auto_now_add=True)),
+                ("status", models.TextField(default="", blank=True)),
+                ("fulfilled_at", models.DateTimeField(null=True)),
+                ("guid", models.TextField(default="", unique=True, blank=True)),
+                ("dataset", models.ForeignKey(to="sa_api_v2.DataSet")),
+                (
+                    "requester",
+                    models.ForeignKey(to=settings.AUTH_USER_MODEL, null=True),
+                ),
             ],
-            options={
-                'db_table': 'sa_api_datasnapshotrequest',
-            },
+            options={"db_table": "sa_api_datasnapshotrequest",},
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name='Group',
+            name="Group",
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(help_text='What is the name of the group to which users with this group belong? For example: "judges", "administrators", "winners", ...', max_length=32)),
-                ('dataset', models.ForeignKey(related_name='groups', to='sa_api_v2.DataSet', help_text='Which dataset does this group apply to?')),
-                ('submitters', models.ManyToManyField(related_name='_groups', to=settings.AUTH_USER_MODEL, blank=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        verbose_name="ID",
+                        serialize=False,
+                        auto_created=True,
+                        primary_key=True,
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        help_text='What is the name of the group to which users with this group belong? For example: "judges", "administrators", "winners", ...',
+                        max_length=32,
+                    ),
+                ),
+                (
+                    "dataset",
+                    models.ForeignKey(
+                        related_name="groups",
+                        to="sa_api_v2.DataSet",
+                        help_text="Which dataset does this group apply to?",
+                    ),
+                ),
+                (
+                    "submitters",
+                    models.ManyToManyField(
+                        related_name="_groups", to=settings.AUTH_USER_MODEL, blank=True
+                    ),
+                ),
             ],
-            options={
-                'db_table': 'sa_api_group',
-            },
+            options={"db_table": "sa_api_group",},
             bases=(sa_api_v2.models.mixins.CloneableModelMixin, models.Model),
         ),
         migrations.CreateModel(
-            name='GroupPermission',
+            name="GroupPermission",
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('submission_set', models.CharField(help_text='Either the name of a submission set (e.g., "comments"), or "places". Leave blank to refer to all things.', max_length=128, blank=True)),
-                ('can_retrieve', models.BooleanField(default=True)),
-                ('can_create', models.BooleanField(default=False)),
-                ('can_update', models.BooleanField(default=False)),
-                ('can_destroy', models.BooleanField(default=False)),
-                ('priority', models.PositiveIntegerField(blank=True)),
-                ('group', models.ForeignKey(related_name='permissions', to='sa_api_v2.Group')),
+                (
+                    "id",
+                    models.AutoField(
+                        verbose_name="ID",
+                        serialize=False,
+                        auto_created=True,
+                        primary_key=True,
+                    ),
+                ),
+                (
+                    "submission_set",
+                    models.CharField(
+                        help_text='Either the name of a submission set (e.g., "comments"), or "places". Leave blank to refer to all things.',
+                        max_length=128,
+                        blank=True,
+                    ),
+                ),
+                ("can_retrieve", models.BooleanField(default=True)),
+                ("can_create", models.BooleanField(default=False)),
+                ("can_update", models.BooleanField(default=False)),
+                ("can_destroy", models.BooleanField(default=False)),
+                ("priority", models.PositiveIntegerField(blank=True)),
+                (
+                    "group",
+                    models.ForeignKey(related_name="permissions", to="sa_api_v2.Group"),
+                ),
             ],
-            options={
-            },
-            bases=(sa_api_v2.models.mixins.CloneableModelMixin, sa_api_v2.models.caching.CacheClearingModel, models.Model),
+            options={},
+            bases=(
+                sa_api_v2.models.mixins.CloneableModelMixin,
+                sa_api_v2.models.caching.CacheClearingModel,
+                models.Model,
+            ),
         ),
         migrations.CreateModel(
-            name='IndexedValue',
+            name="IndexedValue",
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('value', models.CharField(max_length=100, null=True, db_index=True)),
-                ('index', models.ForeignKey(related_name='values', to='sa_api_v2.DataIndex')),
+                (
+                    "id",
+                    models.AutoField(
+                        verbose_name="ID",
+                        serialize=False,
+                        auto_created=True,
+                        primary_key=True,
+                    ),
+                ),
+                ("value", models.CharField(max_length=100, null=True, db_index=True)),
+                (
+                    "index",
+                    models.ForeignKey(related_name="values", to="sa_api_v2.DataIndex"),
+                ),
             ],
-            options={
-            },
+            options={},
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name='KeyPermission',
+            name="KeyPermission",
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('submission_set', models.CharField(help_text='Either the name of a submission set (e.g., "comments"), or "places". Leave blank to refer to all things.', max_length=128, blank=True)),
-                ('can_retrieve', models.BooleanField(default=True)),
-                ('can_create', models.BooleanField(default=False)),
-                ('can_update', models.BooleanField(default=False)),
-                ('can_destroy', models.BooleanField(default=False)),
-                ('priority', models.PositiveIntegerField(blank=True)),
-                ('key', models.ForeignKey(related_name='permissions', to='sa_api_v2.ApiKey')),
+                (
+                    "id",
+                    models.AutoField(
+                        verbose_name="ID",
+                        serialize=False,
+                        auto_created=True,
+                        primary_key=True,
+                    ),
+                ),
+                (
+                    "submission_set",
+                    models.CharField(
+                        help_text='Either the name of a submission set (e.g., "comments"), or "places". Leave blank to refer to all things.',
+                        max_length=128,
+                        blank=True,
+                    ),
+                ),
+                ("can_retrieve", models.BooleanField(default=True)),
+                ("can_create", models.BooleanField(default=False)),
+                ("can_update", models.BooleanField(default=False)),
+                ("can_destroy", models.BooleanField(default=False)),
+                ("priority", models.PositiveIntegerField(blank=True)),
+                (
+                    "key",
+                    models.ForeignKey(
+                        related_name="permissions", to="sa_api_v2.ApiKey"
+                    ),
+                ),
             ],
-            options={
-            },
-            bases=(sa_api_v2.models.mixins.CloneableModelMixin, sa_api_v2.models.caching.CacheClearingModel, models.Model),
+            options={},
+            bases=(
+                sa_api_v2.models.mixins.CloneableModelMixin,
+                sa_api_v2.models.caching.CacheClearingModel,
+                models.Model,
+            ),
         ),
         migrations.CreateModel(
-            name='Origin',
+            name="Origin",
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('pattern', models.CharField(help_text='The origin pattern, e.g., https://*.github.io, http://localhost:*, http*://map.phila.gov', max_length=100)),
-                ('logged_ip', models.IPAddressField(null=True, blank=True)),
-                ('last_used', models.DateTimeField(default=django.utils.timezone.now, blank=True)),
-                ('dataset', models.ForeignKey(related_name='origins', blank=True, to='sa_api_v2.DataSet')),
+                (
+                    "id",
+                    models.AutoField(
+                        verbose_name="ID",
+                        serialize=False,
+                        auto_created=True,
+                        primary_key=True,
+                    ),
+                ),
+                (
+                    "pattern",
+                    models.CharField(
+                        help_text="The origin pattern, e.g., https://*.github.io, http://localhost:*, http*://map.phila.gov",
+                        max_length=100,
+                    ),
+                ),
+                ("logged_ip", models.IPAddressField(null=True, blank=True)),
+                (
+                    "last_used",
+                    models.DateTimeField(default=django.utils.timezone.now, blank=True),
+                ),
+                (
+                    "dataset",
+                    models.ForeignKey(
+                        related_name="origins", blank=True, to="sa_api_v2.DataSet"
+                    ),
+                ),
             ],
-            options={
-                'db_table': 'cors_origin',
-            },
+            options={"db_table": "cors_origin",},
             bases=(sa_api_v2.models.mixins.CloneableModelMixin, models.Model),
         ),
         migrations.CreateModel(
-            name='OriginPermission',
+            name="OriginPermission",
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('submission_set', models.CharField(help_text='Either the name of a submission set (e.g., "comments"), or "places". Leave blank to refer to all things.', max_length=128, blank=True)),
-                ('can_retrieve', models.BooleanField(default=True)),
-                ('can_create', models.BooleanField(default=False)),
-                ('can_update', models.BooleanField(default=False)),
-                ('can_destroy', models.BooleanField(default=False)),
-                ('priority', models.PositiveIntegerField(blank=True)),
-                ('origin', models.ForeignKey(related_name='permissions', to='sa_api_v2.Origin')),
+                (
+                    "id",
+                    models.AutoField(
+                        verbose_name="ID",
+                        serialize=False,
+                        auto_created=True,
+                        primary_key=True,
+                    ),
+                ),
+                (
+                    "submission_set",
+                    models.CharField(
+                        help_text='Either the name of a submission set (e.g., "comments"), or "places". Leave blank to refer to all things.',
+                        max_length=128,
+                        blank=True,
+                    ),
+                ),
+                ("can_retrieve", models.BooleanField(default=True)),
+                ("can_create", models.BooleanField(default=False)),
+                ("can_update", models.BooleanField(default=False)),
+                ("can_destroy", models.BooleanField(default=False)),
+                ("priority", models.PositiveIntegerField(blank=True)),
+                (
+                    "origin",
+                    models.ForeignKey(
+                        related_name="permissions", to="sa_api_v2.Origin"
+                    ),
+                ),
             ],
-            options={
-            },
-            bases=(sa_api_v2.models.mixins.CloneableModelMixin, sa_api_v2.models.caching.CacheClearingModel, models.Model),
+            options={},
+            bases=(
+                sa_api_v2.models.mixins.CloneableModelMixin,
+                sa_api_v2.models.caching.CacheClearingModel,
+                models.Model,
+            ),
         ),
         migrations.CreateModel(
-            name='SubmittedThing',
+            name="SubmittedThing",
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('created_datetime', models.DateTimeField(default=django.utils.timezone.now, db_index=True, blank=True)),
-                ('updated_datetime', models.DateTimeField(auto_now=True, db_index=True)),
-                ('data', models.TextField(default='{}')),
-                ('visible', models.BooleanField(default=True, db_index=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        verbose_name="ID",
+                        serialize=False,
+                        auto_created=True,
+                        primary_key=True,
+                    ),
+                ),
+                (
+                    "created_datetime",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, db_index=True, blank=True
+                    ),
+                ),
+                (
+                    "updated_datetime",
+                    models.DateTimeField(auto_now=True, db_index=True),
+                ),
+                ("data", models.TextField(default="{}")),
+                ("visible", models.BooleanField(default=True, db_index=True)),
             ],
-            options={
-                'db_table': 'sa_api_submittedthing',
-            },
-            bases=(sa_api_v2.models.mixins.CloneableModelMixin, sa_api_v2.models.caching.CacheClearingModel, models.Model),
+            options={"db_table": "sa_api_submittedthing",},
+            bases=(
+                sa_api_v2.models.mixins.CloneableModelMixin,
+                sa_api_v2.models.caching.CacheClearingModel,
+                models.Model,
+            ),
         ),
         migrations.CreateModel(
-            name='Submission',
+            name="Submission",
             fields=[
-                ('submittedthing_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='sa_api_v2.SubmittedThing')),
-                ('set_name', models.TextField(db_index=True)),
+                (
+                    "submittedthing_ptr",
+                    models.OneToOneField(
+                        parent_link=True,
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="sa_api_v2.SubmittedThing",
+                    ),
+                ),
+                ("set_name", models.TextField(db_index=True)),
             ],
             options={
-                'ordering': ['-updated_datetime'],
-                'db_table': 'sa_api_submission',
+                "ordering": ["-updated_datetime"],
+                "db_table": "sa_api_submission",
             },
-            bases=('sa_api_v2.submittedthing',),
+            bases=("sa_api_v2.submittedthing",),
         ),
         migrations.CreateModel(
-            name='Place',
+            name="Place",
             fields=[
-                ('submittedthing_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='sa_api_v2.SubmittedThing')),
-                ('geometry', django.contrib.gis.db.models.fields.GeometryField(srid=4326)),
+                (
+                    "submittedthing_ptr",
+                    models.OneToOneField(
+                        parent_link=True,
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="sa_api_v2.SubmittedThing",
+                    ),
+                ),
+                (
+                    "geometry",
+                    django.contrib.gis.db.models.fields.GeometryField(srid=4326),
+                ),
             ],
-            options={
-                'ordering': ['-updated_datetime'],
-                'db_table': 'sa_api_place',
-            },
-            bases=('sa_api_v2.submittedthing',),
+            options={"ordering": ["-updated_datetime"], "db_table": "sa_api_place",},
+            bases=("sa_api_v2.submittedthing",),
         ),
         migrations.CreateModel(
-            name='Webhook',
+            name="Webhook",
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('created_datetime', models.DateTimeField(default=django.utils.timezone.now, db_index=True, blank=True)),
-                ('updated_datetime', models.DateTimeField(auto_now=True, db_index=True)),
-                ('submission_set', models.CharField(max_length=128)),
-                ('event', models.CharField(default='add', max_length=128, choices=[('add', 'On add')])),
-                ('url', models.URLField(max_length=2048)),
-                ('dataset', models.ForeignKey(related_name='webhooks', to='sa_api_v2.DataSet')),
+                (
+                    "id",
+                    models.AutoField(
+                        verbose_name="ID",
+                        serialize=False,
+                        auto_created=True,
+                        primary_key=True,
+                    ),
+                ),
+                (
+                    "created_datetime",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, db_index=True, blank=True
+                    ),
+                ),
+                (
+                    "updated_datetime",
+                    models.DateTimeField(auto_now=True, db_index=True),
+                ),
+                ("submission_set", models.CharField(max_length=128)),
+                (
+                    "event",
+                    models.CharField(
+                        default="add", max_length=128, choices=[("add", "On add")]
+                    ),
+                ),
+                ("url", models.URLField(max_length=2048)),
+                (
+                    "dataset",
+                    models.ForeignKey(related_name="webhooks", to="sa_api_v2.DataSet"),
+                ),
             ],
-            options={
-                'db_table': 'sa_api_webhook',
-            },
+            options={"db_table": "sa_api_webhook",},
             bases=(models.Model,),
         ),
         migrations.AddField(
-            model_name='submittedthing',
-            name='dataset',
-            field=models.ForeignKey(related_name='things', blank=True, to='sa_api_v2.DataSet'),
+            model_name="submittedthing",
+            name="dataset",
+            field=models.ForeignKey(
+                related_name="things", blank=True, to="sa_api_v2.DataSet"
+            ),
             preserve_default=True,
         ),
         migrations.AddField(
-            model_name='submittedthing',
-            name='submitter',
-            field=models.ForeignKey(related_name='things', blank=True, to=settings.AUTH_USER_MODEL, null=True),
+            model_name="submittedthing",
+            name="submitter",
+            field=models.ForeignKey(
+                related_name="things",
+                blank=True,
+                to=settings.AUTH_USER_MODEL,
+                null=True,
+            ),
             preserve_default=True,
         ),
         migrations.AddField(
-            model_name='submission',
-            name='place',
-            field=models.ForeignKey(related_name='submissions', to='sa_api_v2.Place'),
+            model_name="submission",
+            name="place",
+            field=models.ForeignKey(related_name="submissions", to="sa_api_v2.Place"),
             preserve_default=True,
         ),
         migrations.AddField(
-            model_name='indexedvalue',
-            name='thing',
-            field=models.ForeignKey(related_name='indexed_values', to='sa_api_v2.SubmittedThing'),
+            model_name="indexedvalue",
+            name="thing",
+            field=models.ForeignKey(
+                related_name="indexed_values", to="sa_api_v2.SubmittedThing"
+            ),
             preserve_default=True,
         ),
         migrations.AlterUniqueTogether(
-            name='group',
-            unique_together=set([('name', 'dataset')]),
+            name="group", unique_together=set([("name", "dataset")]),
         ),
         migrations.AddField(
-            model_name='datasnapshot',
-            name='request',
-            field=models.OneToOneField(related_name='fulfillment', to='sa_api_v2.DataSnapshotRequest'),
+            model_name="datasnapshot",
+            name="request",
+            field=models.OneToOneField(
+                related_name="fulfillment", to="sa_api_v2.DataSnapshotRequest"
+            ),
             preserve_default=True,
         ),
         migrations.AlterUniqueTogether(
-            name='dataset',
-            unique_together=set([('owner', 'slug')]),
+            name="dataset", unique_together=set([("owner", "slug")]),
         ),
         migrations.AddField(
-            model_name='dataindex',
-            name='dataset',
-            field=models.ForeignKey(related_name='indexes', to='sa_api_v2.DataSet'),
+            model_name="dataindex",
+            name="dataset",
+            field=models.ForeignKey(related_name="indexes", to="sa_api_v2.DataSet"),
             preserve_default=True,
         ),
         migrations.AddField(
-            model_name='attachment',
-            name='thing',
-            field=models.ForeignKey(related_name='attachments', to='sa_api_v2.SubmittedThing'),
+            model_name="attachment",
+            name="thing",
+            field=models.ForeignKey(
+                related_name="attachments", to="sa_api_v2.SubmittedThing"
+            ),
             preserve_default=True,
         ),
         migrations.AddField(
-            model_name='apikey',
-            name='dataset',
-            field=models.ForeignKey(related_name='keys', blank=True, to='sa_api_v2.DataSet'),
+            model_name="apikey",
+            name="dataset",
+            field=models.ForeignKey(
+                related_name="keys", blank=True, to="sa_api_v2.DataSet"
+            ),
             preserve_default=True,
         ),
         migrations.AddField(
-            model_name='action',
-            name='thing',
-            field=models.ForeignKey(related_name='actions', db_column='data_id', to='sa_api_v2.SubmittedThing'),
+            model_name="action",
+            name="thing",
+            field=models.ForeignKey(
+                related_name="actions",
+                db_column="data_id",
+                to="sa_api_v2.SubmittedThing",
+            ),
             preserve_default=True,
         ),
         migrations.AddField(
-            model_name='user',
-            name='groups',
-            field=models.ManyToManyField(related_query_name='user', related_name='user_set', to='auth.Group', blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of his/her group.', verbose_name='groups'),
+            model_name="user",
+            name="groups",
+            field=models.ManyToManyField(
+                related_query_name="user",
+                related_name="user_set",
+                to="auth.Group",
+                blank=True,
+                help_text="The groups this user belongs to. A user will get all permissions granted to each of his/her group.",
+                verbose_name="groups",
+            ),
             preserve_default=True,
         ),
         migrations.AddField(
-            model_name='user',
-            name='user_permissions',
-            field=models.ManyToManyField(related_query_name='user', related_name='user_set', to='auth.Permission', blank=True, help_text='Specific permissions for this user.', verbose_name='user permissions'),
+            model_name="user",
+            name="user_permissions",
+            field=models.ManyToManyField(
+                related_query_name="user",
+                related_name="user_set",
+                to="auth.Permission",
+                blank=True,
+                help_text="Specific permissions for this user.",
+                verbose_name="user permissions",
+            ),
             preserve_default=True,
         ),
     ]

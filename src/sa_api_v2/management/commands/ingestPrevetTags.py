@@ -4,12 +4,7 @@ from django.db import transaction
 import pandas as pd
 import math
 
-from sa_api_v2.models import (
-    Tag,
-    PlaceTag,
-    Place,
-    DataSet
-)
+from sa_api_v2.models import Tag, PlaceTag, Place, DataSet
 
 import logging
 
@@ -40,44 +35,17 @@ TAGS = [
         "name": "Removed",
         "is_enabled": False,
         "children": [
-            {
-                "name": "above costs",
-                "color": "#c9302c"
-            },
-            {
-                "name": "illegal",
-                "color": "#c9302c"
-            },
-            {
-                "name": "programmatic",
-                "color": "#c9302c"
-            },
-            {
-                "name": "separate process",
-                "color": "#c9302c"
-            },
-            {
-                "name": "incomplete",
-                "color": "#c9302c"
-            },
-            {
-                "name": "county function",
-                "color": "#c9302c"
-            },
-            {
-                "name": "private",
-                "color": "#c9302c"
-            },
-            {
-                "name": "not in durham",
-                "color": "#c9302c"
-            },
-        ]
+            {"name": "above costs", "color": "#c9302c"},
+            {"name": "illegal", "color": "#c9302c"},
+            {"name": "programmatic", "color": "#c9302c"},
+            {"name": "separate process", "color": "#c9302c"},
+            {"name": "incomplete", "color": "#c9302c"},
+            {"name": "county function", "color": "#c9302c"},
+            {"name": "private", "color": "#c9302c"},
+            {"name": "not in durham", "color": "#c9302c"},
+        ],
     },
-    {
-        "name": "Vetted",
-        "color": "#449d44"
-    }
+    {"name": "Vetted", "color": "#449d44"},
 ]
 
 
@@ -101,11 +69,12 @@ def create_tags():
             color=color,
             parent=parent,
             is_enabled=is_enabled,
-            dataset=dataset
+            dataset=dataset,
         )
         logger.info("creating tag: {}".format(tagModel))
-        for child in [tag for tag in tag.get('children', [])]:
+        for child in [tag for tag in tag.get("children", [])]:
             create_tag(child, tagModel)
+
     for tag in TAGS:
         create_tag(tag, None)
 
@@ -115,24 +84,27 @@ def create_place_tags():
     ideas_not_vetted = []
     for index, row in df.iterrows():
         # get the relevant place:
-        if math.isnan(row['Mapseed ID']):
+        if math.isnan(row["Mapseed ID"]):
             logger.info("row had invalid id: {}".format(row))
             continue
-        mapseed_id = int(row['Mapseed ID'])
+        mapseed_id = int(row["Mapseed ID"])
         logger.info("parsing mapseed id: {}".format(mapseed_id))
         if mapseed_id is None:
             import ipdb
+
             ipdb.set_trace()
-        if type(row['Pre-Vetting Status ']) == float and math.isnan(row['Pre-Vetting Status ']):
+        if type(row["Pre-Vetting Status "]) == float and math.isnan(
+            row["Pre-Vetting Status "]
+        ):
             logger.info("row has invalid prevet status: {}".format(row))
             ideas_not_vetted.append(mapseed_id)
             continue
-        status = row['Pre-Vetting Status '].strip()
+        status = row["Pre-Vetting Status "].strip()
         tag_name = TAG_MAPPINGS.get(status, None)
         logger.info("tag name: {}".format(tag_name))
         if tag_name is None:
             logger.info("no tag name for place id: {}".format(mapseed_id))
-            raise ValueError("no tag mapping for prevet status: {}". format(status))
+            raise ValueError("no tag mapping for prevet status: {}".format(status))
             continue
         # get the relevant tag:
         tag = Tag.objects.get(name=tag_name)

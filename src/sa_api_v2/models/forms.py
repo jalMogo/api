@@ -2,38 +2,37 @@ from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.contrib.gis.db import models
 from .core import DataSet
-from .profiles import (
-    Group,
-)
+from .profiles import Group
 from .flavors import Flavor
 import logging
 from django.core.exceptions import ValidationError
+
 logger = logging.getLogger(__name__)
 
 __all__ = [
-    'Form',
-    'FormStage',
-    'LayerGroup',
-    'MapViewport',
-    'OrderedModule',
-    'NestedOrderedModule',
-    'GroupModule',
-    'HtmlModule',
-    'SkipStageModule',
-    'SubmitButtonModule',
-    'Modal',
-    'FormFieldOption',
-    'CheckboxOption',
-    'AddressField',
-    'DateField',
-    'NumberField',
-    'FileField',
-    'RadioField',
-    'RadioOption',
-    'TextField',
-    'TextAreaField',
-    'CheckboxField',
-    'RELATED_MODULES',
+    "Form",
+    "FormStage",
+    "LayerGroup",
+    "MapViewport",
+    "OrderedModule",
+    "NestedOrderedModule",
+    "GroupModule",
+    "HtmlModule",
+    "SkipStageModule",
+    "SubmitButtonModule",
+    "Modal",
+    "FormFieldOption",
+    "CheckboxOption",
+    "AddressField",
+    "DateField",
+    "NumberField",
+    "FileField",
+    "RadioField",
+    "RadioOption",
+    "TextField",
+    "TextAreaField",
+    "CheckboxField",
+    "RELATED_MODULES",
 ]
 
 RELATED_MODULES = [
@@ -50,14 +49,13 @@ RELATED_MODULES = [
     "submitbuttonmodule",
 ]
 
+
 class Form(models.Model):
-    label = models.CharField(
-        max_length=127
-    )
+    label = models.CharField(max_length=127)
     is_enabled = models.BooleanField(default=True)
 
     engagement_text = models.CharField(
-        max_length=255, 
+        max_length=255,
         blank=True,
         help_text="When multiple forms are available to select, this text will help describe this form.",
     )
@@ -69,53 +67,41 @@ class Form(models.Model):
     )
 
     dataset = models.OneToOneField(
-        DataSet,
-        related_name='+',
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
+        DataSet, related_name="+", on_delete=models.CASCADE, null=True, blank=True,
     )
 
     flavor = models.ForeignKey(
-        Flavor,
-        related_name='forms',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
+        Flavor, related_name="forms", on_delete=models.SET_NULL, null=True, blank=True,
     )
 
     def __unicode__(self):
-        return "\"{}\" on dataset: {}".format(self.label, self.dataset)
+        return '"{}" on dataset: {}'.format(self.label, self.dataset)
 
     class Meta:
-        app_label = 'sa_api_v2'
-        db_table = 'ms_api_form'
+        app_label = "sa_api_v2"
+        db_table = "ms_api_form"
 
 
 class LayerGroup(models.Model):
     label = models.CharField(max_length=127, unique=True)
 
     class Meta:
-        app_label = 'sa_api_v2'
-        db_table = 'ms_api_map_layer_group'
+        app_label = "sa_api_v2"
+        db_table = "ms_api_map_layer_group"
 
     def __unicode__(self):
         return self.label
 
 
 class FormStage(models.Model):
-    form = models.ForeignKey(
-        Form,
-        related_name="stages",
-        on_delete=models.CASCADE,
-    )
+    form = models.ForeignKey(Form, related_name="stages", on_delete=models.CASCADE,)
     order = models.PositiveSmallIntegerField(default=0, blank=False, null=False)
 
     visible_layer_groups = models.ManyToManyField(
         LayerGroup,
         help_text="A list of layers that will become visible during this stage.",
         blank=True,
-        related_name='+',
+        related_name="+",
     )
 
     header_text = models.CharField(
@@ -137,16 +123,14 @@ class FormStage(models.Model):
     )
 
     def __unicode__(self):
-        return 'order: {}, containing {} modules, on form: \"{}\"'.format(
-            self.order,
-            len(self.modules.all()),
-            self.form.label,
+        return 'order: {}, containing {} modules, on form: "{}"'.format(
+            self.order, len(self.modules.all()), self.form.label,
         )
 
     class Meta:
-        app_label = 'sa_api_v2'
-        db_table = 'ms_api_form_stage'
-        ordering = ['order']
+        app_label = "sa_api_v2"
+        db_table = "ms_api_form_stage"
+        ordering = ["order"]
 
 
 class MapViewport(models.Model):
@@ -159,32 +143,36 @@ class MapViewport(models.Model):
 
     stage = models.OneToOneField(
         FormStage,
-        related_name='map_viewport',
+        related_name="map_viewport",
         on_delete=models.CASCADE,
         blank=True,
         null=True,
     )
 
     class Meta:
-        app_label = 'sa_api_v2'
-        db_table = 'ms_api_map_viewport'
+        app_label = "sa_api_v2"
+        db_table = "ms_api_map_viewport"
 
 
 class RelatedFormModule(models.Model):
-
     class Meta:
-        app_label = 'sa_api_v2'
+        app_label = "sa_api_v2"
         abstract = True
 
     # If the model's cache has a (nested)OrderedModule, then verify with the db
     # and return if that's true
     def _has_ordered_module(self):
-        return (hasattr(self, 'orderedmodule')) and \
-            OrderedModule.objects.filter(id=self.orderedmodule.id).exists()    
+        return (hasattr(self, "orderedmodule")) and OrderedModule.objects.filter(
+            id=self.orderedmodule.id
+        ).exists()
 
     def _has_nested_ordered_module(self):
-        return (hasattr(self, 'nestedorderedmodule')) and \
-            NestedOrderedModule.objects.filter(id=self.nestedorderedmodule.id).exists()    
+        return (
+            (hasattr(self, "nestedorderedmodule"))
+            and NestedOrderedModule.objects.filter(
+                id=self.nestedorderedmodule.id
+            ).exists()
+        )
 
     # returns whether the instances has ordered_module or
     # nested_ordered_module pointing to it.
@@ -193,7 +181,7 @@ class RelatedFormModule(models.Model):
 
     # returns the (nested)ordered module
     def get_ordered_module(self):
-        if self._has_ordered_module(): 
+        if self._has_ordered_module():
             return self.orderedmodule
         elif self._has_nested_ordered_module():
             return self.nestedorderedmodule
@@ -218,10 +206,14 @@ class GroupModule(RelatedFormModule):
     )
 
     def summary(self):
-        return "group module, with label: \"{}\"".format(self.label) if self.label else "group module, id: {}".format(self.id)
+        return (
+            'group module, with label: "{}"'.format(self.label)
+            if self.label
+            else "group module, id: {}".format(self.id)
+        )
 
     class Meta:
-        db_table = 'ms_api_form_module_group'
+        db_table = "ms_api_form_module_group"
 
 
 class HtmlModule(RelatedFormModule):
@@ -235,17 +227,17 @@ class HtmlModule(RelatedFormModule):
     )
 
     def summary(self):
-        return "html module, with label: \"{}\"".format(self.label)
+        return 'html module, with label: "{}"'.format(self.label)
 
     class Meta:
-        db_table = 'ms_api_form_module_html'
+        db_table = "ms_api_form_module_html"
 
 
 class SkipStageModule(RelatedFormModule):
     label = models.TextField(
-        help_text="The message to be displayed on the form. When clicked, it will skip to the appropriate FormStage. Note that all modules within this FormStage should be optional for this to work properly. (eg: \"This section is not relevant to me.\")",
+        help_text='The message to be displayed on the form. When clicked, it will skip to the appropriate FormStage. Note that all modules within this FormStage should be optional for this to work properly. (eg: "This section is not relevant to me.")',
         blank=True,
-        default='',
+        default="",
     )
 
     stage = models.ForeignKey(
@@ -257,10 +249,12 @@ class SkipStageModule(RelatedFormModule):
     )
 
     def validate(self, ordered_module):
-        if self.stage is not None and \
-            ordered_module.stage.form != self.stage.form:
-            raise ValidationError("[SkipStageModule] self.stage has a different Form than this module: {}".format(self.stage))
-
+        if self.stage is not None and ordered_module.stage.form != self.stage.form:
+            raise ValidationError(
+                "[SkipStageModule] self.stage has a different Form than this module: {}".format(
+                    self.stage
+                )
+            )
 
     # This is only used for importing SkipStageModules relationships from a JSON
     # source
@@ -271,42 +265,41 @@ class SkipStageModule(RelatedFormModule):
     def import_skip_stage_modules(skip_stage_modules):
         for module_data in skip_stage_modules:
             module = SkipStageModule.objects.get(
-                orderedmodule__stage__form__label=module_data['form'],
-                orderedmodule__order=module_data['module_order'],
+                orderedmodule__stage__form__label=module_data["form"],
+                orderedmodule__order=module_data["module_order"],
             )
             stage = FormStage.objects.get(
-                form__label=module_data['form'],
-                order=module_data['destination_stage_order']
+                form__label=module_data["form"],
+                order=module_data["destination_stage_order"],
             )
             module.stage = stage
             module.save()
 
     def summary(self):
-        return "skip stage module with label: \"{}\"".format(self.label[:40])
+        return 'skip stage module with label: "{}"'.format(self.label[:40])
 
     class Meta:
-        db_table = 'ms_api_form_module_skip_stage'
+        db_table = "ms_api_form_module_skip_stage"
 
 
 class SubmitButtonModule(RelatedFormModule):
     label = models.CharField(
         help_text="This is the label that the submit button will have",
-        default='Submit',
+        default="Submit",
         max_length=127,
     )
 
     def summary(self):
-        return "submit button with label: \"{}\"".format(self.label[:40])
+        return 'submit button with label: "{}"'.format(self.label[:40])
 
     class Meta:
-        db_table = 'ms_api_form_module_submit_button'
+        db_table = "ms_api_form_module_submit_button"
 
 
 class Modal(models.Model):
     # We are assuming that these fields must be filled out.
     header = models.CharField(
-        help_text="This is the label that the submit button will have",
-        max_length=127,
+        help_text="This is the label that the submit button will have", max_length=127,
     )
 
     content = models.TextField(
@@ -314,11 +307,12 @@ class Modal(models.Model):
     )
 
     class Meta:
-        app_label = 'sa_api_v2'
-        db_table = 'ms_api_form_field_modal'
+        app_label = "sa_api_v2"
+        db_table = "ms_api_form_field_modal"
 
     def __unicode__(self):
         return "header: {}, content: {}".format(self.header[0:20], self.content[0:20])
+
 
 class FormField(RelatedFormModule):
     key = models.CharField(
@@ -328,12 +322,12 @@ class FormField(RelatedFormModule):
     label = models.CharField(
         blank=True,
         max_length=127,
-        help_text="This label will be used when displaying the submitted form field (eg: \"My project idea is:\")",
+        help_text='This label will be used when displaying the submitted form field (eg: "My project idea is:")',
     )
     prompt = models.CharField(
         blank=True,
         max_length=512,
-        help_text="Some helpful text to guide the user on how to fill out this field (eg: \"What is your project idea?\")",
+        help_text='Some helpful text to guide the user on how to fill out this field (eg: "What is your project idea?")',
     )
     private = models.BooleanField(
         default=False,
@@ -346,11 +340,9 @@ class FormField(RelatedFormModule):
         help_text="If true, then the form cannot be submitted unless this field has received a response",
     )
     info_modal = models.OneToOneField(
-        Modal,
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
+        Modal, on_delete=models.SET_NULL, blank=True, null=True,
     )
+
     class Meta:
         abstract = True
 
@@ -364,14 +356,14 @@ class FormField(RelatedFormModule):
 placeholder_kwargs = {
     "max_length": 512,
     "blank": True,
-    "help_text": "Used to help guide users on what to type into the form's input box (eg: \"Enter your email here\", \"joe@example.com\")",
+    "help_text": 'Used to help guide users on what to type into the form\'s input box (eg: "Enter your email here", "joe@example.com")',
 }
 
 # Used for CharField:
 units_kwargs = {
     "max_length": 127,
     "blank": True,
-    "help_text": "Units are used for labelling numerical submissions (eg: \"13 acres\")",
+    "help_text": 'Units are used for labelling numerical submissions (eg: "13 acres")',
 }
 
 
@@ -392,10 +384,10 @@ class DateField(FormField):
     )
 
     def summary(self):
-        return "date field with prompt: \"{}\"".format(self.prompt)
+        return 'date field with prompt: "{}"'.format(self.prompt)
 
     class Meta:
-        db_table = 'ms_api_form_module_field_date'
+        db_table = "ms_api_form_module_field_date"
 
 
 class NumberField(FormField):
@@ -404,25 +396,25 @@ class NumberField(FormField):
     units = models.CharField(**units_kwargs)
 
     def summary(self):
-        return "number field with prompt: \"{}\"".format(self.prompt)
+        return 'number field with prompt: "{}"'.format(self.prompt)
 
     class Meta:
-        db_table = 'ms_api_form_module_field_number'
+        db_table = "ms_api_form_module_field_number"
 
 
 class FileField(FormField):
-
     def summary(self):
-        return "file field with prompt: \"{}\"".format(self.prompt)
+        return 'file field with prompt: "{}"'.format(self.prompt)
 
     class Meta:
-        db_table = 'ms_api_form_module_field_file'
+        db_table = "ms_api_form_module_field_file"
 
 
 class AddressField(FormField):
     """
     Saves the address from the map's lng/lat values
     """
+
     placeholder = models.CharField(**placeholder_kwargs)
     reverse_geocode = models.BooleanField(
         default=True,
@@ -431,10 +423,10 @@ class AddressField(FormField):
     )
 
     def summary(self):
-        return "address field with prompt: \"{}\"".format(self.prompt)
+        return 'address field with prompt: "{}"'.format(self.prompt)
 
     class Meta:
-        db_table = 'ms_api_form_module_field_address'
+        db_table = "ms_api_form_module_field_address"
 
 
 class RadioField(FormField):
@@ -443,28 +435,31 @@ class RadioField(FormField):
     AUTOCOMPLETE_DROPDOWN = "AD"
     TOGGLE = "TO"
     CHOICES = [
-        (RADIO, 'a radio selection'),
-        (DROPDOWN, 'a dropdown list'),
-        (TOGGLE, 'a toggle switch, choosing one of 2 choices'),
-        (AUTOCOMPLETE_DROPDOWN, 'a dropdown list that allows fuzzy searching through the items'),
+        (RADIO, "a radio selection"),
+        (DROPDOWN, "a dropdown list"),
+        (TOGGLE, "a toggle switch, choosing one of 2 choices"),
+        (
+            AUTOCOMPLETE_DROPDOWN,
+            "a dropdown list that allows fuzzy searching through the items",
+        ),
     ]
 
     variant = models.CharField(max_length=127, choices=CHOICES, default=RADIO)
     dropdown_placeholder = models.CharField(**placeholder_kwargs)
 
     def summary(self):
-        return "radio field with prompt: \"{}\"".format(self.prompt)
+        return 'radio field with prompt: "{}"'.format(self.prompt)
 
     class Meta:
-        db_table = 'ms_api_form_module_field_radio'
+        db_table = "ms_api_form_module_field_radio"
 
 
 class CheckboxField(FormField):
     def summary(self):
-        return "checkbox field with prompt: \"{}\"".format(self.prompt)
+        return 'checkbox field with prompt: "{}"'.format(self.prompt)
 
     class Meta:
-        db_table = 'ms_api_form_module_field_checkbox'
+        db_table = "ms_api_form_module_field_checkbox"
 
 
 class TextAreaField(FormField):
@@ -476,10 +471,10 @@ class TextAreaField(FormField):
     )
 
     def summary(self):
-        return "textarea field with prompt: \"{}\"".format(self.prompt)
+        return 'textarea field with prompt: "{}"'.format(self.prompt)
 
     class Meta:
-        db_table = 'ms_api_form_module_field_textarea'
+        db_table = "ms_api_form_module_field_textarea"
 
 
 class TextField(FormField):
@@ -487,23 +482,19 @@ class TextField(FormField):
     PHONE = "PH"
     ADDRESS = "AD"
     TEXT_FIELD_VARIANTS = (
-        (EMAIL, 'Email'),
-        (PHONE, 'Phone'),
-        (ADDRESS, 'Address'),
+        (EMAIL, "Email"),
+        (PHONE, "Phone"),
+        (ADDRESS, "Address"),
     )
-    variant = models.CharField(
-        max_length=127,
-        blank=True,
-        choices=TEXT_FIELD_VARIANTS,
-    )
+    variant = models.CharField(max_length=127, blank=True, choices=TEXT_FIELD_VARIANTS,)
 
     placeholder = models.CharField(**placeholder_kwargs)
 
     def summary(self):
-        return "text field with prompt: \"{}\"".format(self.prompt)
+        return 'text field with prompt: "{}"'.format(self.prompt)
 
     class Meta:
-        db_table = 'ms_api_form_module_field_text'
+        db_table = "ms_api_form_module_field_text"
 
 
 class AbstractOrderedModule(models.Model):
@@ -604,7 +595,9 @@ class AbstractOrderedModule(models.Model):
 
     def __unicode__(self):
         related_module = self.get_related_module()
-        return 'order: {order}, with Related Module: {related}'.format(related=related_module, order=self.order)
+        return "order: {order}, with Related Module: {related}".format(
+            related=related_module, order=self.order
+        )
 
     def get_related_module(self):
         related_modules = self._get_related_modules()
@@ -628,39 +621,50 @@ class AbstractOrderedModule(models.Model):
     def clean(self):
         related_modules = self._get_related_modules()
         if len(related_modules) > 1:
-            message = '[FormModuleModel] Instance has more than one related model: {}'.format([related_modules])
+            message = "[FormModuleModel] Instance has more than one related model: {}".format(
+                [related_modules]
+            )
             raise ValidationError(message)
         # Validate permitted_group on OrderedModule:
-        if hasattr(self, 'permitted_group') and self.permitted_group is not None:
+        if hasattr(self, "permitted_group") and self.permitted_group is not None:
             # every OrderedModule has a stage, and every stage has a form.
             if self.stage.form.dataset is None:
-                raise ValidationError("[FormModuleModel] Dataset must be assigned before adding Restrcted Group to module: {}".format(self))
+                raise ValidationError(
+                    "[FormModuleModel] Dataset must be assigned before adding Restrcted Group to module: {}".format(
+                        self
+                    )
+                )
             dataset = self.stage.form.dataset
             if self.permitted_group.dataset != dataset:
-                raise ValidationError("[FormModuleModel] permitted_group is not within this form's dataset: {}".format(dataset))
+                raise ValidationError(
+                    "[FormModuleModel] permitted_group is not within this form's dataset: {}".format(
+                        dataset
+                    )
+                )
         if len(related_modules) == 1:
             related_module = related_modules[0]
             related_ordered_module = related_module.get_ordered_module()
             # check to ensure that the (nested)ordered modules are the same:
-            if related_ordered_module and \
-                related_ordered_module != self:
-                raise ValidationError("[FormModuleModel] RelatedModule cannot have more than one (Nested)OrderedModules pointing to it: {}".format(related_modules[0]))
+            if related_ordered_module and related_ordered_module != self:
+                raise ValidationError(
+                    "[FormModuleModel] RelatedModule cannot have more than one (Nested)OrderedModules pointing to it: {}".format(
+                        related_modules[0]
+                    )
+                )
             # Perform validation specific to the related module.
             related_module.validate(self)
-
 
     def save(self, *args, **kwargs):
         self.clean()
         super(RelatedFormModule, self).save(*args, **kwargs)
-
 
     def save(self, *args, **kwargs):
         self.clean()
         super(AbstractOrderedModule, self).save(*args, **kwargs)
 
     class Meta:
-        app_label = 'sa_api_v2'
-        ordering = ['order']
+        app_label = "sa_api_v2"
+        ordering = ["order"]
         abstract = True
 
 
@@ -702,18 +706,16 @@ class OrderedModule(AbstractOrderedModule):
         return related_modules
 
     class Meta(AbstractOrderedModule.Meta):
-        db_table = 'ms_api_form_ordered_module'
+        db_table = "ms_api_form_ordered_module"
 
 
 class NestedOrderedModule(AbstractOrderedModule):
     group = models.ForeignKey(
-        GroupModule,
-        related_name="modules",
-        on_delete=models.CASCADE,
+        GroupModule, related_name="modules", on_delete=models.CASCADE,
     )
 
     class Meta(AbstractOrderedModule.Meta):
-        db_table = 'ms_api_form_nested_ordered_module'
+        db_table = "ms_api_form_nested_ordered_module"
 
 
 @receiver(post_delete, sender=OrderedModule)
@@ -734,7 +736,7 @@ class FormFieldOption(models.Model):
         FormStage,
         help_text="Triggers an update to make the following FormStages visible. Only default invisible stages are within this module's Form are selectable here",
         blank=True,
-        related_name='+',
+        related_name="+",
     )
 
     group_visibility_triggers = models.ManyToManyField(
@@ -742,7 +744,7 @@ class FormFieldOption(models.Model):
         NestedOrderedModule,
         help_text="Triggers an update to make the following NestedOrderedModules visible. Only default invisible modules are within this module's group are selectable here.",
         blank=True,
-        related_name='+',
+        related_name="+",
     )
 
     default = models.BooleanField(
@@ -766,8 +768,10 @@ class FormFieldOption(models.Model):
     order = models.PositiveSmallIntegerField(default=0, blank=False, null=False)
 
     def clean(self):
-        if not hasattr(self, 'field') or self.field is None:
-            message = '[FORM_FIELD_OPTION] Instance does not have a related `field`: {}'.format(self)
+        if not hasattr(self, "field") or self.field is None:
+            message = "[FORM_FIELD_OPTION] Instance does not have a related `field`: {}".format(
+                self
+            )
             raise ValidationError(message)
 
     def save(self, *args, **kwargs):
@@ -780,13 +784,21 @@ class FormFieldOption(models.Model):
     def import_group_triggers(field_data):
         for field in field_data:
             # First get the field option to which we'll add the group triggers:
-            FieldOption = RadioOption if field['type'] == 'radiofield' else CheckboxOption
+            FieldOption = (
+                RadioOption if field["type"] == "radiofield" else CheckboxOption
+            )
             field_option = FieldOption.objects.get(
-                value=field['option_value'],
-                field__nestedorderedmodule__order=field['field_order'],
-                field__nestedorderedmodule__group__orderedmodule__order=field['group_order'],
-                field__nestedorderedmodule__group__orderedmodule__stage__order=field['stage_order'],
-                field__nestedorderedmodule__group__orderedmodule__stage__form__label=field['form'],
+                value=field["option_value"],
+                field__nestedorderedmodule__order=field["field_order"],
+                field__nestedorderedmodule__group__orderedmodule__order=field[
+                    "group_order"
+                ],
+                field__nestedorderedmodule__group__orderedmodule__stage__order=field[
+                    "stage_order"
+                ],
+                field__nestedorderedmodule__group__orderedmodule__stage__form__label=field[
+                    "form"
+                ],
             )
             # get the GroupModule that contains the field_option:
             group = GroupModule.objects.get(
@@ -795,8 +807,7 @@ class FormFieldOption(models.Model):
             # get the hidden modules that we want to trigger when this field
             # option is selected:
             nested_ordered_modules_to_trigger = NestedOrderedModule.objects.filter(
-                order__in=field['group_visibility_triggers'],
-                group_id=group.id,
+                order__in=field["group_visibility_triggers"], group_id=group.id,
             )
             field_option.group_visibility_triggers.add(
                 *[module for module in nested_ordered_modules_to_trigger.all()]
@@ -812,16 +823,17 @@ class FormFieldOption(models.Model):
     def import_stage_triggers(field_data):
         for field in field_data:
             # First get the field option to which we'll add the stage triggers:
-            FieldOption = RadioOption if field['type'] == 'radiofield' else CheckboxOption
+            FieldOption = (
+                RadioOption if field["type"] == "radiofield" else CheckboxOption
+            )
             field_option = FieldOption.objects.get(
-                value=field['option_value'],
-                field__orderedmodule__order=field['field_order'],
-                field__orderedmodule__stage__order=field['stage_order'],
-                field__orderedmodule__stage__form__label=field['form'],
+                value=field["option_value"],
+                field__orderedmodule__order=field["field_order"],
+                field__orderedmodule__stage__order=field["stage_order"],
+                field__orderedmodule__stage__form__label=field["form"],
             )
             stages_to_trigger = FormStage.objects.filter(
-                order__in=field['stage_visibility_triggers'],
-                form__label=field['form']
+                order__in=field["stage_visibility_triggers"], form__label=field["form"]
             )
             field_option.stage_visibility_triggers.add(
                 *[stage for stage in stages_to_trigger.all()]
@@ -829,16 +841,15 @@ class FormFieldOption(models.Model):
             field_option.save()
 
     class Meta:
-        app_label = 'sa_api_v2'
+        app_label = "sa_api_v2"
         abstract = True
-        ordering = ['order']
+        ordering = ["order"]
 
 
 class CheckboxOption(FormFieldOption):
     label = models.CharField(
         max_length=127,
         help_text="For display purposes only. This is how the option will be presented on the form, or labelled in a submission summary.",
-
     )
     value = models.CharField(
         max_length=127,
@@ -846,16 +857,16 @@ class CheckboxOption(FormFieldOption):
     )
 
     field = models.ForeignKey(
-        CheckboxField,
-        related_name="options",
-        on_delete=models.CASCADE,
+        CheckboxField, related_name="options", on_delete=models.CASCADE,
     )
 
     def __unicode__(self):
-        return "CheckboxOption with label: {} on field: {}".format(self.label, self.field)
+        return "CheckboxOption with label: {} on field: {}".format(
+            self.label, self.field
+        )
 
     class Meta(FormFieldOption.Meta):
-        db_table = 'ms_api_form_module_option_checkbox'
+        db_table = "ms_api_form_module_option_checkbox"
 
 
 class RadioOption(FormFieldOption):
@@ -869,13 +880,13 @@ class RadioOption(FormFieldOption):
     )
 
     field = models.ForeignKey(
-        RadioField,
-        related_name="options",
-        on_delete=models.CASCADE,
+        RadioField, related_name="options", on_delete=models.CASCADE,
     )
 
     def __unicode__(self):
-        return "RadioOption with label: '{}' and order: {} on field: {}".format(self.label, self.order, self.field)
+        return "RadioOption with label: '{}' and order: {} on field: {}".format(
+            self.label, self.order, self.field
+        )
 
     class Meta(FormFieldOption.Meta):
-        db_table = 'ms_api_form_module_option_radio'
+        db_table = "ms_api_form_module_option_radio"

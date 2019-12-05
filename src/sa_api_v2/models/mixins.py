@@ -1,9 +1,10 @@
-class CloneableModelMixin (object):
+class CloneableModelMixin(object):
     """
     Mixin providing a clone method that copies all of a models instance's
     fields to a new instance of the model, allowing overrides.
 
     """
+
     def get_ignore_fields(self, ModelClass):
         fields = ModelClass._meta.fields
         pk_name = ModelClass._meta.pk.name
@@ -14,7 +15,7 @@ class CloneableModelMixin (object):
                 pk_fld = fld
                 break
         else:
-            raise Exception('Model %s somehow has no PK field' % (ModelClass,))
+            raise Exception("Model %s somehow has no PK field" % (ModelClass,))
 
         if pk_fld.rel and pk_fld.rel.parent_link:
             parent_ignore_fields = self.get_ignore_fields(pk_fld.rel.to)

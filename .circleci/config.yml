@@ -45,10 +45,14 @@ jobs:
           command: |
             sleep 5
       - run:
+          name: Run our code formatting tests
+          command: |
+            black --check . 
+      - run:
           name: Migrate DB
           command: |
             ./src/manage.py migrate
       - run:
-          name: Run our tests!
+          name: Run our app tests
           command: |
             ./src/manage.py test

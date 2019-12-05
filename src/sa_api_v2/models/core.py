@@ -16,7 +16,7 @@ from jwt.exceptions import (
     ImmatureSignatureError,
     InvalidKeyError,
     InvalidAlgorithmError,
-    MissingRequiredClaimError
+    MissingRequiredClaimError,
 )
 from .. import cache
 from .. import utils
@@ -26,7 +26,7 @@ from .mixins import CloneableModelMixin
 from .profiles import User
 
 
-class TimeStampedModel (models.Model):
+class TimeStampedModel(models.Model):
     created_datetime = models.DateTimeField(default=now, blank=True, db_index=True)
     updated_datetime = models.DateTimeField(auto_now=True, db_index=True)
 
@@ -34,16 +34,18 @@ class TimeStampedModel (models.Model):
         abstract = True
 
 
-class ModelWithDataBlob (models.Model):
-    data = models.TextField(default='{}')
+class ModelWithDataBlob(models.Model):
+    data = models.TextField(default="{}")
 
     class Meta:
         abstract = True
 
 
-class SubmittedThingQuerySet (FilterByIndexMixin, query.QuerySet):
+class SubmittedThingQuerySet(FilterByIndexMixin, query.QuerySet):
     # Custom version of create that passes needed kwargs to save.
-    def create(self, silent=False, reindex=False, source='', force_insert=True, *args, **kwargs):
+    def create(
+        self, silent=False, reindex=False, source="", force_insert=True, *args, **kwargs
+    ):
         """
         Creates a new object with the given kwargs, saving it to the database
         and returning the created object.
@@ -60,28 +62,31 @@ class SubmittedThingQuerySet (FilterByIndexMixin, query.QuerySet):
         return obj
 
 
-class SubmittedThingManager (FilterByIndexMixin, models.Manager):
+class SubmittedThingManager(FilterByIndexMixin, models.Manager):
     use_for_related_fields = True
 
     def get_queryset(self):
         return SubmittedThingQuerySet(self.model, using=self._db)
 
 
-class SubmittedThing (CloneableModelMixin, CacheClearingModel, ModelWithDataBlob, TimeStampedModel):
+class SubmittedThing(
+    CloneableModelMixin, CacheClearingModel, ModelWithDataBlob, TimeStampedModel
+):
     """
     A SubmittedThing generally comes from the end-user.  It may be a place, a
     comment, a vote, etc.
 
     """
-    submitter = models.ForeignKey(User, related_name='things', null=True, blank=True)
-    dataset = models.ForeignKey('DataSet', related_name='things', blank=True)
+
+    submitter = models.ForeignKey(User, related_name="things", null=True, blank=True)
+    dataset = models.ForeignKey("DataSet", related_name="things", blank=True)
     visible = models.BooleanField(default=True, blank=True, db_index=True)
 
     objects = SubmittedThingManager()
 
     class Meta:
-        app_label = 'sa_api_v2'
-        db_table = 'sa_api_submittedthing'
+        app_label = "sa_api_v2"
+        db_table = "sa_api_submittedthing"
 
     def index_values(self, indexes=None):
         if indexes is None:
@@ -95,18 +100,18 @@ class SubmittedThing (CloneableModelMixin, CacheClearingModel, ModelWithDataBlob
             IndexedValue.objects.sync(self, index, data=data)
 
     def get_clone_save_kwargs(self):
-        return {'silent': True, 'reindex': False, 'clear_cache': False}
+        return {"silent": True, "reindex": False, "clear_cache": False}
 
-    def save(self, silent=False, source='', reindex=True, *args, **kwargs):
+    def save(self, silent=False, source="", reindex=True, *args, **kwargs):
         # HACK: this method is reading values from both kwargs and
         # self attributes because the admin form is using kwargs while
         # the serializers are using attributes to set these flags. We
         # should find a way to make both of these approaches use the
         # same api - ideally kwargs.
-        silent = getattr(self, 'silent', silent)
-        source = getattr(self, 'source', source)
-        reindex = getattr(self, 'reindex', reindex)
-        is_new = (self.id == None)
+        silent = getattr(self, "silent", silent)
+        source = getattr(self, "source", source)
+        reindex = getattr(self, "reindex", reindex)
+        is_new = self.id == None
 
         ret = super(SubmittedThing, self).save(*args, **kwargs)
 
@@ -116,7 +121,7 @@ class SubmittedThing (CloneableModelMixin, CacheClearingModel, ModelWithDataBlob
         # All submitted things generate an action if not silent.
         if not silent:
             action = Action()
-            action.action = 'create' if is_new else 'update'
+            action.action = "create" if is_new else "update"
             action.thing = self
             action.source = source
             action.save()
@@ -124,18 +129,19 @@ class SubmittedThing (CloneableModelMixin, CacheClearingModel, ModelWithDataBlob
         return ret
 
 
-class DataSet (CloneableModelMixin, CacheClearingModel, models.Model):
+class DataSet(CloneableModelMixin, CacheClearingModel, models.Model):
     """
     A DataSet is a named collection of data, eg. Places, owned by a user,
     and intended for a coherent purpose, eg. display on a single map.
     """
-    owner = models.ForeignKey(User, related_name='datasets')
+
+    owner = models.ForeignKey(User, related_name="datasets")
     display_name = models.CharField(max_length=128)
-    slug = models.SlugField(max_length=128, default='')
+    slug = models.SlugField(max_length=128, default="")
     auth_required = models.BooleanField(
-        help_text='If True, then users must authenticate before they can post to this dataset',
+        help_text="If True, then users must authenticate before they can post to this dataset",
         default=False,
-        blank=True
+        blank=True,
     )
 
     cache = cache.DataSetCache()
@@ -145,19 +151,19 @@ class DataSet (CloneableModelMixin, CacheClearingModel, models.Model):
         return self.slug
 
     class Meta:
-        app_label = 'sa_api_v2'
-        db_table = 'sa_api_dataset'
-        unique_together = (('owner', 'slug'),)
+        app_label = "sa_api_v2"
+        db_table = "sa_api_dataset"
+        unique_together = (("owner", "slug"),)
 
     @property
     def places(self):
-        if not hasattr(self, '_places'):
+        if not hasattr(self, "_places"):
             self._places = Place.objects.filter(dataset=self)
         return self._places
 
     @property
     def submissions(self):
-        if not hasattr(self, '_submissions'):
+        if not hasattr(self, "_submissions"):
             self._submissions = Submission.objects.filter(dataset=self)
         return self._submissions
 
@@ -186,113 +192,116 @@ class DataSet (CloneableModelMixin, CacheClearingModel, models.Model):
         # Clone all the places. Submissions will be cloned as part of the
         # places.
         for thing in self.things.all():
-            try: place = thing.place
-            except Place.DoesNotExist: continue
+            try:
+                place = thing.place
+            except Place.DoesNotExist:
+                continue
             if place:
-                place.clone(overrides={'dataset': onto})
+                place.clone(overrides={"dataset": onto})
 
         for group in self.groups.all():
-            group.clone(overrides={'dataset': onto})
+            group.clone(overrides={"dataset": onto})
 
         for index in self.indexes.all():
-            index.clone(overrides={'dataset': onto})
+            index.clone(overrides={"dataset": onto})
 
         for permission in self.permissions.all():
-            permission.clone(overrides={'dataset': onto})
+            permission.clone(overrides={"dataset": onto})
 
         for origin in self.origins.all():
-            origin.clone(overrides={'dataset': onto})
+            origin.clone(overrides={"dataset": onto})
 
         for key in self.keys.all():
-            key.clone(overrides={'dataset': onto})
+            key.clone(overrides={"dataset": onto})
 
         self.reindex()
 
 
-class Webhook (TimeStampedModel):
+class Webhook(TimeStampedModel):
     """
     A Webhook is a user-defined HTTP callback for POSTing place or submitted
     thing as JSON to a specified URL after a specified event.
 
     """
-    EVENT_CHOICES = (
-        ('add', 'On add'),
-    )
 
-    dataset = models.ForeignKey('DataSet', related_name='webhooks')
+    EVENT_CHOICES = (("add", "On add"),)
+
+    dataset = models.ForeignKey("DataSet", related_name="webhooks")
     submission_set = models.CharField(max_length=128)
-    event = models.CharField(max_length=128, choices=EVENT_CHOICES, default='add')
+    event = models.CharField(max_length=128, choices=EVENT_CHOICES, default="add")
     url = models.URLField(max_length=2048)
 
     class Meta:
-        app_label = 'sa_api_v2'
-        db_table = 'sa_api_webhook'
+        app_label = "sa_api_v2"
+        db_table = "sa_api_webhook"
 
     def __unicode__(self):
-        return 'On %s data in %s' % (self.event, self.submission_set)
+        return "On %s data in %s" % (self.event, self.submission_set)
 
 
 # TODO: rename this to SubmissionEmailTemplate
-class PlaceEmailTemplate (TimeStampedModel):
+class PlaceEmailTemplate(TimeStampedModel):
     """
     A Place Email is a user-defined email to be sent to the submitter of
     a place.
     """
-    EVENT_CHOICES = (
-        ('add', 'On add'),
-    )
+
+    EVENT_CHOICES = (("add", "On add"),)
 
     submission_set = models.CharField(
         max_length=128,
         blank=True,
         help_text='The name of a submission set \
         (e.g., "comments", "places", "support"). Leave blank to \
-        refer to all submission sets.'
+        refer to all submission sets.',
     )
-    event = models.CharField(max_length=128, choices=EVENT_CHOICES, default='add')
-    recipient_email_field = models.CharField(blank=True, default='', max_length=128)
+    event = models.CharField(max_length=128, choices=EVENT_CHOICES, default="add")
+    recipient_email_field = models.CharField(blank=True, default="", max_length=128)
     default_recipient_email = models.EmailField(
         blank=True,
-        default='',
-        help_text='A "Default recipient email" will take precedence over a Submission\'s "Recipient email field".'
+        default="",
+        help_text='A "Default recipient email" will take precedence over a Submission\'s "Recipient email field".',
     )
     from_email = models.EmailField()
-    bcc_email_1 = models.EmailField(blank=True, default='')
-    bcc_email_2 = models.EmailField(blank=True, default='')
-    bcc_email_3 = models.EmailField(blank=True, default='')
-    bcc_email_4 = models.EmailField(blank=True, default='')
-    bcc_email_5 = models.EmailField(blank=True, default='')
+    bcc_email_1 = models.EmailField(blank=True, default="")
+    bcc_email_2 = models.EmailField(blank=True, default="")
+    bcc_email_3 = models.EmailField(blank=True, default="")
+    bcc_email_4 = models.EmailField(blank=True, default="")
+    bcc_email_5 = models.EmailField(blank=True, default="")
     subject = models.CharField(max_length=512)
     body_text = models.TextField()
-    body_html = models.TextField(blank=True, default='')
+    body_html = models.TextField(blank=True, default="")
 
     def clean(self):
         if not self.recipient_email_field and not self.default_recipient_email:
-            raise ValidationError('Either a "recipient_email_field" or a "default_recipient_email" must be supplied.')
+            raise ValidationError(
+                'Either a "recipient_email_field" or a "default_recipient_email" must be supplied.'
+            )
 
     class Meta:
-        app_label = 'sa_api_v2'
-        db_table = 'sa_api_place_email_templates'
+        app_label = "sa_api_v2"
+        db_table = "sa_api_place_email_templates"
 
     def __unicode__(self):
-        return 'template id: %s' % (self.id)
+        return "template id: %s" % (self.id)
 
 
-class GeoSubmittedThingQuerySet (query.GeoQuerySet, SubmittedThingQuerySet):
+class GeoSubmittedThingQuerySet(query.GeoQuerySet, SubmittedThingQuerySet):
     pass
 
 
-class GeoSubmittedThingManager (models.GeoManager, SubmittedThingManager):
+class GeoSubmittedThingManager(models.GeoManager, SubmittedThingManager):
     def get_queryset(self):
         return GeoSubmittedThingQuerySet(self.model, using=self._db)
 
 
-class Place (SubmittedThing):
+class Place(SubmittedThing):
     """
     A Place is a submitted thing with some geographic information, to which
     other submissions such as comments or surveys can be attached.
 
     """
+
     geometry = models.GeometryField()
 
     objects = GeoSubmittedThingManager()
@@ -301,18 +310,18 @@ class Place (SubmittedThing):
     # previous_version = 'sa_api_v1.models.Place'
 
     class Meta:
-        app_label = 'sa_api_v2'
-        db_table = 'sa_api_place'
-        ordering = ['-updated_datetime']
+        app_label = "sa_api_v2"
+        db_table = "sa_api_place"
+        ordering = ["-updated_datetime"]
         verbose_name = "place"
 
     def make_jwt(self):
-        return jwt.encode({'place_id': self.id}, settings.JWT_SECRET, algorithm='HS256')
+        return jwt.encode({"place_id": self.id}, settings.JWT_SECRET, algorithm="HS256")
 
     def check_jwt(self, jwt_public):
         try:
-            payload = jwt.decode(jwt_public, settings.JWT_SECRET, algorithm='RS256')
-            return payload['place_id'] == self.id
+            payload = jwt.decode(jwt_public, settings.JWT_SECRET, algorithm="RS256")
+            return payload["place_id"] == self.id
         except (
             InvalidTokenError,
             DecodeError,
@@ -323,14 +332,14 @@ class Place (SubmittedThing):
             ImmatureSignatureError,
             InvalidKeyError,
             InvalidAlgorithmError,
-            MissingRequiredClaimError
+            MissingRequiredClaimError,
         ) as e:
             # If the JWT decoding fails for any reason (invalid payload,
             # invalid signature), an exception is thrown.
             return False
 
     def clone_related(self, onto):
-        data_overrides = {'place_model': onto, 'dataset': onto.dataset}
+        data_overrides = {"place_model": onto, "dataset": onto.dataset}
         for submission in self.submissions.all():
             submission.clone(overrides=data_overrides)
 
@@ -338,13 +347,14 @@ class Place (SubmittedThing):
         return str(self.id)
 
 
-class Submission (SubmittedThing):
+class Submission(SubmittedThing):
     """
     A Submission is the simplest flavor of SubmittedThing.
     It belongs to a Place.
     Used for representing eg. comments, votes, ...
     """
-    place_model = models.ForeignKey(Place, related_name='submissions')
+
+    place_model = models.ForeignKey(Place, related_name="submissions")
     set_name = models.TextField(db_index=True)
 
     objects = SubmittedThingManager()
@@ -352,27 +362,30 @@ class Submission (SubmittedThing):
     # previous_version = 'sa_api_v1.models.Submission'
 
     class Meta:
-        app_label = 'sa_api_v2'
-        db_table = 'sa_api_submission'
-        ordering = ['-updated_datetime']
+        app_label = "sa_api_v2"
+        db_table = "sa_api_submission"
+        ordering = ["-updated_datetime"]
 
 
-class Action (CacheClearingModel, TimeStampedModel):
+class Action(CacheClearingModel, TimeStampedModel):
     """
     Metadata about SubmittedThings:
     what happened when.
     """
-    action = models.CharField(max_length=16, default='create')
-    thing = models.ForeignKey(SubmittedThing, db_column='data_id', related_name='actions')
+
+    action = models.CharField(max_length=16, default="create")
+    thing = models.ForeignKey(
+        SubmittedThing, db_column="data_id", related_name="actions"
+    )
     source = models.TextField(blank=True, null=True)
 
     cache = cache.ActionCache()
     # previous_version = 'sa_api_v1.models.Activity'
 
     class Meta:
-        app_label = 'sa_api_v2'
-        db_table = 'sa_api_activity'
-        ordering = ['-created_datetime']
+        app_label = "sa_api_v2"
+        db_table = "sa_api_activity"
+        ordering = ["-created_datetime"]
 
     @property
     def submitter(self):
@@ -382,36 +395,38 @@ class Action (CacheClearingModel, TimeStampedModel):
 def timestamp_filename(attachment, filename):
     # NOTE: It would be nice if this were a staticmethod in Attachment, but
     # Django 1.4 tries to convert the function to a string when we do that.
-    return ''.join(['attachments/', utils.base62_time(), '-', filename])
+    return "".join(["attachments/", utils.base62_time(), "-", filename])
+
 
 AttachmentStorage = get_storage_class(settings.ATTACHMENT_STORAGE)
 
 
-class Attachment (CacheClearingModel, TimeStampedModel):
+class Attachment(CacheClearingModel, TimeStampedModel):
     """
     A file attached to a submitted thing.
     """
+
     file = models.FileField(upload_to=timestamp_filename, storage=AttachmentStorage())
     name = models.CharField(max_length=128, null=True, blank=True)
-    thing = models.ForeignKey('SubmittedThing', related_name='attachments')
+    thing = models.ForeignKey("SubmittedThing", related_name="attachments")
     visible = models.BooleanField(default=True, blank=True, db_index=True)
 
-    COVER = 'CO'
-    RICH_TEXT = 'RT'
+    COVER = "CO"
+    RICH_TEXT = "RT"
     ATTACHMENT_TYPE_CHOICES = (
-        (COVER, 'Cover'),
-        (RICH_TEXT, 'Rich Text'),
+        (COVER, "Cover"),
+        (RICH_TEXT, "Rich Text"),
     )
-    type = models.CharField(max_length=2,
-                            choices=ATTACHMENT_TYPE_CHOICES,
-                            default=COVER)
+    type = models.CharField(
+        max_length=2, choices=ATTACHMENT_TYPE_CHOICES, default=COVER
+    )
 
     cache = cache.AttachmentCache()
     # previous_version = 'sa_api_v1.models.Attachment'
 
     class Meta:
-        app_label = 'sa_api_v2'
-        db_table = 'sa_api_attachment'
+        app_label = "sa_api_v2"
+        db_table = "sa_api_attachment"
 
 
 #

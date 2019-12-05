@@ -9,439 +9,1430 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('sa_api_v2', '0016_auto_20191001_1544'),
+        ("sa_api_v2", "0016_auto_20191001_1544"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='AddressField',
+            name="AddressField",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('key', models.CharField(help_text="The key onto which the field's response will be saved", max_length=127)),
-                ('label', models.CharField(blank=True, help_text='This label will be used when displaying the submitted form field (eg: "My project idea is:")', max_length=127)),
-                ('prompt', models.CharField(blank=True, help_text='Some helpful text to guide the user on how to fill out this field (eg: "What is your project idea?")', max_length=512)),
-                ('private', models.BooleanField(default=False, help_text='If true, then the submitted data will be flagged as private')),
-                ('required', models.BooleanField(default=False, help_text='If true, then the form cannot be submitted unless this field has received a response')),
-                ('placeholder', models.CharField(blank=True, help_text='Used to help guide users on what to type into the form\'s input box (eg: "Enter your email here", "joe@example.com")', max_length=512)),
-                ('reverse_geocode', models.BooleanField(default=True, help_text="Inidicates whether the field will auto-update with a new address based on the map's location.")),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "key",
+                    models.CharField(
+                        help_text="The key onto which the field's response will be saved",
+                        max_length=127,
+                    ),
+                ),
+                (
+                    "label",
+                    models.CharField(
+                        blank=True,
+                        help_text='This label will be used when displaying the submitted form field (eg: "My project idea is:")',
+                        max_length=127,
+                    ),
+                ),
+                (
+                    "prompt",
+                    models.CharField(
+                        blank=True,
+                        help_text='Some helpful text to guide the user on how to fill out this field (eg: "What is your project idea?")',
+                        max_length=512,
+                    ),
+                ),
+                (
+                    "private",
+                    models.BooleanField(
+                        default=False,
+                        help_text="If true, then the submitted data will be flagged as private",
+                    ),
+                ),
+                (
+                    "required",
+                    models.BooleanField(
+                        default=False,
+                        help_text="If true, then the form cannot be submitted unless this field has received a response",
+                    ),
+                ),
+                (
+                    "placeholder",
+                    models.CharField(
+                        blank=True,
+                        help_text='Used to help guide users on what to type into the form\'s input box (eg: "Enter your email here", "joe@example.com")',
+                        max_length=512,
+                    ),
+                ),
+                (
+                    "reverse_geocode",
+                    models.BooleanField(
+                        default=True,
+                        help_text="Inidicates whether the field will auto-update with a new address based on the map's location.",
+                    ),
+                ),
+            ],
+            options={"db_table": "ms_api_form_module_field_address",},
+        ),
+        migrations.CreateModel(
+            name="CheckboxField",
+            fields=[
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "key",
+                    models.CharField(
+                        help_text="The key onto which the field's response will be saved",
+                        max_length=127,
+                    ),
+                ),
+                (
+                    "label",
+                    models.CharField(
+                        blank=True,
+                        help_text='This label will be used when displaying the submitted form field (eg: "My project idea is:")',
+                        max_length=127,
+                    ),
+                ),
+                (
+                    "prompt",
+                    models.CharField(
+                        blank=True,
+                        help_text='Some helpful text to guide the user on how to fill out this field (eg: "What is your project idea?")',
+                        max_length=512,
+                    ),
+                ),
+                (
+                    "private",
+                    models.BooleanField(
+                        default=False,
+                        help_text="If true, then the submitted data will be flagged as private",
+                    ),
+                ),
+                (
+                    "required",
+                    models.BooleanField(
+                        default=False,
+                        help_text="If true, then the form cannot be submitted unless this field has received a response",
+                    ),
+                ),
+            ],
+            options={"db_table": "ms_api_form_module_field_checkbox",},
+        ),
+        migrations.CreateModel(
+            name="CheckboxOption",
+            fields=[
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "default",
+                    models.BooleanField(
+                        default=False,
+                        help_text="If true, then this field will be selected by default.",
+                    ),
+                ),
+                (
+                    "make_private",
+                    models.BooleanField(
+                        default=False,
+                        help_text="If true, then the Place's 'private' field will be set to true when this option is selected.",
+                    ),
+                ),
+                (
+                    "icon",
+                    models.CharField(
+                        blank=True,
+                        help_text="An URL for the location of this option's icon. This field is optional.",
+                        max_length=127,
+                    ),
+                ),
+                ("order", models.PositiveSmallIntegerField(default=0)),
+                (
+                    "label",
+                    models.CharField(
+                        help_text="For display purposes only. This is how the option will be presented on the form, or labelled in a submission summary.",
+                        max_length=127,
+                    ),
+                ),
+                (
+                    "value",
+                    models.CharField(
+                        help_text="This is the value that will be associated with the field's key.",
+                        max_length=127,
+                    ),
+                ),
+                (
+                    "field",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="options",
+                        to="sa_api_v2.CheckboxField",
+                    ),
+                ),
             ],
             options={
-                'db_table': 'ms_api_form_module_field_address',
+                "ordering": ["order"],
+                "abstract": False,
+                "db_table": "ms_api_form_module_option_checkbox",
             },
         ),
         migrations.CreateModel(
-            name='CheckboxField',
+            name="DateField",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('key', models.CharField(help_text="The key onto which the field's response will be saved", max_length=127)),
-                ('label', models.CharField(blank=True, help_text='This label will be used when displaying the submitted form field (eg: "My project idea is:")', max_length=127)),
-                ('prompt', models.CharField(blank=True, help_text='Some helpful text to guide the user on how to fill out this field (eg: "What is your project idea?")', max_length=512)),
-                ('private', models.BooleanField(default=False, help_text='If true, then the submitted data will be flagged as private')),
-                ('required', models.BooleanField(default=False, help_text='If true, then the form cannot be submitted unless this field has received a response')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "key",
+                    models.CharField(
+                        help_text="The key onto which the field's response will be saved",
+                        max_length=127,
+                    ),
+                ),
+                (
+                    "label",
+                    models.CharField(
+                        blank=True,
+                        help_text='This label will be used when displaying the submitted form field (eg: "My project idea is:")',
+                        max_length=127,
+                    ),
+                ),
+                (
+                    "prompt",
+                    models.CharField(
+                        blank=True,
+                        help_text='Some helpful text to guide the user on how to fill out this field (eg: "What is your project idea?")',
+                        max_length=512,
+                    ),
+                ),
+                (
+                    "private",
+                    models.BooleanField(
+                        default=False,
+                        help_text="If true, then the submitted data will be flagged as private",
+                    ),
+                ),
+                (
+                    "required",
+                    models.BooleanField(
+                        default=False,
+                        help_text="If true, then the form cannot be submitted unless this field has received a response",
+                    ),
+                ),
+                (
+                    "placeholder",
+                    models.CharField(
+                        blank=True,
+                        help_text='Used to help guide users on what to type into the form\'s input box (eg: "Enter your email here", "joe@example.com")',
+                        max_length=512,
+                    ),
+                ),
+                ("include_ongoing", models.BooleanField(default=False)),
+                (
+                    "label_format",
+                    models.CharField(
+                        blank=True,
+                        help_text="Formatting of the date that will be used on the label",
+                        max_length=24,
+                    ),
+                ),
+                (
+                    "form_format",
+                    models.CharField(
+                        blank=True,
+                        help_text="Formatting of the date that will be required for the input form",
+                        max_length=24,
+                    ),
+                ),
+            ],
+            options={"db_table": "ms_api_form_module_field_date",},
+        ),
+        migrations.CreateModel(
+            name="FileField",
+            fields=[
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "key",
+                    models.CharField(
+                        help_text="The key onto which the field's response will be saved",
+                        max_length=127,
+                    ),
+                ),
+                (
+                    "label",
+                    models.CharField(
+                        blank=True,
+                        help_text='This label will be used when displaying the submitted form field (eg: "My project idea is:")',
+                        max_length=127,
+                    ),
+                ),
+                (
+                    "prompt",
+                    models.CharField(
+                        blank=True,
+                        help_text='Some helpful text to guide the user on how to fill out this field (eg: "What is your project idea?")',
+                        max_length=512,
+                    ),
+                ),
+                (
+                    "private",
+                    models.BooleanField(
+                        default=False,
+                        help_text="If true, then the submitted data will be flagged as private",
+                    ),
+                ),
+                (
+                    "required",
+                    models.BooleanField(
+                        default=False,
+                        help_text="If true, then the form cannot be submitted unless this field has received a response",
+                    ),
+                ),
+            ],
+            options={"db_table": "ms_api_form_module_field_file",},
+        ),
+        migrations.CreateModel(
+            name="Flavor",
+            fields=[
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("display_name", models.CharField(max_length=128)),
+                ("slug", models.SlugField(default="", max_length=128, unique=True)),
+            ],
+            options={"ordering": ["display_name"], "db_table": "ms_api_flavor",},
+        ),
+        migrations.CreateModel(
+            name="Form",
+            fields=[
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("label", models.CharField(max_length=127)),
+                ("is_enabled", models.BooleanField(default=True)),
+                (
+                    "engagement_text",
+                    models.CharField(
+                        blank=True,
+                        help_text="When multiple forms are available to select, this text will help describe this form.",
+                        max_length=255,
+                    ),
+                ),
+                (
+                    "image",
+                    models.CharField(
+                        blank=True,
+                        help_text="An URL for the location of this forms's image. Useful when selecting one of multiple forms on a flavor. This field is optional.",
+                        max_length=127,
+                    ),
+                ),
+                (
+                    "dataset",
+                    models.OneToOneField(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="+",
+                        to="sa_api_v2.DataSet",
+                    ),
+                ),
+                (
+                    "flavor",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="forms",
+                        to="sa_api_v2.Flavor",
+                    ),
+                ),
+            ],
+            options={"db_table": "ms_api_form",},
+        ),
+        migrations.CreateModel(
+            name="FormStage",
+            fields=[
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("order", models.PositiveSmallIntegerField(default=0)),
+                (
+                    "header_text",
+                    models.CharField(
+                        blank=True,
+                        help_text="Use this when adding a header to the Form Stage. Usually used to summarize this section of the form.",
+                        max_length=512,
+                    ),
+                ),
+                (
+                    "label",
+                    models.CharField(
+                        blank=True,
+                        help_text="An option label that can be used to describe the form stage. Currently it is only used internally.",
+                        max_length=255,
+                    ),
+                ),
+                (
+                    "visible",
+                    models.BooleanField(
+                        default=True,
+                        help_text="Determines whether the stage is visible by default.",
+                    ),
+                ),
+                (
+                    "form",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="stages",
+                        to="sa_api_v2.Form",
+                    ),
+                ),
+            ],
+            options={"ordering": ["order"], "db_table": "ms_api_form_stage",},
+        ),
+        migrations.CreateModel(
+            name="GroupModule",
+            fields=[
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "label",
+                    models.CharField(
+                        blank=True,
+                        help_text="For naming purposes only - this won't be displayed to end users. Use this label to more easily identify this module whle building the form.",
+                        max_length=127,
+                    ),
+                ),
+            ],
+            options={"db_table": "ms_api_form_module_group",},
+        ),
+        migrations.CreateModel(
+            name="HtmlModule",
+            fields=[
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "label",
+                    models.CharField(
+                        blank=True,
+                        help_text="For naming purposes only - this won't be displayed to end users. Use this label to more easily identify this module whle building the form.",
+                        max_length=127,
+                    ),
+                ),
+                (
+                    "content",
+                    models.TextField(
+                        help_text="Add HTML here that will be displayed on the form. Make sure that the html is valid and sanitized!"
+                    ),
+                ),
+            ],
+            options={"db_table": "ms_api_form_module_html",},
+        ),
+        migrations.CreateModel(
+            name="LayerGroup",
+            fields=[
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("label", models.CharField(max_length=127, unique=True)),
+            ],
+            options={"db_table": "ms_api_map_layer_group",},
+        ),
+        migrations.CreateModel(
+            name="MapViewport",
+            fields=[
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("zoom", models.FloatField(blank=True, null=True)),
+                ("latitude", models.FloatField(blank=True, null=True)),
+                ("longitude", models.FloatField(blank=True, null=True)),
+                (
+                    "transition_duration",
+                    models.PositiveSmallIntegerField(blank=True, null=True),
+                ),
+                ("bearing", models.PositiveSmallIntegerField(blank=True, null=True)),
+                ("pitch", models.PositiveSmallIntegerField(blank=True, null=True)),
+                (
+                    "stage",
+                    models.OneToOneField(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="map_viewport",
+                        to="sa_api_v2.FormStage",
+                    ),
+                ),
+            ],
+            options={"db_table": "ms_api_map_viewport",},
+        ),
+        migrations.CreateModel(
+            name="Modal",
+            fields=[
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "header",
+                    models.CharField(
+                        help_text="This is the label that the submit button will have",
+                        max_length=127,
+                    ),
+                ),
+                (
+                    "content",
+                    models.TextField(
+                        help_text="Add HTML here that will be displayed as a modal alongside the FormField. Make sure that the html is valid and sanitized!"
+                    ),
+                ),
+            ],
+            options={"db_table": "ms_api_form_field_modal",},
+        ),
+        migrations.CreateModel(
+            name="NestedOrderedModule",
+            fields=[
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("order", models.PositiveSmallIntegerField(default=0)),
+                (
+                    "visible",
+                    models.BooleanField(
+                        default=True,
+                        help_text="Determines whether the module is visible by default.",
+                    ),
+                ),
+                (
+                    "addressfield",
+                    models.OneToOneField(
+                        blank=True,
+                        help_text="Choose a address field by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="sa_api_v2.AddressField",
+                    ),
+                ),
+                (
+                    "checkboxfield",
+                    models.OneToOneField(
+                        blank=True,
+                        help_text="Choose a checkbox field by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="sa_api_v2.CheckboxField",
+                    ),
+                ),
+                (
+                    "datefield",
+                    models.OneToOneField(
+                        blank=True,
+                        help_text="Choose a date by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="sa_api_v2.DateField",
+                    ),
+                ),
+                (
+                    "filefield",
+                    models.OneToOneField(
+                        blank=True,
+                        help_text="Choose a file by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="sa_api_v2.FileField",
+                    ),
+                ),
+                (
+                    "group",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="modules",
+                        to="sa_api_v2.GroupModule",
+                    ),
+                ),
+                (
+                    "htmlmodule",
+                    models.OneToOneField(
+                        blank=True,
+                        help_text="Choose a html module by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="sa_api_v2.HtmlModule",
+                    ),
+                ),
             ],
             options={
-                'db_table': 'ms_api_form_module_field_checkbox',
+                "ordering": ["order"],
+                "abstract": False,
+                "db_table": "ms_api_form_nested_ordered_module",
             },
         ),
         migrations.CreateModel(
-            name='CheckboxOption',
+            name="NumberField",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('default', models.BooleanField(default=False, help_text='If true, then this field will be selected by default.')),
-                ('make_private', models.BooleanField(default=False, help_text="If true, then the Place's 'private' field will be set to true when this option is selected.")),
-                ('icon', models.CharField(blank=True, help_text="An URL for the location of this option's icon. This field is optional.", max_length=127)),
-                ('order', models.PositiveSmallIntegerField(default=0)),
-                ('label', models.CharField(help_text='For display purposes only. This is how the option will be presented on the form, or labelled in a submission summary.', max_length=127)),
-                ('value', models.CharField(help_text="This is the value that will be associated with the field's key.", max_length=127)),
-                ('field', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='options', to='sa_api_v2.CheckboxField')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "key",
+                    models.CharField(
+                        help_text="The key onto which the field's response will be saved",
+                        max_length=127,
+                    ),
+                ),
+                (
+                    "label",
+                    models.CharField(
+                        blank=True,
+                        help_text='This label will be used when displaying the submitted form field (eg: "My project idea is:")',
+                        max_length=127,
+                    ),
+                ),
+                (
+                    "prompt",
+                    models.CharField(
+                        blank=True,
+                        help_text='Some helpful text to guide the user on how to fill out this field (eg: "What is your project idea?")',
+                        max_length=512,
+                    ),
+                ),
+                (
+                    "private",
+                    models.BooleanField(
+                        default=False,
+                        help_text="If true, then the submitted data will be flagged as private",
+                    ),
+                ),
+                (
+                    "required",
+                    models.BooleanField(
+                        default=False,
+                        help_text="If true, then the form cannot be submitted unless this field has received a response",
+                    ),
+                ),
+                (
+                    "placeholder",
+                    models.CharField(
+                        blank=True,
+                        help_text='Used to help guide users on what to type into the form\'s input box (eg: "Enter your email here", "joe@example.com")',
+                        max_length=512,
+                    ),
+                ),
+                ("minimum", models.IntegerField(blank=True, null=True)),
+                (
+                    "units",
+                    models.CharField(
+                        blank=True,
+                        help_text='Units are used for labelling numerical submissions (eg: "13 acres")',
+                        max_length=127,
+                    ),
+                ),
+                (
+                    "info_modal",
+                    models.OneToOneField(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="sa_api_v2.Modal",
+                    ),
+                ),
+            ],
+            options={"db_table": "ms_api_form_module_field_number",},
+        ),
+        migrations.CreateModel(
+            name="OrderedModule",
+            fields=[
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("order", models.PositiveSmallIntegerField(default=0)),
+                (
+                    "visible",
+                    models.BooleanField(
+                        default=True,
+                        help_text="Determines whether the module is visible by default.",
+                    ),
+                ),
+                (
+                    "include_on_list",
+                    models.BooleanField(
+                        default=False,
+                        help_text="If true, then include this field when rendering list items.",
+                    ),
+                ),
+                (
+                    "addressfield",
+                    models.OneToOneField(
+                        blank=True,
+                        help_text="Choose a address field by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="sa_api_v2.AddressField",
+                    ),
+                ),
+                (
+                    "checkboxfield",
+                    models.OneToOneField(
+                        blank=True,
+                        help_text="Choose a checkbox field by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="sa_api_v2.CheckboxField",
+                    ),
+                ),
+                (
+                    "datefield",
+                    models.OneToOneField(
+                        blank=True,
+                        help_text="Choose a date by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="sa_api_v2.DateField",
+                    ),
+                ),
+                (
+                    "filefield",
+                    models.OneToOneField(
+                        blank=True,
+                        help_text="Choose a file by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="sa_api_v2.FileField",
+                    ),
+                ),
+                (
+                    "groupmodule",
+                    models.OneToOneField(
+                        blank=True,
+                        help_text="Choose a group module by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="sa_api_v2.GroupModule",
+                    ),
+                ),
+                (
+                    "htmlmodule",
+                    models.OneToOneField(
+                        blank=True,
+                        help_text="Choose a html module by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="sa_api_v2.HtmlModule",
+                    ),
+                ),
+                (
+                    "numberfield",
+                    models.OneToOneField(
+                        blank=True,
+                        help_text="Choose a number by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="sa_api_v2.NumberField",
+                    ),
+                ),
+                (
+                    "permitted_group",
+                    models.ForeignKey(
+                        blank=True,
+                        help_text="Only this Group is allowed to edit this module's field. If null, any group can edit.",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="+",
+                        to="sa_api_v2.Group",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['order'],
-                'abstract': False,
-                'db_table': 'ms_api_form_module_option_checkbox',
+                "ordering": ["order"],
+                "abstract": False,
+                "db_table": "ms_api_form_ordered_module",
             },
         ),
         migrations.CreateModel(
-            name='DateField',
+            name="RadioField",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('key', models.CharField(help_text="The key onto which the field's response will be saved", max_length=127)),
-                ('label', models.CharField(blank=True, help_text='This label will be used when displaying the submitted form field (eg: "My project idea is:")', max_length=127)),
-                ('prompt', models.CharField(blank=True, help_text='Some helpful text to guide the user on how to fill out this field (eg: "What is your project idea?")', max_length=512)),
-                ('private', models.BooleanField(default=False, help_text='If true, then the submitted data will be flagged as private')),
-                ('required', models.BooleanField(default=False, help_text='If true, then the form cannot be submitted unless this field has received a response')),
-                ('placeholder', models.CharField(blank=True, help_text='Used to help guide users on what to type into the form\'s input box (eg: "Enter your email here", "joe@example.com")', max_length=512)),
-                ('include_ongoing', models.BooleanField(default=False)),
-                ('label_format', models.CharField(blank=True, help_text='Formatting of the date that will be used on the label', max_length=24)),
-                ('form_format', models.CharField(blank=True, help_text='Formatting of the date that will be required for the input form', max_length=24)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "key",
+                    models.CharField(
+                        help_text="The key onto which the field's response will be saved",
+                        max_length=127,
+                    ),
+                ),
+                (
+                    "label",
+                    models.CharField(
+                        blank=True,
+                        help_text='This label will be used when displaying the submitted form field (eg: "My project idea is:")',
+                        max_length=127,
+                    ),
+                ),
+                (
+                    "prompt",
+                    models.CharField(
+                        blank=True,
+                        help_text='Some helpful text to guide the user on how to fill out this field (eg: "What is your project idea?")',
+                        max_length=512,
+                    ),
+                ),
+                (
+                    "private",
+                    models.BooleanField(
+                        default=False,
+                        help_text="If true, then the submitted data will be flagged as private",
+                    ),
+                ),
+                (
+                    "required",
+                    models.BooleanField(
+                        default=False,
+                        help_text="If true, then the form cannot be submitted unless this field has received a response",
+                    ),
+                ),
+                (
+                    "variant",
+                    models.CharField(
+                        choices=[
+                            ("RA", "a radio selection"),
+                            ("DR", "a dropdown list"),
+                            ("TO", "a toggle switch, choosing one of 2 choices"),
+                            (
+                                "AD",
+                                "a dropdown list that allows fuzzy searching through the items",
+                            ),
+                        ],
+                        default="RA",
+                        max_length=127,
+                    ),
+                ),
+                (
+                    "dropdown_placeholder",
+                    models.CharField(
+                        blank=True,
+                        help_text='Used to help guide users on what to type into the form\'s input box (eg: "Enter your email here", "joe@example.com")',
+                        max_length=512,
+                    ),
+                ),
+                (
+                    "info_modal",
+                    models.OneToOneField(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="sa_api_v2.Modal",
+                    ),
+                ),
+            ],
+            options={"db_table": "ms_api_form_module_field_radio",},
+        ),
+        migrations.CreateModel(
+            name="RadioOption",
+            fields=[
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "default",
+                    models.BooleanField(
+                        default=False,
+                        help_text="If true, then this field will be selected by default.",
+                    ),
+                ),
+                (
+                    "make_private",
+                    models.BooleanField(
+                        default=False,
+                        help_text="If true, then the Place's 'private' field will be set to true when this option is selected.",
+                    ),
+                ),
+                (
+                    "icon",
+                    models.CharField(
+                        blank=True,
+                        help_text="An URL for the location of this option's icon. This field is optional.",
+                        max_length=127,
+                    ),
+                ),
+                ("order", models.PositiveSmallIntegerField(default=0)),
+                (
+                    "label",
+                    models.CharField(
+                        help_text="For display purposes only. This is how the option will be presented on the form, or labelled in a submission summary.",
+                        max_length=255,
+                    ),
+                ),
+                (
+                    "value",
+                    models.CharField(
+                        help_text="This is the value that will be associated with the field's key.",
+                        max_length=127,
+                    ),
+                ),
+                (
+                    "field",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="options",
+                        to="sa_api_v2.RadioField",
+                    ),
+                ),
+                (
+                    "group_visibility_triggers",
+                    models.ManyToManyField(
+                        blank=True,
+                        help_text="Triggers an update to make the following NestedOrderedModules visible. Only default invisible modules are within this module's group are selectable here.",
+                        related_name="_radiooption_group_visibility_triggers_+",
+                        to="sa_api_v2.NestedOrderedModule",
+                    ),
+                ),
+                (
+                    "stage_visibility_triggers",
+                    models.ManyToManyField(
+                        blank=True,
+                        help_text="Triggers an update to make the following FormStages visible. Only default invisible stages are within this module's Form are selectable here",
+                        related_name="_radiooption_stage_visibility_triggers_+",
+                        to="sa_api_v2.FormStage",
+                    ),
+                ),
             ],
             options={
-                'db_table': 'ms_api_form_module_field_date',
+                "ordering": ["order"],
+                "abstract": False,
+                "db_table": "ms_api_form_module_option_radio",
             },
         ),
         migrations.CreateModel(
-            name='FileField',
+            name="SkipStageModule",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('key', models.CharField(help_text="The key onto which the field's response will be saved", max_length=127)),
-                ('label', models.CharField(blank=True, help_text='This label will be used when displaying the submitted form field (eg: "My project idea is:")', max_length=127)),
-                ('prompt', models.CharField(blank=True, help_text='Some helpful text to guide the user on how to fill out this field (eg: "What is your project idea?")', max_length=512)),
-                ('private', models.BooleanField(default=False, help_text='If true, then the submitted data will be flagged as private')),
-                ('required', models.BooleanField(default=False, help_text='If true, then the form cannot be submitted unless this field has received a response')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "label",
+                    models.TextField(
+                        blank=True,
+                        default="",
+                        help_text='The message to be displayed on the form. When clicked, it will skip to the appropriate FormStage. Note that all modules within this FormStage should be optional for this to work properly. (eg: "This section is not relevant to me.")',
+                    ),
+                ),
+                (
+                    "stage",
+                    models.ForeignKey(
+                        blank=True,
+                        help_text="If null, skip to the next stage. Otherwise, we skip to the associated FormStage.",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="sa_api_v2.FormStage",
+                    ),
+                ),
             ],
-            options={
-                'db_table': 'ms_api_form_module_field_file',
-            },
+            options={"db_table": "ms_api_form_module_skip_stage",},
         ),
         migrations.CreateModel(
-            name='Flavor',
+            name="SubmitButtonModule",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('display_name', models.CharField(max_length=128)),
-                ('slug', models.SlugField(default='', max_length=128, unique=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "label",
+                    models.CharField(
+                        default="Submit",
+                        help_text="This is the label that the submit button will have",
+                        max_length=127,
+                    ),
+                ),
             ],
-            options={
-                'ordering': ['display_name'],
-                'db_table': 'ms_api_flavor',
-            },
+            options={"db_table": "ms_api_form_module_submit_button",},
         ),
         migrations.CreateModel(
-            name='Form',
+            name="TextAreaField",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('label', models.CharField(max_length=127)),
-                ('is_enabled', models.BooleanField(default=True)),
-                ('engagement_text', models.CharField(blank=True, help_text='When multiple forms are available to select, this text will help describe this form.', max_length=255)),
-                ('image', models.CharField(blank=True, help_text="An URL for the location of this forms's image. Useful when selecting one of multiple forms on a flavor. This field is optional.", max_length=127)),
-                ('dataset', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='+', to='sa_api_v2.DataSet')),
-                ('flavor', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='forms', to='sa_api_v2.Flavor')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "key",
+                    models.CharField(
+                        help_text="The key onto which the field's response will be saved",
+                        max_length=127,
+                    ),
+                ),
+                (
+                    "label",
+                    models.CharField(
+                        blank=True,
+                        help_text='This label will be used when displaying the submitted form field (eg: "My project idea is:")',
+                        max_length=127,
+                    ),
+                ),
+                (
+                    "prompt",
+                    models.CharField(
+                        blank=True,
+                        help_text='Some helpful text to guide the user on how to fill out this field (eg: "What is your project idea?")',
+                        max_length=512,
+                    ),
+                ),
+                (
+                    "private",
+                    models.BooleanField(
+                        default=False,
+                        help_text="If true, then the submitted data will be flagged as private",
+                    ),
+                ),
+                (
+                    "required",
+                    models.BooleanField(
+                        default=False,
+                        help_text="If true, then the form cannot be submitted unless this field has received a response",
+                    ),
+                ),
+                (
+                    "placeholder",
+                    models.CharField(
+                        blank=True,
+                        help_text='Used to help guide users on what to type into the form\'s input box (eg: "Enter your email here", "joe@example.com")',
+                        max_length=512,
+                    ),
+                ),
+                (
+                    "rich_text",
+                    models.BooleanField(
+                        default=False,
+                        help_text="Determines whether the field allows for rich text input.",
+                    ),
+                ),
+                (
+                    "info_modal",
+                    models.OneToOneField(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="sa_api_v2.Modal",
+                    ),
+                ),
             ],
-            options={
-                'db_table': 'ms_api_form',
-            },
+            options={"db_table": "ms_api_form_module_field_textarea",},
         ),
         migrations.CreateModel(
-            name='FormStage',
+            name="TextField",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('order', models.PositiveSmallIntegerField(default=0)),
-                ('header_text', models.CharField(blank=True, help_text='Use this when adding a header to the Form Stage. Usually used to summarize this section of the form.', max_length=512)),
-                ('label', models.CharField(blank=True, help_text='An option label that can be used to describe the form stage. Currently it is only used internally.', max_length=255)),
-                ('visible', models.BooleanField(default=True, help_text='Determines whether the stage is visible by default.')),
-                ('form', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='stages', to='sa_api_v2.Form')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "key",
+                    models.CharField(
+                        help_text="The key onto which the field's response will be saved",
+                        max_length=127,
+                    ),
+                ),
+                (
+                    "label",
+                    models.CharField(
+                        blank=True,
+                        help_text='This label will be used when displaying the submitted form field (eg: "My project idea is:")',
+                        max_length=127,
+                    ),
+                ),
+                (
+                    "prompt",
+                    models.CharField(
+                        blank=True,
+                        help_text='Some helpful text to guide the user on how to fill out this field (eg: "What is your project idea?")',
+                        max_length=512,
+                    ),
+                ),
+                (
+                    "private",
+                    models.BooleanField(
+                        default=False,
+                        help_text="If true, then the submitted data will be flagged as private",
+                    ),
+                ),
+                (
+                    "required",
+                    models.BooleanField(
+                        default=False,
+                        help_text="If true, then the form cannot be submitted unless this field has received a response",
+                    ),
+                ),
+                (
+                    "variant",
+                    models.CharField(
+                        blank=True,
+                        choices=[("EM", "Email"), ("PH", "Phone"), ("AD", "Address")],
+                        max_length=127,
+                    ),
+                ),
+                (
+                    "placeholder",
+                    models.CharField(
+                        blank=True,
+                        help_text='Used to help guide users on what to type into the form\'s input box (eg: "Enter your email here", "joe@example.com")',
+                        max_length=512,
+                    ),
+                ),
+                (
+                    "info_modal",
+                    models.OneToOneField(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="sa_api_v2.Modal",
+                    ),
+                ),
             ],
-            options={
-                'ordering': ['order'],
-                'db_table': 'ms_api_form_stage',
-            },
-        ),
-        migrations.CreateModel(
-            name='GroupModule',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('label', models.CharField(blank=True, help_text="For naming purposes only - this won't be displayed to end users. Use this label to more easily identify this module whle building the form.", max_length=127)),
-            ],
-            options={
-                'db_table': 'ms_api_form_module_group',
-            },
-        ),
-        migrations.CreateModel(
-            name='HtmlModule',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('label', models.CharField(blank=True, help_text="For naming purposes only - this won't be displayed to end users. Use this label to more easily identify this module whle building the form.", max_length=127)),
-                ('content', models.TextField(help_text='Add HTML here that will be displayed on the form. Make sure that the html is valid and sanitized!')),
-            ],
-            options={
-                'db_table': 'ms_api_form_module_html',
-            },
-        ),
-        migrations.CreateModel(
-            name='LayerGroup',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('label', models.CharField(max_length=127, unique=True)),
-            ],
-            options={
-                'db_table': 'ms_api_map_layer_group',
-            },
-        ),
-        migrations.CreateModel(
-            name='MapViewport',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('zoom', models.FloatField(blank=True, null=True)),
-                ('latitude', models.FloatField(blank=True, null=True)),
-                ('longitude', models.FloatField(blank=True, null=True)),
-                ('transition_duration', models.PositiveSmallIntegerField(blank=True, null=True)),
-                ('bearing', models.PositiveSmallIntegerField(blank=True, null=True)),
-                ('pitch', models.PositiveSmallIntegerField(blank=True, null=True)),
-                ('stage', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='map_viewport', to='sa_api_v2.FormStage')),
-            ],
-            options={
-                'db_table': 'ms_api_map_viewport',
-            },
-        ),
-        migrations.CreateModel(
-            name='Modal',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('header', models.CharField(help_text='This is the label that the submit button will have', max_length=127)),
-                ('content', models.TextField(help_text='Add HTML here that will be displayed as a modal alongside the FormField. Make sure that the html is valid and sanitized!')),
-            ],
-            options={
-                'db_table': 'ms_api_form_field_modal',
-            },
-        ),
-        migrations.CreateModel(
-            name='NestedOrderedModule',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('order', models.PositiveSmallIntegerField(default=0)),
-                ('visible', models.BooleanField(default=True, help_text='Determines whether the module is visible by default.')),
-                ('addressfield', models.OneToOneField(blank=True, help_text='Choose a address field by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.AddressField')),
-                ('checkboxfield', models.OneToOneField(blank=True, help_text='Choose a checkbox field by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.CheckboxField')),
-                ('datefield', models.OneToOneField(blank=True, help_text='Choose a date by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.DateField')),
-                ('filefield', models.OneToOneField(blank=True, help_text='Choose a file by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.FileField')),
-                ('group', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='modules', to='sa_api_v2.GroupModule')),
-                ('htmlmodule', models.OneToOneField(blank=True, help_text='Choose a html module by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.HtmlModule')),
-            ],
-            options={
-                'ordering': ['order'],
-                'abstract': False,
-                'db_table': 'ms_api_form_nested_ordered_module',
-            },
-        ),
-        migrations.CreateModel(
-            name='NumberField',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('key', models.CharField(help_text="The key onto which the field's response will be saved", max_length=127)),
-                ('label', models.CharField(blank=True, help_text='This label will be used when displaying the submitted form field (eg: "My project idea is:")', max_length=127)),
-                ('prompt', models.CharField(blank=True, help_text='Some helpful text to guide the user on how to fill out this field (eg: "What is your project idea?")', max_length=512)),
-                ('private', models.BooleanField(default=False, help_text='If true, then the submitted data will be flagged as private')),
-                ('required', models.BooleanField(default=False, help_text='If true, then the form cannot be submitted unless this field has received a response')),
-                ('placeholder', models.CharField(blank=True, help_text='Used to help guide users on what to type into the form\'s input box (eg: "Enter your email here", "joe@example.com")', max_length=512)),
-                ('minimum', models.IntegerField(blank=True, null=True)),
-                ('units', models.CharField(blank=True, help_text='Units are used for labelling numerical submissions (eg: "13 acres")', max_length=127)),
-                ('info_modal', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.Modal')),
-            ],
-            options={
-                'db_table': 'ms_api_form_module_field_number',
-            },
-        ),
-        migrations.CreateModel(
-            name='OrderedModule',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('order', models.PositiveSmallIntegerField(default=0)),
-                ('visible', models.BooleanField(default=True, help_text='Determines whether the module is visible by default.')),
-                ('include_on_list', models.BooleanField(default=False, help_text='If true, then include this field when rendering list items.')),
-                ('addressfield', models.OneToOneField(blank=True, help_text='Choose a address field by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.AddressField')),
-                ('checkboxfield', models.OneToOneField(blank=True, help_text='Choose a checkbox field by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.CheckboxField')),
-                ('datefield', models.OneToOneField(blank=True, help_text='Choose a date by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.DateField')),
-                ('filefield', models.OneToOneField(blank=True, help_text='Choose a file by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.FileField')),
-                ('groupmodule', models.OneToOneField(blank=True, help_text='Choose a group module by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.GroupModule')),
-                ('htmlmodule', models.OneToOneField(blank=True, help_text='Choose a html module by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.HtmlModule')),
-                ('numberfield', models.OneToOneField(blank=True, help_text='Choose a number by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.NumberField')),
-                ('permitted_group', models.ForeignKey(blank=True, help_text="Only this Group is allowed to edit this module's field. If null, any group can edit.", null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='sa_api_v2.Group')),
-            ],
-            options={
-                'ordering': ['order'],
-                'abstract': False,
-                'db_table': 'ms_api_form_ordered_module',
-            },
-        ),
-        migrations.CreateModel(
-            name='RadioField',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('key', models.CharField(help_text="The key onto which the field's response will be saved", max_length=127)),
-                ('label', models.CharField(blank=True, help_text='This label will be used when displaying the submitted form field (eg: "My project idea is:")', max_length=127)),
-                ('prompt', models.CharField(blank=True, help_text='Some helpful text to guide the user on how to fill out this field (eg: "What is your project idea?")', max_length=512)),
-                ('private', models.BooleanField(default=False, help_text='If true, then the submitted data will be flagged as private')),
-                ('required', models.BooleanField(default=False, help_text='If true, then the form cannot be submitted unless this field has received a response')),
-                ('variant', models.CharField(choices=[('RA', 'a radio selection'), ('DR', 'a dropdown list'), ('TO', 'a toggle switch, choosing one of 2 choices'), ('AD', 'a dropdown list that allows fuzzy searching through the items')], default='RA', max_length=127)),
-                ('dropdown_placeholder', models.CharField(blank=True, help_text='Used to help guide users on what to type into the form\'s input box (eg: "Enter your email here", "joe@example.com")', max_length=512)),
-                ('info_modal', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.Modal')),
-            ],
-            options={
-                'db_table': 'ms_api_form_module_field_radio',
-            },
-        ),
-        migrations.CreateModel(
-            name='RadioOption',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('default', models.BooleanField(default=False, help_text='If true, then this field will be selected by default.')),
-                ('make_private', models.BooleanField(default=False, help_text="If true, then the Place's 'private' field will be set to true when this option is selected.")),
-                ('icon', models.CharField(blank=True, help_text="An URL for the location of this option's icon. This field is optional.", max_length=127)),
-                ('order', models.PositiveSmallIntegerField(default=0)),
-                ('label', models.CharField(help_text='For display purposes only. This is how the option will be presented on the form, or labelled in a submission summary.', max_length=255)),
-                ('value', models.CharField(help_text="This is the value that will be associated with the field's key.", max_length=127)),
-                ('field', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='options', to='sa_api_v2.RadioField')),
-                ('group_visibility_triggers', models.ManyToManyField(blank=True, help_text="Triggers an update to make the following NestedOrderedModules visible. Only default invisible modules are within this module's group are selectable here.", related_name='_radiooption_group_visibility_triggers_+', to='sa_api_v2.NestedOrderedModule')),
-                ('stage_visibility_triggers', models.ManyToManyField(blank=True, help_text="Triggers an update to make the following FormStages visible. Only default invisible stages are within this module's Form are selectable here", related_name='_radiooption_stage_visibility_triggers_+', to='sa_api_v2.FormStage')),
-            ],
-            options={
-                'ordering': ['order'],
-                'abstract': False,
-                'db_table': 'ms_api_form_module_option_radio',
-            },
-        ),
-        migrations.CreateModel(
-            name='SkipStageModule',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('label', models.TextField(blank=True, default='', help_text='The message to be displayed on the form. When clicked, it will skip to the appropriate FormStage. Note that all modules within this FormStage should be optional for this to work properly. (eg: "This section is not relevant to me.")')),
-                ('stage', models.ForeignKey(blank=True, help_text='If null, skip to the next stage. Otherwise, we skip to the associated FormStage.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.FormStage')),
-            ],
-            options={
-                'db_table': 'ms_api_form_module_skip_stage',
-            },
-        ),
-        migrations.CreateModel(
-            name='SubmitButtonModule',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('label', models.CharField(default='Submit', help_text='This is the label that the submit button will have', max_length=127)),
-            ],
-            options={
-                'db_table': 'ms_api_form_module_submit_button',
-            },
-        ),
-        migrations.CreateModel(
-            name='TextAreaField',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('key', models.CharField(help_text="The key onto which the field's response will be saved", max_length=127)),
-                ('label', models.CharField(blank=True, help_text='This label will be used when displaying the submitted form field (eg: "My project idea is:")', max_length=127)),
-                ('prompt', models.CharField(blank=True, help_text='Some helpful text to guide the user on how to fill out this field (eg: "What is your project idea?")', max_length=512)),
-                ('private', models.BooleanField(default=False, help_text='If true, then the submitted data will be flagged as private')),
-                ('required', models.BooleanField(default=False, help_text='If true, then the form cannot be submitted unless this field has received a response')),
-                ('placeholder', models.CharField(blank=True, help_text='Used to help guide users on what to type into the form\'s input box (eg: "Enter your email here", "joe@example.com")', max_length=512)),
-                ('rich_text', models.BooleanField(default=False, help_text='Determines whether the field allows for rich text input.')),
-                ('info_modal', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.Modal')),
-            ],
-            options={
-                'db_table': 'ms_api_form_module_field_textarea',
-            },
-        ),
-        migrations.CreateModel(
-            name='TextField',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('key', models.CharField(help_text="The key onto which the field's response will be saved", max_length=127)),
-                ('label', models.CharField(blank=True, help_text='This label will be used when displaying the submitted form field (eg: "My project idea is:")', max_length=127)),
-                ('prompt', models.CharField(blank=True, help_text='Some helpful text to guide the user on how to fill out this field (eg: "What is your project idea?")', max_length=512)),
-                ('private', models.BooleanField(default=False, help_text='If true, then the submitted data will be flagged as private')),
-                ('required', models.BooleanField(default=False, help_text='If true, then the form cannot be submitted unless this field has received a response')),
-                ('variant', models.CharField(blank=True, choices=[('EM', 'Email'), ('PH', 'Phone'), ('AD', 'Address')], max_length=127)),
-                ('placeholder', models.CharField(blank=True, help_text='Used to help guide users on what to type into the form\'s input box (eg: "Enter your email here", "joe@example.com")', max_length=512)),
-                ('info_modal', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.Modal')),
-            ],
-            options={
-                'db_table': 'ms_api_form_module_field_text',
-            },
+            options={"db_table": "ms_api_form_module_field_text",},
         ),
         migrations.AlterField(
-            model_name='origin',
-            name='pattern',
-            field=models.CharField(help_text='The origin pattern, e.g., https://*.mapseed.org, http://localhost:*, http*://map.pugetsoundkeeper.org', max_length=100),
+            model_name="origin",
+            name="pattern",
+            field=models.CharField(
+                help_text="The origin pattern, e.g., https://*.mapseed.org, http://localhost:*, http*://map.pugetsoundkeeper.org",
+                max_length=100,
+            ),
         ),
         migrations.AddField(
-            model_name='orderedmodule',
-            name='radiofield',
-            field=models.OneToOneField(blank=True, help_text='Choose a radio by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.RadioField'),
+            model_name="orderedmodule",
+            name="radiofield",
+            field=models.OneToOneField(
+                blank=True,
+                help_text="Choose a radio by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.",
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="sa_api_v2.RadioField",
+            ),
         ),
         migrations.AddField(
-            model_name='orderedmodule',
-            name='skipstagemodule',
-            field=models.OneToOneField(blank=True, help_text='Choose a skip stage module by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.SkipStageModule'),
+            model_name="orderedmodule",
+            name="skipstagemodule",
+            field=models.OneToOneField(
+                blank=True,
+                help_text="Choose a skip stage module by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.",
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="sa_api_v2.SkipStageModule",
+            ),
         ),
         migrations.AddField(
-            model_name='orderedmodule',
-            name='stage',
-            field=models.ForeignKey(help_text='Every OrderedModule must belong to a FormStage.', on_delete=django.db.models.deletion.CASCADE, related_name='modules', to='sa_api_v2.FormStage'),
+            model_name="orderedmodule",
+            name="stage",
+            field=models.ForeignKey(
+                help_text="Every OrderedModule must belong to a FormStage.",
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="modules",
+                to="sa_api_v2.FormStage",
+            ),
         ),
         migrations.AddField(
-            model_name='orderedmodule',
-            name='submitbuttonmodule',
-            field=models.OneToOneField(blank=True, help_text='Choose a submit button module by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.SubmitButtonModule'),
+            model_name="orderedmodule",
+            name="submitbuttonmodule",
+            field=models.OneToOneField(
+                blank=True,
+                help_text="Choose a submit button module by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.",
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="sa_api_v2.SubmitButtonModule",
+            ),
         ),
         migrations.AddField(
-            model_name='orderedmodule',
-            name='textareafield',
-            field=models.OneToOneField(blank=True, help_text='Choose a textarea field by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.TextAreaField'),
+            model_name="orderedmodule",
+            name="textareafield",
+            field=models.OneToOneField(
+                blank=True,
+                help_text="Choose a textarea field by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.",
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="sa_api_v2.TextAreaField",
+            ),
         ),
         migrations.AddField(
-            model_name='orderedmodule',
-            name='textfield',
-            field=models.OneToOneField(blank=True, help_text='Choose a text field by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.TextField'),
+            model_name="orderedmodule",
+            name="textfield",
+            field=models.OneToOneField(
+                blank=True,
+                help_text="Choose a text field by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.",
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="sa_api_v2.TextField",
+            ),
         ),
         migrations.AddField(
-            model_name='nestedorderedmodule',
-            name='numberfield',
-            field=models.OneToOneField(blank=True, help_text='Choose a number by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.NumberField'),
+            model_name="nestedorderedmodule",
+            name="numberfield",
+            field=models.OneToOneField(
+                blank=True,
+                help_text="Choose a number by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.",
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="sa_api_v2.NumberField",
+            ),
         ),
         migrations.AddField(
-            model_name='nestedorderedmodule',
-            name='radiofield',
-            field=models.OneToOneField(blank=True, help_text='Choose a radio by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.RadioField'),
+            model_name="nestedorderedmodule",
+            name="radiofield",
+            field=models.OneToOneField(
+                blank=True,
+                help_text="Choose a radio by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.",
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="sa_api_v2.RadioField",
+            ),
         ),
         migrations.AddField(
-            model_name='nestedorderedmodule',
-            name='skipstagemodule',
-            field=models.OneToOneField(blank=True, help_text='Choose a skip stage module by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.SkipStageModule'),
+            model_name="nestedorderedmodule",
+            name="skipstagemodule",
+            field=models.OneToOneField(
+                blank=True,
+                help_text="Choose a skip stage module by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.",
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="sa_api_v2.SkipStageModule",
+            ),
         ),
         migrations.AddField(
-            model_name='nestedorderedmodule',
-            name='submitbuttonmodule',
-            field=models.OneToOneField(blank=True, help_text='Choose a submit button module by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.SubmitButtonModule'),
+            model_name="nestedorderedmodule",
+            name="submitbuttonmodule",
+            field=models.OneToOneField(
+                blank=True,
+                help_text="Choose a submit button module by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.",
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="sa_api_v2.SubmitButtonModule",
+            ),
         ),
         migrations.AddField(
-            model_name='nestedorderedmodule',
-            name='textareafield',
-            field=models.OneToOneField(blank=True, help_text='Choose a textarea field by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.TextAreaField'),
+            model_name="nestedorderedmodule",
+            name="textareafield",
+            field=models.OneToOneField(
+                blank=True,
+                help_text="Choose a textarea field by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.",
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="sa_api_v2.TextAreaField",
+            ),
         ),
         migrations.AddField(
-            model_name='nestedorderedmodule',
-            name='textfield',
-            field=models.OneToOneField(blank=True, help_text='Choose a text field by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.TextField'),
+            model_name="nestedorderedmodule",
+            name="textfield",
+            field=models.OneToOneField(
+                blank=True,
+                help_text="Choose a text field by creating a new one, or selecting one that already exists within this flavor. Only one field/module can be selected for this OrderedModule.",
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="sa_api_v2.TextField",
+            ),
         ),
         migrations.AddField(
-            model_name='formstage',
-            name='visible_layer_groups',
-            field=models.ManyToManyField(blank=True, help_text='A list of layers that will become visible during this stage.', related_name='_formstage_visible_layer_groups_+', to='sa_api_v2.LayerGroup'),
+            model_name="formstage",
+            name="visible_layer_groups",
+            field=models.ManyToManyField(
+                blank=True,
+                help_text="A list of layers that will become visible during this stage.",
+                related_name="_formstage_visible_layer_groups_+",
+                to="sa_api_v2.LayerGroup",
+            ),
         ),
         migrations.AddField(
-            model_name='filefield',
-            name='info_modal',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.Modal'),
+            model_name="filefield",
+            name="info_modal",
+            field=models.OneToOneField(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="sa_api_v2.Modal",
+            ),
         ),
         migrations.AddField(
-            model_name='datefield',
-            name='info_modal',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.Modal'),
+            model_name="datefield",
+            name="info_modal",
+            field=models.OneToOneField(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="sa_api_v2.Modal",
+            ),
         ),
         migrations.AddField(
-            model_name='checkboxoption',
-            name='group_visibility_triggers',
-            field=models.ManyToManyField(blank=True, help_text="Triggers an update to make the following NestedOrderedModules visible. Only default invisible modules are within this module's group are selectable here.", related_name='_checkboxoption_group_visibility_triggers_+', to='sa_api_v2.NestedOrderedModule'),
+            model_name="checkboxoption",
+            name="group_visibility_triggers",
+            field=models.ManyToManyField(
+                blank=True,
+                help_text="Triggers an update to make the following NestedOrderedModules visible. Only default invisible modules are within this module's group are selectable here.",
+                related_name="_checkboxoption_group_visibility_triggers_+",
+                to="sa_api_v2.NestedOrderedModule",
+            ),
         ),
         migrations.AddField(
-            model_name='checkboxoption',
-            name='stage_visibility_triggers',
-            field=models.ManyToManyField(blank=True, help_text="Triggers an update to make the following FormStages visible. Only default invisible stages are within this module's Form are selectable here", related_name='_checkboxoption_stage_visibility_triggers_+', to='sa_api_v2.FormStage'),
+            model_name="checkboxoption",
+            name="stage_visibility_triggers",
+            field=models.ManyToManyField(
+                blank=True,
+                help_text="Triggers an update to make the following FormStages visible. Only default invisible stages are within this module's Form are selectable here",
+                related_name="_checkboxoption_stage_visibility_triggers_+",
+                to="sa_api_v2.FormStage",
+            ),
         ),
         migrations.AddField(
-            model_name='checkboxfield',
-            name='info_modal',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.Modal'),
+            model_name="checkboxfield",
+            name="info_modal",
+            field=models.OneToOneField(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="sa_api_v2.Modal",
+            ),
         ),
         migrations.AddField(
-            model_name='addressfield',
-            name='info_modal',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='sa_api_v2.Modal'),
+            model_name="addressfield",
+            name="info_modal",
+            field=models.OneToOneField(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="sa_api_v2.Modal",
+            ),
         ),
     ]

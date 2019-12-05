@@ -19,14 +19,19 @@ import re
 
 
 class Origin(CloneableModelMixin, models.Model):
-    pattern = models.CharField(max_length=100, help_text='The origin pattern, e.g., https://*.mapseed.org, http://localhost:*, http*://map.pugetsoundkeeper.org')
+    pattern = models.CharField(
+        max_length=100,
+        help_text="The origin pattern, e.g., https://*.mapseed.org, http://localhost:*, http*://map.pugetsoundkeeper.org",
+    )
     logged_ip = models.GenericIPAddressField(blank=True, null=True)
     last_used = models.DateTimeField(blank=True, default=now)
-    dataset = models.ForeignKey(DataSet, blank=True, related_name='origins')
-    place_email_template = models.ForeignKey(PlaceEmailTemplate, blank=True, null=True, default=None, related_name='origins')
+    dataset = models.ForeignKey(DataSet, blank=True, related_name="origins")
+    place_email_template = models.ForeignKey(
+        PlaceEmailTemplate, blank=True, null=True, default=None, related_name="origins"
+    )
 
     class Meta:
-        db_table = 'cors_origin'
+        db_table = "cors_origin"
 
     def login(self, ip_address):
         self.logged_ip = ip_address
@@ -60,28 +65,28 @@ class Origin(CloneableModelMixin, models.Model):
         Determine whether a given origin matches an origin pattern.
         """
         # Universal
-        if pattern == '*':
+        if pattern == "*":
             return True
 
         # No scheme specified; assume all HTTP[S]
-        if '://' not in pattern:
-            pattern = 'http*://' + pattern
+        if "://" not in pattern:
+            pattern = "http*://" + pattern
 
         # No wild-cards; literal
-        if '*' not in pattern:
+        if "*" not in pattern:
             return pattern == origin
 
         # Wildcards; convert to regex
         else:
-            pattern = pattern.replace('.', r'\.').replace('*', r'.*')
+            pattern = pattern.replace(".", r"\.").replace("*", r".*")
             return re.match(pattern, origin) is not None
 
     def clone_related(self, onto):
         for permission in self.permissions.all():
-            permission.clone(overrides={'origin': onto})
+            permission.clone(overrides={"origin": onto})
 
     def save(self, *args, **kwargs):
-        if self.logged_ip == '':
+        if self.logged_ip == "":
             self.logged_ip = None
         return super(Origin, self).save(*args, **kwargs)
 
@@ -91,6 +96,16 @@ def create_data_permissions(sender, instance, created, **kwargs):
     Create a default permission instance for a new origin.
     """
     if created:
-        OriginPermission.objects.create(origin=instance, submission_set='*',
-            can_retrieve=True, can_create=True, can_update=True, can_destroy=True)
-post_save.connect(create_data_permissions, sender=Origin, dispatch_uid="origin-create-permissions")
+        OriginPermission.objects.create(
+            origin=instance,
+            submission_set="*",
+            can_retrieve=True,
+            can_create=True,
+            can_update=True,
+            can_destroy=True,
+        )
+
+
+post_save.connect(
+    create_data_permissions, sender=Origin, dispatch_uid="origin-create-permissions"
+)

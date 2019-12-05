@@ -10,14 +10,14 @@ def read_env():
 
     """
     try:
-        file_path = os.path.join(os.path.dirname(__file__), '..',  '.env')
+        file_path = os.path.join(os.path.dirname(__file__), "..", ".env")
         with open(file_path) as f:
             content = f.read()
     except IOError:
-        content = ''
+        content = ""
 
     for line in content.splitlines():
-        m1 = re.match(r'\A([A-Za-z_0-9]+)=(.*)\Z', line)
+        m1 = re.match(r"\A([A-Za-z_0-9]+)=(.*)\Z", line)
         if m1:
             key, val = m1.group(1), m1.group(2)
             m2 = re.match(r"\A'(.*)'\Z", val)
@@ -25,30 +25,29 @@ def read_env():
                 val = m2.group(1)
             m3 = re.match(r'\A"(.*)"\Z', val)
             if m3:
-                val = re.sub(r'\\(.)', r'\1', m3.group(1))
+                val = re.sub(r"\\(.)", r"\1", m3.group(1))
             os.environ.setdefault(key, val)
+
+
 read_env()
 
-DEBUG = (os.environ.get('DEBUG', True) in ["True", "true", True])
+DEBUG = os.environ.get("DEBUG", True) in ["True", "true", True]
 SHOW_DEBUG_TOOLBAR = False
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': os.environ.get('DB_NAME', 'shareabouts_v2'),
-        'USER': os.environ.get('USERNAME', 'postgres'),
-        'PASSWORD': os.environ.get('PASS', 'postgres'),
-        'HOST': os.environ.get('HOST', 'localhost'),
-        'PORT': os.environ.get('PORT', '5432'),
+    "default": {
+        "ENGINE": "django.contrib.gis.db.backends.postgis",
+        "NAME": os.environ.get("DB_NAME", "shareabouts_v2"),
+        "USER": os.environ.get("USERNAME", "postgres"),
+        "PASSWORD": os.environ.get("PASS", "postgres"),
+        "HOST": os.environ.get("HOST", "localhost"),
+        "PORT": os.environ.get("PORT", "5432"),
     }
 }
 
-REST_FRAMEWORK = {
-    'PAGINATE_BY': 500,
-    'PAGINATE_BY_PARAM': 'page_size'
-}
+REST_FRAMEWORK = {"PAGINATE_BY": 500, "PAGINATE_BY_PARAM": "page_size"}
 
-BROKER_URL = 'django://'
+BROKER_URL = "django://"
 
 # Set the attachment storage class to the file storage class that should
 # manage storing and retriving of place and submission attachments.
@@ -56,29 +55,37 @@ BROKER_URL = 'django://'
 # ATTACHMENT_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 # Duwamish account settings:
-SOCIAL_AUTH_TWITTER_KEY = os.environ.get('SOCIAL_AUTH_TWITTER_KEY',
-                                         'NO_SOCIAL_AUTH_TWITTER_KEY')
-SOCIAL_AUTH_TWITTER_SECRET = os.environ.get('SOCIAL_AUTH_TWITTER_SECRET',
-                                            'NO_SOCIAL_AUTH_TWITTER_SECRET')
+SOCIAL_AUTH_TWITTER_KEY = os.environ.get(
+    "SOCIAL_AUTH_TWITTER_KEY", "NO_SOCIAL_AUTH_TWITTER_KEY"
+)
+SOCIAL_AUTH_TWITTER_SECRET = os.environ.get(
+    "SOCIAL_AUTH_TWITTER_SECRET", "NO_SOCIAL_AUTH_TWITTER_SECRET"
+)
 
-SOCIAL_AUTH_FACEBOOK_KEY = os.environ.get('SOCIAL_AUTH_FACEBOOK_KEY',
-                                          'NO_SOCIAL_AUTH_FACEBOOK_KEY')
-SOCIAL_AUTH_FACEBOOK_SECRET = os.environ.get('SOCIAL_AUTH_FACEBOOK_SECRET',
-                                             'NO_SOCIAL_AUTH_FACEBOOK_SECRET')
+SOCIAL_AUTH_FACEBOOK_KEY = os.environ.get(
+    "SOCIAL_AUTH_FACEBOOK_KEY", "NO_SOCIAL_AUTH_FACEBOOK_KEY"
+)
+SOCIAL_AUTH_FACEBOOK_SECRET = os.environ.get(
+    "SOCIAL_AUTH_FACEBOOK_SECRET", "NO_SOCIAL_AUTH_FACEBOOK_SECRET"
+)
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY',
-                                               'NO_SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET',
-                                                  'NO_SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get(
+    "SOCIAL_AUTH_GOOGLE_OAUTH2_KEY", "NO_SOCIAL_AUTH_GOOGLE_OAUTH2_KEY"
+)
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get(
+    "SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET", "NO_SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET"
+)
 
-SOCIAL_AUTH_DISCOURSE_HDK_SECRET = os.environ.get('SOCIAL_AUTH_DISCOURSE_HDK_SECRET',
-                                                   'NO_SOCIAL_AUTH_DISCOURSE_HDK_SECRET')
-SOCIAL_AUTH_DISCOURSE_HDK_SERVER_URL = os.environ.get('SOCIAL_AUTH_DISCOURSE_HDK_SERVER_URL',
-                                                       'NO_SOCIAL_AUTH_DISCOURSE_HDK_SERVER_URL')
+SOCIAL_AUTH_DISCOURSE_HDK_SECRET = os.environ.get(
+    "SOCIAL_AUTH_DISCOURSE_HDK_SECRET", "NO_SOCIAL_AUTH_DISCOURSE_HDK_SECRET"
+)
+SOCIAL_AUTH_DISCOURSE_HDK_SERVER_URL = os.environ.get(
+    "SOCIAL_AUTH_DISCOURSE_HDK_SERVER_URL", "NO_SOCIAL_AUTH_DISCOURSE_HDK_SERVER_URL"
+)
 # Django will use django.core.files.storage.FileSystemStorage by default.
 # Uncomment the following lines if you want to use S3 storage instead.
 #
-ATTACHMENT_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+ATTACHMENT_STORAGE = "storages.backends.s3boto.S3BotoStorage"
 # AWS_ACCESS_KEY_ID = ''
 # AWS_SECRET_ACCESS_KEY = ''
 # AWS_STORAGE_BUCKET_NAME = 'shareabouts_attachments'
@@ -89,106 +96,99 @@ ATTACHMENT_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 # STATICFILES_STORAGE = DEFAULT_FILE_STORAGE
 
 # email notification service:
-if all(k in os.environ for k in ['EMAIL_HOST', 'EMAIL_PORT',
-                                 'EMAIL_HOST_USER', 'EMAIL_HOST_PASSWORD',
-                                 'EMAIL_USE_TLS']):
-    EMAIL_HOST = os.environ['EMAIL_HOST']
-    EMAIL_PORT = os.environ['EMAIL_PORT']
-    EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
-    EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
-    EMAIL_USE_TLS = (os.environ['EMAIL_USE_TLS'].lower() in
-                     ('true', 'on', 't', 'yes'))
-    EMAIL_DEBUG = (os.environ.get('EMAIL_DEBUG').lower() in
-                   ('true', 'on', 't', 'yes'))
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' \
-                    if not EMAIL_DEBUG else \
-                    'django.core.mail.backends.console.EmailBackend'
+if all(
+    k in os.environ
+    for k in [
+        "EMAIL_HOST",
+        "EMAIL_PORT",
+        "EMAIL_HOST_USER",
+        "EMAIL_HOST_PASSWORD",
+        "EMAIL_USE_TLS",
+    ]
+):
+    EMAIL_HOST = os.environ["EMAIL_HOST"]
+    EMAIL_PORT = os.environ["EMAIL_PORT"]
+    EMAIL_HOST_USER = os.environ["EMAIL_HOST_USER"]
+    EMAIL_HOST_PASSWORD = os.environ["EMAIL_HOST_PASSWORD"]
+    EMAIL_USE_TLS = os.environ["EMAIL_USE_TLS"].lower() in ("true", "on", "t", "yes")
+    EMAIL_DEBUG = os.environ.get("EMAIL_DEBUG").lower() in ("true", "on", "t", "yes")
+    EMAIL_BACKEND = (
+        "django.core.mail.backends.smtp.EmailBackend"
+        if not EMAIL_DEBUG
+        else "django.core.mail.backends.console.EmailBackend"
+    )
 
-AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID',
-                                   'NO_AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY',
-                                       'NO_AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME',
-                                         'NO_AWS_STORAGE_BUCKET_NAME')
+AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID", "NO_AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.environ.get(
+    "AWS_SECRET_ACCESS_KEY", "NO_AWS_SECRET_ACCESS_KEY"
+)
+AWS_STORAGE_BUCKET_NAME = os.environ.get(
+    "AWS_STORAGE_BUCKET_NAME", "NO_AWS_STORAGE_BUCKET_NAME"
+)
 # STATIC_URL = 'https://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 AWS_QUERYSTRING_AUTH = False
 
-LAUNCHROCK_KEY = os.environ.get('LAUNCHROCK_KEY', 'NO_LAUNCHROCK_KEY')
+LAUNCHROCK_KEY = os.environ.get("LAUNCHROCK_KEY", "NO_LAUNCHROCK_KEY")
 
 # JWTs
-JWT_SECRET = os.environ.get('JWT_SECRET')
+JWT_SECRET = os.environ.get("JWT_SECRET")
 if JWT_SECRET is None:
     if DEBUG:
-        JWT_SECRET = 'secretsecret'
+        JWT_SECRET = "secretsecret"
     else:
-        raise Exception('Missing JWT configuration. Set the JWT_SECRET environment variable.')
+        raise Exception(
+            "Missing JWT configuration. Set the JWT_SECRET environment variable."
+        )
 
 # Some default settings that are handy for debugging
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'filters': {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "filters": {},
+    "formatters": {
+        "verbose": {
+            "format": "%(levelname)s %(asctime)s %(name)s %(process)d %(thread)d %(message)s"
+        },
+        "moderate": {"format": "%(levelname)s %(asctime)s %(name)s: %(message)s"},
+        "simple": {"format": "%(levelname)s %(message)s"},
     },
-    'formatters': {
-        'verbose': {
-            'format': '%(levelname)s %(asctime)s %(name)s %(process)d %(thread)d %(message)s'
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "moderate",
         },
-        'moderate': {
-            'format': '%(levelname)s %(asctime)s %(name)s: %(message)s'
-        },
-        'simple': {
-            'format': '%(levelname)s %(message)s'
-        },
-    },
-    'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'moderate'
-        },
-        'debug_file': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.TimedRotatingFileHandler',
-            'formatter': 'moderate',
-
-            'filename': 'debug.log',
-            'backupCount': 3,
-            'when': 'h',
+        "debug_file": {
+            "level": "DEBUG",
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "formatter": "moderate",
+            "filename": "debug.log",
+            "backupCount": 3,
+            "when": "h",
         },
     },
-    'loggers': {
-        'django.db.backends': {
-            'handlers': ['debug_file'],
-            'level': 'DEBUG',
-            'propagate': True,
-            },
+    "loggers": {
+        "django.db.backends": {
+            "handlers": ["debug_file"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
         # 'raven': {
         #     'level': 'ERROR',
         #     'handlers': ['console'],
         #     'propagate': True,
         #     },
-        'utils.request_timer': {
-            'handlers': ['debug_file'],
-            'level': 'DEBUG',
-            'propagate': True,
-            },
-
-        'storages': {
-            'handlers': ['debug_file'],
-            'level': 'DEBUG',
-            'propagate': True,
-            },
-
-        'redis_cache': {
-            'handlers': ['debug_file'],
-            'level': 'DEBUG',
-            'propagate': True,
-            },
-
-        'sa_api': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': True,
-            },
-        }
+        "utils.request_timer": {
+            "handlers": ["debug_file"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+        "storages": {"handlers": ["debug_file"], "level": "DEBUG", "propagate": True,},
+        "redis_cache": {
+            "handlers": ["debug_file"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+        "sa_api": {"handlers": ["console"], "level": "DEBUG", "propagate": True,},
+    },
 }
