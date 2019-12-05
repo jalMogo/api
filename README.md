@@ -35,3 +35,7 @@ https://stackoverflow.com/a/39244687
 ## contributing
 
 We use [Black](https://github.com/psf/black) as our code formatter. Editor integration is encouraged.
+
+You can format the entire project in one command with `black .` from the project root. Tests will be check by running `black --check .` from the project root.
+
+*TOOD: consider using pre-commit hook as described [here](https://dev.to/notsag/python-code-formatting-using-black-2fe1) and [here](https://adamj.eu/tech/2019/06/20/all-is-turned-to-black/)*
