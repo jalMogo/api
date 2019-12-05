@@ -16,7 +16,7 @@ class Flavor(models.Model):
     # an ordered list of models that represent either a styled
     # DataSet, or other vector/raster/geojson source.
 
-    def __unicode__(self):
+    def __str__(self):
         return self.display_name
 
     class Meta:

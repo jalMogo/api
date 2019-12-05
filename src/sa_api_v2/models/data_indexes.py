@@ -1,8 +1,10 @@
 import operator
+from functools import reduce
+
 import ujson as json
 from django.contrib.gis.db import models
+
 from .mixins import CloneableModelMixin
-from functools import reduce
 
 
 class DataIndex(CloneableModelMixin, models.Model):
@@ -22,7 +24,7 @@ class DataIndex(CloneableModelMixin, models.Model):
     class Meta:
         app_label = "sa_api_v2"
 
-    def __unicode__(self):
+    def __str__(self):
         return self.attr_name
 
     def index_things(self):

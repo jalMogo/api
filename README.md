@@ -34,7 +34,7 @@ https://stackoverflow.com/a/39244687
 
 ## contributing
 
-We use [Black](https://github.com/psf/black) as our code formatter. Editor integration is encouraged.
+We use [Black](https://github.com/psf/black) as our code formatter, along with [isort](https://pypi.org/project/isort/). Editor integration is encouraged.
 
 You can format the entire project in one command with `black .` from the project root. Tests will be check by running `black --check .` from the project root.
 

@@ -1,9 +1,9 @@
-from django.contrib.gis.db import models
 from django.contrib.auth.models import AbstractUser, UserManager
-from .caching import CacheClearingModel
-from .. import cache
-from .. import utils
+from django.contrib.gis.db import models
+
+from .. import cache, utils
 from ..models.mixins import CloneableModelMixin
+from .caching import CacheClearingModel
 
 
 class ShareaboutsUserManager(UserManager):
@@ -151,7 +151,7 @@ class Group(CloneableModelMixin, models.Model):
         db_table = "sa_api_group"
         unique_together = [("name", "dataset")]
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s in %s" % (self.name, self.dataset.slug)
 
     def clone_related(self, onto):

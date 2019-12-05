@@ -1,11 +1,13 @@
+import logging
+
+from django.contrib.gis.db import models
+from django.core.exceptions import ValidationError
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
-from django.contrib.gis.db import models
+
 from .core import DataSet
-from .profiles import Group
 from .flavors import Flavor
-import logging
-from django.core.exceptions import ValidationError
+from .profiles import Group
 
 logger = logging.getLogger(__name__)
 
@@ -74,7 +76,7 @@ class Form(models.Model):
         Flavor, related_name="forms", on_delete=models.SET_NULL, null=True, blank=True,
     )
 
-    def __unicode__(self):
+    def __str__(self):
         return '"{}" on dataset: {}'.format(self.label, self.dataset)
 
     class Meta:
@@ -89,7 +91,7 @@ class LayerGroup(models.Model):
         app_label = "sa_api_v2"
         db_table = "ms_api_map_layer_group"
 
-    def __unicode__(self):
+    def __str__(self):
         return self.label
 
 
@@ -122,7 +124,7 @@ class FormStage(models.Model):
         help_text="Determines whether the stage is visible by default.",
     )
 
-    def __unicode__(self):
+    def __str__(self):
         return 'order: {}, containing {} modules, on form: "{}"'.format(
             self.order, len(self.modules.all()), self.form.label,
         )
@@ -191,7 +193,7 @@ class RelatedFormModule(models.Model):
     def validate(self, ordered_module):
         pass
 
-    def __unicode__(self):
+    def __str__(self):
         if not self.has_any_ordered_module():
             return "{} (unnattached)".format(self.summary())
         else:
@@ -310,7 +312,7 @@ class Modal(models.Model):
         app_label = "sa_api_v2"
         db_table = "ms_api_form_field_modal"
 
-    def __unicode__(self):
+    def __str__(self):
         return "header: {}, content: {}".format(self.header[0:20], self.content[0:20])
 
 
@@ -593,7 +595,7 @@ class AbstractOrderedModule(models.Model):
         null=True,
     )
 
-    def __unicode__(self):
+    def __str__(self):
         related_module = self.get_related_module()
         return "order: {order}, with Related Module: {related}".format(
             related=related_module, order=self.order
@@ -860,7 +862,7 @@ class CheckboxOption(FormFieldOption):
         CheckboxField, related_name="options", on_delete=models.CASCADE,
     )
 
-    def __unicode__(self):
+    def __str__(self):
         return "CheckboxOption with label: {} on field: {}".format(
             self.label, self.field
         )
@@ -883,7 +885,7 @@ class RadioOption(FormFieldOption):
         RadioField, related_name="options", on_delete=models.CASCADE,
     )
 
-    def __unicode__(self):
+    def __str__(self):
         return "RadioOption with label: '{}' and order: {} on field: {}".format(
             self.label, self.order, self.field
         )

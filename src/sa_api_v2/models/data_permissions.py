@@ -1,9 +1,8 @@
 from django.contrib.gis.db import models
 from django.db.models.signals import post_save
+
 from .. import utils
-from .core import CacheClearingModel
-from .core import DataSet
-from .core import Place
+from .core import CacheClearingModel, DataSet, Place
 from .mixins import CloneableModelMixin
 
 
@@ -146,7 +145,7 @@ class DataSetPermission(DataPermission):
     class Meta:
         app_label = "sa_api_v2"
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s %s" % ("submitters", self.abilities())
 
 
@@ -157,7 +156,7 @@ class GroupPermission(DataPermission):
     class Meta:
         app_label = "sa_api_v2"
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s %s" % (self.group, self.abilities())
 
 
@@ -168,7 +167,7 @@ class KeyPermission(DataPermission):
     class Meta:
         app_label = "sa_api_v2"
 
-    def __unicode__(self):
+    def __str__(self):
         return "submitters %s" % (self.abilities(),)
 
 
@@ -179,7 +178,7 @@ class OriginPermission(DataPermission):
     class Meta:
         app_label = "sa_api_v2"
 
-    def __unicode__(self):
+    def __str__(self):
         return "submitters %s" % (self.abilities(),)
 
 

@@ -12,9 +12,10 @@ license unknown.
 from django.db import models
 from django.db.models.signals import post_save
 from django.utils.timezone import now
+
+from .. import utils
 from ..models import DataSet, KeyPermission
 from ..models.mixins import CloneableModelMixin
-from .. import utils
 
 # Changing this would require a migration, ugh.
 KEY_SIZE = 32
@@ -69,7 +70,7 @@ class ApiKey(CloneableModelMixin, models.Model):
         except AttributeError:
             return None
 
-    def __unicode__(self):
+    def __str__(self):
         return self.key
 
     def clone_related(self, onto):

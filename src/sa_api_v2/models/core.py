@@ -1,27 +1,27 @@
+import jwt
 import ujson as json
+from django.conf import settings
 from django.contrib.gis.db import models
 from django.contrib.gis.db.models import query
-from django.conf import settings
-from django.core.files.storage import get_storage_class
 from django.core.exceptions import ValidationError
+from django.core.files.storage import get_storage_class
 from django.utils.timezone import now
-import jwt
 from jwt.exceptions import (
-    InvalidTokenError,
     DecodeError,
-    InvalidSignatureError,
     ExpiredSignatureError,
+    ImmatureSignatureError,
+    InvalidAlgorithmError,
     InvalidAudienceError,
     InvalidIssuedAtError,
-    ImmatureSignatureError,
     InvalidKeyError,
-    InvalidAlgorithmError,
+    InvalidSignatureError,
+    InvalidTokenError,
     MissingRequiredClaimError,
 )
-from .. import cache
-from .. import utils
+
+from .. import cache, utils
 from .caching import CacheClearingModel
-from .data_indexes import IndexedValue, FilterByIndexMixin
+from .data_indexes import FilterByIndexMixin, IndexedValue
 from .mixins import CloneableModelMixin
 from .profiles import User
 
@@ -147,7 +147,7 @@ class DataSet(CloneableModelMixin, CacheClearingModel, models.Model):
     cache = cache.DataSetCache()
     # previous_version = 'sa_api_v1.models.DataSet'
 
-    def __unicode__(self):
+    def __str__(self):
         return self.slug
 
     class Meta:
@@ -235,7 +235,7 @@ class Webhook(TimeStampedModel):
         app_label = "sa_api_v2"
         db_table = "sa_api_webhook"
 
-    def __unicode__(self):
+    def __str__(self):
         return "On %s data in %s" % (self.event, self.submission_set)
 
 
@@ -282,7 +282,7 @@ class PlaceEmailTemplate(TimeStampedModel):
         app_label = "sa_api_v2"
         db_table = "sa_api_place_email_templates"
 
-    def __unicode__(self):
+    def __str__(self):
         return "template id: %s" % (self.id)
 
 
@@ -343,7 +343,7 @@ class Place(SubmittedThing):
         for submission in self.submissions.all():
             submission.clone(overrides=data_overrides)
 
-    def __unicode__(self):
+    def __str__(self):
         return str(self.id)
 
 

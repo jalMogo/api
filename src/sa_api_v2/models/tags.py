@@ -1,11 +1,13 @@
 import re
+
 from closuretree.models import ClosureModel
 from django.contrib.gis.db import models
 from django.core.exceptions import ValidationError
-from .core import DataSet, Place, TimeStampedModel
-from .. import cache
-from .profiles import User
 from django.core.validators import RegexValidator
+
+from .. import cache
+from .core import DataSet, Place, TimeStampedModel
+from .profiles import User
 
 color_re = re.compile("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$")
 validate_color = RegexValidator(
@@ -24,10 +26,10 @@ class Tag(ClosureModel):
     )
     is_enabled = models.BooleanField(default=True)
 
-    def __unicode__(self):
+    def __str__(self):
         if self.parent:
             return "{parent_name}:{name}".format(
-                name=self.name, parent_name=self.parent.__unicode__()
+                name=self.name, parent_name=self.parent.__str__()
             )
         else:
             return self.name

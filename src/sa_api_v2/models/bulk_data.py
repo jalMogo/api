@@ -1,5 +1,6 @@
 import time
 import uuid
+
 from django.contrib.gis.db import models
 
 
@@ -23,7 +24,7 @@ class DataSnapshotRequest(models.Model):
         app_label = "sa_api_v2"
         db_table = "sa_api_datasnapshotrequest"
 
-    def __unicode__(self):
+    def __str__(self):
         return "Bulk request for %s %s" % (self.dataset, self.submission_set)
 
     @staticmethod

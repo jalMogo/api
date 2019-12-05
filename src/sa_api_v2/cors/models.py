@@ -9,13 +9,15 @@ http://jetfar.com/simple-api-key-generation-in-python/
 license unknown.
 """
 
+import re
+
 from django.db import models
 from django.db.models.signals import post_save
 from django.utils.timezone import now
+
+from .. import utils
 from ..models import DataSet, OriginPermission, PlaceEmailTemplate
 from ..models.mixins import CloneableModelMixin
-from .. import utils
-import re
 
 
 class Origin(CloneableModelMixin, models.Model):
@@ -56,7 +58,7 @@ class Origin(CloneableModelMixin, models.Model):
         except AttributeError:
             return None
 
-    def __unicode__(self):
+    def __str__(self):
         return self.pattern
 
     @staticmethod
