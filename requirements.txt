@@ -104,6 +104,9 @@ django-debug-toolbar==1.4
 # TODO: upgrade to 6.x for django 1.11:
 raven==6.10.0  # For Sentry error logging
 
+# code formatter
+black==19.10b0
+
 
 # - - - - - - - - - - - - - - - -
 
