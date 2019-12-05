@@ -17,16 +17,16 @@ def RequestResponsePayloadLogger(get_response):
 
         body = ""
         if request.META.get('CONTENT_TYPE') == 'application/json' and\
-           request.body != '' and request.body is not None:
+           request.body != b'' and request.body is not None:
             # DELETE often has an empty string as body, so we've checked for that here.
-            body = json.dumps(json.loads(request.body.decode("utf-8")), indent=2)
+            body = json.dumps(json.loads(request.body.decode()), indent=2)
 
         response = get_response(request)
 
         response_content = ""
         if response.get('Content-Type', None) == 'application/json' and \
-           response.content is not None and response.content != '':
-            response_content = json.dumps(json.loads(response.content.decode("utf-8")), indent=2)
+           response.content is not None and response.content != b'':
+            response_content = json.dumps(json.loads(response.content.decode()), indent=2)
         logger.info('"{} {} {}"\nbody: {}\nresponse: {}'.format(
             request.method,
             response.status_code,
