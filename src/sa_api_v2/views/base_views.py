@@ -45,7 +45,7 @@ from .. import parsers
 from ..cors.auth import OriginAuthentication
 from ..apikey.auth import ApiKeyAuthentication
 from .email_templates import EmailTemplateMixin
-from .. import tasks
+# from .. import tasks
 from .content_negotiation import ShareaboutsContentNegotiation
 from ..cache import cache_buffer
 from ..params import (
@@ -1646,7 +1646,8 @@ class DataSetListView(
 
     def create(self, request, owner_username):
         if "HTTP_X_SHAREABOUTS_CLONE" in request.META or "clone" in request.GET:
-            return self.clone(request, owner_username=owner_username)
+            raise Exception("unable to clone dataset")
+            # return self.clone(request, owner_username=owner_username)
         else:
             return super(DataSetListView, self).create(
                 request, owner_username=owner_username
@@ -1694,70 +1695,71 @@ class DataSetListView(
         return dataset
 
     def clone(self, request, owner_username):
-        clone_header = request.META.get("HTTP_X_SHAREABOUTS_CLONE") or request.GET.get(
-            "clone"
-        )
+        raise Exception("unable to clone dataset")
+    #     clone_header = request.META.get("HTTP_X_SHAREABOUTS_CLONE") or request.GET.get(
+    #         "clone"
+    #     )
 
-        # Make sure we have a thing to clone
-        if not clone_header:
-            return Response({"errors": ["No object specified to clone"]}, status=400)
+    #     # Make sure we have a thing to clone
+    #     if not clone_header:
+    #         return Response({"errors": ["No object specified to clone"]}, status=400)
 
-        original = self.get_object_to_clone(clone_header)
-        if original is None:
-            return Response(
-                {"errors": ['No object available to clone for "%s"' % clone_header]},
-                status=404,
-            )
+    #     original = self.get_object_to_clone(clone_header)
+    #     if original is None:
+    #         return Response(
+    #             {"errors": ['No object available to clone for "%s"' % clone_header]},
+    #             status=404,
+    #         )
 
-        # Make sure we would have access if we were getting that whole thing
-        fake_request = RequestFactory().get(
-            path=reverse(
-                "dataset-detail", args=[original.owner.username, original.slug]
-            ),
-            data=dict(include_invisible=True, include_private_fields=True),
-        )
-        self.check_object_permissions(fake_request, original)
+    #     # Make sure we would have access if we were getting that whole thing
+    #     fake_request = RequestFactory().get(
+    #         path=reverse(
+    #             "dataset-detail", args=[original.owner.username, original.slug]
+    #         ),
+    #         data=dict(include_invisible=True, include_private_fields=True),
+    #     )
+    #     self.check_object_permissions(fake_request, original)
 
-        # Clone the object using the override values from the request. Only
-        # do a shallow clone during the request. Schedule the deep clone to
-        # run in a background process.
-        overrides = {}
-        queryset = self.get_queryset()
+    #     # Clone the object using the override values from the request. Only
+    #     # do a shallow clone during the request. Schedule the deep clone to
+    #     # run in a background process.
+    #     overrides = {}
+    #     queryset = self.get_queryset()
 
-        for field in ("slug", "display_name"):
-            if field in request.data:
-                overrides[field] = request.data[field]
+    #     for field in ("slug", "display_name"):
+    #         if field in request.data:
+    #             overrides[field] = request.data[field]
 
-        # - - Make sure slug is unique.
-        if "slug" in overrides:
-            slug = overrides["slug"]
-            try:
-                queryset.get(slug=slug)
-            except models.DataSet.DoesNotExist:
-                pass
-            else:
-                return Response(
-                    {"errors": {"slug": "DataSet with this slug already exists"}},
-                    status=409,
-                )
-        else:
-            slugs = set([ds.slug for ds in queryset])
-            unique_slug = original.slug
-            for uniquifier in count(2):
-                if unique_slug not in slugs:
-                    break
-                unique_slug = "-".join([original.slug, str(uniquifier)])
-            overrides["slug"] = unique_slug
+    #     # - - Make sure slug is unique.
+    #     if "slug" in overrides:
+    #         slug = overrides["slug"]
+    #         try:
+    #             queryset.get(slug=slug)
+    #         except models.DataSet.DoesNotExist:
+    #             pass
+    #         else:
+    #             return Response(
+    #                 {"errors": {"slug": "DataSet with this slug already exists"}},
+    #                 status=409,
+    #             )
+    #     else:
+    #         slugs = set([ds.slug for ds in queryset])
+    #         unique_slug = original.slug
+    #         for uniquifier in count(2):
+    #             if unique_slug not in slugs:
+    #                 break
+    #             unique_slug = "-".join([original.slug, str(uniquifier)])
+    #         overrides["slug"] = unique_slug
 
-        clone = original.clone(overrides=overrides, commit=False)
-        clone.save()
-        tasks.clone_related_dataset_data.apply_async(args=[original.id, clone.id])
+    #     clone = original.clone(overrides=overrides, commit=False)
+    #     clone.save()
+    #     tasks.clone_related_dataset_data.apply_async(args=[original.id, clone.id])
 
-        serializer = self.get_serializer(instance=clone)
-        headers = self.get_success_headers(serializer.data)
-        return Response(
-            serializer.data, status=status.HTTP_202_ACCEPTED, headers=headers
-        )
+    #     serializer = self.get_serializer(instance=clone)
+    #     headers = self.get_success_headers(serializer.data)
+    #     return Response(
+    #         serializer.data, status=status.HTTP_202_ACCEPTED, headers=headers
+    #     )
 
 
 class AdminDataSetListView(CachedResourceMixin, DataSetListMixin, generics.ListAPIView):
