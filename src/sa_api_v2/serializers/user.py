@@ -2,9 +2,8 @@ import re
 from rest_framework import serializers
 from .. import models
 
-from ..params import (
-    INCLUDE_PRIVATE_FIELDS_PARAM,
-)
+from ..params import INCLUDE_PRIVATE_FIELDS_PARAM
+
 ###############################################################################
 #
 # User Data Strategies
@@ -14,119 +13,131 @@ from ..params import (
 #
 
 
-class DefaultUserDataStrategy (object):
+class DefaultUserDataStrategy(object):
     def extract_avatar_url(self, user_info):
-        return ''
+        return ""
 
     def extract_full_name(self, user_info):
-        return ''
+        return ""
 
     def extract_bio(self, user_info):
-        return ''
+        return ""
 
 
-class TwitterUserDataStrategy (object):
+class TwitterUserDataStrategy(object):
     def extract_avatar_url(self, user_info):
         try:
-            url = user_info['profile_image_url_https']
+            url = user_info["profile_image_url_https"]
         except:
-            url = user_info['profile_image_url']
+            url = user_info["profile_image_url"]
 
-        url_pattern = '^(?P<path>.*?)(?:_normal|_mini|_bigger|)(?P<ext>\.[^\.]*)$'
+        url_pattern = "^(?P<path>.*?)(?:_normal|_mini|_bigger|)(?P<ext>\.[^\.]*)$"
         match = re.match(url_pattern, url)
         if match:
-            return match.group('path') + '_bigger' + match.group('ext')
+            return match.group("path") + "_bigger" + match.group("ext")
         else:
             return url
 
     def extract_full_name(self, user_info):
-        return user_info['name']
+        return user_info["name"]
 
     def extract_bio(self, user_info):
-        return user_info['description']
+        return user_info["description"]
 
 
-class FacebookUserDataStrategy (object):
+class FacebookUserDataStrategy(object):
     def extract_avatar_url(self, user_info):
-        url = user_info['picture']['data']['url']
+        url = user_info["picture"]["data"]["url"]
         return url
 
     def extract_full_name(self, user_info):
-        return user_info['name']
+        return user_info["name"]
 
     def extract_bio(self, user_info):
-        return user_info['about']
+        return user_info["about"]
 
 
-class GoogleUserDataStrategy (object):
+class GoogleUserDataStrategy(object):
     def extract_avatar_url(self, user_info):
-        if 'picture' in user_info:
+        if "picture" in user_info:
             # This is the googleOauth2 new schema:
-            return user_info.get('picture', None)
+            return user_info.get("picture", None)
         else:
             # This is the old schema (ideally should be migrated to the new one)
-            return user_info['image']['url']
+            return user_info["image"]["url"]
 
     def extract_full_name(self, user_info):
-        if isinstance(user_info['name'], (unicode, str)):
+        if isinstance(user_info["name"], str):
             # This is the googleOauth2 new schema:
-            return user_info.get('name', None)
+            return user_info.get("name", None)
         else:
             # This is the old schema (ideally should be migrated to the new one)
-            return user_info['name']['givenName'] + ' ' + user_info['name']['familyName']
+            return (
+                user_info["name"]["givenName"] + " " + user_info["name"]["familyName"]
+            )
 
     def extract_bio(self, user_info):
         return user_info["aboutMe"]
 
 
-class DiscourseUserDataStrategy (object):
+class DiscourseUserDataStrategy(object):
     def extract_avatar_url(self, user_info):
-        return user_info.get('avatar_url', None)
+        return user_info.get("avatar_url", None)
 
     def extract_full_name(self, user_info):
-        return user_info.get('username', None)
+        return user_info.get("username", None)
 
     def extract_bio(self, user_info):
         return None
 
 
-class ShareaboutsUserDataStrategy (object):
+class ShareaboutsUserDataStrategy(object):
     """
     This strategy exists so that we can add avatars and full names to users
     that already exist in the system without them creating a Twitter or
     Facebook account.
     """
+
     def extract_avatar_url(self, user_info):
-        return user_info.get('avatar_url', None)
+        return user_info.get("avatar_url", None)
 
     def extract_full_name(self, user_info):
-        return user_info.get('full_name', None)
+        return user_info.get("full_name", None)
 
     def extract_bio(self, user_info):
-        return user_info.get('bio', None)
+        return user_info.get("bio", None)
 
 
 # User serializers
-class BaseUserSerializer (serializers.ModelSerializer):
+class BaseUserSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
     avatar_url = serializers.SerializerMethodField()
     provider_type = serializers.SerializerMethodField()
     provider_id = serializers.SerializerMethodField()
 
     strategies = {
-        'twitter': TwitterUserDataStrategy(),
-        'facebook': FacebookUserDataStrategy(),
-        'google-oauth2': GoogleUserDataStrategy(),
-        'discourse-hdk': DiscourseUserDataStrategy(),
-        'shareabouts': ShareaboutsUserDataStrategy()
+        "twitter": TwitterUserDataStrategy(),
+        "facebook": FacebookUserDataStrategy(),
+        "google-oauth2": GoogleUserDataStrategy(),
+        "discourse-hdk": DiscourseUserDataStrategy(),
+        "shareabouts": ShareaboutsUserDataStrategy(),
     }
     default_strategy = DefaultUserDataStrategy()
 
     class Meta:
         model = models.User
-        exclude = ('first_name', 'last_name', 'email', 'password', 'is_staff',
-                   'is_active', 'is_superuser', 'last_login', 'date_joined',
-                   'user_permissions')
+        exclude = (
+            "first_name",
+            "last_name",
+            "email",
+            "password",
+            "is_staff",
+            "is_active",
+            "is_superuser",
+            "last_login",
+            "date_joined",
+            "user_permissions",
+        )
 
     def get_strategy(self, obj):
         for social_auth in obj.social_auth.all():
@@ -140,7 +151,7 @@ class BaseUserSerializer (serializers.ModelSerializer):
         user_data, strategy = self.get_strategy(obj)
         # return the user's name, if it exists in our model. If not, return the
         # user's name provided by the strategy:
-        name = " ".join(filter(lambda name: name, [obj.first_name, obj.last_name]))
+        name = " ".join([name for name in [obj.first_name, obj.last_name] if name])
         return name or strategy.extract_full_name(user_data)
 
     def get_avatar_url(self, obj):
@@ -151,7 +162,7 @@ class BaseUserSerializer (serializers.ModelSerializer):
         for social_auth in obj.social_auth.all():
             return social_auth.provider
         else:
-            return ''
+            return ""
 
     def get_provider_id(self, obj):
         for social_auth in obj.social_auth.all():
@@ -167,7 +178,7 @@ class BaseUserSerializer (serializers.ModelSerializer):
             "avatar_url": self.get_avatar_url(obj),
             "provider_type": self.get_provider_type(obj),
             "id": obj.id,
-            "username": obj.username
+            "username": obj.username,
         }
 
         # provider_id contains email address for Google Oauth, so we
@@ -177,19 +188,21 @@ class BaseUserSerializer (serializers.ModelSerializer):
         return data
 
 
-class SimpleUserSerializer (BaseUserSerializer):
+class SimpleUserSerializer(BaseUserSerializer):
     """
     Generates a partial user representation, for use as submitter data in bulk
     data calls.
     """
-    class Meta (BaseUserSerializer.Meta):
-        exclude = BaseUserSerializer.Meta.exclude + ('groups',)
+
+    class Meta(BaseUserSerializer.Meta):
+        exclude = BaseUserSerializer.Meta.exclude + ("groups",)
 
 
-class UserSerializer (BaseUserSerializer):
+class UserSerializer(BaseUserSerializer):
     """
     Generates a partial user representation, for use as submitter data in API
     calls.
     """
-    class Meta (BaseUserSerializer.Meta):
-        exclude = BaseUserSerializer.Meta.exclude + ('groups',)
+
+    class Meta(BaseUserSerializer.Meta):
+        exclude = BaseUserSerializer.Meta.exclude + ("groups",)

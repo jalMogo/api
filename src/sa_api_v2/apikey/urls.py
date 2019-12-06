@@ -10,7 +10,7 @@ from django.conf.urls import *
 
 
 # urlpatterns = patterns('sa_api_v2.apikey.views',
-#                        url(r'^create_key/$', 'generate_key', 
+#                        url(r'^create_key/$', 'generate_key',
 #                            name='api_create_key' ),
 #                        url(r'^keys/$', 'list_keys',
 #                            name='api_list_keys' ),

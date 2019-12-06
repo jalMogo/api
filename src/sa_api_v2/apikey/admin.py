@@ -14,13 +14,13 @@ class InlineKeyPermissionAdmin(admin.TabularInline):
 class ApiKeyAdmin(ModelAdmin):
     inlines = [InlineKeyPermissionAdmin]
     form = ApiKeyForm
-    list_display = ('key', 'dataset', 'logged_ip', 'last_used')
+    list_display = ("key", "dataset", "logged_ip", "last_used")
 
     class Media:
         js = (
-            'admin/js/jquery-1.11.0.min.js',
-            'admin/js/jquery-ui-1.10.4.min.js',
-            'admin/js/admin-list-reorder.js',
+            "admin/js/jquery-1.11.0.min.js",
+            "admin/js/jquery-ui-1.10.4.min.js",
+            "admin/js/admin-list-reorder.js",
         )
 
     def get_queryset(self, request):
@@ -29,5 +29,6 @@ class ApiKeyAdmin(ModelAdmin):
         if not user.is_superuser:
             qs = qs.filter(dataset__owner=user)
         return qs
+
 
 admin.site.register(ApiKey, ApiKeyAdmin)

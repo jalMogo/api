@@ -11,13 +11,19 @@ class InlineOriginPermissionAdmin(admin.TabularInline):
 
 class OriginAdmin(ModelAdmin):
     inlines = [InlineOriginPermissionAdmin]
-    list_display = ('pattern', 'dataset', 'place_email_template', 'logged_ip', 'last_used')
+    list_display = (
+        "pattern",
+        "dataset",
+        "place_email_template",
+        "logged_ip",
+        "last_used",
+    )
 
     class Media:
         js = (
-            'admin/js/jquery-1.11.0.min.js',
-            'admin/js/jquery-ui-1.10.4.min.js',
-            'admin/js/admin-list-reorder.js',
+            "admin/js/jquery-1.11.0.min.js",
+            "admin/js/jquery-ui-1.10.4.min.js",
+            "admin/js/admin-list-reorder.js",
         )
 
     def get_queryset(self, request):
@@ -28,7 +34,7 @@ class OriginAdmin(ModelAdmin):
         return qs
 
     def save_model(self, request, obj, form, change):
-        if obj.logged_ip == '':
+        if obj.logged_ip == "":
             obj.logged_ip = None
         super(OriginAdmin, self).save_model(request, obj, form, change)
 

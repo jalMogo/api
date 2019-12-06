@@ -3,7 +3,7 @@ from .cache import UserCache
 from social_core.backends.discourse import DiscourseAuth
 
 
-class CachedModelBackend (ModelBackend):
+class CachedModelBackend(ModelBackend):
     def get_user(self, user_id):
         user = UserCache.get_instance(user_id=user_id)
         if user is None:
@@ -13,4 +13,4 @@ class CachedModelBackend (ModelBackend):
 
 
 class DiscourseAuthHDK(DiscourseAuth):
-    name = 'discourse-hdk'
+    name = "discourse-hdk"

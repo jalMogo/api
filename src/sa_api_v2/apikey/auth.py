@@ -2,7 +2,7 @@ from django.core.exceptions import PermissionDenied
 from rest_framework import authentication
 from .models import ApiKey
 
-KEY_HEADER = 'HTTP_X_SHAREABOUTS_KEY'
+KEY_HEADER = "HTTP_X_SHAREABOUTS_KEY"
 
 
 class APIKeyBackend(object):
@@ -17,7 +17,7 @@ class APIKeyBackend(object):
     supports_inactive_user = False
 
     # This needs to be importable.
-    backend_name = 'sa_api_v2.apikey.auth.APIKeyBackend'
+    backend_name = "sa_api_v2.apikey.auth.APIKeyBackend"
     model = ApiKey
 
     def authenticate(self, request, key=None, ip_address=None):
@@ -56,7 +56,7 @@ def check_api_authorization(request):
 
     This should become more configurable.
     """ % KEY_HEADER
-    ip_address = request.META['REMOTE_ADDR']
+    ip_address = request.META["REMOTE_ADDR"]
     key = request.META.get(KEY_HEADER)
 
     auth_backend = APIKeyBackend()
@@ -73,7 +73,6 @@ def check_api_authorization(request):
 
 
 class ApiKeyAuthentication(authentication.BaseAuthentication):
-
     def authenticate(self, request):
         """
         Return a Client, or something usable as such, or None;
