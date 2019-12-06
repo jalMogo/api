@@ -18,8 +18,8 @@ import sys
 from os.path import abspath, join
 
 CURR_DIR = os.path.dirname(__file__)
-sys.path.append(os.path.join(CURR_DIR, 'src'))
-sys.path.append(abspath(join(CURR_DIR, 'libs', 'django-rest-framework-0.4')))
+sys.path.append(os.path.join(CURR_DIR, "src"))
+sys.path.append(abspath(join(CURR_DIR, "libs", "django-rest-framework-0.4")))
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings")
 
@@ -27,6 +27,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings")
 # file. This includes Django's development server, if the WSGI_APPLICATION
 # setting points here.
 from django.core.wsgi import get_wsgi_application
+
 application = get_wsgi_application()
 
 # Apply WSGI middleware here.

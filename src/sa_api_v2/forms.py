@@ -14,31 +14,31 @@ from . import models
 #                 raise e
 
 
-class SubmissionForm (forms.ModelForm):
+class SubmissionForm(forms.ModelForm):
     class Meta:
         model = models.Submission
         # When using the submission form, the parent submission set should be
         # be set by some external mechanism, usually according to the URL path.
-        exclude = ['parent', 'dataset']
+        exclude = ["parent", "dataset"]
 
 
-class DataSetForm (forms.ModelForm):
+class DataSetForm(forms.ModelForm):
     class Meta:
         model = models.DataSet
         # When using the dataset form, the owner set should be set by some
         # external mechanism, usually according to the URL path.
-        exclude = ['owner']
+        exclude = ["owner"]
 
 
-class PlaceForm (forms.ModelForm):
+class PlaceForm(forms.ModelForm):
     class Meta:
         model = models.Place
         # When using the place form, the dataset set should be set by some
         # external mechanism, usually according to the URL path.
-        exclude = ['dataset']
+        exclude = ["dataset"]
 
 
-class ActionForm (forms.Form):
+class ActionForm(forms.Form):
     before = forms.IntegerField(required=False)
     after = forms.IntegerField(required=False)
     limit = forms.IntegerField(required=False)
@@ -48,7 +48,7 @@ class ActionForm (forms.Form):
     callback = forms.CharField(required=False)
 
 
-class AttachmentForm (forms.ModelForm):
+class AttachmentForm(forms.ModelForm):
     class Meta:
         model = models.Attachment
-        exclude = ['thing']
+        exclude = ["thing"]

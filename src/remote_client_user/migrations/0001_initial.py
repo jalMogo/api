@@ -13,15 +13,28 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='ClientPermissions',
+            name="ClientPermissions",
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('allow_remote_signin', models.BooleanField(default=False)),
-                ('allow_remote_signup', models.BooleanField(default=False)),
-                ('client', models.OneToOneField(related_name='permissions', to=settings.OAUTH2_PROVIDER_APPLICATION_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        verbose_name="ID",
+                        serialize=False,
+                        auto_created=True,
+                        primary_key=True,
+                    ),
+                ),
+                ("allow_remote_signin", models.BooleanField(default=False)),
+                ("allow_remote_signup", models.BooleanField(default=False)),
+                (
+                    "client",
+                    models.OneToOneField(
+                        related_name="permissions",
+                        to=settings.OAUTH2_PROVIDER_APPLICATION_MODEL,
+                    ),
+                ),
             ],
-            options={
-            },
+            options={},
             bases=(models.Model,),
         ),
     ]

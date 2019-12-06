@@ -4,14 +4,13 @@ from rest_framework import authentication
 
 # Client authentication with CORS
 class OriginAuthentication(authentication.BaseAuthentication):
-
     def authenticate(self, request):
         """
         Return a Client, or something usable as such, if the origin has
         permission to access the dataset;
         as per http://django-rest-framework.org/library/authentication.html
         """
-        origin = request.META.get('HTTP_ORIGIN', '')
+        origin = request.META.get("HTTP_ORIGIN", "")
 
         if not origin:
             return None
@@ -29,4 +28,6 @@ class OriginAuthentication(authentication.BaseAuthentication):
         if ds_origin is not None:
             return ds_origin, ds_origin
         else:
-            raise PermissionDenied("None of the dataset's origin permission policies matched")
+            raise PermissionDenied(
+                "None of the dataset's origin permission policies matched"
+            )

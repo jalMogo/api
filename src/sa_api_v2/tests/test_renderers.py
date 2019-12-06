@@ -1,31 +1,33 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 
 from django.test import TestCase
 from nose.tools import istest
 from sa_api_v2.renderers import GeoJSONRenderer
 
-class TestGeoJSONRenderer (TestCase):
 
-#    def test_(self):
-#        renderer = GeoJSONRenderer()
-#        data = {
-#          u'updated_datetime': u'2013-05-01T20:41:34.097Z',
-#          u'created_datetime': u'2013-05-01T20:41:34.097Z',
-#          u'geometry': u'POINT (2.0000000000000000 3.0000000000000000)',
-#          u'dataset': 1,
-#          u'visible': True,
-#          u'submitter_name': u'Mjumbe',
-#          u'data': u'{"name": "K-Mart", "type": "ATM"}',
-#          u'id': 1
-#        }
-#        renderer.render(data)
+class TestGeoJSONRenderer(TestCase):
+
+    #    def test_(self):
+    #        renderer = GeoJSONRenderer()
+    #        data = {
+    #          u'updated_datetime': u'2013-05-01T20:41:34.097Z',
+    #          u'created_datetime': u'2013-05-01T20:41:34.097Z',
+    #          u'geometry': u'POINT (2.0000000000000000 3.0000000000000000)',
+    #          u'dataset': 1,
+    #          u'visible': True,
+    #          u'submitter_name': u'Mjumbe',
+    #          u'data': u'{"name": "K-Mart", "type": "ATM"}',
+    #          u'id': 1
+    #        }
+    #        renderer.render(data)
 
     def test_no_data(self):
         renderer = GeoJSONRenderer()
         data = None
 
         result = renderer.render(data)
-        self.assertEqual(result, '')
+        self.assertEqual(result, b"")
+
 
 # class TestCSVRenderer (TestCase):
 
@@ -88,4 +90,3 @@ class TestGeoJSONRenderer (TestCase):
 
 #         dump = renderer.render([{u'a': 1, u'b': u'hello\u2014goodbye', u'c': 'http://example.com/'}])
 #         self.assertEqual(dump, (u'a,b,c\r\n1,hello—goodbye,http://example.com/\r\n').encode('utf-8'))
-

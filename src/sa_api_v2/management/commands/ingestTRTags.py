@@ -4,12 +4,7 @@ from django.db import transaction
 import pandas as pd
 import math
 
-from sa_api_v2.models import (
-    Tag,
-    PlaceTag,
-    Place,
-    DataSet
-)
+from sa_api_v2.models import Tag, PlaceTag, Place, DataSet
 
 import logging
 
@@ -23,7 +18,7 @@ IMPACT_COLUMN = "Impact Score"
 TAG_MAPPINGS = {
     FEASIBILITY_COLUMN: "feasibility",
     EQUITY_COLUMN: "equity",
-    IMPACT_COLUMN: "impact"
+    IMPACT_COLUMN: "impact",
 }
 
 # 1. Create the tags on our pbdurham dataset
@@ -37,65 +32,35 @@ TAGS = [
         "name": "Technical Review",
         "is_enabled": False,
         "children": [
-            {
-                "name": "merged",
-                "color": BLUE
-            },
+            {"name": "merged", "color": BLUE},
             {
                 "name": "feasibility",
                 "is_enabled": False,
                 "children": [
-                    {
-                        "name": "1",
-                        "color": RED
-                    },
-                    {
-                        "name": "2",
-                        "color": YELLOW
-                    },
-                    {
-                        "name": "3",
-                        "color": GREEN
-                    },
-                ]
+                    {"name": "1", "color": RED},
+                    {"name": "2", "color": YELLOW},
+                    {"name": "3", "color": GREEN},
+                ],
             },
             {
                 "name": "equity",
                 "is_enabled": False,
                 "children": [
-                    {
-                        "name": "1",
-                        "color": RED
-                    },
-                    {
-                        "name": "2",
-                        "color": YELLOW
-                    },
-                    {
-                        "name": "3",
-                        "color": GREEN
-                    },
-                ]
+                    {"name": "1", "color": RED},
+                    {"name": "2", "color": YELLOW},
+                    {"name": "3", "color": GREEN},
+                ],
             },
             {
                 "name": "impact",
                 "is_enabled": False,
                 "children": [
-                    {
-                        "name": "1",
-                        "color": RED
-                    },
-                    {
-                        "name": "2",
-                        "color": YELLOW
-                    },
-                    {
-                        "name": "3",
-                        "color": GREEN
-                    },
-                ]
+                    {"name": "1", "color": RED},
+                    {"name": "2", "color": YELLOW},
+                    {"name": "3", "color": GREEN},
+                ],
             },
-        ]
+        ],
     }
 ]
 
@@ -118,7 +83,6 @@ FILEPATH = "./tr-tags.csv"
 
 
 def create_tags(dataset):
-
     def create_tag(tag, parent):
         is_enabled = False if tag.get("is_enabled") is False else True
         color = tag.get("color", None)
@@ -127,11 +91,12 @@ def create_tags(dataset):
             color=color,
             parent=parent,
             is_enabled=is_enabled,
-            dataset=dataset
+            dataset=dataset,
         )
         logger.info("creating tag: {}".format(tagModel))
-        for child in [tag for tag in tag.get('children', [])]:
+        for child in [tag for tag in tag.get("children", [])]:
             create_tag(child, tagModel)
+
     for tag in TAGS:
         create_tag(tag, None)
 
@@ -153,7 +118,7 @@ def create_place_tags(dataset):
     df = pd.read_csv(FILEPATH)
     for index, row in df.iterrows():
         # get the relevant place:
-        id_field = row['Mapseed ID']
+        id_field = row["Mapseed ID"]
         if type(id_field) == str:
             id_field = id_field.split(" ")
         elif type(id_field) == float and math.isnan(id_field):
@@ -177,8 +142,10 @@ def create_place_tags(dataset):
             place_tag = PlaceTag.objects.create(
                 tag=merged_tag,
                 place=place,
-                note='This idea has been merged with another idea:\
-                https://pbdurham.mapseed.org/idea/{}'.format(main_place.id)
+                note="This idea has been merged with another idea:\
+                https://pbdurham.mapseed.org/idea/{}".format(
+                    main_place.id
+                ),
             )
             logger.info("place tag created: {}".format(place_tag))
 

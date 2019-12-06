@@ -2,30 +2,30 @@ from django.core.exceptions import ObjectDoesNotExist
 from importlib import import_module
 
 
-class CacheClearingModel (object):
+class CacheClearingModel(object):
     @classmethod
     def resolve_attr(cls, attr):
         if hasattr(cls, attr):
             value = getattr(cls, attr)
             if isinstance(value, str):
-                module_name, class_name = value.rsplit('.', 1)
+                module_name, class_name = value.rsplit(".", 1)
                 value = getattr(import_module(module_name), class_name)
             return value
         else:
             return None
 
     def get_previous_version(self):
-        model = self.resolve_attr('previous_version')
+        model = self.resolve_attr("previous_version")
         if model:
             return model.objects.get(pk=self.pk)
 
     def get_next_version(self):
-        model = self.resolve_attr('next_version')
+        model = self.resolve_attr("next_version")
         if model:
             return model.objects.get(pk=self.pk)
 
     def clear_instance_cache(self):
-        if hasattr(self, 'cache'):
+        if hasattr(self, "cache"):
             self.cache.clear_instance(self)
 
         try:

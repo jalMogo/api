@@ -1,12 +1,13 @@
 import base64
 import logging
 from django.contrib.auth import get_user_model, SESSION_KEY, BACKEND_SESSION_KEY
+
 # from provider.oauth2.models import Client
 from oauth2_provider.models import Application
 from remote_client_user.models import ClientPermissions
 from rest_framework.authentication import get_authorization_header
 
-logger = logging.getLogger('remote_client_user')
+logger = logging.getLogger("remote_client_user")
 
 
 def get_authed_user(request):
@@ -15,24 +16,26 @@ def get_authed_user(request):
     if not auth_header:
         return None
 
-    if auth_header[0].lower() != 'remote':
+    if auth_header[0].lower() != b"remote":
         return None
 
     # Decode the base64-encoded header data
     encoded_auth_data = auth_header[1]
-    auth_data = base64.decodestring(encoded_auth_data)
+    auth_data = base64.decodestring(encoded_auth_data).decode()
 
     # Parse out the client and user information
     try:
-        client_id, client_secret, username, email = auth_data.split(';')
+        client_id, client_secret, username, email = auth_data.split(";")
     except ValueError:
         return None
 
     # Get the client
     try:
-#        client = Client.objects.select_related('permissions').get(client_id=client_id, client_secret=client_secret)
-        client = Application.objects.select_related('permissions').get(client_id=client_id, client_secret=client_secret)
-#    except Client.DoesNotExist:
+        #        client = Client.objects.select_related('permissions').get(client_id=client_id, client_secret=client_secret)
+        client = Application.objects.select_related("permissions").get(
+            client_id=client_id, client_secret=client_secret
+        )
+    #    except Client.DoesNotExist:
     except Application.DoesNotExist:
         return None
 
@@ -61,7 +64,9 @@ def RemoteClientMiddleware(get_response):
         # on the session.
         if user:
             request.session[SESSION_KEY] = user.id
-            request.session[BACKEND_SESSION_KEY] = 'sa_api_v2.auth_backends.CachedModelBackend'
+            request.session[
+                BACKEND_SESSION_KEY
+            ] = "sa_api_v2.auth_backends.CachedModelBackend"
         response = get_response(request)
         return response
 

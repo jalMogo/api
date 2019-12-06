@@ -17,6 +17,7 @@ import os
 import urllib
 
 import logging
+
 log = logging.getLogger(__name__)
 
 csv_filepathname = sys.argv[2]
@@ -24,11 +25,11 @@ csv_filepathname = sys.argv[2]
 
 # TODO: Refactor common utils out of our import functions
 class Command(BaseCommand):
-    help = 'Import a CSV file of places.'
+    help = "Import a CSV file of places."
 
     def handle(self, *args, **options):
-        log.info('Command.handle: starting CSV import (log.info)')
-        print('Command.handle: starting CSV import (print)')
+        log.info("Command.handle: starting CSV import (log.info)")
+        print("Command.handle: starting CSV import (print)")
 
         reader = csv.DictReader(open(csv_filepathname))
         i = 0
@@ -48,27 +49,27 @@ class Command(BaseCommand):
         # First_Name|Last_Name|First_and_|Num|Street|Lat/Long|Phone|Email_addr|
         # Tree Condition|Water Bag?|Photo?|Notes_|||||||||||
 
-        location_type = 'tree'
-        lat, lon = [float(x) for x in row['Lat/Long'].split('/')]
-        common_name = validate(row['Common name'])
-        latin_name = validate(row['Latin Name'])
-        condition = validate(row['Tree Condition'])
-        notes = validate(row['Notes_'])
-        waterbag = validate(row['Water Bag?'])
-        family_id = validate(row['Family ID #'])
+        location_type = "tree"
+        lat, lon = [float(x) for x in row["Lat/Long"].split("/")]
+        common_name = validate(row["Common name"])
+        latin_name = validate(row["Latin Name"])
+        condition = validate(row["Tree Condition"])
+        notes = validate(row["Notes_"])
+        waterbag = validate(row["Water Bag?"])
+        family_id = validate(row["Family ID #"])
 
         # Private fields:
-        id_tag = row['Tree ID Tag #']
-        address = validate(row['Street'])
-        submitter_email = validate(row['Email_addr'])
-        phone = validate(row['Phone'])
-        first_name = validate(row['First_Name'])
-        last_name = validate(row['Last_Name'])
+        id_tag = row["Tree ID Tag #"]
+        address = validate(row["Street"])
+        submitter_email = validate(row["Email_addr"])
+        phone = validate(row["Phone"])
+        first_name = validate(row["First_Name"])
+        last_name = validate(row["Last_Name"])
 
         print("processing tree id_tag:", id_tag)
 
         # Attachment data:
-        imageUrl = validate(row['Image URL'])
+        imageUrl = validate(row["Image URL"])
 
         data = {
             "common_name": common_name,
@@ -78,30 +79,31 @@ class Command(BaseCommand):
             "notes": notes,
             "waterbag": waterbag,
             "family_id": family_id,
-
             "private-id_tag": id_tag,
             "private-address": address,
             "private-submitter_email": submitter_email,
             "private-phone": phone,
             "private-first_name": first_name,
-            "private-last_name": last_name
+            "private-last_name": last_name,
         }
         data = json.dumps(data)
 
-        placeForm = forms.PlaceForm({
-            "data": data,
-            # For geometry, using floats for lat/lon are accurate enough
-            "geometry": "POINT(%f %f)" % (lon, lat),
-            "created_datetime": datetime.datetime.now(),
-            "updated_datetime": datetime.datetime.now(),
-            "visible": True
-        })
+        placeForm = forms.PlaceForm(
+            {
+                "data": data,
+                # For geometry, using floats for lat/lon are accurate enough
+                "geometry": "POINT(%f %f)" % (lon, lat),
+                "created_datetime": datetime.datetime.now(),
+                "updated_datetime": datetime.datetime.now(),
+                "visible": True,
+            }
+        )
         place = placeForm.save(commit=False)
 
-        submitter = sa_models.User.objects.get(username='DIRT_Corps')
+        submitter = sa_models.User.objects.get(username="DIRT_Corps")
         place.submitter = submitter
 
-        dataset = sa_models.DataSet.objects.get(slug='trees')
+        dataset = sa_models.DataSet.objects.get(slug="trees")
         place.dataset = dataset
 
         place.save()
@@ -113,11 +115,14 @@ class Command(BaseCommand):
             content = urllib.urlretrieve(imageUrl, file_name)
             temp_file = File(open(content[0]))
 
-            attachmentForm = forms.AttachmentForm({
-                "created_datetime": datetime.datetime.now(),
-                "updated_datetime": datetime.datetime.now(),
-                "name": "my_image"
-            }, {"file": temp_file})
+            attachmentForm = forms.AttachmentForm(
+                {
+                    "created_datetime": datetime.datetime.now(),
+                    "updated_datetime": datetime.datetime.now(),
+                    "name": "my_image",
+                },
+                {"file": temp_file},
+            )
 
             attachment = attachmentForm.save(commit=False)
             attachment.thing = place.submittedthing_ptr
@@ -128,7 +133,7 @@ class Command(BaseCommand):
 
 # value must be a string
 def validate(value):
-    if value == 'NULL' or value.isspace():
-        return ''
+    if value == "NULL" or value.isspace():
+        return ""
     else:
         return value
