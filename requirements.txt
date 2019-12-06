@@ -1,9 +1,10 @@
 # ==============================
 # Web server
 # ==============================
-Django==1.11.26
+Django==2.0.13
 
 # Consider updating these for python 3 support:
+# TODO: upgrade this to 20.x latest version:
 gunicorn==19.5
 dj-static==0.0.6
 
@@ -12,9 +13,8 @@ dj-static==0.0.6
 # Background processing
 # ==============================
 
-celery==3.1.23
-django-celery==3.1.17
-
+# celery==3.1.23
+# django-celery==3.1.17
 
 
 # ==============================
@@ -26,20 +26,24 @@ psycopg2==2.8.4
 psycogreen==1.0
 # consider updates to 0.5.0 for python 3 support:
 dj-database-url==0.4.1
-django-object-actions==1.0.0
+
+django-object-actions==2.0.0
 
 # Caching
 django-redis==4.4.2
 django-cache-url==1.0.0
 
 # File Storage
+# TODO: upgrade to boto3 
 boto==2.39.0
+# TODO: upgrade to 1.8
 django-storages==1.6.6
 
 # hierarchy support for our dataset labels:
 # TODO: move over to django-mptt in Python 3.5+:
 # https://github.com/django-mptt/django-mptt
-django-closuretree==1.2.0
+# django-closuretree==1.2.0
+-e git+https://github.com/modulitos/django-closuretree.git@209bc2c0c58f5fc90dcd1abe4a37e1ea8c4964ca#egg=django-closuretree
 
 
 # ==============================
@@ -51,12 +55,11 @@ django-closuretree==1.2.0
 -e git+https://github.com/modulitos/social-core.git@31460b799752630d93e872f5bb50225f7e590a80#egg=social_auth_core
 -e git+https://github.com/modulitos/social-app-django.git@99600f11090b874b190106efe9901b560d275b98#egg=social_auth_app_django
 
-django-loginas==0.2.2
-django-oauth-toolkit== 1.0.0
+django-loginas==0.3.8
+django-oauth-toolkit== 1.2.0
 
 
-django-cors-headers==2.5.2
-# last version with Django 1.10 support:
+django-cors-headers==2.5.3
 
 
 
@@ -70,20 +73,20 @@ djangorestframework-csv==2.0.0
 # git+https://github.com/mjumbewu/django-rest-framework-bulk.git@84a5d6c#egg=djangorestframework-bulk==0.1.3
 # replace forked drf-bulk with main version
 djangorestframework-bulk==0.2
-six>=1.10.0
+# six>=1.10.0
 markdown==2.6.11  # For browsable API docs
 python-dateutil==2.5
 ujson==1.35
 bleach==1.4.3
 
 # The Django admin interface
-# TODO: upgrade to 1.0.4 for django 1.11:
+# TODO: upgrade to 1.0.5:
 django-ace==1.0.4
 django-nested-admin==3.2.3
 django-admin-sortable2==0.7
 
 # The manager interface
-requests>=2.9.1
+requests==2.22.0
 
 # Support for JSON Web Token generation
 pyjwt==1.7.1

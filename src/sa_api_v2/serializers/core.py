@@ -1,7 +1,6 @@
 """
 DjangoRestFramework resources for the Shareabouts REST API.
 """
-from django.utils import six
 from collections import defaultdict
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
@@ -152,9 +151,7 @@ class GroupSerializer(BaseGroupSerializer):
 
     def to_representation(self, obj):
         ret = {}
-        ret["dataset"] = six.text_type(
-            self.fields["dataset"].to_representation(obj.dataset)
-        )
+        ret["dataset"] = self.fields["dataset"].to_representation(obj.dataset)
         ret["name"] = obj.name
         ret["dataset_slug"] = obj.dataset.slug
         ret["permissions"] = []

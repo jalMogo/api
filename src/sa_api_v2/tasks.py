@@ -1,6 +1,7 @@
 import requests
 import ujson as json
-from celery import shared_task
+
+# from celery import shared_task
 from celery.result import AsyncResult
 from django.db import transaction
 from django.test.client import RequestFactory
@@ -87,19 +88,19 @@ def store_bulk_data(request_id):
     return task_id
 
 
-@shared_task
-def bulk_data_status_update(uuid):
-    """
-    A callback task that updates the status of a data snapshot request, whether
-    successful or not.
-    """
-    taskresult = AsyncResult(uuid)
-    datarequest = DataSnapshotRequest.objects.get(guid=uuid)
-    datarequest.status = taskresult.status.lower()
-    datarequest.save()
+# # @shared_task
+# def bulk_data_status_update(uuid):
+#     """
+#     A callback task that updates the status of a data snapshot request, whether
+#     successful or not.
+#     """
+#     taskresult = AsyncResult(uuid)
+#     datarequest = DataSnapshotRequest.objects.get(guid=uuid)
+#     datarequest.status = taskresult.status.lower()
+#     datarequest.save()
 
 
-@shared_task
+# @shared_task
 def clone_related_dataset_data(orig_dataset_id, new_dataset_id):
     qs = (
         DataSet.objects.select_related("owner")
@@ -225,7 +226,7 @@ def list_errors(errors):
     return errors_list
 
 
-@shared_task
+# @shared_task
 def load_dataset_archive(dataset_id, archive_url):
     dataset = DataSet.objects.get(id=dataset_id)
 

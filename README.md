@@ -32,6 +32,11 @@ env LDFLAGS="-I/usr/local/opt/openssl/include -L/usr/local/opt/openssl/lib" pip 
 ```
 https://stackoverflow.com/a/39244687
 
+
+might also need to run `pip install gitversion` so that our fork of django-closuretree can build. See here: 
+https://github.com/ocadotechnology/django-closuretree/pull/52 and here: 
+https://github.com/ocadotechnology/django-closuretree/pull/49
+
 ## contributing
 
 We use [Black](https://github.com/psf/black) as our code formatter, along with [isort](https://pypi.org/project/isort/). Editor integration is encouraged.
