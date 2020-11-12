@@ -129,8 +129,8 @@ WSGI_APPLICATION = "project.wsgi.application"
 ROOT_URLCONF = "project.urls"
 
 MIDDLEWARE = (
-    "django_cookies_samesite.middleware.CookiesSameSite",
     "corsheaders.middleware.CorsMiddleware",
+    "django_cookies_samesite.middleware.CookiesSameSite",
     "django.middleware.gzip.GZipMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
