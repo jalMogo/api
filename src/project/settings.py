@@ -129,6 +129,7 @@ WSGI_APPLICATION = "project.wsgi.application"
 ROOT_URLCONF = "project.urls"
 
 MIDDLEWARE = (
+    "django_cookies_samesite.middleware.CookiesSameSite",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.gzip.GZipMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -242,6 +243,9 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
 }
 
 SOCIAL_AUTH_LOGIN_ERROR_URL = "remote-social-login-error"
+
+# Needed for cross-origin login requests to function with modern browsers:
+SESSION_COOKIE_SAMESITE = 'None' # (intentional string value)
 
 
 ################################################################################
