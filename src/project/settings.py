@@ -188,6 +188,7 @@ INSTALLED_APPS = (
     # testing switch to django-oauth-toolkit
     "oauth2_provider",
     "corsheaders",
+    "django_cookies_samesite",
     # =================================
     # Project apps
     # =================================
