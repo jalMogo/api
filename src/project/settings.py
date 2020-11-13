@@ -245,7 +245,7 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
 SOCIAL_AUTH_LOGIN_ERROR_URL = "remote-social-login-error"
 
 # Needed for cross-origin login requests to function with modern browsers:
-SESSION_COOKIE_SAMESITE = 'None' # (intentional string value)
+SESSION_COOKIE_SAMESITE = "None"  # (intentional string value)
 
 
 ################################################################################
