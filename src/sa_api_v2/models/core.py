@@ -412,13 +412,15 @@ class Attachment(CacheClearingModel, TimeStampedModel):
     visible = models.BooleanField(default=True, blank=True, db_index=True)
 
     COVER = "CO"
+    COVER_PDF = "CO_PDF"
     RICH_TEXT = "RT"
     ATTACHMENT_TYPE_CHOICES = (
         (COVER, "Cover"),
+        (COVER_PDF, "Cover PDF"),
         (RICH_TEXT, "Rich Text"),
     )
     type = models.CharField(
-        max_length=2, choices=ATTACHMENT_TYPE_CHOICES, default=COVER
+        max_length=6, choices=ATTACHMENT_TYPE_CHOICES, default=COVER
     )
 
     cache = cache.AttachmentCache()
