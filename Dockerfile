@@ -43,7 +43,7 @@ RUN apt-get install -y tar curl wget dialog net-tools build-essential gettext
 RUN apt-get install -y python-dev python-distribute python-pip
 
 # Install Postgres/PostGIS dependencies:
-RUN apt-get install -y python-psycopg2 postgresql libpq-dev postgresql-9.6-postgis-2.3 postgis postgresql-9.6
+RUN apt-get install -y python-psycopg2 postgresql libpq-dev postgresql-12-postgis-3 postgis postgresql-12
 
 
 # Move the repo from our intermediate image into our final image:
